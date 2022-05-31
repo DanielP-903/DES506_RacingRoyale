@@ -21,7 +21,7 @@ public class Dan_CarController : MonoBehaviour
         float motorMultiplier = _moveForward ? 1 : _moveBackward ? -1 : 0;
         float currentMotorValue = maxTorque * motorMultiplier;
         
-        float steeringMultiplier = _moveLeft ? 1 : _moveRight ? -1 : 0;
+        float steeringMultiplier = _moveLeft ? -1 : _moveRight ? 1 : 0;
         float currentSteeringValue = maxSteeringAngle * steeringMultiplier;
 
         foreach (var axle in axles)
