@@ -18,6 +18,7 @@ public class NicholasCarController : MonoBehaviour
     {
         float motor = maxMotorTorque * (_forwardInput + _backwardInput);
         float steering = maxSteeringAngle * (_leftInput + _rightInput);
+        Debug.Log("Motor: "+motor);
             
         foreach (AxleInfo axleInfo in axleInfos) {
             if (axleInfo.steering) {
@@ -35,17 +36,18 @@ public class NicholasCarController : MonoBehaviour
     {
         float value = context.ReadValue<float>();
         _forwardInput = value;
+        Debug.Log("Input: "+_forwardInput);
     }
     
     public void Backward(InputAction.CallbackContext context)
     {
-        float value = context.ReadValue<float>();
+        float value = -context.ReadValue<float>();
         _backwardInput = value;
     }
     
     public void Left(InputAction.CallbackContext context)
     {
-        float value = context.ReadValue<float>();
+        float value = -context.ReadValue<float>();
         _leftInput = value;
     }
     
