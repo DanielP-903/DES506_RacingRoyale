@@ -13,10 +13,43 @@ public class NicholasCarController : MonoBehaviour
     private float _backwardInput; // forward input value of keys pressed
     private float _rightInput; // forward input value of keys pressed
     private float _leftInput; // forward input value of keys pressed
-        
+    private Rigidbody rb;
+    [SerializeField] private float drag;
+
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
+
     public void FixedUpdate()
     {
         float motor = maxMotorTorque * (_forwardInput + _backwardInput);
+        if (_forwardInput + _backwardInput == 0)
+        {
+            foreach (AxleInfo axleInfo in axleInfos)
+            {
+                axleInfo.leftWheel.motorTorque = 0;
+                axleInfo.rightWheel.motorTorque = 0;
+            }
+            
+            Debug.Log("V: "+transform.InverseTransformDirection(rb.velocity).x);
+            if (transform.InverseTransformDirection(rb.velocity).x > 0.01f)
+            {
+                rb.velocity -= transform.InverseTransformDirection(Vector3.forward) * drag;
+            }
+            else if (transform.InverseTransformDirection(rb.velocity).x < -0.01f)
+            {
+                rb.velocity += transform.InverseTransformDirection(Vector3.forward) * drag;
+            }
+            else
+            {
+                rb.velocity = Vector3.zero;
+            }
+        }
+        else
+        {
+            //rb.drag = 0;
+        }
         float steering = maxSteeringAngle * (_leftInput + _rightInput);
         Debug.Log("Motor: "+motor);
             
