@@ -24,7 +24,7 @@ public class NicholasCarController : MonoBehaviour
     public void FixedUpdate()
     {
         float motor = maxMotorTorque * (_forwardInput + _backwardInput);
-        if (_forwardInput + _backwardInput == 0)
+        /*if (_forwardInput + _backwardInput == 0)
         {
             foreach (AxleInfo axleInfo in axleInfos)
             {
@@ -32,7 +32,7 @@ public class NicholasCarController : MonoBehaviour
                 axleInfo.rightWheel.motorTorque = 0;
             }
             
-            Debug.Log("V: "+transform.InverseTransformDirection(rb.velocity).x);
+            //Debug.Log("V: "+transform.InverseTransformDirection(rb.velocity).x);
             if (transform.InverseTransformDirection(rb.velocity).x > 0.01f)
             {
                 rb.velocity -= transform.InverseTransformDirection(Vector3.forward) * drag;
@@ -49,9 +49,9 @@ public class NicholasCarController : MonoBehaviour
         else
         {
             //rb.drag = 0;
-        }
+        }*/
         float steering = maxSteeringAngle * (_leftInput + _rightInput);
-        Debug.Log("Motor: "+motor);
+        //Debug.Log("Motor: "+motor);
             
         foreach (AxleInfo axleInfo in axleInfos) {
             if (axleInfo.steering) {
@@ -69,7 +69,6 @@ public class NicholasCarController : MonoBehaviour
     {
         float value = context.ReadValue<float>();
         _forwardInput = value;
-        Debug.Log("Input: "+_forwardInput);
     }
     
     public void Backward(InputAction.CallbackContext context)
