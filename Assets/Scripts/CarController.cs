@@ -16,15 +16,19 @@ public class CarController : MonoBehaviour
 
     [Header("Forces")]
     public float pushForceAmount = 5.0f;
-    
+    public Vector3 pushForce = Vector3.up;
+    public float torqueVectorAmount = 1.0f;//Vector3.forward;
+
     private bool _moveForward = false;
     private bool _moveBackward = false;
     private bool _moveRight = false;
     private bool _moveLeft = false;
     private bool _pushUp = false;
+    private bool _drift = false;
+    private bool _boost = false;
     private bool _grounded = false;
 
-    private float _pushDelay = 5.0f;
+    private float _pushDelay = 2.0f;
     
     private Rigidbody _rigidbody;
     private bool _HitDetect;
@@ -55,11 +59,12 @@ public class CarController : MonoBehaviour
         
         if (_pushUp && !_grounded && _pushDelay <= 0.0f)
         {
-            _pushDelay = 5.0f;
-            Vector3 pushForce = Vector3.up + new Vector3(.5f,0,0);
+            _pushDelay = 2.0f;
+            _rigidbody.AddRelativeForce(pushForce * (pushForceAmount * 700.0f), ForceMode.Force);
+            _rigidbody.AddRelativeTorque(transform.worldToLocalMatrix.MultiplyVector(transform.forward) * torqueVectorAmount, ForceMode.Force);
             
-            _rigidbody.AddForce(pushForce * (pushForceAmount * 700.0f), ForceMode.Force);
-            _rigidbody.AddTorque(transform.forward * pushForceAmount, ForceMode.Impulse);
+            //Vector3 pushForce = Vector3.up;// + (transform.forward);//Vector3.up;// + new Vector3(.5f,0,0);
+            //_rigidbody.AddTorque(transform.forward * pushForceAmount, ForceMode.Impulse);
         }
     }
     
@@ -87,6 +92,21 @@ public class CarController : MonoBehaviour
                 axle.rightWheel.motorTorque = currentMotorValue;
             }
 
+            if (_drift) // New original friction
+            {
+                WheelFrictionCurve frictionCurve = axle.leftWheel.forwardFriction;
+                frictionCurve.stiffness = 1.75f;
+                axle.leftWheel.forwardFriction  = frictionCurve;
+                axle.rightWheel.forwardFriction  = frictionCurve;
+            }
+            else // Default friction
+            {
+                WheelFrictionCurve frictionCurve = axle.leftWheel.forwardFriction;
+                frictionCurve.stiffness = 1.0f;
+                axle.leftWheel.forwardFriction  = frictionCurve;
+                axle.rightWheel.forwardFriction  = frictionCurve;  
+            }
+            
         }
 
         if (!_moveForward && !_moveBackward)
@@ -97,6 +117,7 @@ public class CarController : MonoBehaviour
         {
             brakeTorque = 0.0f;
         }
+        
     }
 
     private void Update()
@@ -181,7 +202,21 @@ public class CarController : MonoBehaviour
         _pushUp = value > 0;
         //Debug.Log("Space detected");
     }
-
+    // Drift
+    public void Drift(InputAction.CallbackContext context)
+    {
+        float value = context.ReadValue<float>();
+        _drift = value > 0;
+        //Debug.Log("Drift detected");
+    }
+    // Boost
+    public void Boost(InputAction.CallbackContext context)
+    {
+        float value = context.ReadValue<float>();
+        _boost = value > 0;
+        //Debug.Log("Boost detected");
+    }
+    
     [Serializable]
     public class Axle
     {
