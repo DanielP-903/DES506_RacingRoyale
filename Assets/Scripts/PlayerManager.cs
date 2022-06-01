@@ -7,12 +7,12 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour
 {
     private PhotonView _photonView;
-    private Dan_CarController _dcc;
+    private CarController _dcc;
     // Start is called before the first frame update
     void Start()
     {
         _photonView = GetComponent<PhotonView>();
-        _dcc = GetComponent<Dan_CarController>();
+        _dcc = GetComponent<CarController>();
         if (_photonView.IsMine)
         {
             CinemachineVirtualCamera cvc = Camera.main.gameObject.GetComponent<CinemachineVirtualCamera>();

@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 
 
-public class Dan_CarController : MonoBehaviour
+public class CarController : MonoBehaviour
 {
     public float motorForce = 0;
     public float brakeTorque = 1000;
@@ -16,6 +16,7 @@ public class Dan_CarController : MonoBehaviour
     private bool _moveBackward = false;
     private bool _moveRight = false;
     private bool _moveLeft = false;
+    private bool _pushUp = false;
     private Rigidbody _rigidbody;
 
     private void Start()
@@ -29,6 +30,18 @@ public class Dan_CarController : MonoBehaviour
     }
 
     public void FixedUpdate()
+    {
+        PhysUpdateDriving();
+    }
+
+    // For updating rigidbody forces acting upon the car
+    private void PhysUpdateForces()
+    {
+        
+    }
+    
+    // For updating driving physics with wheel colliders
+    private void PhysUpdateDriving()
     {
         float motorMultiplier = _moveForward ? 1 : _moveBackward ? -1 : 0;
         float currentMotorValue = motorForce * motorMultiplier;
@@ -106,7 +119,14 @@ public class Dan_CarController : MonoBehaviour
         _moveRight = value > 0;
         //Debug.Log("Right detected");
     }
-    
+    // Space
+    public void Space(InputAction.CallbackContext context)
+    {
+        bool value = context.ReadValue<bool>();
+        _pushUp = value;
+        //Debug.Log("Space detected");
+    }
+
     [Serializable]
     public class Axle
     {

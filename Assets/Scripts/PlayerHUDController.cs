@@ -7,7 +7,7 @@ public class PlayerHUDController : MonoBehaviour
 {
     public TextMeshProUGUI speedText;
     private GameObject _playerRef;
-    private Dan_CarController _carController;
+    private CarController _carController;
     private Rigidbody _rigidbodyRef;
 
     [HideInInspector] public float currentSpeed = 0.0f;
@@ -15,7 +15,7 @@ public class PlayerHUDController : MonoBehaviour
     void Start()
     {
         _playerRef = GameObject.FindGameObjectWithTag("Player");
-        _carController = _playerRef.GetComponent<Dan_CarController>();
+        _carController = _playerRef.GetComponent<CarController>();
         _rigidbodyRef = _carController.GetComponent<Rigidbody>();
     }
 
