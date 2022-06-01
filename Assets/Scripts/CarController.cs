@@ -56,9 +56,10 @@ public class CarController : MonoBehaviour
         if (_pushUp && !_grounded && _pushDelay <= 0.0f)
         {
             _pushDelay = 5.0f;
-            Vector3 pushForce = Vector3.up + new Vector3(.3f,0,0);
+            Vector3 pushForce = Vector3.up + new Vector3(.5f,0,0);
             
-            _rigidbody.AddForce(pushForce * (pushForceAmount * 100.0f), ForceMode.Force);
+            _rigidbody.AddForce(pushForce * (pushForceAmount * 700.0f), ForceMode.Force);
+            _rigidbody.AddTorque(transform.forward * pushForceAmount, ForceMode.Impulse);
         }
     }
     
@@ -100,11 +101,9 @@ public class CarController : MonoBehaviour
 
     private void Update()
     {
-        WheelCollider currentWheel;
-        currentWheel = axles[0].leftWheel;
+        WheelCollider currentWheel = axles[0].leftWheel;
         
         float currentTorque = currentWheel.motorTorque;
-        float currentSteer = currentWheel.steerAngle;
         float currentBrake = currentWheel.brakeTorque;
         float currentRpm = currentWheel.rpm;
         Debug.DrawRay(currentWheel.transform.position, currentWheel.transform.parent.forward * currentTorque / 100, Color.blue);
@@ -126,7 +125,6 @@ public class CarController : MonoBehaviour
     
     void OnDrawGizmos()
     {
-
         //Check if there has been a hit yet
         if (_HitDetect)
         {
@@ -146,6 +144,7 @@ public class CarController : MonoBehaviour
             Gizmos.DrawWireCube((transform.position) - transform.up * 1, transform.localScale);
         }
     }
+    
     // Input Actions
     // W
     public void Forward(InputAction.CallbackContext context)
@@ -179,7 +178,7 @@ public class CarController : MonoBehaviour
     public void Space(InputAction.CallbackContext context)
     {
         float value = context.ReadValue<float>();
-        _pushUp = value>0;
+        _pushUp = value > 0;
         //Debug.Log("Space detected");
     }
 
