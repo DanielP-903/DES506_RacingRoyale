@@ -60,8 +60,8 @@ public class CarController : MonoBehaviour
         if (_pushUp && !_grounded && _pushDelay <= 0.0f)
         {
             _pushDelay = 2.0f;
-            _rigidbody.AddForce(pushForce * (pushForceAmount * 700.0f), ForceMode.Force);
-            _rigidbody.AddTorque(transform.forward * torqueVectorAmount, ForceMode.Force);
+            _rigidbody.AddRelativeForce(pushForce * (pushForceAmount * 700.0f), ForceMode.Force);
+            _rigidbody.AddRelativeTorque(transform.worldToLocalMatrix.MultiplyVector(transform.forward) * torqueVectorAmount, ForceMode.Force);
             
             //Vector3 pushForce = Vector3.up;// + (transform.forward);//Vector3.up;// + new Vector3(.5f,0,0);
             //_rigidbody.AddTorque(transform.forward * pushForceAmount, ForceMode.Impulse);
