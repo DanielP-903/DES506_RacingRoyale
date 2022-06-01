@@ -8,18 +8,27 @@ using TMPro;
 public class DialRotator : MonoBehaviour
 {
     private float _rotationalValue = 0;
-    public PlayerHUDController _hudRef;
+    public PlayerHUDController hudRef;
     private RectTransform _rectTransform;
+    public Vector3 endAngles = new Vector3(0, 0, 90);
 
+    private Quaternion _toAngle;
     private void Start()
     {
         _rectTransform = GetComponent<RectTransform>();
+        _toAngle = Quaternion.Euler(endAngles);
     }
 
     private void Update()
     {
-        _rotationalValue = Mathf.Clamp(_hudRef.currentSpeed, 0, 99);
-        transform.rotation = new Quaternion(0,0,0,0);
+        _rotationalValue = Mathf.Clamp(hudRef.currentSpeed, 0, 120);
+        _toAngle = new Quaternion(0, 0, (-_rotationalValue) * Mathf.Deg2Rad + (endAngles.z * Mathf.Deg2Rad), 1);
+        _rectTransform.rotation = Quaternion.Lerp(_rectTransform.rotation, _toAngle, 10*Time.deltaTime);
+        Debug.Log(_rotationalValue);
+        //_rectTransform.rotation = Quaternion.RotateTowards(_rectTransform.rotation, Quaternion.Euler(0,0,-_rotationalValue * 100), Time.deltaTime);
+        // Vector3 relative = transform.InverseTransformPoint(_rectTransform.position);
+        // float angle = Mathf.Atan2(relative.x, relative.z) * Mathf.Rad2Deg;
+        // _rectTransform.Rotate(0, angle, 0);
         //transform.RotateAround(transform.position - new Vector3(0,40,0),Vector3.forward, _rotationalValue);
     }
 }
