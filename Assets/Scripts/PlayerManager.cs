@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using UnityEngine;
 using TMPro;
 
