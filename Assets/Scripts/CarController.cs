@@ -16,9 +16,15 @@ public class CarController : MonoBehaviour
 
     [Header("Forces")]
     public float pushForceAmount = 5.0f;
+    public float accelerationForce = 5.0f;
     public Vector3 pushForce = Vector3.up;
     public float torqueVectorAmount = 1.0f;//Vector3.forward;
     public float airControlForce = 500.0f;//Vector3.forward;
+    public float boostForceAmount = 5.0f;//Vector3.forward;
+
+    [Header("Cooldowns (in seconds)")]
+    public float jumpCooldown = 2.0f;
+    public float boostCooldown = 2.0f;
 
     private bool _moveForward = false;
     private bool _moveBackward = false;
@@ -30,6 +36,7 @@ public class CarController : MonoBehaviour
     private bool _grounded = false;
 
     private float _pushDelay = 2.0f;
+    private float _boostDelay = 2.0f;
     
     private Rigidbody _rigidbody;
     private bool _HitDetect;
@@ -37,6 +44,8 @@ public class CarController : MonoBehaviour
     private RaycastHit _Hit;
     private void Start()
     {
+        _pushDelay = jumpCooldown;
+        _boostDelay = boostCooldown;
         _rigidbody = GetComponent<Rigidbody>();
         foreach (var axle in axles)
         {
@@ -54,8 +63,35 @@ public class CarController : MonoBehaviour
         PhysUpdateDriving();
         PhysUpdateForces();
         PhysUpdateAirControl();
+        PhysUpdateAcceleration();
     }
+    
+    private void PhysUpdateAcceleration()
+    {
+        _boostDelay = _boostDelay <= 0 ? 0 : _boostDelay - Time.fixedDeltaTime;
 
+        // BOOST FUNCTIONALITY
+        if (_boost && _boostDelay <= 0)
+        {
+            _boostDelay = boostCooldown;
+            if (_moveForward) _rigidbody.AddForce(transform.forward * boostForceAmount, ForceMode.VelocityChange);
+            if (_moveBackward) _rigidbody.AddForce(-transform.forward * boostForceAmount, ForceMode.VelocityChange);
+            if (_moveLeft) _rigidbody.AddForce(transform.right * boostForceAmount, ForceMode.VelocityChange);
+            if (_moveRight) _rigidbody.AddForce(-transform.right * boostForceAmount, ForceMode.VelocityChange);
+            if (!_moveBackward && !_moveForward && !_moveLeft && !_moveRight) _rigidbody.AddForce(transform.forward * (boostForceAmount), ForceMode.VelocityChange);
+     
+            // foreach (var axle in axles)
+            // {
+            //     if (axle.motor)
+            //     {
+            //         axle.leftWheel.motorTorque = motorForce;
+            //         axle.rightWheel.motorTorque = motorForce;
+            //     }
+            // }
+            //if (!_moveBackward && !_moveForward && !_moveLeft && !_moveRight) _rigidbody.AddForce(transform.forward * (boostForceAmount), ForceMode.VelocityChange);
+        }
+    }
+    
     // For updating rigidbody forces acting upon the car
     private void PhysUpdateForces()
     {
@@ -63,14 +99,14 @@ public class CarController : MonoBehaviour
         
         if (_pushUp && !_grounded && _pushDelay <= 0.0f)
         {
-            _pushDelay = 2.0f;
+            _pushDelay = jumpCooldown;
             Vector3 push = Vector3.up + new Vector3(.5f,0,0);
             _rigidbody.AddForce(push * (pushForceAmount * 500.0f), ForceMode.Force);
             _rigidbody.AddTorque(transform.forward * pushForceAmount, ForceMode.Impulse);
         }
         else if (_pushUp && _grounded && _pushDelay <= 0.0f)
         {
-            _pushDelay = 2.0f;
+            _pushDelay = jumpCooldown;
             _rigidbody.AddForce(transform.up * (pushForceAmount * 700.0f), ForceMode.Force);
             //_rigidbody.AddTorque(transform.worldToLocalMatrix.MultiplyVector(transform.forward) * torqueVectorAmount, ForceMode.Force);
         }
@@ -136,7 +172,10 @@ public class CarController : MonoBehaviour
         {
             brakeTorque = 0.0f;
         }
-        
+        if (_moveForward) _rigidbody.AddForce(transform.forward * accelerationForce, ForceMode.Acceleration);
+        if (_moveBackward) _rigidbody.AddForce(-transform.forward * accelerationForce, ForceMode.Acceleration);
+        if (_moveLeft) _rigidbody.AddForce(transform.right * accelerationForce, ForceMode.Acceleration);
+        if (_moveRight) _rigidbody.AddForce(-transform.right * accelerationForce, ForceMode.Acceleration);
     }
 
     private void Update()
