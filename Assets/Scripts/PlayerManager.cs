@@ -59,7 +59,7 @@ public class PlayerManager : MonoBehaviour
     {
         if (transform.position.y < -5)
         {
-            Debug.Log("Less than 5");
+            //Debug.Log("Less than 5");
             _rb.velocity = Vector3.zero;
             _rb.angularVelocity = Vector3.zero;
             transform.rotation = Quaternion.Euler(Vector3.zero);
