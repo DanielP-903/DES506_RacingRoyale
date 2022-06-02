@@ -18,6 +18,7 @@ public class CarController : MonoBehaviour
     public float pushForceAmount = 5.0f;
     public Vector3 pushForce = Vector3.up;
     public float torqueVectorAmount = 1.0f;//Vector3.forward;
+    public float airControlForce = 500.0f;//Vector3.forward;
 
     private bool _moveForward = false;
     private bool _moveBackward = false;
@@ -44,27 +45,45 @@ public class CarController : MonoBehaviour
         }
 
         _boxCollider = transform.GetComponent<BoxCollider>();
+
+        //_rigidbody.centerOfMass = _boxCollider.bounds.center - (transform.up/4);
     }
 
     public void FixedUpdate()
     {
         PhysUpdateDriving();
         PhysUpdateForces();
+        PhysUpdateAirControl();
     }
 
     // For updating rigidbody forces acting upon the car
     private void PhysUpdateForces()
     {
-        _pushDelay = _pushDelay <= 0 ? 0 : _pushDelay - Time.fixedDeltaTime; 
+        _pushDelay = _pushDelay <= 0 ? 0 : _pushDelay - Time.fixedDeltaTime;
         
         if (_pushUp && !_grounded && _pushDelay <= 0.0f)
         {
             _pushDelay = 2.0f;
-            _rigidbody.AddRelativeForce(pushForce * (pushForceAmount * 700.0f), ForceMode.Force);
-            _rigidbody.AddRelativeTorque(transform.worldToLocalMatrix.MultiplyVector(transform.forward) * torqueVectorAmount, ForceMode.Force);
-            
-            //Vector3 pushForce = Vector3.up;// + (transform.forward);//Vector3.up;// + new Vector3(.5f,0,0);
-            //_rigidbody.AddTorque(transform.forward * pushForceAmount, ForceMode.Impulse);
+            Vector3 push = Vector3.up + new Vector3(.5f,0,0);
+            _rigidbody.AddForce(push * (pushForceAmount * 500.0f), ForceMode.Force);
+            _rigidbody.AddTorque(transform.forward * pushForceAmount, ForceMode.Impulse);
+        }
+        else if (_pushUp && _grounded && _pushDelay <= 0.0f)
+        {
+            _pushDelay = 2.0f;
+            _rigidbody.AddForce(transform.up * (pushForceAmount * 700.0f), ForceMode.Force);
+            //_rigidbody.AddTorque(transform.worldToLocalMatrix.MultiplyVector(transform.forward) * torqueVectorAmount, ForceMode.Force);
+        }
+    }
+
+    private void PhysUpdateAirControl()
+    {
+        if (!_grounded)
+        {
+            if (_moveForward) _rigidbody.AddTorque(transform.right * airControlForce, ForceMode.Force);
+            if (_moveBackward) _rigidbody.AddTorque(-transform.right * airControlForce, ForceMode.Force);
+            if (_moveLeft) _rigidbody.AddTorque(transform.forward * airControlForce, ForceMode.Force);
+            if (_moveRight) _rigidbody.AddTorque(-transform.forward * airControlForce, ForceMode.Force);
         }
     }
     
@@ -95,14 +114,14 @@ public class CarController : MonoBehaviour
             if (_drift) // New original friction
             {
                 WheelFrictionCurve frictionCurve = axle.leftWheel.forwardFriction;
-                frictionCurve.stiffness = 1.75f;
+                frictionCurve.stiffness = 1.5f;
                 axle.leftWheel.forwardFriction  = frictionCurve;
                 axle.rightWheel.forwardFriction  = frictionCurve;
             }
             else // Default friction
             {
                 WheelFrictionCurve frictionCurve = axle.leftWheel.forwardFriction;
-                frictionCurve.stiffness = 1.0f;
+                frictionCurve.stiffness = 1.2f;
                 axle.leftWheel.forwardFriction  = frictionCurve;
                 axle.rightWheel.forwardFriction  = frictionCurve;  
             }
@@ -131,7 +150,7 @@ public class CarController : MonoBehaviour
         Debug.DrawRay(currentWheel.transform.position, Vector3.up * currentRpm / 100, Color.green);
         Debug.DrawRay(currentWheel.transform.position, -currentWheel.transform.parent.forward * currentBrake / 100, Color.red);
         
-        _HitDetect = Physics.BoxCast(transform.position, transform.localScale, -transform.up, out _Hit, transform.rotation, 1);
+        _HitDetect = Physics.BoxCast(transform.position + transform.up, transform.localScale, -transform.up, out _Hit, transform.rotation, 1);
         if (_HitDetect)
         {
             _grounded = true;
@@ -160,10 +179,14 @@ public class CarController : MonoBehaviour
         {
             Gizmos.color = Color.red;
             //Draw a Ray forward from GameObject toward the maximum distance
-            Gizmos.DrawRay(transform.position, - transform.up * 1);
+            Gizmos.DrawRay(transform.position+ transform.up, - transform.up * 1);
             //Draw a cube at the maximum distance
-            Gizmos.DrawWireCube((transform.position) - transform.up * 1, transform.localScale);
+            Gizmos.DrawWireCube((transform.position + transform.up) - transform.up * 1, transform.localScale);
         }
+        
+        Gizmos.color = Color.cyan;
+        //Gizmos.DrawSphere(transform.position + (transform.up/4), 0.1f);
+        //Gizmos.DrawSphere(GetComponent<BoxCollider>().bounds.center- (transform.up/4), 0.1f);
     }
     
     // Input Actions
