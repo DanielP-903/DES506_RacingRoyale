@@ -151,6 +151,11 @@ using Photon.Realtime;
             }
         }
 
+        public void QuitGame()
+        {
+            Application.Quit();
+        }
+
 
     #endregion
     
