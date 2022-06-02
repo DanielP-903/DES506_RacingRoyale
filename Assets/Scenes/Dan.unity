@@ -331,7 +331,7 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 402784455}
+      - m_Target: {fileID: 5153201257417537403}
         m_TargetAssemblyTypeName: Dan_CarController, Assembly-CSharp
         m_MethodName: Forward
         m_Mode: 0
@@ -347,7 +347,7 @@ MonoBehaviour:
     m_ActionName: Master/Forward[/Keyboard/w]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 402784455}
+      - m_Target: {fileID: 5153201257417537403}
         m_TargetAssemblyTypeName: Dan_CarController, Assembly-CSharp
         m_MethodName: Backward
         m_Mode: 0
@@ -363,7 +363,7 @@ MonoBehaviour:
     m_ActionName: Master/Backward[/Keyboard/s]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 402784455}
+      - m_Target: {fileID: 5153201257417537403}
         m_TargetAssemblyTypeName: Dan_CarController, Assembly-CSharp
         m_MethodName: Left
         m_Mode: 0
@@ -379,7 +379,7 @@ MonoBehaviour:
     m_ActionName: Master/Left[/Keyboard/a]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 402784455}
+      - m_Target: {fileID: 5153201257417537403}
         m_TargetAssemblyTypeName: Dan_CarController, Assembly-CSharp
         m_MethodName: Right
         m_Mode: 0
@@ -395,7 +395,7 @@ MonoBehaviour:
     m_ActionName: Master/Right[/Keyboard/d]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 402784455}
+      - m_Target: {fileID: 5153201257417537403}
         m_TargetAssemblyTypeName: CarController, Assembly-CSharp
         m_MethodName: Space
         m_Mode: 0
@@ -628,27 +628,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &402784452 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1118674505751619608, guid: dfa51f2b8b5cefb41ac601d6dab6d720, type: 3}
-  m_PrefabInstance: {fileID: 5189709952312909664}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &402784454 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1118674505751619610, guid: dfa51f2b8b5cefb41ac601d6dab6d720, type: 3}
-  m_PrefabInstance: {fileID: 5189709952312909664}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &402784455 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1118674505751619611, guid: dfa51f2b8b5cefb41ac601d6dab6d720, type: 3}
-  m_PrefabInstance: {fileID: 5189709952312909664}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 402784452}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ddffb28a62db14459910a9bcdc1d72a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &674205054 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1394177388191395593, guid: 6a291ba819d5b8845868aa2154145ad0, type: 3}
@@ -20267,15 +20246,15 @@ PrefabInstance:
     - target: {fileID: 2774631455131860110, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_Follow
       value: 
-      objectReference: {fileID: 402784454}
+      objectReference: {fileID: 5153201257417537402}
     - target: {fileID: 2774631455131860110, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_LookAt
       value: 
-      objectReference: {fileID: 402784454}
+      objectReference: {fileID: 5153201257417537402}
     - target: {fileID: 2774631455131860144, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: target
       value: 
-      objectReference: {fileID: 402784452}
+      objectReference: {fileID: 5153201257417537400}
     - target: {fileID: 2774631455131860148, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -20322,7 +20301,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
---- !u!1001 &5189709952312909664
+--- !u!1 &5153201257417537400 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1118674505751619608, guid: dfa51f2b8b5cefb41ac601d6dab6d720, type: 3}
+  m_PrefabInstance: {fileID: 5622008197735987802}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5153201257417537402 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1118674505751619610, guid: dfa51f2b8b5cefb41ac601d6dab6d720, type: 3}
+  m_PrefabInstance: {fileID: 5622008197735987802}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5153201257417537403 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1118674505751619611, guid: dfa51f2b8b5cefb41ac601d6dab6d720, type: 3}
+  m_PrefabInstance: {fileID: 5622008197735987802}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5153201257417537400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ddffb28a62db14459910a9bcdc1d72a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1001 &5622008197735987802
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
