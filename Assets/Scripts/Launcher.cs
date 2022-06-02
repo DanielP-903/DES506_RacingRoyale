@@ -62,7 +62,7 @@ using Photon.Realtime;
         /// </summary>
         [Tooltip("The maximum number of players per room. When a room is full, it can't be joined by new players, and so new room will be created")]
         [SerializeField]
-        private byte maxPlayersPerRoom = 4;
+        private byte maxPlayersPerRoom = 32;
 
         #endregion
 
@@ -90,7 +90,7 @@ using Photon.Realtime;
         /// <summary>
         /// This client's version number. Users are separated from each other by gameVersion (which allows you to make breaking changes).
         /// </summary>
-        string gameVersion = "1";
+        string gameVersion = "0.3";
 
 
         #endregion

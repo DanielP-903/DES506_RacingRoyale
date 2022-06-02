@@ -9,6 +9,7 @@ public class PlayerManager : MonoBehaviour
 {
     private PhotonView _photonView;
     private CarController _dcc;
+    private Rigidbody _rb;
     
     [SerializeField]
     private TextMeshProUGUI playerNameText;
@@ -22,6 +23,7 @@ public class PlayerManager : MonoBehaviour
     {
         _photonView = GetComponent<PhotonView>();
         _dcc = GetComponent<CarController>();
+        _rb = GetComponent<Rigidbody>();
         if (_photonView.IsMine)
         {
             CinemachineVirtualCamera cvc = Camera.main.gameObject.GetComponent<CinemachineVirtualCamera>();
@@ -33,6 +35,8 @@ public class PlayerManager : MonoBehaviour
         {
             Destroy(_dcc);
         }
+        playerNameText.text = _photonView.Owner.NickName;
+        playerLicenseText.text = _photonView.Owner.NickName;
     }
     
     public void SetTarget(PlayerManager _target)
@@ -53,6 +57,13 @@ public class PlayerManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (transform.position.y < -5)
+        {
+            Debug.Log("Less than 5");
+            _rb.velocity = Vector3.zero;
+            _rb.angularVelocity = Vector3.zero;
+            transform.rotation = Quaternion.Euler(Vector3.zero);
+            transform.position = GameObject.Find("SpawnLocation" + PhotonNetwork.CurrentRoom.PlayerCount).transform.position;
+        }
     }
 }
