@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using UnityEngine;
 using TMPro;
 
@@ -65,7 +66,7 @@ public class PlayerManager : MonoBehaviour
             _rb.velocity = Vector3.zero;
             _rb.angularVelocity = Vector3.zero;
             transform.rotation = Quaternion.Euler(Vector3.zero);
-            transform.position = GameObject.Find("SpawnLocation" + PhotonNetwork.LocalPlayer.ActorNumber).transform.position;
+            transform.position = GameObject.Find("SpawnLocation" + PhotonNetwork.CurrentRoom.PlayerCount).transform.position;
         }
     }
 }

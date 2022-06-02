@@ -1,18 +1,18 @@
 using System;
 using System.Collections;
-
-
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
-    private ArrayList _playerList;
-    
+    //private ArrayList _playerList;
+    //private Dictionary<int, string> players;
 
     #region Photon Callbacks
 
@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Player other)
     {
         Debug.LogFormat("OnPlayerEnteredRoom() {0}", other.NickName); // not seen if you're the player connecting
-        _playerList.Add(other);
+        //_playerList.Add(other);
 
         if (PhotonNetwork.IsMasterClient)
         {
@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public override void OnPlayerLeftRoom(Player other)
     {
         Debug.LogFormat("OnPlayerLeftRoom() {0}", other.NickName); // seen when other disconnects
-        _playerList.Remove(other);
+        //_playerList.Remove(other);
 
         if (PhotonNetwork.IsMasterClient)
         {
@@ -93,6 +93,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             Debug.LogFormat("We are Instantiating LocalPlayer from {0}", Application.loadedLevelName);
             // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
             //PhotonNetwork.Instantiate(this.playerPrefab.name, GameObject.Find("SpawnLocation"+PhotonNetwork.CurrentRoom.PlayerCount).transform.position, Quaternion.identity, 0);
+            Debug.Log("Player Number: "+PhotonNetwork.LocalPlayer.GetPlayerNumber()); //GetPlayerNumber()
             PhotonNetwork.Instantiate(this.playerPrefab.name, GameObject.Find("SpawnLocation" + PhotonNetwork.LocalPlayer.ActorNumber).transform.position, Quaternion.identity, 0);
         }
     }
