@@ -17,6 +17,7 @@ public class PlayerManager : MonoBehaviour
     private TextMeshProUGUI playerLicenseText;
     
     private PlayerManager target;
+    private GameManager _gm;
     
     // Start is called before the first frame update
     void Start()
@@ -24,6 +25,7 @@ public class PlayerManager : MonoBehaviour
         _photonView = GetComponent<PhotonView>();
         _dcc = GetComponent<CarController>();
         _rb = GetComponent<Rigidbody>();
+        _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
         if (_photonView.IsMine)
         {
             CinemachineVirtualCamera cvc = Camera.main.gameObject.GetComponent<CinemachineVirtualCamera>();
@@ -63,7 +65,7 @@ public class PlayerManager : MonoBehaviour
             _rb.velocity = Vector3.zero;
             _rb.angularVelocity = Vector3.zero;
             transform.rotation = Quaternion.Euler(Vector3.zero);
-            transform.position = GameObject.Find("SpawnLocation" + PhotonNetwork.CurrentRoom.PlayerCount).transform.position;
+            transform.position = GameObject.Find("SpawnLocation" + PhotonNetwork.LocalPlayer.ActorNumber).transform.position;
         }
     }
 }

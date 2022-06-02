@@ -243,7 +243,6 @@ GameObject:
   - component: {fileID: 1118674505751619611}
   - component: {fileID: 1118674505751619605}
   - component: {fileID: 1118674505751619604}
-  - component: {fileID: 1579782965471858743}
   - component: {fileID: 1978116585297259193}
   - component: {fileID: 3259610436090621005}
   - component: {fileID: 7770678307179569261}
@@ -335,6 +334,7 @@ MonoBehaviour:
     rightWheel: {fileID: 1118674506502527237}
     motor: 0
     steering: 1
+  AntiRoll: 5000
   pushForceAmount: 700
   accelerationForce: 5
   pushForce: {x: 0.5, y: 1, z: 0}
@@ -375,22 +375,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.96, y: 0.87, z: 2.7}
   m_Center: {x: 0, y: 0.8, z: 0.1}
---- !u!114 &1579782965471858743
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1118674505751619608}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
 --- !u!114 &1978116585297259193
 MonoBehaviour:
   m_ObjectHideFlags: 0
