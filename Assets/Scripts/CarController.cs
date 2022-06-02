@@ -60,7 +60,7 @@ public class CarController : MonoBehaviour
 
         _boxCollider = transform.GetComponent<BoxCollider>();
 
-        //_rigidbody.centerOfMass = _boxCollider.bounds.center - (transform.up/4);
+        _rigidbody.centerOfMass += (Vector3.down/4);
     }
 
     public void FixedUpdate()
@@ -100,29 +100,35 @@ public class CarController : MonoBehaviour
 
     private void PhysAntiRoll()
     {
-        // ANTI-ROLL SOURCED FROM: https://forum.unity.com/threads/how-to-make-a-physically-real-stable-car-with-wheelcolliders.50643/
-        foreach (var axle in axles)
+        // // ANTI-ROLL SOURCED FROM: https://forum.unity.com/threads/how-to-make-a-physically-real-stable-car-with-wheelcolliders.50643/
+        // foreach (var axle in axles)
+        // {
+        //     
+        //     float travelL = 1.0f;
+        //     float travelR = 1.0f;
+        //
+        //     if (_groundedL)
+        //         travelL = (-axle.leftWheel.transform.InverseTransformPoint(_leftHit.point).y - axle.leftWheel.radius) /
+        //                   axle.leftWheel.suspensionDistance;
+        //
+        //     if (_groundedR)
+        //         travelR = (-axle.rightWheel.transform.InverseTransformPoint(_rightHit.point).y - axle.rightWheel.radius) /
+        //                   axle.rightWheel.suspensionDistance;
+        //
+        //     float antiRollForce = (travelL - travelR) * AntiRoll;
+        //
+        //     if (_groundedL)
+        //         _rigidbody.AddForceAtPosition(axle.leftWheel.transform.up * -antiRollForce,
+        //             axle.leftWheel.transform.position);
+        //     if (_groundedR)
+        //         _rigidbody.AddForceAtPosition(axle.rightWheel.transform.up * antiRollForce,
+        //             axle.rightWheel.transform.position);
+        // }
+
+        if (_grounded)
         {
-            
-            float travelL = 1.0f;
-            float travelR = 1.0f;
-
-            if (_groundedL)
-                travelL = (-axle.leftWheel.transform.InverseTransformPoint(_leftHit.point).y - axle.leftWheel.radius) /
-                          axle.leftWheel.suspensionDistance;
-
-            if (_groundedR)
-                travelR = (-axle.rightWheel.transform.InverseTransformPoint(_rightHit.point).y - axle.rightWheel.radius) /
-                          axle.rightWheel.suspensionDistance;
-
-            float antiRollForce = (travelL - travelR) * AntiRoll;
-
-            if (_groundedL)
-                _rigidbody.AddForceAtPosition(axle.leftWheel.transform.up * -antiRollForce,
-                    axle.leftWheel.transform.position);
-            if (_groundedR)
-                _rigidbody.AddForceAtPosition(axle.rightWheel.transform.up * antiRollForce,
-                    axle.rightWheel.transform.position);
+            //_rigidbody.rotation = _Hit.transform.rotation;
+            //_rigidbody.AddForce(-_Hit.normal * AntiRoll, ForceMode.Force);
         }
     }
     
