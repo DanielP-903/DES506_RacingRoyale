@@ -13,7 +13,8 @@ public class CarController : MonoBehaviour
     public float brakeTorque = 1000;
     public float maxSteeringAngle = 0;
     public List<Axle> axles;
-
+    public float AntiRoll = 5000.0f;
+    
     [Header("Forces")]
     public float pushForceAmount = 5.0f;
     public float accelerationForce = 5.0f;
@@ -34,6 +35,8 @@ public class CarController : MonoBehaviour
     private bool _drift = false;
     private bool _boost = false;
     private bool _grounded = false;
+    private bool _groundedL = false;
+    private bool _groundedR = false;
 
     private float _pushDelay = 2.0f;
     private float _boostDelay = 2.0f;
@@ -42,6 +45,8 @@ public class CarController : MonoBehaviour
     private bool _HitDetect;
     private Collider _boxCollider;
     private RaycastHit _Hit;
+    private RaycastHit _leftHit;
+    private RaycastHit _rightHit;
     private void Start()
     {
         _pushDelay = jumpCooldown;
@@ -64,6 +69,7 @@ public class CarController : MonoBehaviour
         PhysUpdateForces();
         PhysUpdateAirControl();
         PhysUpdateAcceleration();
+        PhysAntiRoll();
     }
     
     private void PhysUpdateAcceleration()
@@ -74,12 +80,12 @@ public class CarController : MonoBehaviour
         if (_boost && _boostDelay <= 0)
         {
             _boostDelay = boostCooldown;
-            if (_moveForward) _rigidbody.AddForce(transform.forward * boostForceAmount, ForceMode.VelocityChange);
-            if (_moveBackward) _rigidbody.AddForce(-transform.forward * boostForceAmount, ForceMode.VelocityChange);
-            if (_moveLeft) _rigidbody.AddForce(transform.right * boostForceAmount, ForceMode.VelocityChange);
-            if (_moveRight) _rigidbody.AddForce(-transform.right * boostForceAmount, ForceMode.VelocityChange);
-            if (!_moveBackward && !_moveForward && !_moveLeft && !_moveRight) _rigidbody.AddForce(transform.forward * (boostForceAmount), ForceMode.VelocityChange);
-     
+            _rigidbody.AddForce(transform.forward * boostForceAmount, ForceMode.VelocityChange);
+            // if (_moveForward) _rigidbody.AddForce(transform.forward * boostForceAmount, ForceMode.VelocityChange);
+            // if (_moveBackward) _rigidbody.AddForce(-transform.forward * boostForceAmount, ForceMode.VelocityChange);
+            // if (_moveLeft) _rigidbody.AddForce(transform.right * boostForceAmount, ForceMode.VelocityChange);
+            // if (_moveRight) _rigidbody.AddForce(-transform.right * boostForceAmount, ForceMode.VelocityChange);
+            //if (!_moveBackward && !_moveForward && !_moveLeft && !_moveRight) _rigidbody.AddForce(transform.forward * (boostForceAmount), ForceMode.VelocityChange);
             // foreach (var axle in axles)
             // {
             //     if (axle.motor)
@@ -89,6 +95,34 @@ public class CarController : MonoBehaviour
             //     }
             // }
             //if (!_moveBackward && !_moveForward && !_moveLeft && !_moveRight) _rigidbody.AddForce(transform.forward * (boostForceAmount), ForceMode.VelocityChange);
+        }
+    }
+
+    private void PhysAntiRoll()
+    {
+        // ANTI-ROLL SOURCED FROM: https://forum.unity.com/threads/how-to-make-a-physically-real-stable-car-with-wheelcolliders.50643/
+        foreach (var axle in axles)
+        {
+            
+            float travelL = 1.0f;
+            float travelR = 1.0f;
+
+            if (_groundedL)
+                travelL = (-axle.leftWheel.transform.InverseTransformPoint(_leftHit.point).y - axle.leftWheel.radius) /
+                          axle.leftWheel.suspensionDistance;
+
+            if (_groundedR)
+                travelR = (-axle.rightWheel.transform.InverseTransformPoint(_rightHit.point).y - axle.rightWheel.radius) /
+                          axle.rightWheel.suspensionDistance;
+
+            float antiRollForce = (travelL - travelR) * AntiRoll;
+
+            if (_groundedL)
+                _rigidbody.AddForceAtPosition(axle.leftWheel.transform.up * -antiRollForce,
+                    axle.leftWheel.transform.position);
+            if (_groundedR)
+                _rigidbody.AddForceAtPosition(axle.rightWheel.transform.up * antiRollForce,
+                    axle.rightWheel.transform.position);
         }
     }
     
@@ -193,13 +227,18 @@ public class CarController : MonoBehaviour
         if (_HitDetect)
         {
             _grounded = true;
-            Debug.Log("Hit : " + _Hit.collider.name);
+            //Debug.Log("Hit : " + _Hit.collider.name);
         }
         else
         {
             _grounded = false;
-            Debug.Log("No Hit :(");
+            //Debug.Log("No Hit :(");
         }
+        
+        var leftCheck = Physics.Raycast(axles[0].leftWheel.transform.position + axles[0].leftWheel.transform.up, -axles[0].leftWheel.transform.up, out _leftHit, 1.0f);
+        var rightCheck = Physics.Raycast(axles[0].rightWheel.transform.position + axles[0].rightWheel.transform.up, -axles[0].rightWheel.transform.up, out _rightHit, 1.0f);
+        _groundedL = leftCheck;
+        _groundedR = rightCheck;
     }
     
     void OnDrawGizmos()
