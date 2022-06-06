@@ -13,16 +13,15 @@ public class CarController : MonoBehaviour
     public float brakeTorque = 1000;
     public float maxSteeringAngle = 0;
     public List<Axle> axles;
-    public float AntiRoll = 5000.0f;
     
     [Header("Forces")]
     public float pushForceAmount = 5.0f;
     public float accelerationForce = 5.0f;
     public Vector3 pushForce = Vector3.up;
-    public float torqueVectorAmount = 1.0f;//Vector3.forward;
-    public float airControlForce = 500.0f;//Vector3.forward;
-    public float boostForceAmount = 5.0f;//Vector3.forward;
-
+    public float torqueVectorAmount = 1.0f;
+    public float airControlForce = 500.0f;
+    public float boostForceAmount = 5.0f;
+    
     [Header("Cooldowns (in seconds)")]
     public float jumpCooldown = 2.0f;
     public float boostCooldown = 2.0f;
@@ -34,6 +33,8 @@ public class CarController : MonoBehaviour
     private bool _pushUp = false;
     private bool _drift = false;
     private bool _boost = false;
+    private bool _rollLeft = false;
+    private bool _rollRight = false;
     private bool _grounded = false;
     private bool _groundedL = false;
     private bool _groundedR = false;
@@ -124,6 +125,8 @@ public class CarController : MonoBehaviour
             if (_moveBackward) _rigidbody.AddTorque(-transform.right * airControlForce, ForceMode.Force);
             if (_moveLeft) _rigidbody.AddTorque(-transform.up/20, ForceMode.VelocityChange);
             if (_moveRight) _rigidbody.AddTorque(transform.up/20, ForceMode.VelocityChange);
+            if (_rollLeft) _rigidbody.AddTorque(transform.forward/20, ForceMode.VelocityChange);
+            if (_rollRight) _rigidbody.AddTorque(-transform.forward/20, ForceMode.VelocityChange);
         }
     }
     
@@ -278,7 +281,21 @@ public class CarController : MonoBehaviour
         _boost = value > 0;
         //Debug.Log("Boost detected");
     }
-    
+    // Roll Left
+    public void RollLeft(InputAction.CallbackContext context)
+    {
+        float value = context.ReadValue<float>();
+        _rollLeft = value > 0;
+        //Debug.Log("Boost detected");
+    }
+    // Roll Right
+    public void RollRight(InputAction.CallbackContext context)
+    {
+        float value = context.ReadValue<float>();
+        _rollRight = value > 0;
+        //Debug.Log("Boost detected");
+    }
+
     [Serializable]
     public class Axle
     {
