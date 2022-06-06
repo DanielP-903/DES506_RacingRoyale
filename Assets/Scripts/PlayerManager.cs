@@ -66,7 +66,7 @@ public class PlayerManager : MonoBehaviour
             _rb.velocity = Vector3.zero;
             _rb.angularVelocity = Vector3.zero;
             transform.rotation = Quaternion.Euler(Vector3.zero);
-            transform.position = GameObject.Find("SpawnLocation" + PhotonNetwork.CurrentRoom.PlayerCount).transform.position;
+            transform.position = GameObject.Find("SpawnLocation" + _gm.GetPlayerNumber()).transform.position;
         }
     }
 }

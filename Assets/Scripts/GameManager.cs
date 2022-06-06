@@ -16,7 +16,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     #region Photon Callbacks
 
-
     /// <summary>
     /// Called when the local player left the room. We need to load the launcher scene.
     /// </summary>
@@ -24,7 +23,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         SceneManager.LoadScene(0);
     }
-    
     public override void OnPlayerEnteredRoom(Player other)
     {
         Debug.LogFormat("OnPlayerEnteredRoom() {0}", other.NickName); // not seen if you're the player connecting
@@ -38,8 +36,6 @@ public class GameManager : MonoBehaviourPunCallbacks
             LoadArena();
         }
     }
-
-
     public override void OnPlayerLeftRoom(Player other)
     {
         Debug.LogFormat("OnPlayerLeftRoom() {0}", other.NickName); // seen when other disconnects
@@ -53,11 +49,9 @@ public class GameManager : MonoBehaviourPunCallbacks
             LoadArena();
         }
     }
-
-
+    
     #endregion
-
-
+    
     #region Public Methods
 
 
@@ -67,6 +61,22 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
 
 
+    public int GetPlayerNumber()
+    {
+        int counter = 1;
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            if (player.Equals(PhotonNetwork.LocalPlayer))
+            {
+                return counter;
+            }
+
+            counter++;
+        }
+
+        return counter;
+    }
+    
     #endregion
     
     #region Private Methods
@@ -94,7 +104,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
             //PhotonNetwork.Instantiate(this.playerPrefab.name, GameObject.Find("SpawnLocation"+PhotonNetwork.CurrentRoom.PlayerCount).transform.position, Quaternion.identity, 0);
             Debug.Log("Player Number: "+PhotonNetwork.LocalPlayer.GetPlayerNumber()); //GetPlayerNumber()
-            PhotonNetwork.Instantiate(this.playerPrefab.name, GameObject.Find("SpawnLocation" + PhotonNetwork.LocalPlayer.ActorNumber).transform.position, Quaternion.identity, 0);
+            PhotonNetwork.Instantiate(this.playerPrefab.name, GameObject.Find("SpawnLocation" + GetPlayerNumber()).transform.position, Quaternion.identity, 0);
         }
     }
 
