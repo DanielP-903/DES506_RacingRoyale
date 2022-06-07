@@ -96,7 +96,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        timer = (TextMeshProUGUI)GameObject.Find("Timer");
+        timer = GameObject.Find("Timer").GetComponent<TextMeshProUGUI>();
         if (playerPrefab == null)
         {
             Debug.LogError("<Color=Red><a>Missing</a></Color> playerPrefab Reference. Please set it up in GameObject 'Game Manager'",this);
@@ -124,7 +124,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             LoadArena("Stage1");
         }
 
-        int Sec = waitingTime;
+        int Sec = (int)waitingTime;
         int milSec;
         timer.text = "";
     }
