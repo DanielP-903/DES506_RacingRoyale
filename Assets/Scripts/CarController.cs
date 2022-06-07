@@ -47,7 +47,7 @@ public class CarController : MonoBehaviour
     private bool _grounded = false;
     private bool _groundedL = false;
     private bool _groundedR = false;
-
+    
     private float _currentSteeringMulti;
     
     private bool _passedFinishLine = false;
@@ -90,7 +90,7 @@ public class CarController : MonoBehaviour
         PhysUpdateForces();
         PhysUpdateAirControl();
         PhysUpdateAcceleration();
-    }
+  }
     
     private void PhysUpdateAcceleration()
     {
@@ -100,7 +100,19 @@ public class CarController : MonoBehaviour
         if (_boost && _boostDelay <= 0)
         {
             _boostDelay = boostCooldown;
-            _rigidbody.AddForce(transform.forward * boostForceAmount, ForceMode.VelocityChange);
+            if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
+            {                
+                _rigidbody.velocity = transform.forward * boostForceAmount;
+                //_rigidbody.AddForce(transform.forward * (boostForceAmount * 300.0f), ForceMode.v);
+                //_rigidbody.AddForce(transform.forward * accelerationForce, ForceMode.Acceleration);
+
+            }
+            else
+            {
+                _rigidbody.AddForce(transform.forward * boostForceAmount, ForceMode.VelocityChange);
+            }
+
+
             // if (_moveForward) _rigidbody.AddForce(transform.forward * boostForceAmount, ForceMode.VelocityChange);
             // if (_moveBackward) _rigidbody.AddForce(-transform.forward * boostForceAmount, ForceMode.VelocityChange);
             // if (_moveLeft) _rigidbody.AddForce(transform.right * boostForceAmount, ForceMode.VelocityChange);
@@ -154,22 +166,14 @@ public class CarController : MonoBehaviour
     private void PhysUpdateDriving()
     {
         float motorMultiplier = _moveForward ? 1 : _moveBackward ? -1 : 0;
+  
         float currentMotorValue = motorForce * motorMultiplier;
-        
-        // _currentSteeringMulti = _moveLeft ? -1 : _moveRight ? 1 : 0;
-        if (_rigidbody.velocity.magnitude * 2.2369362912f > 30)
-        {
-            maxSteeringAngle = Mathf.Lerp(maxSteeringAngle, 10, Time.deltaTime * 5);
-        }
-        else
-        {
-            maxSteeringAngle = Mathf.Lerp(maxSteeringAngle, 30, Time.deltaTime * 5);
-        }
-        
+
+        maxSteeringAngle = Mathf.Lerp(maxSteeringAngle, _rigidbody.velocity.magnitude * 2.2369362912f > 30 ? 10 : 30, Time.deltaTime * 5);
+
         if (_moveLeft)
         {
             _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, -1, Time.deltaTime * 5.0f);
-    
         }
         else if (_moveRight)
         {
@@ -179,8 +183,6 @@ public class CarController : MonoBehaviour
         {
             _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 0, Time.deltaTime * 5.0f);
         }
-
-        
         
         float currentSteeringValue = maxSteeringAngle * _currentSteeringMulti;
 
@@ -195,6 +197,11 @@ public class CarController : MonoBehaviour
             }
             if (axle.motor)
             {
+                // if (_rigidbody.velocity.magnitude * 2.2369362912f < 1 && _boost && _boostDelay <= 0)
+                // {
+                //     axle.leftWheel.motorTorque = motorForce * 200;
+                //     axle.rightWheel.motorTorque = motorForce * 200;
+                // }
                 axle.leftWheel.motorTorque = currentMotorValue;
                 axle.rightWheel.motorTorque = currentMotorValue;
             }
@@ -283,7 +290,7 @@ public class CarController : MonoBehaviour
         if (collision.transform.CompareTag("Player"))
         {
             Vector3 direction = collision.contacts[0].point - transform.position;
-            _rigidbody.AddForce(-(direction.normalized * bounciness), ForceMode.VelocityChange);
+            _rigidbody.velocity = -(direction.normalized * bounciness);
         }
     }
 
