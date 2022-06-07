@@ -75,7 +75,7 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    void GoToSpawn()
+    public void GoToSpawn()
     {
         _rb.velocity = Vector3.zero;
         _rb.angularVelocity = Vector3.zero;

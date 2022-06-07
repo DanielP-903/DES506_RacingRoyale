@@ -31,6 +31,7 @@ public class CarController : MonoBehaviour
     [Header("Cooldowns (in seconds)")]
     public float jumpCooldown = 2.0f;
     public float boostCooldown = 2.0f;
+    public float resetCooldown = 2.0f;
 
     private float _startingExtremumSlip;
     private float _startingAsymptoteSlip;
@@ -44,6 +45,7 @@ public class CarController : MonoBehaviour
     private bool _boost = false;
     private bool _rollLeft = false;
     private bool _rollRight = false;
+    private bool _reset = false;
     private bool _grounded = false;
     private bool _groundedL = false;
     private bool _groundedR = false;
@@ -54,6 +56,9 @@ public class CarController : MonoBehaviour
     
     private float _pushDelay = 2.0f;
     private float _boostDelay = 2.0f;
+    private float _resetDelay = 2.0f;
+    
+    private PlayerManager _playerManager;
     
     private Rigidbody _rigidbody;
     private bool _HitDetect;
@@ -82,6 +87,8 @@ public class CarController : MonoBehaviour
         _startingExtremumSlip = axles[0].leftWheel.sidewaysFriction.extremumSlip;
 
         _rigidbody.centerOfMass = centreOfMass.transform.localPosition;
+
+        _playerManager = GetComponent<PlayerManager>();
     }
 
     public void FixedUpdate()
@@ -103,30 +110,11 @@ public class CarController : MonoBehaviour
             if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
             {                
                 _rigidbody.velocity = transform.forward * boostForceAmount;
-                //_rigidbody.AddForce(transform.forward * (boostForceAmount * 300.0f), ForceMode.v);
-                //_rigidbody.AddForce(transform.forward * accelerationForce, ForceMode.Acceleration);
-
             }
             else
             {
                 _rigidbody.AddForce(transform.forward * boostForceAmount, ForceMode.VelocityChange);
             }
-
-
-            // if (_moveForward) _rigidbody.AddForce(transform.forward * boostForceAmount, ForceMode.VelocityChange);
-            // if (_moveBackward) _rigidbody.AddForce(-transform.forward * boostForceAmount, ForceMode.VelocityChange);
-            // if (_moveLeft) _rigidbody.AddForce(transform.right * boostForceAmount, ForceMode.VelocityChange);
-            // if (_moveRight) _rigidbody.AddForce(-transform.right * boostForceAmount, ForceMode.VelocityChange);
-            //if (!_moveBackward && !_moveForward && !_moveLeft && !_moveRight) _rigidbody.AddForce(transform.forward * (boostForceAmount), ForceMode.VelocityChange);
-            // foreach (var axle in axles)
-            // {
-            //     if (axle.motor)
-            //     {
-            //         axle.leftWheel.motorTorque = motorForce;
-            //         axle.rightWheel.motorTorque = motorForce;
-            //     }
-            // }
-            //if (!_moveBackward && !_moveForward && !_moveLeft && !_moveRight) _rigidbody.AddForce(transform.forward * (boostForceAmount), ForceMode.VelocityChange);
         }
     }
 
@@ -197,11 +185,6 @@ public class CarController : MonoBehaviour
             }
             if (axle.motor)
             {
-                // if (_rigidbody.velocity.magnitude * 2.2369362912f < 1 && _boost && _boostDelay <= 0)
-                // {
-                //     axle.leftWheel.motorTorque = motorForce * 200;
-                //     axle.rightWheel.motorTorque = motorForce * 200;
-                // }
                 axle.leftWheel.motorTorque = currentMotorValue;
                 axle.rightWheel.motorTorque = currentMotorValue;
             }
@@ -257,6 +240,13 @@ public class CarController : MonoBehaviour
         var rightCheck = Physics.Raycast(axles[0].rightWheel.transform.position + axles[0].rightWheel.transform.up, -axles[0].rightWheel.transform.up, out _rightHit, 1.0f);
         _groundedL = leftCheck;
         _groundedR = rightCheck;
+
+        _resetDelay = _resetDelay <= 0 ? 0 : _resetDelay - Time.deltaTime;
+        if (_reset && _resetDelay <= 0)
+        {
+            _resetDelay = resetCooldown;
+            _playerManager.GoToSpawn();
+        }
     }
     
     void OnDrawGizmos()
@@ -367,6 +357,13 @@ public class CarController : MonoBehaviour
     {
         float value = context.ReadValue<float>();
         _rollRight = value > 0;
+        //Debug.Log("Boost detected");
+    }
+    // Reset
+    public void Reset(InputAction.CallbackContext context)
+    {
+        float value = context.ReadValue<float>();
+        _reset = value > 0;
         //Debug.Log("Boost detected");
     }
 
