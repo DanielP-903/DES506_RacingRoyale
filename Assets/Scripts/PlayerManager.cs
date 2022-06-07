@@ -16,6 +16,8 @@ public class PlayerManager : MonoBehaviour
     private TextMeshProUGUI playerNameText;
     [SerializeField]
     private TextMeshProUGUI playerLicenseText;
+    [SerializeField]
+    private int playerNumber = 0;
     
     private PlayerManager target;
     private GameManager _gm;
@@ -57,18 +59,34 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    [PunRPC]
+    void SetNumber()
+    {
+        playerNumber = _gm.GetPlayerNumber();
+    }
+
     // Update is called once per frame
     void Update()
     {
         if (transform.position.y < -5)
         {
             //Debug.Log("Less than 5");
-            _rb.velocity = Vector3.zero;
-            _rb.angularVelocity = Vector3.zero;
-            Transform spawn = GameObject.Find("SpawnLocation" + _gm.GetPlayerNumber()).transform;
-            Transform thisTransform = transform;
-            thisTransform.rotation = spawn.rotation;
-            thisTransform.position = spawn.position;
+            GoToSpawn();
         }
+    }
+
+    void GoToSpawn()
+    {
+        _rb.velocity = Vector3.zero;
+        _rb.angularVelocity = Vector3.zero;
+        int spawnNumber = playerNumber;
+        if (playerNumber == 0)
+        {
+            spawnNumber = _gm.GetPlayerNumber();
+        }
+        Transform spawn = GameObject.Find("SpawnLocation" + spawnNumber).transform;
+        Transform thisTransform = transform;
+        thisTransform.rotation = spawn.rotation;
+        thisTransform.position = spawn.position;
     }
 }
