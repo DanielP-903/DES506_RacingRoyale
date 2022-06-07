@@ -24,6 +24,9 @@ public class CarController : MonoBehaviour
     public float torqueVectorAmount = 1.0f;
     public float airControlForce = 500.0f;
     public float boostForceAmount = 5.0f;
+
+    [Header("Collisions")] 
+    public float bounciness = 100.0f;
     
     [Header("Cooldowns (in seconds)")]
     public float jumpCooldown = 2.0f;
@@ -273,6 +276,15 @@ public class CarController : MonoBehaviour
         Gizmos.color = Color.cyan;
         //Gizmos.DrawSphere(transform.position + (transform.up/4), 0.1f);
         //Gizmos.DrawSphere(GetComponent<BoxCollider>().bounds.center- (transform.up/4), 0.1f);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.CompareTag("Player"))
+        {
+            Vector3 direction = collision.contacts[0].point - transform.position;
+            _rigidbody.AddForce(-(direction.normalized * bounciness), ForceMode.VelocityChange);
+        }
     }
 
     private void OnTriggerEnter(Collider collider)
