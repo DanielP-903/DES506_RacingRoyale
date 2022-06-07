@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,6 +9,8 @@ using UnityEngine.InputSystem;
 
 public class CarController : MonoBehaviour
 {
+    public GameObject centreOfMass;
+    
     [Header("Car Driving Physics")]
     public float motorForce = 0;
     public float brakeTorque = 1000;
@@ -26,6 +29,9 @@ public class CarController : MonoBehaviour
     public float jumpCooldown = 2.0f;
     public float boostCooldown = 2.0f;
 
+    private float _startingExtremumSlip;
+    private float _startingAsymptoteSlip;
+    
     private bool _moveForward = false;
     private bool _moveBackward = false;
     private bool _moveRight = false;
@@ -39,6 +45,8 @@ public class CarController : MonoBehaviour
     private bool _groundedL = false;
     private bool _groundedR = false;
 
+    private float _currentSteeringMulti;
+    
     private bool _passedFinishLine = false;
     
     private float _pushDelay = 2.0f;
@@ -63,9 +71,14 @@ public class CarController : MonoBehaviour
 
         _boxCollider = transform.GetComponent<BoxCollider>();
 
-        _rigidbody.centerOfMass += (Vector3.down/4);
+        //_rigidbody.centerOfMass += (Vector3.down/4);
 
         _passedFinishLine = false;
+
+        _startingAsymptoteSlip = axles[0].leftWheel.sidewaysFriction.asymptoteSlip;
+        _startingExtremumSlip = axles[0].leftWheel.sidewaysFriction.extremumSlip;
+
+        _rigidbody.centerOfMass = centreOfMass.transform.localPosition;
     }
 
     public void FixedUpdate()
@@ -140,8 +153,33 @@ public class CarController : MonoBehaviour
         float motorMultiplier = _moveForward ? 1 : _moveBackward ? -1 : 0;
         float currentMotorValue = motorForce * motorMultiplier;
         
-        float steeringMultiplier = _moveLeft ? -1 : _moveRight ? 1 : 0;
-        float currentSteeringValue = maxSteeringAngle * steeringMultiplier;
+        // _currentSteeringMulti = _moveLeft ? -1 : _moveRight ? 1 : 0;
+        if (_rigidbody.velocity.magnitude * 2.2369362912f > 30)
+        {
+            maxSteeringAngle = Mathf.Lerp(maxSteeringAngle, 10, Time.deltaTime * 5);
+        }
+        else
+        {
+            maxSteeringAngle = Mathf.Lerp(maxSteeringAngle, 30, Time.deltaTime * 5);
+        }
+        
+        if (_moveLeft)
+        {
+            _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, -1, Time.deltaTime * 5.0f);
+    
+        }
+        else if (_moveRight)
+        {
+            _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 1, Time.deltaTime * 5.0f);
+        }
+        else
+        {
+            _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 0, Time.deltaTime * 5.0f);
+        }
+
+        
+        
+        float currentSteeringValue = maxSteeringAngle * _currentSteeringMulti;
 
         foreach (var axle in axles)
         {
@@ -161,14 +199,14 @@ public class CarController : MonoBehaviour
             if (_drift) // New original friction
             {
                 WheelFrictionCurve frictionCurve = axle.leftWheel.forwardFriction;
-                frictionCurve.stiffness = 1.5f;
+               // frictionCurve.stiffness = 1.5f;
                 axle.leftWheel.forwardFriction  = frictionCurve;
                 axle.rightWheel.forwardFriction  = frictionCurve;
             }
             else // Default friction
             {
                 WheelFrictionCurve frictionCurve = axle.leftWheel.forwardFriction;
-                frictionCurve.stiffness = 1.2f;
+                //frictionCurve.stiffness = 1.2f;
                 axle.leftWheel.forwardFriction  = frictionCurve;
                 axle.rightWheel.forwardFriction  = frictionCurve;  
             }
@@ -185,8 +223,10 @@ public class CarController : MonoBehaviour
         }
         if (_moveForward) _rigidbody.AddForce(transform.forward * accelerationForce, ForceMode.Acceleration);
         if (_moveBackward) _rigidbody.AddForce(-transform.forward * accelerationForce, ForceMode.Acceleration);
-        if (_moveLeft) _rigidbody.AddForce(transform.right * accelerationForce, ForceMode.Acceleration);
-        if (_moveRight) _rigidbody.AddForce(-transform.right * accelerationForce, ForceMode.Acceleration);
+        if (_moveLeft) _rigidbody.AddForce(transform.right * (accelerationForce), ForceMode.Acceleration);
+        if (_moveRight) _rigidbody.AddForce(-transform.right * (accelerationForce), ForceMode.Acceleration);
+        
+        
     }
 
     private void Update()
