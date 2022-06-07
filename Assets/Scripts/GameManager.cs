@@ -14,6 +14,28 @@ public class GameManager : MonoBehaviourPunCallbacks
 {
     //private ArrayList _playerList;
     //private Dictionary<int, string> players;
+    
+    #region Serializable Private Fields
+
+    [Tooltip("Time spent waiting in lobby before game starts")] [SerializeField]
+    private float waitingTime;
+    
+    #endregion
+    
+    #region Private Fields
+
+    [Tooltip("The prefab to use for representing the timer")]
+    private TextMeshProUGUI timer;
+    private PhotonView _photonView;
+
+    #endregion
+    
+    #region Public Fields
+    
+    [Tooltip("The prefab to use for representing the player")]
+    public GameObject playerPrefab;
+    
+    #endregion
 
     #region Photon Callbacks
 
@@ -90,12 +112,12 @@ public class GameManager : MonoBehaviourPunCallbacks
             Debug.LogError("PhotonNetwork : Trying to Load a level but we are not the master Client");
         }
         Debug.LogFormat("PhotonNetwork : Loading Level : {0}", PhotonNetwork.CurrentRoom.PlayerCount);
-        photonView.RPC("SetNumber", RpcTarget.All);
+        _photonView.RPC("SetNumber", RpcTarget.All);
         PhotonNetwork.LoadLevel(arenaName);
     }
 
     private void Start()
-    {
+    { 
         timer = GameObject.Find("Timer").GetComponent<TextMeshProUGUI>();
         if (playerPrefab == null)
         {
@@ -107,10 +129,11 @@ public class GameManager : MonoBehaviourPunCallbacks
             // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
             //PhotonNetwork.Instantiate(this.playerPrefab.name, GameObject.Find("SpawnLocation"+PhotonNetwork.CurrentRoom.PlayerCount).transform.position, Quaternion.identity, 0);
             Debug.Log("Player Number: "+PhotonNetwork.LocalPlayer.GetPlayerNumber()); //GetPlayerNumber()
-            PhotonNetwork.Instantiate(this.playerPrefab.name, GameObject.Find("SpawnLocation" + GetPlayerNumber()).transform.position, GameObject.Find("SpawnLocation" + GetPlayerNumber()).transform.rotation, 0);
+            GameObject player = PhotonNetwork.Instantiate(this.playerPrefab.name, GameObject.Find("SpawnLocation" + GetPlayerNumber()).transform.position, GameObject.Find("SpawnLocation" + GetPlayerNumber()).transform.rotation, 0);
+            _photonView = player.GetComponent<PhotonView>();
         }
 
-        if (!PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsMasterClient)
         {
             CountdownTimer.SetStartTime();
         }
@@ -119,35 +142,22 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void Update()
     {
         CountdownTimer.TryGetStartTime(out var hit);
-        if (PhotonNetwork.IsMasterClient && PhotonNetwork.Time - hit > waitingTime )
+        if (PhotonNetwork.CurrentRoom.IsOpen && PhotonNetwork.IsMasterClient && (PhotonNetwork.ServerTimestamp - hit)/1000f > waitingTime)
         {
+            PhotonNetwork.CurrentRoom.IsOpen = false;
             LoadArena("Stage1");
         }
+        else if (!PhotonNetwork.CurrentRoom.IsOpen)
+        {
+            timer.gameObject.SetActive(false);
+        }
 
-        int Sec = (int)waitingTime;
-        int milSec;
-        timer.text = "";
+        float tempTime = (float)waitingTime - (float)((PhotonNetwork.ServerTimestamp - hit)/1000f);
+        int sec = Mathf.FloorToInt(tempTime);
+        int milSec = Mathf.FloorToInt((tempTime - sec)*100f);
+        timer.text = sec+":"+milSec;
     }
 
     #endregion
     
-    #region Serializable Private Fields
-
-    [Tooltip("Time spent waiting in lobby before game starts")] [SerializeField]
-    private float waitingTime;
-    
-    #endregion
-    #region Private Fields
-
-    [Tooltip("The prefab to use for representing the timer")]
-    private TextMeshProUGUI timer;
-
-    #endregion
-    
-    #region Public Fields
-    
-    [Tooltip("The prefab to use for representing the player")]
-    public GameObject playerPrefab;
-    
-    #endregion
 }
