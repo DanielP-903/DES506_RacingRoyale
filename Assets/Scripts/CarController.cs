@@ -39,6 +39,8 @@ public class CarController : MonoBehaviour
     private bool _groundedL = false;
     private bool _groundedR = false;
 
+    private bool _passedFinishLine = false;
+    
     private float _pushDelay = 2.0f;
     private float _boostDelay = 2.0f;
     
@@ -46,8 +48,8 @@ public class CarController : MonoBehaviour
     private bool _HitDetect;
     private Collider _boxCollider;
     private RaycastHit _Hit;
-    private RaycastHit _leftHit;
-    private RaycastHit _rightHit;
+    private RaycastHit _leftHit, _rightHit;
+    
     private void Start()
     {
         _pushDelay = jumpCooldown;
@@ -62,6 +64,8 @@ public class CarController : MonoBehaviour
         _boxCollider = transform.GetComponent<BoxCollider>();
 
         _rigidbody.centerOfMass += (Vector3.down/4);
+
+        _passedFinishLine = false;
     }
 
     public void FixedUpdate()
@@ -125,8 +129,8 @@ public class CarController : MonoBehaviour
             if (_moveBackward) _rigidbody.AddTorque(-transform.right * airControlForce, ForceMode.Force);
             if (_moveLeft) _rigidbody.AddTorque(-transform.up/20, ForceMode.VelocityChange);
             if (_moveRight) _rigidbody.AddTorque(transform.up/20, ForceMode.VelocityChange);
-            if (_rollLeft) _rigidbody.AddTorque(transform.forward/20, ForceMode.VelocityChange);
-            if (_rollRight) _rigidbody.AddTorque(-transform.forward/20, ForceMode.VelocityChange);
+            if (_rollLeft) _rigidbody.AddTorque(transform.forward/15, ForceMode.VelocityChange);
+            if (_rollRight) _rigidbody.AddTorque(-transform.forward/15, ForceMode.VelocityChange);
         }
     }
     
@@ -230,7 +234,18 @@ public class CarController : MonoBehaviour
         //Gizmos.DrawSphere(transform.position + (transform.up/4), 0.1f);
         //Gizmos.DrawSphere(GetComponent<BoxCollider>().bounds.center- (transform.up/4), 0.1f);
     }
-    
+
+    private void OnTriggerEnter(Collider collider)
+    {
+        if (collider.transform.CompareTag("FinishLine") && !_passedFinishLine)
+        {
+            // Passed finish line
+            Debug.Log("Passed finish line!");
+            _passedFinishLine = true;
+            // TODO: Implement finish line communication with network
+        }
+    }
+
     // Input Actions
     // W
     public void Forward(InputAction.CallbackContext context)
