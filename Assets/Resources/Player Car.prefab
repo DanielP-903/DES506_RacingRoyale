@@ -326,7 +326,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 1435640181232334093}
   - {fileID: 3259610436090621005}
-  sceneViewId: 0
+  sceneViewId: 1
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!1 &1118674506502527236
@@ -1198,6 +1198,7 @@ GameObject:
   - component: {fileID: 6871293398502592986}
   - component: {fileID: 6871293398499683994}
   - component: {fileID: 6871293398500278808}
+  - component: {fileID: 1247857592}
   m_Layer: 0
   m_Name: wheel_03
   m_TagString: Untagged
@@ -1268,6 +1269,18 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1247857592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6871293398502682900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6957b9694324954aab69c36df5e1000, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6871293398502739254
 GameObject:
   m_ObjectHideFlags: 0
@@ -1279,6 +1292,7 @@ GameObject:
   - component: {fileID: 6871293398502504832}
   - component: {fileID: 6871293398499693328}
   - component: {fileID: 6871293398500737754}
+  - component: {fileID: 669765859}
   m_Layer: 0
   m_Name: wheel_04
   m_TagString: Untagged
@@ -1349,6 +1363,18 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &669765859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6871293398502739254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6957b9694324954aab69c36df5e1000, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6871293398502746342
 GameObject:
   m_ObjectHideFlags: 0
@@ -1360,6 +1386,7 @@ GameObject:
   - component: {fileID: 6871293398502584034}
   - component: {fileID: 6871293398499706124}
   - component: {fileID: 6871293398500768590}
+  - component: {fileID: 434410228}
   m_Layer: 0
   m_Name: wheel_02
   m_TagString: Untagged
@@ -1430,6 +1457,18 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &434410228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6871293398502746342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6957b9694324954aab69c36df5e1000, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6871293398502776574
 GameObject:
   m_ObjectHideFlags: 0
@@ -1522,6 +1561,7 @@ GameObject:
   - component: {fileID: 6871293398502496486}
   - component: {fileID: 6871293398499602514}
   - component: {fileID: 6871293398500754850}
+  - component: {fileID: 707629999}
   m_Layer: 0
   m_Name: wheel_01
   m_TagString: Untagged
@@ -1592,6 +1632,18 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &707629999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6871293398502779776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6957b9694324954aab69c36df5e1000, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7720919390906063054
 GameObject:
   m_ObjectHideFlags: 0
