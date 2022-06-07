@@ -331,7 +331,7 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1334133134134803657}
+      - m_Target: {fileID: 4753270344536567150}
         m_TargetAssemblyTypeName: Dan_CarController, Assembly-CSharp
         m_MethodName: Forward
         m_Mode: 0
@@ -347,7 +347,7 @@ MonoBehaviour:
     m_ActionName: Master/Forward[/Keyboard/w]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1334133134134803657}
+      - m_Target: {fileID: 4753270344536567150}
         m_TargetAssemblyTypeName: Dan_CarController, Assembly-CSharp
         m_MethodName: Backward
         m_Mode: 0
@@ -363,7 +363,7 @@ MonoBehaviour:
     m_ActionName: Master/Backward[/Keyboard/s]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1334133134134803657}
+      - m_Target: {fileID: 4753270344536567150}
         m_TargetAssemblyTypeName: Dan_CarController, Assembly-CSharp
         m_MethodName: Left
         m_Mode: 0
@@ -379,7 +379,7 @@ MonoBehaviour:
     m_ActionName: Master/Left[/Keyboard/a]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1334133134134803657}
+      - m_Target: {fileID: 4753270344536567150}
         m_TargetAssemblyTypeName: Dan_CarController, Assembly-CSharp
         m_MethodName: Right
         m_Mode: 0
@@ -395,7 +395,7 @@ MonoBehaviour:
     m_ActionName: Master/Right[/Keyboard/d]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1334133134134803657}
+      - m_Target: {fileID: 4753270344536567150}
         m_TargetAssemblyTypeName: CarController, Assembly-CSharp
         m_MethodName: Space
         m_Mode: 0
@@ -411,7 +411,7 @@ MonoBehaviour:
     m_ActionName: Master/Push[/Keyboard/space]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1334133134134803657}
+      - m_Target: {fileID: 4753270344536567150}
         m_TargetAssemblyTypeName: CarController, Assembly-CSharp
         m_MethodName: Boost
         m_Mode: 0
@@ -427,7 +427,7 @@ MonoBehaviour:
     m_ActionName: Master/Boost[/Keyboard/leftShift]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1334133134134803657}
+      - m_Target: {fileID: 4753270344536567150}
         m_TargetAssemblyTypeName: CarController, Assembly-CSharp
         m_MethodName: Drift
         m_Mode: 0
@@ -443,7 +443,7 @@ MonoBehaviour:
     m_ActionName: Master/Drift[/Keyboard/leftAlt]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1334133134134803657}
+      - m_Target: {fileID: 4753270344536567150}
         m_TargetAssemblyTypeName: CarController, Assembly-CSharp
         m_MethodName: RollLeft
         m_Mode: 0
@@ -459,7 +459,7 @@ MonoBehaviour:
     m_ActionName: Master/Roll Left[/Keyboard/q]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1334133134134803657}
+      - m_Target: {fileID: 4753270344536567150}
         m_TargetAssemblyTypeName: CarController, Assembly-CSharp
         m_MethodName: RollRight
         m_Mode: 0
@@ -36044,27 +36044,6 @@ MonoBehaviour:
     InterpolateOption: 0
     InterpolateMoveTowardsSpeed: 1
     InterpolateLerpSpeed: 0
---- !u!4 &1334133134134803656 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1118674505751619610, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-  m_PrefabInstance: {fileID: 5652394359645816181}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1334133134134803657 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1118674505751619611, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-  m_PrefabInstance: {fileID: 5652394359645816181}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1334133134134803658}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ddffb28a62db14459910a9bcdc1d72a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &1334133134134803658 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1118674505751619608, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-  m_PrefabInstance: {fileID: 5652394359645816181}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1394177387522433655
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -36190,15 +36169,15 @@ PrefabInstance:
     - target: {fileID: 2774631455131860110, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_Follow
       value: 
-      objectReference: {fileID: 1334133134134803656}
+      objectReference: {fileID: 4753270344536567151}
     - target: {fileID: 2774631455131860110, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_LookAt
       value: 
-      objectReference: {fileID: 1334133134134803656}
+      objectReference: {fileID: 4753270344536567151}
     - target: {fileID: 2774631455131860144, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: target
       value: 
-      objectReference: {fileID: 1334133134134803658}
+      objectReference: {fileID: 4753270344536567149}
     - target: {fileID: 2774631455131860148, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -36711,6 +36690,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6957b9694324954aab69c36df5e1000, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &4753270344536567149 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1118674505751619608, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+  m_PrefabInstance: {fileID: 5652394359645816181}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4753270344536567150 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1118674505751619611, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+  m_PrefabInstance: {fileID: 5652394359645816181}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4753270344536567149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ddffb28a62db14459910a9bcdc1d72a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &4753270344536567151 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1118674505751619610, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+  m_PrefabInstance: {fileID: 5652394359645816181}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5652394359645816181
 PrefabInstance:
   m_ObjectHideFlags: 0
