@@ -52514,6 +52514,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3259610436090621005, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+      propertyPath: m_PositionModel.TeleportEnabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3259610436090621005, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+      propertyPath: m_PositionModel.InterpolateOption
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3259610436090621005, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+      propertyPath: m_PositionModel.TeleportIfDistanceGreaterThan
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 7770678307179569261, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
       propertyPath: sceneViewId
       value: 1

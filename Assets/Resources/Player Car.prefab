@@ -288,9 +288,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PositionModel:
     SynchronizeEnabled: 1
-    TeleportEnabled: 1
-    TeleportIfDistanceGreaterThan: 3
-    InterpolateOption: 4
+    TeleportEnabled: 0
+    TeleportIfDistanceGreaterThan: 20
+    InterpolateOption: 2
     InterpolateMoveTowardsSpeed: 1
     InterpolateLerpSpeed: 1
     ExtrapolateOption: 0
@@ -328,7 +328,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 1435640181232334093}
   - {fileID: 3259610436090621005}
-  sceneViewId: 0
+  sceneViewId: 1
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!1 &1118674506502527236
