@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
+using TMPro;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
@@ -33,7 +34,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             Debug.LogFormat("OnPlayerEnteredRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
 
 
-            LoadArena();
+            //LoadArena();
         }
     }
     public override void OnPlayerLeftRoom(Player other)
@@ -46,7 +47,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             Debug.LogFormat("OnPlayerLeftRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
 
 
-            LoadArena();
+            //LoadArena();
         }
     }
     
@@ -82,18 +83,20 @@ public class GameManager : MonoBehaviourPunCallbacks
     #region Private Methods
 
 
-    void LoadArena()
+    void LoadArena(string arenaName)
     {
         if (!PhotonNetwork.IsMasterClient)
         {
             Debug.LogError("PhotonNetwork : Trying to Load a level but we are not the master Client");
         }
         Debug.LogFormat("PhotonNetwork : Loading Level : {0}", PhotonNetwork.CurrentRoom.PlayerCount);
-        //PhotonNetwork.LoadLevel("Nicholas");
+        photonView.RPC("SetNumber", RpcTarget.All);
+        PhotonNetwork.LoadLevel(arenaName);
     }
 
     private void Start()
     {
+        timer = (TextMeshProUGUI)GameObject.Find("Timer");
         if (playerPrefab == null)
         {
             Debug.LogError("<Color=Red><a>Missing</a></Color> playerPrefab Reference. Please set it up in GameObject 'Game Manager'",this);
@@ -106,8 +109,38 @@ public class GameManager : MonoBehaviourPunCallbacks
             Debug.Log("Player Number: "+PhotonNetwork.LocalPlayer.GetPlayerNumber()); //GetPlayerNumber()
             PhotonNetwork.Instantiate(this.playerPrefab.name, GameObject.Find("SpawnLocation" + GetPlayerNumber()).transform.position, GameObject.Find("SpawnLocation" + GetPlayerNumber()).transform.rotation, 0);
         }
+
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            CountdownTimer.SetStartTime();
+        }
     }
 
+    private void Update()
+    {
+        CountdownTimer.TryGetStartTime(out var hit);
+        if (PhotonNetwork.IsMasterClient && PhotonNetwork.Time - hit > waitingTime )
+        {
+            LoadArena("Stage1");
+        }
+
+        int Sec = waitingTime;
+        int milSec;
+        timer.text = "";
+    }
+
+    #endregion
+    
+    #region Serializable Private Fields
+
+    [Tooltip("Time spent waiting in lobby before game starts")] [SerializeField]
+    private float waitingTime;
+    
+    #endregion
+    #region Private Fields
+
+    [Tooltip("The prefab to use for representing the timer")]
+    private TextMeshProUGUI timer;
 
     #endregion
     
