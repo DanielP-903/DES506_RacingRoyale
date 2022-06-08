@@ -100,11 +100,8 @@ public class PlayerManager : MonoBehaviour
         {
             Debug.Log("Stage Completed");
             completedStage = true;
-            int num = 200;
-            GameManager.TryGetFinishedPlayers(out num);
-            num = num+1;
-            Debug.Log("Player Finished: "+num);
-            GameManager.SetFinishedPlayers(num);
+            GameManager.TryGetFinishedPlayers(out int num);
+            GameManager.SetFinishedPlayers(num++);
         }
     }
     
