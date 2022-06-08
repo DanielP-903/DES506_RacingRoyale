@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
+public struct RoadPart
+{
+    public float rotation;
+    public GameObject part;
+}
+
 public class Pathfinder : MonoBehaviour
 {
     public GameObject playerRef;
@@ -41,8 +47,7 @@ public class Pathfinder : MonoBehaviour
     private Node _temp;
     private CarController _carController;
 
-    private Stack<float> _rotationStack = new Stack<float>();
-    private Stack<GameObject> _roadPieceStack = new Stack<GameObject>();
+    private List<RoadPart> _roadParts = new List<RoadPart>();
     void OnDrawGizmos()
     {
         if (_grid[0, 0] != null)
@@ -166,7 +171,7 @@ public class Pathfinder : MonoBehaviour
     {
         Vector3 currentDirection = Vector3.zero;
         Vector3 previousDirection = Vector3.zero;
-        for (var index = 0; index < _originalPath.Count; index++)
+        for (var index = 1; index < _originalPath.Count-1; index++)
         {
             Node current = _originalPath[index];
             if (index + 1 < _originalPath.Count)
@@ -185,8 +190,10 @@ public class Pathfinder : MonoBehaviour
                         chosenRoadPart = straightPieces[0];
                     }
 
-                    _rotationStack.Push(Vector3.Angle(previousDirection,currentDirection));
-                    _roadPieceStack.Push(chosenRoadPart);
+                    RoadPart roadPart = new RoadPart();
+                    roadPart.part = chosenRoadPart;
+                    roadPart.rotation = Vector3.Angle(previousDirection,currentDirection);
+                    _roadParts.Add(roadPart);
 
                     //chosenRoadPart.transform.rotation = Quaternion.LookRotation(currentDirection); // * _currentTransform.rotation;
                     //roadPart.SetActive(false);
@@ -203,16 +210,17 @@ public class Pathfinder : MonoBehaviour
 
     private IEnumerator Delay()
     {
-        float currentRotation;
-        foreach (Node n in _originalPath)
+        float currentRotation = 0;
+        for (var index = 1; index < _originalPath.Count-1; index++)
         {
+            Node n = _originalPath[index];
             yield return new WaitForSeconds(0.2f);
-            GameObject part = _roadPieceStack.Pop();
-            float rotation = _rotationStack.Pop();
-            
-            part.transform.Rotate(rotation * Vector3.up);
-            
-            GameObject roadPart = Instantiate(part, n.transform.position, part.transform.rotation);//, _originalPath[index].transform);
+            RoadPart road = _roadParts[index-1];
+            currentRotation += road.rotation;
+            road.part.transform.Rotate(currentRotation * Vector3.up);
+
+            GameObject roadPart =
+                Instantiate(road.part, n.transform.position, road.part.transform.rotation); //, _originalPath[index].transform);
         }
     }
 
