@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
+using ExitGames.Client.Photon;
 using TMPro;
 
 public class GameManager : MonoBehaviourPunCallbacks
@@ -49,7 +50,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Player other)
     {
         Debug.LogFormat("OnPlayerEnteredRoom() {0}", other.NickName); // not seen if you're the player connecting
-        //_playerList.Add(other);
 
         if (PhotonNetwork.IsMasterClient)
         {
@@ -62,7 +62,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     public override void OnPlayerLeftRoom(Player other)
     {
         Debug.LogFormat("OnPlayerLeftRoom() {0}", other.NickName); // seen when other disconnects
-        //_playerList.Remove(other);
 
         if (PhotonNetwork.IsMasterClient)
         {
@@ -100,6 +99,36 @@ public class GameManager : MonoBehaviourPunCallbacks
         return counter;
     }
     
+    public static bool TryGetFinishedPlayers(out int finishedPlayers)
+    {
+        finishedPlayers = 0;
+
+        object finishedPlayersFromProps;
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("FinishedPlayers", out finishedPlayersFromProps))
+        {
+            finishedPlayers = (int)finishedPlayersFromProps;
+            return true;
+        }
+
+        return false;
+    }
+
+
+    public static void SetFinishedPlayers(int num)
+    {
+        int finishedPlayers = 0;
+        bool wasSet = TryGetFinishedPlayers(out finishedPlayers);
+
+        ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
+        {
+            {"FinishedPlayers", (int)num}
+        };
+        PhotonNetwork.CurrentRoom.SetCustomProperties(props);
+
+
+        Debug.Log("Set Custom Props for Time: "+ props.ToStringFull() + " wasSet: "+wasSet);
+    }
+    
     #endregion
     
     #region Private Methods
@@ -112,7 +141,6 @@ public class GameManager : MonoBehaviourPunCallbacks
             Debug.LogError("PhotonNetwork : Trying to Load a level but we are not the master Client");
         }
         Debug.LogFormat("PhotonNetwork : Loading Level : {0}", PhotonNetwork.CurrentRoom.PlayerCount);
-        _photonView.RPC("SetNumber", RpcTarget.All);
         PhotonNetwork.LoadLevel(arenaName);
     }
 
@@ -135,27 +163,71 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient)
         {
+            SetFinishedPlayers(0);
             CountdownTimer.SetStartTime();
         }
     }
 
     private void Update()
     {
-        CountdownTimer.TryGetStartTime(out var hit);
-        if (PhotonNetwork.CurrentRoom.IsOpen && PhotonNetwork.IsMasterClient && (PhotonNetwork.ServerTimestamp - hit)/1000f > waitingTime)
+        switch (SceneManager.GetActiveScene().name)
         {
-            PhotonNetwork.CurrentRoom.IsOpen = false;
-            LoadArena("Stage1");
-        }
-        else if (!PhotonNetwork.CurrentRoom.IsOpen)
-        {
-            timer.gameObject.SetActive(false);
-        }
+            case "WaitingArea":
+                CountdownTimer.TryGetStartTime(out var hit);
+                if (PhotonNetwork.CurrentRoom.IsOpen && PhotonNetwork.IsMasterClient &&
+                    (PhotonNetwork.ServerTimestamp - hit) / 1000f > waitingTime)
+                {
+                    PhotonNetwork.CurrentRoom.IsOpen = false;
+                    _photonView.RPC("SetNumber", RpcTarget.All);
+                    LoadArena("Stage1");
+                }
+                else if (!PhotonNetwork.CurrentRoom.IsOpen)
+                {
+                    timer.gameObject.SetActive(false);
+                }
 
-        float tempTime = (float)waitingTime - (float)((PhotonNetwork.ServerTimestamp - hit)/1000f);
-        int sec = Mathf.FloorToInt(tempTime);
-        int milSec = Mathf.FloorToInt((tempTime - sec)*100f);
-        timer.text = sec+":"+milSec;
+                float tempTime = (float)waitingTime - (float)((PhotonNetwork.ServerTimestamp - hit) / 1000f);
+                int sec = Mathf.FloorToInt(tempTime);
+                int milSec = Mathf.FloorToInt((tempTime - sec) * 100f);
+                timer.text = sec + ":" + milSec;
+                break;
+            case "Stage1":
+            case "Stage2":
+            case "Stage3":
+                int playersCompleted = 0;
+                string str = SceneManager.GetActiveScene().name;
+                int stageNumber = Convert.ToInt32(str[str.Length - 1]);
+                TryGetFinishedPlayers(out playersCompleted);
+                if (playersCompleted >= PhotonNetwork.CurrentRoom.MaxPlayers/Mathf.Pow(2,stageNumber))
+                {
+                    LoadArena("Stage"+stageNumber++);
+                    _photonView.RPC("ResetCompleted", RpcTarget.All);
+                }
+                break;
+            case "Stage4":
+                break;
+            case "EndStage":
+                break;
+        }
+        /*
+            CountdownTimer.TryGetStartTime(out var hit);
+            if (PhotonNetwork.CurrentRoom.IsOpen && PhotonNetwork.IsMasterClient &&
+                (PhotonNetwork.ServerTimestamp - hit) / 1000f > waitingTime)
+            {
+                PhotonNetwork.CurrentRoom.IsOpen = false;
+                _photonView.RPC("SetNumber", RpcTarget.All);
+                LoadArena("Stage1");
+            }
+            else if (!PhotonNetwork.CurrentRoom.IsOpen)
+            {
+                timer.gameObject.SetActive(false);
+            }
+
+            float tempTime = (float)waitingTime - (float)((PhotonNetwork.ServerTimestamp - hit) / 1000f);
+            int sec = Mathf.FloorToInt(tempTime);
+            int milSec = Mathf.FloorToInt((tempTime - sec) * 100f);
+            timer.text = sec + ":" + milSec;
+        */
     }
 
     #endregion

@@ -11,17 +11,20 @@ public class PlayerManager : MonoBehaviour
     private PhotonView _photonView;
     private CarController _dcc;
     private Rigidbody _rb;
+    private PlayerManager target;
+    private GameManager _gm;
+    
+    
     
     [SerializeField]
     private TextMeshProUGUI playerNameText;
     [SerializeField]
     private TextMeshProUGUI playerLicenseText;
-    [SerializeField]
+    
+    
     private int playerNumber = 0;
-    
-    private PlayerManager target;
-    private GameManager _gm;
-    
+    private bool completedStage = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -88,5 +91,29 @@ public class PlayerManager : MonoBehaviour
         Transform thisTransform = transform;
         thisTransform.rotation = spawn.rotation;
         thisTransform.position = spawn.position;
+    }
+
+    public void CompleteStage()
+    {
+        if (!completedStage)
+        {
+            Debug.Log("Stage Completed");
+            completedStage = true;
+            GameManager.TryGetFinishedPlayers(out int num);
+            GameManager.SetFinishedPlayers(num++);
+        }
+    }
+    
+    [PunRPC]
+    void ResetCompleted()
+    {
+        if (completedStage)
+        {
+            completedStage = false;
+        }
+        else
+        {
+            _gm.LeaveRoom();
+        }
     }
 }
