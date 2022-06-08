@@ -51,11 +51,11 @@ public class PlayerHUDController : MonoBehaviour
         GameObject[] listOfPlayers = GameObject.FindGameObjectsWithTag("Player");
         foreach (GameObject player in listOfPlayers)
         {
-            Debug.Log("Player: " + player);
+            //Debug.Log("Player: " + player);
             if (player.GetComponent<PhotonView>().IsMine)
             {
                 _playerRef = player;
-                Debug.Log("Player Found");
+                //Debug.Log("Player Found");
                 hasFoundPlayer = true;
             }
         }
