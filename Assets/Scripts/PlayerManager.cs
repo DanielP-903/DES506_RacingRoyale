@@ -11,15 +11,20 @@ public class PlayerManager : MonoBehaviour
     private PhotonView _photonView;
     private CarController _dcc;
     private Rigidbody _rb;
+    private PlayerManager target;
+    private GameManager _gm;
+    
+    
     
     [SerializeField]
     private TextMeshProUGUI playerNameText;
     [SerializeField]
     private TextMeshProUGUI playerLicenseText;
     
-    private PlayerManager target;
-    private GameManager _gm;
     
+    private int playerNumber = 0;
+    private bool completedStage = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -57,16 +62,58 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    [PunRPC]
+    void SetNumber()
+    {
+        playerNumber = _gm.GetPlayerNumber();
+    }
+
     // Update is called once per frame
     void Update()
     {
         if (transform.position.y < -5)
         {
             //Debug.Log("Less than 5");
-            _rb.velocity = Vector3.zero;
-            _rb.angularVelocity = Vector3.zero;
-            transform.rotation = Quaternion.Euler(Vector3.zero);
-            transform.position = GameObject.Find("SpawnLocation" + _gm.GetPlayerNumber()).transform.position;
+            GoToSpawn();
+        }
+    }
+
+    public void GoToSpawn()
+    {
+        _rb.velocity = Vector3.zero;
+        _rb.angularVelocity = Vector3.zero;
+        int spawnNumber = playerNumber;
+        if (playerNumber == 0)
+        {
+            spawnNumber = _gm.GetPlayerNumber();
+        }
+        Transform spawn = GameObject.Find("SpawnLocation" + spawnNumber).transform;
+        Transform thisTransform = transform;
+        thisTransform.rotation = spawn.rotation;
+        thisTransform.position = spawn.position;
+    }
+
+    public void CompleteStage()
+    {
+        if (!completedStage)
+        {
+            Debug.Log("Stage Completed");
+            completedStage = true;
+            GameManager.TryGetFinishedPlayers(out int num);
+            GameManager.SetFinishedPlayers(num++);
+        }
+    }
+    
+    [PunRPC]
+    void ResetCompleted()
+    {
+        if (completedStage)
+        {
+            completedStage = false;
+        }
+        else
+        {
+            _gm.LeaveRoom();
         }
     }
 }

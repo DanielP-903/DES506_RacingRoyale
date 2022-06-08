@@ -48,7 +48,7 @@ using Photon.Realtime;
 
                 // #Critical
                 // Load the Room Level.
-                PhotonNetwork.LoadLevel("Nicholas");
+                PhotonNetwork.LoadLevel("WaitingArea");
             }
         }
 
