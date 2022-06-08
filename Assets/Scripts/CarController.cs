@@ -222,6 +222,11 @@ public class CarController : MonoBehaviour
         
     }
 
+    public bool GetBoost()
+    {
+        return _boostDelay <= 0 && _boost;
+    }
+    
     private void Update()
     {
         WheelCollider currentWheel = axles[0].leftWheel;
@@ -248,6 +253,8 @@ public class CarController : MonoBehaviour
             _playerManager.GoToSpawn();
         }
     }
+    
+    
     
     void OnDrawGizmos()
     {
@@ -291,6 +298,7 @@ public class CarController : MonoBehaviour
             // Passed finish line
             Debug.Log("Passed finish line!");
             _passedFinishLine = true;
+            _playerManager.CompleteStage();
             // TODO: Implement finish line communication with network
         }
     }
