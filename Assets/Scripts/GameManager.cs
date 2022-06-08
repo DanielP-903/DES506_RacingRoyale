@@ -13,6 +13,9 @@ using TMPro;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
+    public int previousFrame;
+    public int currentFrame;
+    
     //private ArrayList _playerList;
     //private Dictionary<int, string> players;
     
@@ -28,6 +31,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [Tooltip("The prefab to use for representing the timer")]
     private TextMeshProUGUI timer;
     private PhotonView _photonView;
+    private int _stage = 1;
 
     #endregion
     
@@ -126,7 +130,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         PhotonNetwork.CurrentRoom.SetCustomProperties(props);
 
 
-        Debug.Log("Set Custom Props for Time: "+ props.ToStringFull() + " wasSet: "+wasSet);
+        Debug.Log("Set Custom Props for Finished Players: "+ props.ToStringFull() + " wasSet: "+wasSet);
     }
     
     #endregion
@@ -170,6 +174,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void Update()
     {
+        int playersCompleted;
         switch (SceneManager.GetActiveScene().name)
         {
             case "WaitingArea":
@@ -192,44 +197,77 @@ public class GameManager : MonoBehaviourPunCallbacks
                 timer.text = sec + ":" + milSec;
                 break;
             case "Stage1":
-            case "Stage2":
-            case "Stage3":
-                int playersCompleted = 0;
-                string str = SceneManager.GetActiveScene().name;
-                int stageNumber = Convert.ToInt32(str[str.Length - 1]);
+                Debug.Log("Name: "+SceneManager.GetActiveScene().name);
+                
                 TryGetFinishedPlayers(out playersCompleted);
-                if (playersCompleted >= PhotonNetwork.CurrentRoom.MaxPlayers/Mathf.Pow(2,stageNumber))
+                if (_stage == 1 && playersCompleted >= PhotonNetwork.CurrentRoom.MaxPlayers/2)
                 {
-                    LoadArena("Stage"+stageNumber++);
+                    _stage++;
+                    SetFinishedPlayers(0);
+                    LoadArena("Stage2");
                     _photonView.RPC("ResetCompleted", RpcTarget.All);
                 }
+
+                break;
+            case "Stage2":
+                Debug.Log("Name: "+SceneManager.GetActiveScene().name);
+                
+                TryGetFinishedPlayers(out playersCompleted);
+                if (_stage == 1 && playersCompleted >= PhotonNetwork.CurrentRoom.MaxPlayers/2)
+                {
+                    _stage++;
+                    SetFinishedPlayers(0);
+                    LoadArena("Stage3");
+                    _photonView.RPC("ResetCompleted", RpcTarget.All);
+                }
+                
+                break;
+            case "Stage3":
+                Debug.Log("Name: "+SceneManager.GetActiveScene().name);
+                
+                TryGetFinishedPlayers(out playersCompleted);
+                if (_stage == 1 && playersCompleted >= PhotonNetwork.CurrentRoom.MaxPlayers/2)
+                {
+                    _stage++;
+                    SetFinishedPlayers(0);
+                    LoadArena("Stage4");
+                    _photonView.RPC("ResetCompleted", RpcTarget.All);
+                }
+                
                 break;
             case "Stage4":
+                Debug.Log("Name: "+SceneManager.GetActiveScene().name);
+                
+                TryGetFinishedPlayers(out playersCompleted);
+                if (_stage == 1 && playersCompleted >= PhotonNetwork.CurrentRoom.MaxPlayers/2)
+                {
+                    _stage++;
+                    SetFinishedPlayers(0);
+                    LoadArena("EndStage");
+                    _photonView.RPC("ResetCompleted", RpcTarget.All);
+                }
+                
                 break;
             case "EndStage":
                 break;
         }
-        /*
-            CountdownTimer.TryGetStartTime(out var hit);
-            if (PhotonNetwork.CurrentRoom.IsOpen && PhotonNetwork.IsMasterClient &&
-                (PhotonNetwork.ServerTimestamp - hit) / 1000f > waitingTime)
-            {
-                PhotonNetwork.CurrentRoom.IsOpen = false;
-                _photonView.RPC("SetNumber", RpcTarget.All);
-                LoadArena("Stage1");
-            }
-            else if (!PhotonNetwork.CurrentRoom.IsOpen)
-            {
-                timer.gameObject.SetActive(false);
-            }
-
-            float tempTime = (float)waitingTime - (float)((PhotonNetwork.ServerTimestamp - hit) / 1000f);
-            int sec = Mathf.FloorToInt(tempTime);
-            int milSec = Mathf.FloorToInt((tempTime - sec) * 100f);
-            timer.text = sec + ":" + milSec;
-        */
     }
 
+    /*Debug.Log("Name: "+SceneManager.GetActiveScene().name);
+                string str = SceneManager.GetActiveScene().name;
+                int stageNumber = Convert.ToInt32(str[str.Length - 1].ToString());
+                int playersCompleted;
+                TryGetFinishedPlayers(out playersCompleted);
+                Debug.Log("CompletionGoal: "+PhotonNetwork.CurrentRoom.MaxPlayers/Mathf.Pow(2,stageNumber));
+                Debug.Log("PCompleted: " + playersCompleted);
+                if (_stage == stageNumber && playersCompleted >= PhotonNetwork.CurrentRoom.MaxPlayers/Mathf.Pow(2,stageNumber))
+                {
+                    _stage++;
+                    SetFinishedPlayers(0);
+                    LoadArena("Stage"+(stageNumber+1));
+                    _photonView.RPC("ResetCompleted", RpcTarget.All);
+                }*/
+    
     #endregion
     
 }
