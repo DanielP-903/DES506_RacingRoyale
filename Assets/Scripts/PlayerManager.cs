@@ -42,6 +42,7 @@ public class PlayerManager : MonoBehaviour
         else
         {
             Destroy(_dcc);
+            Destroy(GetComponent<Rigidbody>());
         }
         playerNameText.text = _photonView.Owner.NickName;
         playerLicenseText.text = _photonView.Owner.NickName;
