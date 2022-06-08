@@ -11,6 +11,8 @@ public class TrackGenerator : MonoBehaviour
 
     private TrackPiece _previousTrackPiece;
     private TrackPiece _newTrackPiece;
+
+    private float _rotation;
     
     // Start is called before the first frame update
     void Start()
@@ -47,8 +49,11 @@ public class TrackGenerator : MonoBehaviour
             Vector3 offset = new Vector3(generatedTrack[i + 1].transform.position.x - XdistBetweenEndAndStart, 0, generatedTrack[i + 1].transform.position.z + ZdistBetweenEndAndStart);
 
             generatedTrack[i + 1].transform.position = offset;
-
-            generatedTrack[i + 1].transform.RotateAround(generatedTrack[i+1].startLocation.transform.position, Vector3.up, 90.0f);
+            
+            float angle = Vector3.Angle(generatedTrack[i].endLocation.transform.forward, generatedTrack[i + 1].startLocation.transform.forward);
+            _rotation += angle;
+            generatedTrack[i + 1].transform.RotateAround(generatedTrack[i+1].startLocation.transform.position, Vector3.up,  angle);
+            Debug.Log("Angle " + i + ": " + angle);
         }
     }
 
