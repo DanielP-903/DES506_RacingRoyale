@@ -79,6 +79,11 @@ public class PlayerManager : MonoBehaviour
         playerNumber = _gm.GetPlayerNumber();
     }
 
+    public int GetPlayerNumber()
+    {
+        return playerNumber;
+    }
+    
     // Update is called once per frame
     void Update()
     {
