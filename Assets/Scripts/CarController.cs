@@ -53,6 +53,7 @@ public class CarController : MonoBehaviour
     private float _currentSteeringMulti;
     
     private bool _passedFinishLine = false;
+    private bool _hitEliminationZone = false;
     
     private float _pushDelay = 2.0f;
     private float _boostDelay = 2.0f;
@@ -299,7 +300,13 @@ public class CarController : MonoBehaviour
             Debug.Log("Passed finish line!");
             _passedFinishLine = true;
             _playerManager.CompleteStage();
-            // TODO: Implement finish line communication with network
+        }
+        if (collider.transform.CompareTag("EliminationZone") && !_hitEliminationZone)
+        {
+            // Passed finish line
+            Debug.Log("Hit the Elimination Wall");
+            _hitEliminationZone = true;
+            _playerManager.EliminateCurrentPlayer();
         }
     }
 

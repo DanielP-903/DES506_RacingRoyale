@@ -11,6 +11,7 @@ public class BezierCurveGenerator : MonoBehaviour
     {
         for (float t = 0; t <= 1; t += 0.05f)
         {
+            // Reference: https://en.wikipedia.org/wiki/B%C3%A9zier_curve
             _gizmosPos =
                 Mathf.Pow(1 - t, 3) * controlPoints[0].position +
                 3 * Mathf.Pow(1 - t, 2) * t * controlPoints[1].position +
