@@ -25,10 +25,10 @@ public class WallFollow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 p0 = routes[0].transform.GetChild(0).position;
-        Vector3 p1 = routes[0].transform.GetChild(1).position;
-        Vector3 p2 = routes[0].transform.GetChild(2).position;
-        Vector3 p3 = routes[0].transform.GetChild(3).position;
+        Vector3 p0 = routes[routeNumber].transform.GetChild(0).position;
+        Vector3 p1 = routes[routeNumber].transform.GetChild(1).position;
+        Vector3 p2 = routes[routeNumber].transform.GetChild(2).position;
+        Vector3 p3 = routes[routeNumber].transform.GetChild(3).position;
 
         _tValue += Time.deltaTime * chaseSpeed;
 
@@ -51,6 +51,7 @@ public class WallFollow : MonoBehaviour
         
         if (_tValue > 1)
         {
+            //Debug.Log("_tValue is > 1");
             _tValue = 0.0f;
             routeNumber++;
             if (routeNumber > routes.Count - 1)

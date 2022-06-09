@@ -9,9 +9,8 @@ using UnityEngine.InputSystem;
 
 public class CarController : MonoBehaviour
 {
-    public GameObject centreOfMass;
-    
     [Header("Car Driving Physics")]
+    public GameObject centreOfMass;
     public float motorForce = 0;
     public float brakeTorque = 1000;
     public float maxSteeringAngle = 0;
@@ -32,10 +31,6 @@ public class CarController : MonoBehaviour
     public float jumpCooldown = 2.0f;
     public float boostCooldown = 2.0f;
     public float resetCooldown = 2.0f;
-
-    private float _startingExtremumSlip;
-    private float _startingAsymptoteSlip;
-    
     private bool _moveForward = false;
     private bool _moveBackward = false;
     private bool _moveRight = false;
@@ -47,9 +42,7 @@ public class CarController : MonoBehaviour
     private bool _rollRight = false;
     private bool _reset = false;
     private bool _grounded = false;
-    private bool _groundedL = false;
-    private bool _groundedR = false;
-    
+
     private float _currentSteeringMulti;
     
     private bool _passedFinishLine = false;
@@ -63,33 +56,34 @@ public class CarController : MonoBehaviour
     
     private Rigidbody _rigidbody;
     private bool _HitDetect;
-    private Collider _boxCollider;
     private RaycastHit _Hit;
-    private RaycastHit _leftHit, _rightHit;
-    
+
+    public Transform lastCheckpoint;
+    private Dictionary<GameObject, bool> _passedCheckpoints = new Dictionary<GameObject, bool>();
+    private Transform _currentRespawnPoint;
+    public CheckpointSystem checkpoints;
+
     private void Start()
     {
+        _passedFinishLine = false;
         _pushDelay = jumpCooldown;
         _boostDelay = boostCooldown;
         _rigidbody = GetComponent<Rigidbody>();
+        _playerManager = GetComponent<PlayerManager>();
+        
         foreach (var axle in axles)
         {
             axle.leftWheel.brakeTorque = brakeTorque;
             axle.rightWheel.brakeTorque = brakeTorque;
         }
 
-        _boxCollider = transform.GetComponent<BoxCollider>();
-
-        //_rigidbody.centerOfMass += (Vector3.down/4);
-
-        _passedFinishLine = false;
-
-        _startingAsymptoteSlip = axles[0].leftWheel.sidewaysFriction.asymptoteSlip;
-        _startingExtremumSlip = axles[0].leftWheel.sidewaysFriction.extremumSlip;
-
         _rigidbody.centerOfMass = centreOfMass.transform.localPosition;
-
-        _playerManager = GetComponent<PlayerManager>();
+        
+        foreach (var checkpoint in checkpoints.checkpointObjects)
+        {
+            _passedCheckpoints.Add(checkpoint, false);
+            Debug.Log(_passedCheckpoints[checkpoint] + " : " + checkpoint);
+        }
     }
 
     public void FixedUpdate()
@@ -242,10 +236,10 @@ public class CarController : MonoBehaviour
         _HitDetect = Physics.BoxCast(transform.position + transform.up, transform.localScale, -transform.up, out _Hit, transform.rotation, 1);
         _grounded = _HitDetect;
 
-        var leftCheck = Physics.Raycast(axles[0].leftWheel.transform.position + axles[0].leftWheel.transform.up, -axles[0].leftWheel.transform.up, out _leftHit, 1.0f);
-        var rightCheck = Physics.Raycast(axles[0].rightWheel.transform.position + axles[0].rightWheel.transform.up, -axles[0].rightWheel.transform.up, out _rightHit, 1.0f);
-        _groundedL = leftCheck;
-        _groundedR = rightCheck;
+        // var leftCheck = Physics.Raycast(axles[0].leftWheel.transform.position + axles[0].leftWheel.transform.up, -axles[0].leftWheel.transform.up, out _leftHit, 1.0f);
+        // var rightCheck = Physics.Raycast(axles[0].rightWheel.transform.position + axles[0].rightWheel.transform.up, -axles[0].rightWheel.transform.up, out _rightHit, 1.0f);
+        // _groundedL = leftCheck;
+        // _groundedR = rightCheck;
 
         _resetDelay = _resetDelay <= 0 ? 0 : _resetDelay - Time.deltaTime;
         if (_reset && _resetDelay <= 0)
@@ -300,6 +294,14 @@ public class CarController : MonoBehaviour
             Debug.Log("Passed finish line!");
             _passedFinishLine = true;
             _playerManager.CompleteStage();
+        }
+        if (collider.transform.CompareTag("Checkpoint") && _passedCheckpoints.ContainsKey(collider.gameObject) && !_passedCheckpoints[collider.gameObject])
+        {
+            _passedCheckpoints[collider.gameObject] = true;
+            _currentRespawnPoint = collider.gameObject.transform;
+            GameObject newSpawnLocation = GameObject.Find(_currentRespawnPoint.name + _playerManager.GetPlayerNumber());
+            Debug.Log("Checkpoint passed: " + collider.gameObject.name + " , " + newSpawnLocation + " , " + _currentRespawnPoint.name + " , " + _playerManager.GetPlayerNumber());
+            _playerManager.ChangeSpawnLocation(newSpawnLocation.transform);
         }
         if (collider.transform.CompareTag("EliminationZone") && !_hitEliminationZone)
         {
