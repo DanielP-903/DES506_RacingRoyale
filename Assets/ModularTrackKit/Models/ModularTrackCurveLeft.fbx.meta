@@ -1,11 +1,95 @@
 fileFormatVersion: 2
-guid: ba72d1d38750d224bbecf34c70476b48
+guid: a0922edcbe6b74564b40735068507f0c
 ModelImporter:
-  serializedVersion: 20200
-  internalIDToNameTable: []
+  serializedVersion: 26
+  internalIDToNameTable:
+  - first:
+      1: 100000
+    second: LaneDividers
+  - first:
+      1: 100002
+    second: //RootNode
+  - first:
+      1: 100004
+    second: ModularTrackCurveLeft
+  - first:
+      1: 100006
+    second: TwirlOrigin
+  - first:
+      1: 100008
+    second: TwirlOrigin.001
+  - first:
+      1: 100010
+    second: LaneDivider
+  - first:
+      4: 400000
+    second: LaneDividers
+  - first:
+      4: 400002
+    second: //RootNode
+  - first:
+      4: 400004
+    second: ModularTrackCurveLeft
+  - first:
+      4: 400006
+    second: TwirlOrigin
+  - first:
+      4: 400008
+    second: TwirlOrigin.001
+  - first:
+      4: 400010
+    second: LaneDivider
+  - first:
+      21: 2100000
+    second: No Name
+  - first:
+      23: 2300000
+    second: LaneDividers
+  - first:
+      23: 2300002
+    second: ModularTrackCurveLeft
+  - first:
+      23: 2300004
+    second: LaneDivider
+  - first:
+      23: 2300006
+    second: //RootNode
+  - first:
+      33: 3300000
+    second: LaneDividers
+  - first:
+      33: 3300002
+    second: ModularTrackCurveLeft
+  - first:
+      33: 3300004
+    second: LaneDivider
+  - first:
+      33: 3300006
+    second: //RootNode
+  - first:
+      43: 4300000
+    second: ModularTrackCurveLeft
+  - first:
+      43: 4300002
+    second: LaneDividers
+  - first:
+      43: 4300004
+    second: LaneDivider
+  - first:
+      64: 6400000
+    second: LaneDividers
+  - first:
+      64: 6400002
+    second: ModularTrackCurveLeft
+  - first:
+      64: 6400004
+    second: LaneDivider
+  - first:
+      64: 6400006
+    second: //RootNode
   externalObjects: {}
   materials:
-    materialImportMode: 2
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -31,25 +115,23 @@ ModelImporter:
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations: []
-    isReadable: 0
+    isReadable: 1
   meshes:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
-    addColliders: 0
+    addColliders: 1
     useSRGBMaterialColor: 1
     sortHierarchyByName: 1
-    importVisibility: 1
-    importBlendShapes: 1
-    importCameras: 1
-    importLights: 1
-    fileIdsGeneration: 2
+    importVisibility: 0
+    importBlendShapes: 0
+    importCameras: 0
+    importLights: 0
     swapUVChannels: 0
-    generateSecondaryUV: 0
+    generateSecondaryUV: 1
     useFileUnits: 1
     keepQuads: 0
     weldVertices: 1
-    bakeAxisConversion: 0
     preserveHierarchy: 0
     skinWeightsMode: 0
     maxBonesPerVertex: 4
@@ -59,21 +141,19 @@ ModelImporter:
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
-    secondaryUVMarginMethod: 1
-    secondaryUVMinLightmapResolution: 40
-    secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
   tangentSpace:
     normalSmoothAngle: 60
-    normalImportMode: 0
+    normalImportMode: 1
     tangentImportMode: 3
     normalCalculationMode: 4
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
   referencedClips: []
-  importAnimation: 1
+  importAnimation: 0
+  copyAvatar: 0
   humanDescription:
     serializedVersion: 3
     human: []
@@ -91,11 +171,8 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  autoGenerateAvatarMappingIfUnspecified: 1
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
-  avatarSetup: 0
-  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   additionalBone: 0
   userData: 
   assetBundleName: 
