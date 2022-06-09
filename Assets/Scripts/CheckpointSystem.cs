@@ -4,17 +4,6 @@ using UnityEngine;
 
 public class CheckpointSystem : MonoBehaviour
 {
+    [Header("Note: This defines the order of the checkpoints as well!")]
     public List<GameObject> checkpointObjects = new List<GameObject>();
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
