@@ -14,8 +14,7 @@ public class WallFollow : MonoBehaviour
     public int routeNumber = 0;
 
     private float _tValue;
-    
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,10 +30,11 @@ public class WallFollow : MonoBehaviour
         Vector3 p2 = routes[0].transform.GetChild(2).position;
         Vector3 p3 = routes[0].transform.GetChild(3).position;
 
- 
         _tValue += Time.deltaTime * chaseSpeed;
 
         Vector3 oldPosition = transform.position;
+        
+        // Reference: https://en.wikipedia.org/wiki/B%C3%A9zier_curve
         Vector3 newPosition = 
             Mathf.Pow(1 - _tValue, 3) * p0 +
             3 * Mathf.Pow(1 - _tValue, 2) * _tValue * p1 +
@@ -48,8 +48,7 @@ public class WallFollow : MonoBehaviour
         float rotationAngle = Mathf.Atan2(difference.x, difference.z) * Mathf.Rad2Deg;
 
         transform.rotation = Quaternion.Euler(0, rotationAngle, 0);
-            
-
+        
         if (_tValue > 1)
         {
             _tValue = 0.0f;

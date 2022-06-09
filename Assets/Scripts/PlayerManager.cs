@@ -13,7 +13,7 @@ public class PlayerManager : MonoBehaviour
     private Rigidbody _rb;
     private PlayerManager target;
     private GameManager _gm;
-    
+    private Transform _spawnLocation;
     
     
     [SerializeField]
@@ -24,6 +24,8 @@ public class PlayerManager : MonoBehaviour
     
     private int playerNumber = 0;
     private bool completedStage = false;
+    private bool eliminated = false;
+    private int elimPosition = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -44,6 +46,14 @@ public class PlayerManager : MonoBehaviour
             Destroy(_dcc);
             Destroy(GetComponent<Rigidbody>());
         }
+        
+        int spawnNumber = playerNumber;
+        if (playerNumber == 0)
+        {
+            spawnNumber = _gm.GetPlayerNumber();
+        }
+        _spawnLocation = GameObject.Find("SpawnLocation" + spawnNumber).transform;
+        
         playerNameText.text = _photonView.Owner.NickName;
         playerLicenseText.text = _photonView.Owner.NickName;
     }
@@ -69,6 +79,11 @@ public class PlayerManager : MonoBehaviour
         playerNumber = _gm.GetPlayerNumber();
     }
 
+    public int GetPlayerNumber()
+    {
+        return playerNumber;
+    }
+    
     // Update is called once per frame
     void Update()
     {
@@ -83,15 +98,16 @@ public class PlayerManager : MonoBehaviour
     {
         _rb.velocity = Vector3.zero;
         _rb.angularVelocity = Vector3.zero;
-        int spawnNumber = playerNumber;
-        if (playerNumber == 0)
-        {
-            spawnNumber = _gm.GetPlayerNumber();
-        }
-        Transform spawn = GameObject.Find("SpawnLocation" + spawnNumber).transform;
+
+        Transform spawn = _spawnLocation;
         Transform thisTransform = transform;
         thisTransform.rotation = spawn.rotation;
         thisTransform.position = spawn.position;
+    }
+
+    public void ChangeSpawnLocation(Transform newSpawn)
+    {
+        _spawnLocation = newSpawn;
     }
 
     public void CompleteStage()
@@ -101,7 +117,23 @@ public class PlayerManager : MonoBehaviour
             Debug.Log("Stage Completed");
             completedStage = true;
             GameManager.TryGetFinishedPlayers(out int num);
-            GameManager.SetFinishedPlayers(num++);
+            num = num + 1;
+            GameManager.SetFinishedPlayers(num);
+        }
+    }
+    
+    public void EliminateCurrentPlayer()
+    {
+        if (!completedStage && !eliminated)
+        {
+            Debug.Log("Player: "+_photonView.Owner.NickName + " Eliminated.");
+            eliminated = true;
+            GameManager.TryGetElimPlayers(out int num);
+            elimPosition = _gm.GetTotalPlayers() - num;
+            num = num + 1;
+            GameManager.SetElimPlayers(num);
+            Debug.Log("Player: "+_photonView.Owner.NickName + " Eliminated with Position "+elimPosition + "/"+_gm.GetTotalPlayers());
+            PhotonNetwork.Destroy(this.gameObject);
         }
     }
     

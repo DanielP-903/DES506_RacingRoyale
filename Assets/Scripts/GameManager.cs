@@ -13,9 +13,7 @@ using TMPro;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
-    public int previousFrame;
-    public int currentFrame;
-    
+
     //private ArrayList _playerList;
     //private Dictionary<int, string> players;
     
@@ -32,6 +30,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private TextMeshProUGUI timer;
     private PhotonView _photonView;
     private int _stage = 1;
+    private int _totalPlayers = 0;
 
     #endregion
     
@@ -116,8 +115,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         return false;
     }
-
-
     public static void SetFinishedPlayers(int num)
     {
         int finishedPlayers = 0;
@@ -131,6 +128,40 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 
         Debug.Log("Set Custom Props for Finished Players: "+ props.ToStringFull() + " wasSet: "+wasSet);
+    }
+    
+    
+    public static bool TryGetElimPlayers(out int elimPlayers)
+    {
+        elimPlayers = 0;
+
+        object elimPlayersFromProps;
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("ElimPlayers", out elimPlayersFromProps))
+        {
+            elimPlayers = (int)elimPlayersFromProps;
+            return true;
+        }
+
+        return false;
+    }
+    public static void SetElimPlayers(int num)
+    {
+        int elimPlayers = 0;
+        bool wasSet = TryGetElimPlayers(out elimPlayers);
+
+        ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
+        {
+            {"ElimPlayers", (int)num}
+        };
+        PhotonNetwork.CurrentRoom.SetCustomProperties(props);
+
+
+        Debug.Log("Set Custom Props for Eliminated Players: "+ props.ToStringFull() + " wasSet: "+wasSet);
+    }
+
+    public int GetTotalPlayers()
+    {
+        return _totalPlayers;
     }
     
     #endregion
@@ -147,9 +178,10 @@ public class GameManager : MonoBehaviourPunCallbacks
         Debug.LogFormat("PhotonNetwork : Loading Level : {0}", PhotonNetwork.CurrentRoom.PlayerCount);
         PhotonNetwork.LoadLevel(arenaName);
     }
-
     private void Start()
-    { 
+    {
+        SceneManager.sceneLoaded += LoadPlayerInLevel;
+        DontDestroyOnLoad(this.gameObject);
         timer = GameObject.Find("Timer").GetComponent<TextMeshProUGUI>();
         if (playerPrefab == null)
         {
@@ -168,8 +200,15 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             SetFinishedPlayers(0);
+            SetElimPlayers(0);
             CountdownTimer.SetStartTime();
         }
+    }
+
+    private void LoadPlayerInLevel(Scene scene, LoadSceneMode loadSceneMode)
+    {
+        GameObject player = PhotonNetwork.Instantiate(this.playerPrefab.name, GameObject.Find("SpawnLocation" + GetPlayerNumber()).transform.position, GameObject.Find("SpawnLocation" + GetPlayerNumber()).transform.rotation, 0);
+        _photonView = player.GetComponent<PhotonView>();
     }
 
     private void Update()
@@ -182,6 +221,8 @@ public class GameManager : MonoBehaviourPunCallbacks
                 if (PhotonNetwork.CurrentRoom.IsOpen && PhotonNetwork.IsMasterClient &&
                     (PhotonNetwork.ServerTimestamp - hit) / 1000f > waitingTime)
                 {
+                    _totalPlayers = PhotonNetwork.CurrentRoom.PlayerCount;
+                    Debug.Log("TotalPlayers: "+_totalPlayers);
                     PhotonNetwork.CurrentRoom.IsOpen = false;
                     _photonView.RPC("SetNumber", RpcTarget.All);
                     LoadArena("Stage1");
@@ -252,6 +293,8 @@ public class GameManager : MonoBehaviourPunCallbacks
                 break;
         }
     }
+    
+    
 
     /*Debug.Log("Name: "+SceneManager.GetActiveScene().name);
                 string str = SceneManager.GetActiveScene().name;
