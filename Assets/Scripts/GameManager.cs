@@ -213,7 +213,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 Debug.Log("Name: "+SceneManager.GetActiveScene().name);
                 
                 TryGetFinishedPlayers(out playersCompleted);
-                if (_stage == 1 && playersCompleted >= PhotonNetwork.CurrentRoom.MaxPlayers/2)
+                if (_stage == 2 && playersCompleted >= PhotonNetwork.CurrentRoom.MaxPlayers/2)
                 {
                     _stage++;
                     SetFinishedPlayers(0);
@@ -226,7 +226,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 Debug.Log("Name: "+SceneManager.GetActiveScene().name);
                 
                 TryGetFinishedPlayers(out playersCompleted);
-                if (_stage == 1 && playersCompleted >= PhotonNetwork.CurrentRoom.MaxPlayers/2)
+                if (_stage == 3 && playersCompleted >= PhotonNetwork.CurrentRoom.MaxPlayers/2)
                 {
                     _stage++;
                     SetFinishedPlayers(0);
@@ -239,7 +239,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 Debug.Log("Name: "+SceneManager.GetActiveScene().name);
                 
                 TryGetFinishedPlayers(out playersCompleted);
-                if (_stage == 1 && playersCompleted >= PhotonNetwork.CurrentRoom.MaxPlayers/2)
+                if (_stage == 4 && playersCompleted >= PhotonNetwork.CurrentRoom.MaxPlayers/2)
                 {
                     _stage++;
                     SetFinishedPlayers(0);

@@ -42,6 +42,7 @@ public class PlayerManager : MonoBehaviour
         else
         {
             Destroy(_dcc);
+            Destroy(GetComponent<Rigidbody>());
         }
         playerNameText.text = _photonView.Owner.NickName;
         playerLicenseText.text = _photonView.Owner.NickName;
@@ -99,11 +100,8 @@ public class PlayerManager : MonoBehaviour
         {
             Debug.Log("Stage Completed");
             completedStage = true;
-            int num = 200;
-            GameManager.TryGetFinishedPlayers(out num);
-            num = num+1;
-            Debug.Log("Player Finished: "+num);
-            GameManager.SetFinishedPlayers(num);
+            GameManager.TryGetFinishedPlayers(out int num);
+            GameManager.SetFinishedPlayers(num++);
         }
     }
     
