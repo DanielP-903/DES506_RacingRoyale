@@ -61,6 +61,7 @@ public class CarController : MonoBehaviour
     public Transform lastCheckpoint;
     private Dictionary<GameObject, bool> _passedCheckpoints = new Dictionary<GameObject, bool>();
     private Transform _currentRespawnPoint;
+    public CheckpointSystem checkpoints;
 
     private void Start()
     {
@@ -77,6 +78,12 @@ public class CarController : MonoBehaviour
         }
 
         _rigidbody.centerOfMass = centreOfMass.transform.localPosition;
+        
+        foreach (var checkpoint in checkpoints.checkpointObjects)
+        {
+            _passedCheckpoints.Add(checkpoint, false);
+            Debug.Log(_passedCheckpoints[checkpoint] + " : " + checkpoint);
+        }
     }
 
     public void FixedUpdate()
@@ -293,6 +300,7 @@ public class CarController : MonoBehaviour
             _passedCheckpoints[collider.gameObject] = true;
             _currentRespawnPoint = collider.gameObject.transform;
             GameObject newSpawnLocation = GameObject.Find(_currentRespawnPoint.name + _playerManager.GetPlayerNumber());
+            Debug.Log("Checkpoint passed: " + collider.gameObject.name + " , " + newSpawnLocation + " , " + _currentRespawnPoint.name + " , " + _playerManager.GetPlayerNumber());
             _playerManager.ChangeSpawnLocation(newSpawnLocation.transform);
         }
         if (collider.transform.CompareTag("EliminationZone") && !_hitEliminationZone)
