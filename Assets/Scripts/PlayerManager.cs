@@ -111,9 +111,9 @@ public class PlayerManager : MonoBehaviour
         {
             Debug.Log("Stage Completed");
             completedStage = true;
-            GameManager.TryGetFinishedPlayers(out int num);
+            GameManager.TryGetFinishedPlayers(out int num, _gm.GetStageNum());
             num = num + 1;
-            GameManager.SetFinishedPlayers(num);
+            GameManager.SetFinishedPlayers(num,_gm.GetStageNum());
         }
     }
     
@@ -131,6 +131,7 @@ public class PlayerManager : MonoBehaviour
             PhotonNetwork.Destroy(this.gameObject);
         }
     }
+    
     
     [PunRPC]
     void ResetCompleted()

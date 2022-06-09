@@ -13,7 +13,6 @@ using TMPro;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
-
     //private ArrayList _playerList;
     //private Dictionary<int, string> players;
     
@@ -102,12 +101,12 @@ public class GameManager : MonoBehaviourPunCallbacks
         return counter;
     }
     
-    public static bool TryGetFinishedPlayers(out int finishedPlayers)
+    public static bool TryGetFinishedPlayers(out int finishedPlayers, int stageNum)
     {
         finishedPlayers = 0;
 
         object finishedPlayersFromProps;
-        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("FinishedPlayers", out finishedPlayersFromProps))
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("FinishedPlayers"+stageNum, out finishedPlayersFromProps))
         {
             finishedPlayers = (int)finishedPlayersFromProps;
             return true;
@@ -115,19 +114,19 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         return false;
     }
-    public static void SetFinishedPlayers(int num)
+    public static void SetFinishedPlayers(int num, int stageNum)
     {
-        int finishedPlayers = 0;
-        bool wasSet = TryGetFinishedPlayers(out finishedPlayers);
+        int finishedPlayers;
+        bool wasSet = TryGetFinishedPlayers(out finishedPlayers, stageNum);
 
         ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
         {
-            {"FinishedPlayers", (int)num}
+            {"FinishedPlayers"+stageNum, (int)num}
         };
         PhotonNetwork.CurrentRoom.SetCustomProperties(props);
+        bool wasSet2 = TryGetFinishedPlayers(out finishedPlayers, stageNum);
 
-
-        Debug.Log("Set Custom Props for Finished Players: "+ props.ToStringFull() + " wasSet: "+wasSet);
+        Debug.Log("Set Custom Props for Finished Players: "+ props.ToStringFull() + " wasSet: "+wasSet+" NewValue: "+finishedPlayers);
     }
     
     
@@ -164,6 +163,11 @@ public class GameManager : MonoBehaviourPunCallbacks
         return _totalPlayers;
     }
     
+    public int GetStageNum()
+    {
+        return _stage;
+    }
+    
     #endregion
     
     #region Private Methods
@@ -180,6 +184,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
     private void Start()
     {
+        
+        
         SceneManager.sceneLoaded += LoadPlayerInLevel;
         DontDestroyOnLoad(this.gameObject);
         timer = GameObject.Find("Timer").GetComponent<TextMeshProUGUI>();
@@ -199,7 +205,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient)
         {
-            SetFinishedPlayers(0);
+            SetFinishedPlayers(0, _stage);
             SetElimPlayers(0);
             CountdownTimer.SetStartTime();
         }
@@ -238,54 +244,53 @@ public class GameManager : MonoBehaviourPunCallbacks
                 timer.text = sec + ":" + milSec;
                 break;
             case "Stage1":
-                Debug.Log("Name: "+SceneManager.GetActiveScene().name);
+                TryGetFinishedPlayers(out playersCompleted, _stage);
+                Debug.Log("Name: "+SceneManager.GetActiveScene().name + " Stage: " + _stage + " Players Finished: "+playersCompleted+" Goal: " + (PhotonNetwork.CurrentRoom.MaxPlayers/2));
                 
-                TryGetFinishedPlayers(out playersCompleted);
                 if (_stage == 1 && playersCompleted >= PhotonNetwork.CurrentRoom.MaxPlayers/2)
                 {
+                    Debug.Log("Running Level Change");
                     _stage++;
-                    SetFinishedPlayers(0);
+                    SetFinishedPlayers(0, _stage);
                     LoadArena("Stage2");
                     _photonView.RPC("ResetCompleted", RpcTarget.All);
                 }
 
                 break;
             case "Stage2":
-                Debug.Log("Name: "+SceneManager.GetActiveScene().name);
+                TryGetFinishedPlayers(out playersCompleted, _stage);
+                Debug.Log("Name: "+SceneManager.GetActiveScene().name + " Stage: " + _stage + " Players Finished: "+playersCompleted+" Goal: " + (PhotonNetwork.CurrentRoom.MaxPlayers/4));
                 
-                TryGetFinishedPlayers(out playersCompleted);
-                if (_stage == 2 && playersCompleted >= PhotonNetwork.CurrentRoom.MaxPlayers/2)
+                if (_stage == 2 && playersCompleted >= PhotonNetwork.CurrentRoom.MaxPlayers/4)
                 {
                     _stage++;
-                    SetFinishedPlayers(0);
+                    SetFinishedPlayers(0, _stage);
                     LoadArena("Stage3");
                     _photonView.RPC("ResetCompleted", RpcTarget.All);
                 }
                 
                 break;
             case "Stage3":
-                Debug.Log("Name: "+SceneManager.GetActiveScene().name);
+                TryGetFinishedPlayers(out playersCompleted, _stage);
+                Debug.Log("Name: "+SceneManager.GetActiveScene().name + " Stage: " + _stage + " Players Finished: "+playersCompleted+" Goal: " + (PhotonNetwork.CurrentRoom.MaxPlayers/8));
                 
-                TryGetFinishedPlayers(out playersCompleted);
-                if (_stage == 3 && playersCompleted >= PhotonNetwork.CurrentRoom.MaxPlayers/2)
+                if (_stage == 3 && playersCompleted >= PhotonNetwork.CurrentRoom.MaxPlayers/8)
                 {
                     _stage++;
-                    SetFinishedPlayers(0);
+                    SetFinishedPlayers(0, _stage);
                     LoadArena("Stage4");
                     _photonView.RPC("ResetCompleted", RpcTarget.All);
                 }
                 
                 break;
             case "Stage4":
-                Debug.Log("Name: "+SceneManager.GetActiveScene().name);
+                int elimPlayers;
+                TryGetElimPlayers(out elimPlayers);
+                Debug.Log("Name: "+SceneManager.GetActiveScene().name + " Stage: " + _stage + " Players Finished: "+(_totalPlayers - elimPlayers)+" Goal: 1");
                 
-                TryGetFinishedPlayers(out playersCompleted);
-                if (_stage == 4 && playersCompleted >= PhotonNetwork.CurrentRoom.MaxPlayers/2)
+                if (_totalPlayers - elimPlayers == 1)
                 {
-                    _stage++;
-                    SetFinishedPlayers(0);
                     LoadArena("EndStage");
-                    _photonView.RPC("ResetCompleted", RpcTarget.All);
                 }
                 
                 break;
