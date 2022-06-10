@@ -16,6 +16,6 @@ public class UpDownGate : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = new Vector3(transform.position.x, reverse ? -Mathf.PingPong(Time.time * speed, distance) + currentPosition.x : Mathf.PingPong(Time.time * speed, distance) + currentPosition.y, transform.position.z);
+        transform.position = new Vector3(transform.position.x, reverse ? -Mathf.PingPong(Time.time * speed, distance) + currentPosition.y : Mathf.PingPong(Time.time * speed, distance) + currentPosition.y, transform.position.z);
     }
 }
