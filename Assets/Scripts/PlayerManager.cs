@@ -43,6 +43,7 @@ public class PlayerManager : MonoBehaviour
         }
         else
         {
+            Destroy(this);
             Destroy(_dcc);
             Destroy(GetComponent<Rigidbody>());
         }
@@ -73,10 +74,21 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public void SetName(string inputName)
+    {
+        playerNameText.text = inputName;
+        playerLicenseText.text = inputName;
+    }
+
     [PunRPC]
     void SetNumber()
     {
-        playerNumber = _gm.GetPlayerNumber();
+        if (_gm.ReturnPlayerNumber() == 0)
+        {
+            _gm.GetPlayerNumber();
+        }
+        playerNumber = _gm.ReturnPlayerNumber();
+        Debug.Log("PlayerNumber: "+playerNumber);
     }
 
     public int GetPlayerNumber()
@@ -114,11 +126,30 @@ public class PlayerManager : MonoBehaviour
     {
         if (!completedStage)
         {
-            Debug.Log("Stage Completed");
+            Debug.Log("Stage Completed Player: " + GetPlayerNumber());
             completedStage = true;
             GameManager.TryGetFinishedPlayers(out int num, _gm.GetStageNum());
             num = num + 1;
             GameManager.SetFinishedPlayers(num,_gm.GetStageNum());
+            if (_gm.GetStageNum() == 4)
+            {
+                elimPosition = num;
+                if (elimPosition < 4)
+                {
+                    Debug.Log("Finished at:" +elimPosition);
+                    GameManager.SetTop3Players(_photonView.Owner.NickName, elimPosition);
+                    string t3;
+                    GameManager.TryGetTop3Players(out t3, 1);
+                    Debug.Log(t3);
+                    /*
+                    Debug.Log("Finished at:" +elimPosition);
+                    GameManager.SetTop3Players(new Top3PlayerData(_photonView.Owner.NickName), elimPosition);
+                    Top3PlayerData t3;
+                    GameManager.TryGetTop3Players(out t3, 1);
+                    Debug.Log(t3.name);
+                     */
+                }
+            }
         }
     }
     
@@ -127,13 +158,21 @@ public class PlayerManager : MonoBehaviour
         if (!completedStage && !eliminated)
         {
             Debug.Log("Player: "+_photonView.Owner.NickName + " Eliminated.");
+         
+            ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
+            {
+                {"Eliminated", true}
+            };
+            _photonView.Owner.SetCustomProperties(props);
+            
             eliminated = true;
             GameManager.TryGetElimPlayers(out int num);
             elimPosition = _gm.GetTotalPlayers() - num;
             num = num + 1;
             GameManager.SetElimPlayers(num);
+            _gm.EliminatePlayer(elimPosition);
             Debug.Log("Player: "+_photonView.Owner.NickName + " Eliminated with Position "+elimPosition + "/"+_gm.GetTotalPlayers());
-            PhotonNetwork.Destroy(this.gameObject);
+            //PhotonNetwork.Destroy(this.gameObject);
         }
     }
     
@@ -141,13 +180,16 @@ public class PlayerManager : MonoBehaviour
     [PunRPC]
     void ResetCompleted()
     {
+        Debug.Log("CompletedStage: "+completedStage);
         if (completedStage)
         {
-            completedStage = false;
+            //completedStage = false;
         }
         else
         {
-            _gm.LeaveRoom();
+            EliminateCurrentPlayer();
+            Debug.Log("Player: "+playerNumber+" Eliminated. StageCompleted: "+completedStage);
+            //_gm.LeaveRoom();
         }
     }
 }
