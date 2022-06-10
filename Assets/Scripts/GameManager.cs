@@ -316,10 +316,10 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void LoadPlayerInLevel(Scene scene, LoadSceneMode loadSceneMode)
     {
         _photonView.RPC("SetNumber", RpcTarget.All);
-        Debug.Log("Loaded Player: "+_eliminated+" PlayerNum: "+GetPlayerNumber());
+        Debug.Log("Loaded Player: "+_eliminated+" PlayerNum: "+_playerNumber);
         if (scene.name != "EndStage" && !_eliminated)
         {
-            Debug.Log("Created Player");
+            Debug.Log("Created Player: "+_playerNumber);
             GameObject player = PhotonNetwork.Instantiate(this.playerPrefab.name,
                 GameObject.Find("SpawnLocation" + GetPlayerNumber()).transform.position,
                 GameObject.Find("SpawnLocation" + GetPlayerNumber()).transform.rotation, 0);

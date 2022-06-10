@@ -43,6 +43,7 @@ public class PlayerManager : MonoBehaviour
         }
         else
         {
+            Destroy(this);
             Destroy(_dcc);
             Destroy(GetComponent<Rigidbody>());
         }
@@ -179,9 +180,10 @@ public class PlayerManager : MonoBehaviour
     [PunRPC]
     void ResetCompleted()
     {
+        Debug.Log("CompletedStage: "+completedStage);
         if (completedStage)
         {
-            completedStage = false;
+            //completedStage = false;
         }
         else
         {

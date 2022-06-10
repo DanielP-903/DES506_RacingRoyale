@@ -77,11 +77,13 @@ public class CarController : MonoBehaviour
         }
 
         _rigidbody.centerOfMass = centreOfMass.transform.localPosition;
-        
-        foreach (var checkpoint in checkpoints.checkpointObjects)
+        if (checkpoints != null)
         {
-            _passedCheckpoints.Add(checkpoint, false);
-            //Debug.Log(_passedCheckpoints[checkpoint] + " : " + checkpoint);
+            foreach (var checkpoint in checkpoints.checkpointObjects)
+            {
+                _passedCheckpoints.Add(checkpoint, false);
+                //Debug.Log(_passedCheckpoints[checkpoint] + " : " + checkpoint);
+            }
         }
     }
 
