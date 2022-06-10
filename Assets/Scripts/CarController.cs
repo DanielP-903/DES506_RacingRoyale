@@ -58,7 +58,6 @@ public class CarController : MonoBehaviour
     private bool _HitDetect;
     private RaycastHit _Hit;
 
-    public Transform lastCheckpoint;
     private Dictionary<GameObject, bool> _passedCheckpoints = new Dictionary<GameObject, bool>();
     private Transform _currentRespawnPoint;
     public CheckpointSystem checkpoints;
@@ -82,7 +81,7 @@ public class CarController : MonoBehaviour
         foreach (var checkpoint in checkpoints.checkpointObjects)
         {
             _passedCheckpoints.Add(checkpoint, false);
-            Debug.Log(_passedCheckpoints[checkpoint] + " : " + checkpoint);
+            //Debug.Log(_passedCheckpoints[checkpoint] + " : " + checkpoint);
         }
     }
 
