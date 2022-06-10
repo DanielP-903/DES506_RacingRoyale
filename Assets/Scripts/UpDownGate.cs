@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovingPillars : MonoBehaviour
+public class UpDownGate : MonoBehaviour
 {
     public float speed = 2.5f, distance = 10f;
     public bool reverse;
@@ -16,6 +16,6 @@ public class MovingPillars : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = new Vector3(reverse ? -Mathf.PingPong(Time.time * speed, distance) + currentPosition.x : Mathf.PingPong(Time.time * speed, distance) + currentPosition.x, transform.position.y, transform.position.z);
+        transform.position = new Vector3(transform.position.x, reverse ? -Mathf.PingPong(Time.time * speed, distance) + currentPosition.y : Mathf.PingPong(Time.time * speed, distance) + currentPosition.y, transform.position.z);
     }
 }
