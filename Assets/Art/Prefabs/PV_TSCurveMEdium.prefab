@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: -3211298368902775508}
   - component: {fileID: 4200360240806863677}
   - component: {fileID: -2264284760936676188}
+  - component: {fileID: 362095940003426905}
   m_Layer: 0
   m_Name: scale7
   m_TagString: Untagged
@@ -81,6 +82,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &362095940003426905
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: -8154498416440725980}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -8009441148606492626, guid: af1de7088b67a124c93becec8ee20b0c, type: 3}
 --- !u!1 &-6506689828773653609
 GameObject:
   m_ObjectHideFlags: 0
@@ -152,7 +167,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4047560110489112308}
   m_Layer: 0
-  m_Name: New Prefab
+  m_Name: PV_TSCurveMEdium
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
