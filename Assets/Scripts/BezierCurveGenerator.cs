@@ -7,6 +7,10 @@ public class BezierCurveGenerator : MonoBehaviour
     private Vector3 _gizmosPos;
     public Transform[] controlPoints;
     
+    [Header("Adjust Speed Between Length of Curve")]
+    [Tooltip("Step size between each generated point in the bezier sphere")]
+    public float stepValue = 0.05f;
+    
     private void OnDrawGizmos()
     {
         for (float t = 0; t <= 1; t += 0.05f)
