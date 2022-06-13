@@ -13,7 +13,7 @@ public class BezierCurveGenerator : MonoBehaviour
     
     private void OnDrawGizmos()
     {
-        for (float t = 0; t <= 1; t += 0.05f)
+        for (float t = 0; t <= 1; t += stepValue)
         {
             // Reference: https://en.wikipedia.org/wiki/B%C3%A9zier_curve
             _gizmosPos =
