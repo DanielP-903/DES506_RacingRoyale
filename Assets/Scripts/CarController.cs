@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 
 
@@ -75,11 +76,33 @@ public class CarController : MonoBehaviour
             axle.leftWheel.brakeTorque = brakeTorque;
             axle.rightWheel.brakeTorque = brakeTorque;
         }
+        //SceneManager.sceneLoaded += LoadCCInLevel;
+    }
 
-        _rigidbody.centerOfMass = centreOfMass.transform.localPosition;
-
-        checkpoints = GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>();
+    void OnLevelWasLoaded()
+    {
+        _passedFinishLine = false;
+        GameObject checkpointObject = GameObject.Find("CheckpointSystem");
         
+        if (checkpointObject != null)
+        {
+            checkpoints = checkpointObject.GetComponent<CheckpointSystem>();
+            foreach (var checkpoint in checkpoints.checkpointObjects)
+            {
+                _passedCheckpoints.Add(checkpoint, false);
+                Debug.Log(_passedCheckpoints[checkpoint] + " : " + checkpoint);
+            }
+        }
+        else
+        {
+            Debug.Log("Error: no CheckpointSystem object in scene");
+        }
+    }
+    
+
+    /*private void LoadCCInLevel(Scene scene, LoadSceneMode loadSceneMode)
+    {
+        checkpoints = GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>();
         if (checkpoints != null)
         {
             foreach (var checkpoint in checkpoints.checkpointObjects)
@@ -92,7 +115,7 @@ public class CarController : MonoBehaviour
         {
             Debug.Log("Error: no CheckpointSystem object in scene");
         }
-    }
+    }*/
 
     public void FixedUpdate()
     {

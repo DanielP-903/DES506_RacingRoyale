@@ -4,6 +4,7 @@ using Cinemachine;
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class PlayerManager : MonoBehaviour
@@ -14,8 +15,10 @@ public class PlayerManager : MonoBehaviour
     private PlayerManager target;
     private GameManager _gm;
     private Transform _spawnLocation;
+    private GameObject mainCam;
     
-    
+    static private GameObject instance;
+
     [SerializeField]
     private TextMeshProUGUI playerNameText;
     [SerializeField]
@@ -30,24 +33,31 @@ public class PlayerManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //SceneManager.sceneLoaded += LoadPMInLevel;
+        DontDestroyOnLoad(this.gameObject);
         _photonView = GetComponent<PhotonView>();
         _dcc = GetComponent<CarController>();
         _rb = GetComponent<Rigidbody>();
         _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
-        if (_photonView.IsMine)
+        if (_photonView != null)
         {
-            CinemachineVirtualCamera cvc = Camera.main.gameObject.GetComponent<CinemachineVirtualCamera>();
-            var transform1 = transform;
-            cvc.m_Follow = transform1;
-            cvc.m_LookAt = transform1;
+            if (_photonView.IsMine)
+            {
+                mainCam = Camera.main.gameObject;
+                CinemachineVirtualCamera cvc = mainCam.GetComponent<CinemachineVirtualCamera>();
+                DontDestroyOnLoad(mainCam);
+                var transform1 = transform;
+                cvc.m_Follow = transform1;
+                cvc.m_LookAt = transform1;
+            }
+            else
+            {
+                Destroy(this);
+                Destroy(_dcc);
+                Destroy(GetComponent<Rigidbody>());
+            }
         }
-        else
-        {
-            Destroy(this);
-            Destroy(_dcc);
-            Destroy(GetComponent<Rigidbody>());
-        }
-        
+
         int spawnNumber = playerNumber;
         if (playerNumber == 0)
         {
@@ -57,8 +67,78 @@ public class PlayerManager : MonoBehaviour
         
         playerNameText.text = _photonView.Owner.NickName;
         playerLicenseText.text = _photonView.Owner.NickName;
+        
+        /*if (instance == null)
+        {
+            instance = this.gameObject;
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }*/
     }
-    
+
+    void OnLevelWasLoaded()
+    {
+        Debug.Log("PlayerManger Loading Level");
+        if (_photonView != null)
+        {
+            if ((SceneManager.GetActiveScene().name == "Launcher" || SceneManager.GetActiveScene().name == "EndStage"))
+            {
+                PhotonNetwork.Destroy(this.gameObject);
+                Destroy(mainCam);
+            }
+            else
+            {
+                completedStage = false;
+                if (SceneManager.GetActiveScene().name == "Stage1")
+                {
+                    playerNumber = _gm.setPlayerNumber();
+                }
+
+                _spawnLocation = GameObject.Find("SpawnLocation" + playerNumber).transform;
+                GoToSpawn();
+                Debug.Log(_spawnLocation + "- Player: " + playerNumber + " Name: " +_photonView.Owner.NickName);
+
+            }
+        }
+    }
+
+/*    private void LoadPMInLevel(Scene scene, LoadSceneMode loadSceneMode)
+    {
+        Debug.Log("PlayerManger Loading Level");
+        if (scene.name == "Launcher" || scene.name == "EndStage")
+        {
+            PhotonNetwork.Destroy(this.gameObject);
+            Destroy(Camera.main.gameObject);
+        }
+        else
+        {
+            if (scene.name == "Stage1")
+            {
+                if (playerNumber == 0)
+                {
+                    playerNumber = _gm.GetPlayerNumber();
+                }
+            }
+            _spawnLocation = GameObject.Find("SpawnLocation" + playerNumber).transform;
+            Debug.Log(_spawnLocation +"- Player: "+playerNumber );
+            if (_photonView.IsMine)
+            {
+                CinemachineVirtualCamera cvc = Camera.main.gameObject.GetComponent<CinemachineVirtualCamera>();
+                var transform1 = transform;
+                cvc.m_Follow = transform1;
+                cvc.m_LookAt = transform1;
+            }
+            else
+            {
+                Destroy(this);
+                Destroy(_dcc);
+                Destroy(GetComponent<Rigidbody>());
+            }
+        }
+    }*/
+
     public void SetTarget(PlayerManager _target)
     {
         if (_target == null)
@@ -78,17 +158,6 @@ public class PlayerManager : MonoBehaviour
     {
         playerNameText.text = inputName;
         playerLicenseText.text = inputName;
-    }
-
-    [PunRPC]
-    void SetNumber()
-    {
-        if (_gm.ReturnPlayerNumber() == 0)
-        {
-            _gm.GetPlayerNumber();
-        }
-        playerNumber = _gm.ReturnPlayerNumber();
-        Debug.Log("PlayerNumber: "+playerNumber);
     }
 
     public int GetPlayerNumber()
@@ -115,6 +184,8 @@ public class PlayerManager : MonoBehaviour
         Transform thisTransform = transform;
         thisTransform.rotation = spawn.rotation;
         thisTransform.position = spawn.position;
+        mainCam.transform.position = spawn.position+new Vector3(0,6,-10);
+        mainCam.transform.rotation = spawn.rotation;
     }
 
     public void ChangeSpawnLocation(Transform newSpawn)
@@ -139,7 +210,7 @@ public class PlayerManager : MonoBehaviour
                     Debug.Log("Finished at:" +elimPosition);
                     GameManager.SetTop3Players(_photonView.Owner.NickName, elimPosition);
                     string t3;
-                    GameManager.TryGetTop3Players(out t3, 1);
+                    GameManager.TryGetTop3Players(out t3, elimPosition);
                     Debug.Log(t3);
                     /*
                     Debug.Log("Finished at:" +elimPosition);
