@@ -77,13 +77,20 @@ public class CarController : MonoBehaviour
         }
 
         _rigidbody.centerOfMass = centreOfMass.transform.localPosition;
+
+        checkpoints = GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>();
+        
         if (checkpoints != null)
         {
             foreach (var checkpoint in checkpoints.checkpointObjects)
             {
                 _passedCheckpoints.Add(checkpoint, false);
-                //Debug.Log(_passedCheckpoints[checkpoint] + " : " + checkpoint);
+                Debug.Log(_passedCheckpoints[checkpoint] + " : " + checkpoint);
             }
+        }
+        else
+        {
+            Debug.Log("Error: no CheckpointSystem object in scene");
         }
     }
 
