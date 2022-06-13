@@ -172,7 +172,7 @@ public class PlayerManager : MonoBehaviour
             GameManager.SetElimPlayers(num);
             _gm.EliminatePlayer(elimPosition);
             Debug.Log("Player: "+_photonView.Owner.NickName + " Eliminated with Position "+elimPosition + "/"+_gm.GetTotalPlayers());
-            //PhotonNetwork.Destroy(this.gameObject);
+            PhotonNetwork.Destroy(this.gameObject);
         }
     }
     

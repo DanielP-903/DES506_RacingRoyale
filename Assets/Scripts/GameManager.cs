@@ -317,15 +317,17 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void LoadPlayerInLevel(Scene scene, LoadSceneMode loadSceneMode)
     {
         _photonView.RPC("SetNumber", RpcTarget.All);
-        Debug.Log("Loaded Player: "+_eliminated+" PlayerNum: "+_playerNumber);
+        Debug.Log("Loaded Player- Elim?: "+_eliminated+" PlayerNum: "+_playerNumber);
+        // IF NOT PEDESTAL STAGE AND NOT ELIMINATED : CREATE PLAYER CAR AND SET PHOTON VIEW
         if (scene.name != "EndStage" && !_eliminated)
         {
-            Debug.Log("Created Player: "+_playerNumber);
             GameObject player = PhotonNetwork.Instantiate(this.playerPrefab.name,
                 GameObject.Find("SpawnLocation" + GetPlayerNumber()).transform.position,
                 GameObject.Find("SpawnLocation" + GetPlayerNumber()).transform.rotation, 0);
             _photonView = player.GetComponent<PhotonView>();
+            Debug.Log("Created Player: "+_playerNumber + ":"+_photonView.name);
         }
+        // UPON REACHING PEDESTAL STAGE
         else if (scene.name == "EndStage" && !_eliminated)
         {
             for (int i = 1; i < 4; i++)
@@ -346,6 +348,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 }
             }
         }
+        // IF ELIMINATED AND NOT PEDESTAL STAGE : SPECTATE RANDOM PLAYER
         else
         {
             Debug.Log("SpectateUponLoad");
@@ -381,7 +384,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             case "Stage1":
                 //_timer.gameObject.SetActive(false);
                 TryGetFinishedPlayers(out playersCompleted, _stage);
-                Debug.Log("Name: "+SceneManager.GetActiveScene().name + " Stage: " + _stage + " Players Finished: "+playersCompleted+" Goal: " + (_totalPlayers/2));
+                //Debug.Log("Name: "+SceneManager.GetActiveScene().name + " Stage: " + _stage + " Players Finished: "+playersCompleted+" Goal: " + (_totalPlayers/2));
                 
                 if (_stage == 1 && playersCompleted >= (float)_totalPlayers/2 && PhotonNetwork.IsMasterClient)
                 {
@@ -396,7 +399,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             case "Stage2":
                 //_timer.gameObject.SetActive(false);
                 TryGetFinishedPlayers(out playersCompleted, _stage);
-                Debug.Log("Name: "+SceneManager.GetActiveScene().name + " Stage: " + _stage + " Players Finished: "+playersCompleted+" Goal: " + (PhotonNetwork.CurrentRoom.MaxPlayers/4));
+                //Debug.Log("Name: "+SceneManager.GetActiveScene().name + " Stage: " + _stage + " Players Finished: "+playersCompleted+" Goal: " + (PhotonNetwork.CurrentRoom.MaxPlayers/4));
                 
                 if (_stage == 2 && playersCompleted >= (float)_totalPlayers/4 && PhotonNetwork.IsMasterClient)
                 {
@@ -410,7 +413,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             case "Stage3":
                 //_timer.gameObject.SetActive(false);
                 TryGetFinishedPlayers(out playersCompleted, _stage);
-                Debug.Log("Name: "+SceneManager.GetActiveScene().name + " Stage: " + _stage + " Players Finished: "+playersCompleted+" Goal: " + (PhotonNetwork.CurrentRoom.MaxPlayers/8));
+                //Debug.Log("Name: "+SceneManager.GetActiveScene().name + " Stage: " + _stage + " Players Finished: "+playersCompleted+" Goal: " + (PhotonNetwork.CurrentRoom.MaxPlayers/8));
                 
                 if (_stage == 3 && playersCompleted >= (float)_totalPlayers/8 && PhotonNetwork.IsMasterClient)
                 {
@@ -426,7 +429,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 int elimPlayers;
                 TryGetFinishedPlayers(out playersCompleted, _stage);
                 TryGetElimPlayers(out elimPlayers);
-                Debug.Log("Name: "+SceneManager.GetActiveScene().name + " Stage: " + _stage + " Players Finished: "+(_totalPlayers - elimPlayers)+" Goal: 0");
+                //Debug.Log("Name: "+SceneManager.GetActiveScene().name + " Stage: " + _stage + " Players Finished: "+(_totalPlayers - elimPlayers)+" Goal: 0");
                 
                 if (_stage == 4 &&_totalPlayers == (elimPlayers + playersCompleted) && PhotonNetwork.IsMasterClient)
                 {
