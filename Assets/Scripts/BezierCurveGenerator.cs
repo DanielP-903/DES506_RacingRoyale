@@ -13,6 +13,8 @@ public class BezierCurveGenerator : MonoBehaviour
     
     private void OnDrawGizmos()
     {
+        if (stepValue < 0.01f) stepValue = 0.01f;
+        
         for (float t = 0; t <= 1; t += stepValue)
         {
             // Reference: https://en.wikipedia.org/wiki/B%C3%A9zier_curve
