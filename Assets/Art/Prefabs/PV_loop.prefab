@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!64 &1877813048763322850
+--- !u!64 &187771495441914784
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -13,7 +13,7 @@ MeshCollider:
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: -3134520979547085052, guid: 77635bd55a3a11649864cac38413df97, type: 3}
+  m_Mesh: {fileID: 3588288881600126014, guid: 77635bd55a3a11649864cac38413df97, type: 3}
 --- !u!1 &8473250768803526008
 GameObject:
   m_ObjectHideFlags: 0
@@ -25,7 +25,6 @@ GameObject:
   - component: {fileID: 5125321441982473826}
   - component: {fileID: -5754084199372789682}
   - component: {fileID: -7511558181221131132}
-  - component: {fileID: 6949550398781758701}
   m_Layer: 0
   m_Name: PV_loop
   m_TagString: Untagged
@@ -97,20 +96,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6949550398781758701
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8473250768803526008}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -8204869627080196530, guid: 77635bd55a3a11649864cac38413df97, type: 3}
 --- !u!1001 &1120310352495099622
 PrefabInstance:
   m_ObjectHideFlags: 0
