@@ -8,19 +8,19 @@ using UnityEngine;
 public class GhostPlayer : MonoBehaviour
 {
     public SO_CarGhost ghost;
-    private float timeStepValue;
-    private int index1;
-    private int index2;
+    private float _timeStepValue;
+    private int _index1;
+    private int _index2;
 
     private void Awake()
     {
-        timeStepValue = 0.0f;
+        _timeStepValue = 0.0f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        timeStepValue += Time.unscaledDeltaTime;
+        _timeStepValue += Time.unscaledDeltaTime;
 
         if (ghost.mode == GhostMode.Replay)
         {
@@ -33,37 +33,37 @@ public class GhostPlayer : MonoBehaviour
     {
         for (int i = 0; i < ghost.timeStamp.Count - 2; i++)
         {
-            if (ghost.timeStamp[i] == timeStepValue)
+            if (ghost.timeStamp[i] == _timeStepValue)
             {
-                index1 = i;
-                index2 = i;
+                _index1 = i;
+                _index2 = i;
                 return;
             }
-            else if (ghost.timeStamp[i] < timeStepValue && timeStepValue < ghost.timeStamp[i + 1])
+            else if (ghost.timeStamp[i] < _timeStepValue && _timeStepValue < ghost.timeStamp[i + 1])
             {
-                index1 = i;
-                index2 = i+1;
+                _index1 = i;
+                _index2 = i+1;
                 return;
             }
         }
 
-        index1 = ghost.timeStamp.Count - 1;
-        index2 = ghost.timeStamp.Count - 1;
+        _index1 = ghost.timeStamp.Count - 1;
+        _index2 = ghost.timeStamp.Count - 1;
     }
     
     private void SetTransform()
     {
-        if (index1 == index2)
+        if (_index1 == _index2)
         {
-            transform.position = ghost.position[index1];
-            transform.rotation = ghost.rotation[index1];
+            transform.position = ghost.position[_index1];
+            transform.rotation = ghost.rotation[_index1];
         }
         else
         {
-            float lerpFactor = (timeStepValue - ghost.timeStamp[index1]) /
-                               (ghost.timeStamp[index2] - ghost.timeStamp[index1]);
-            transform.position = Vector3.Lerp(ghost.position[index1], ghost.position[index2], lerpFactor);
-            transform.rotation = Quaternion.Slerp(ghost.rotation[index1], ghost.rotation[index2], lerpFactor);
+            float lerpFactor = (_timeStepValue - ghost.timeStamp[_index1]) /
+                               (ghost.timeStamp[_index2] - ghost.timeStamp[_index1]);
+            transform.position = Vector3.Lerp(ghost.position[_index1], ghost.position[_index2], lerpFactor);
+            transform.rotation = Quaternion.Slerp(ghost.rotation[_index1], ghost.rotation[_index2], lerpFactor);
 
         }
     }
