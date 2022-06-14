@@ -32,6 +32,16 @@ public class CarController : MonoBehaviour
     public float jumpCooldown = 2.0f;
     public float boostCooldown = 2.0f;
     public float resetCooldown = 2.0f;
+    
+    [Header("Powerups")]
+    //public bool hasForceField = false;
+    //public bool hasOilSpiller = false;
+    public bool hasSuperBoost = false;
+    public bool hasBouncyWallShield = false;
+    public bool hasAirBlast = false;
+    public bool hasGrapplingHook = false;
+    
+    
     private bool _moveForward = false;
     private bool _moveBackward = false;
     private bool _moveRight = false;
@@ -77,6 +87,8 @@ public class CarController : MonoBehaviour
             axle.rightWheel.brakeTorque = brakeTorque;
         }
         //SceneManager.sceneLoaded += LoadCCInLevel;
+        
+        _rigidbody.centerOfMass = centreOfMass.transform.localPosition;
     }
 
     void OnLevelWasLoaded()
