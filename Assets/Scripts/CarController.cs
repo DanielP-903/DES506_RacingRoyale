@@ -152,7 +152,7 @@ public class CarController : MonoBehaviour
     private void PhysUpdatePowerups()
     {
         _wallShieldTimer = _wallShieldTimer <= 0 ? 0 : _wallShieldTimer - Time.fixedDeltaTime;
-        Debug.Log("Shield Timer: " + _wallShieldTimer);
+        //Debug.Log("Shield Timer: " + _wallShieldTimer);
         
         if (_wallShieldTimer > 0)
         {
