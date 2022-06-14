@@ -28,6 +28,7 @@ public class CarController : MonoBehaviour
     public float torqueVectorAmount = 1.0f;
     public float airControlForce = 500.0f;
     public float boostForceAmount = 5.0f;
+    public float driftForceAmount = 3000.0f;
 
     [Header("Environment Pad")] 
     public float jumpPadForce = 5.0f;
@@ -287,25 +288,28 @@ public class CarController : MonoBehaviour
 
         if (_moveLeft)
         {
-            if (_moveBackward)
-            {
-                _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 1, Time.deltaTime * 5.0f);
-            }
-            else
-            {
-                _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, -1, Time.deltaTime * 5.0f);
-            }
+            _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, -1, Time.deltaTime * 5.0f);
+
+            // if (_moveBackward)
+            // {
+            //     _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 1, Time.deltaTime * 5.0f);
+            // }
+            // else
+            // {
+            //     _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, -1, Time.deltaTime * 5.0f);
+            // }
         }
         else if (_moveRight)
         {
-            if (_moveBackward)
-            {
-                _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, -1, Time.deltaTime * 5.0f);
-            }
-            else
-            {
-                _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 1, Time.deltaTime * 5.0f);
-            }
+            _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 1, Time.deltaTime * 5.0f);
+            // if (_moveBackward)
+            // {
+            //     _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, -1, Time.deltaTime * 5.0f);
+            // }
+            // else
+            // {
+            //     _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 1, Time.deltaTime * 5.0f);
+            // }
         }
         else
         {
@@ -348,12 +352,23 @@ public class CarController : MonoBehaviour
 
         if (!_moveForward && !_moveBackward)
         {
-            brakeTorque = 1000.0f;
+            brakeTorque = 1500.0f;
         }
         else
         {
             brakeTorque = 0.0f;
         }
+
+        if (_drift)
+        {
+            brakeTorque = driftForceAmount;
+            axles[0].motor = false;
+        }
+        else
+        {
+            axles[0].motor = true;
+        }
+        
         if (_moveForward) _rigidbody.AddForce(transform.forward * accelerationForce, ForceMode.Acceleration);
         if (_moveBackward) _rigidbody.AddForce(-transform.forward * accelerationForce, ForceMode.Acceleration);
 
@@ -467,7 +482,11 @@ public class CarController : MonoBehaviour
             _playerManager.EliminateCurrentPlayer();
         }
 
-        
+        if (collider.transform.CompareTag("Powerup"))
+        {
+            currentPowerup = collider.transform.parent.GetComponent<PowerupSpawner>().GetCurrentPowerup().powerupType;
+            collider.transform.parent.GetComponent<PowerupSpawner>().ResetTimer();
+        }
     }
 
     // Input Actions

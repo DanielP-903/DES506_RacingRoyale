@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 829313175}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.35599995, z: -0.37}
+  m_LocalPosition: {x: 0, y: -0.39999998, z: -0.37}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1118674505751619610}
@@ -128,6 +128,7 @@ GameObject:
   - component: {fileID: 1978116585297259193}
   - component: {fileID: 7770678307179569261}
   - component: {fileID: 3894772900694721693}
+  - component: {fileID: 4753270344536567152}
   m_Layer: 0
   m_Name: Player Car
   m_TagString: Player
@@ -208,13 +209,13 @@ MonoBehaviour:
   torqueVectorAmount: 9000
   airControlForce: 1000
   boostForceAmount: 15
-  jumpPadForce: 5
-  boostPadForce: 5
+  jumpPadForce: 1000
+  boostPadForce: 20
   bounciness: 10
   jumpCooldown: 2
   boostCooldown: 2
   resetCooldown: 1
-  padCooldown: 2
+  padCooldown: 0.5
   currentPowerup: 2
   superBoostForce: 50
   wallShieldTime: 15
@@ -304,6 +305,19 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &4753270344536567152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1118674505751619608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97349921e18e0f64c8576f639b33aac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ghost: {fileID: 11400000, guid: 932d1c60c518f68459399f87d7e644c8, type: 2}
 --- !u!1 &1118674506502527236
 GameObject:
   m_ObjectHideFlags: 0
@@ -609,7 +623,7 @@ GameObject:
   - component: {fileID: 6815877793245236840}
   - component: {fileID: 6052293195018222641}
   - component: {fileID: 4974364372929511565}
-  m_Layer: 2
+  m_Layer: 6
   m_Name: BouncyWallShield
   m_TagString: WallShield
   m_Icon: {fileID: 0}
