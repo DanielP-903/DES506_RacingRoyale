@@ -7,6 +7,10 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 
+public enum PowerupType
+{
+    None, Superboost, BouncyWallShield, AirBlast, GrapplingHook
+}
 
 public class CarController : MonoBehaviour
 {
@@ -37,14 +41,11 @@ public class CarController : MonoBehaviour
     public float boostCooldown = 2.0f;
     public float resetCooldown = 2.0f;
     public float padCooldown = 2.0f;
-    
-    [Header("Powerups")]
-    //public bool hasForceField = false;
-    //public bool hasOilSpiller = false;
-    public bool hasSuperBoost = false;
-    public bool hasBouncyWallShield = false;
-    public bool hasAirBlast = false;
-    public bool hasGrapplingHook = false;
+
+    [Header("Powerup Properties")] 
+    public PowerupType currentPowerup;
+    public float superBoostForce = 50.0f;
+    public float wallShieldTime = 15.0f;
     
     
     private bool _moveForward = false;
@@ -57,6 +58,7 @@ public class CarController : MonoBehaviour
     private bool _rollLeft = false;
     private bool _rollRight = false;
     private bool _reset = false;
+    private bool _activatePowerup = false;
     private bool _grounded = false;
 
     private float _currentSteeringMulti;
@@ -68,6 +70,8 @@ public class CarController : MonoBehaviour
     private float _boostDelay = 2.0f;
     private float _resetDelay = 2.0f;
     private float _padDelay = 2.0f;
+    
+    private float _wallShieldTimer = 0.0f;
     
     private PlayerManager _playerManager;
     
@@ -84,6 +88,7 @@ public class CarController : MonoBehaviour
         _passedFinishLine = false;
         _pushDelay = jumpCooldown;
         _boostDelay = boostCooldown;
+        //_wallShieldTimer = wallShieldTime;
         _rigidbody = GetComponent<Rigidbody>();
         _playerManager = GetComponent<PlayerManager>();
         
@@ -136,34 +141,66 @@ public class CarController : MonoBehaviour
 
     public void FixedUpdate()
     {
-        _padDelay = _padDelay <= 0 ? 0 : _padDelay - Time.fixedDeltaTime;
-        
         PhysUpdateDriving();
         PhysUpdateForces();
         PhysUpdateAirControl();
         PhysUpdateAcceleration();
+        PhysUpdatePowerups();
+    }
 
-        if (_Hit.transform != null)
+    private void PhysUpdatePowerups()
+    {
+        _wallShieldTimer = _wallShieldTimer <= 0 ? 0 : _wallShieldTimer - Time.fixedDeltaTime;
+        Debug.Log("Shield Timer: " + _wallShieldTimer);
+        
+        if (_wallShieldTimer > 0)
         {
-            if (_Hit.transform.CompareTag("JumpPad") && _padDelay <= 0)
+            if (!transform.GetChild(0).gameObject.activeInHierarchy)
             {
-                _padDelay = padCooldown;
-                _rigidbody.AddForce(transform.up * (jumpPadForce * 700.0f * 1.5f), ForceMode.Force);
-            }
-
-            if (_Hit.transform.CompareTag("BoostPad") && _padDelay <= 0)
-            {
-                _padDelay = padCooldown;
-                if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
-                {
-                    _rigidbody.velocity = -_Hit.transform.forward * boostPadForce;
-                }
-                else
-                {
-                    _rigidbody.AddForce(-_Hit.transform.forward * boostPadForce, ForceMode.VelocityChange);
-                }
+                transform.GetChild(0).gameObject.SetActive(true);
             }
         }
+        else
+        {
+            if (transform.GetChild(0).gameObject.activeInHierarchy)
+            {
+                transform.GetChild(0).gameObject.SetActive(false);
+            }
+        }
+        
+        if (_activatePowerup)
+        {
+            switch (currentPowerup)
+            {
+                case PowerupType.None:
+                    Debug.Log("No powerup equipped!");
+                    break;
+                case PowerupType.Superboost:
+                    currentPowerup = PowerupType.None;
+                    if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
+                    {                
+                        _rigidbody.velocity = transform.forward * superBoostForce;
+                    }
+                    else
+                    {
+                        _rigidbody.AddForce(transform.forward * superBoostForce, ForceMode.VelocityChange);
+                    }
+                    break;
+                case PowerupType.BouncyWallShield:
+                    _wallShieldTimer = wallShieldTime;
+                    currentPowerup = PowerupType.None;
+                    break;
+                case PowerupType.AirBlast:
+                    currentPowerup = PowerupType.None;
+                    break;
+                case PowerupType.GrapplingHook:
+                    currentPowerup = PowerupType.None;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+        
     }
     
     private void PhysUpdateAcceleration()
@@ -189,7 +226,8 @@ public class CarController : MonoBehaviour
     private void PhysUpdateForces()
     {
         _pushDelay = _pushDelay <= 0 ? 0 : _pushDelay - Time.fixedDeltaTime;
-        
+        _padDelay = _padDelay <= 0 ? 0 : _padDelay - Time.fixedDeltaTime;
+ 
         if (_pushUp && !_grounded && _pushDelay <= 0.0f)
         {
             _pushDelay = jumpCooldown;
@@ -202,7 +240,27 @@ public class CarController : MonoBehaviour
             _pushDelay = jumpCooldown;
             _rigidbody.AddForce(transform.up * (pushForceAmount * 700.0f), ForceMode.Force);
         }
+        if (_Hit.transform != null)
+        {
+            if (_Hit.transform.CompareTag("JumpPad") && _padDelay <= 0)
+            {
+                _padDelay = padCooldown;
+                _rigidbody.AddForce(transform.up * (jumpPadForce * 700.0f * 1.5f), ForceMode.Force);
+            }
 
+            if (_Hit.transform.CompareTag("BoostPad") && _padDelay <= 0)
+            {
+                _padDelay = padCooldown;
+                if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
+                {
+                    _rigidbody.velocity = -_Hit.transform.forward * boostPadForce;
+                }
+                else
+                {
+                    _rigidbody.AddForce(-_Hit.transform.forward * boostPadForce, ForceMode.VelocityChange);
+                }
+            }
+        }
     }
 
     private void PhysUpdateAirControl()
@@ -376,6 +434,12 @@ public class CarController : MonoBehaviour
             Vector3 direction = collision.contacts[0].point - transform.position;
             _rigidbody.velocity = -(direction.normalized * bounciness);
         }
+
+        if (collision.transform.CompareTag("WallShield"))
+        {
+            Vector3 direction = collision.contacts[0].point - transform.position;
+            _rigidbody.velocity = -(direction.normalized * bounciness * 2);
+        }
     }
 
     private void OnTriggerEnter(Collider collider)
@@ -461,21 +525,27 @@ public class CarController : MonoBehaviour
     {
         float value = context.ReadValue<float>();
         _rollLeft = value > 0;
-        //Debug.Log("Boost detected");
+        //Debug.Log("Roll Left detected");
     }
     // Roll Right
     public void RollRight(InputAction.CallbackContext context)
     {
         float value = context.ReadValue<float>();
         _rollRight = value > 0;
-        //Debug.Log("Boost detected");
+        //Debug.Log("Roll Right detected");
     }
     // Reset
     public void Reset(InputAction.CallbackContext context)
     {
         float value = context.ReadValue<float>();
         _reset = value > 0;
-        //Debug.Log("Boost detected");
+        //Debug.Log("Reset detected");
+    }
+    public void ActivatePowerup(InputAction.CallbackContext context)
+    {
+        float value = context.ReadValue<float>();
+        _activatePowerup = value > 0;
+        //Debug.Log("Activate Powerup detected");
     }
 
     [Serializable]
