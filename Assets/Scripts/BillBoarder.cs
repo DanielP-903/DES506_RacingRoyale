@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BillBoarder : MonoBehaviour
 {
@@ -12,8 +13,14 @@ public class BillBoarder : MonoBehaviour
     {
         rect = GetComponent<RectTransform>();
         mainCam = Camera.main;
+        //SceneManager.sceneLoaded += LoadPlayerInLevel;
         //Debug.Log("Rect: "+rect);
     }
+
+    /*private void LoadPlayerInLevel(Scene scene, LoadSceneMode loadSceneMode)
+    {
+        mainCam = Camera.main;
+    }*/
 
     // Update is called once per frame
     void Update()

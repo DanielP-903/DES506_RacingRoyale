@@ -4,8 +4,13 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 
+public enum PowerupType
+{
+    None, Superboost, BouncyWallShield, AirBlast, GrapplingHook
+}
 
 public class CarController : MonoBehaviour
 {
@@ -24,6 +29,10 @@ public class CarController : MonoBehaviour
     public float airControlForce = 500.0f;
     public float boostForceAmount = 5.0f;
 
+    [Header("Environment Pad")] 
+    public float jumpPadForce = 5.0f;
+    public float boostPadForce = 5.0f;
+    
     [Header("Collisions")] 
     public float bounciness = 100.0f;
     
@@ -31,6 +40,14 @@ public class CarController : MonoBehaviour
     public float jumpCooldown = 2.0f;
     public float boostCooldown = 2.0f;
     public float resetCooldown = 2.0f;
+    public float padCooldown = 2.0f;
+
+    [Header("Powerup Properties")] 
+    public PowerupType currentPowerup;
+    public float superBoostForce = 50.0f;
+    public float wallShieldTime = 15.0f;
+    
+    
     private bool _moveForward = false;
     private bool _moveBackward = false;
     private bool _moveRight = false;
@@ -41,6 +58,7 @@ public class CarController : MonoBehaviour
     private bool _rollLeft = false;
     private bool _rollRight = false;
     private bool _reset = false;
+    private bool _activatePowerup = false;
     private bool _grounded = false;
 
     private float _currentSteeringMulti;
@@ -51,6 +69,9 @@ public class CarController : MonoBehaviour
     private float _pushDelay = 2.0f;
     private float _boostDelay = 2.0f;
     private float _resetDelay = 2.0f;
+    private float _padDelay = 2.0f;
+    
+    private float _wallShieldTimer = 0.0f;
     
     private PlayerManager _playerManager;
     
@@ -67,6 +88,7 @@ public class CarController : MonoBehaviour
         _passedFinishLine = false;
         _pushDelay = jumpCooldown;
         _boostDelay = boostCooldown;
+        //_wallShieldTimer = wallShieldTime;
         _rigidbody = GetComponent<Rigidbody>();
         _playerManager = GetComponent<PlayerManager>();
         
@@ -75,13 +97,19 @@ public class CarController : MonoBehaviour
             axle.leftWheel.brakeTorque = brakeTorque;
             axle.rightWheel.brakeTorque = brakeTorque;
         }
-
-        _rigidbody.centerOfMass = centreOfMass.transform.localPosition;
-
-        checkpoints = GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>();
+        //SceneManager.sceneLoaded += LoadCCInLevel;
         
-        if (checkpoints != null)
+        _rigidbody.centerOfMass = centreOfMass.transform.localPosition;
+    }
+
+    void OnLevelWasLoaded()
+    {
+        _passedFinishLine = false;
+        GameObject checkpointObject = GameObject.Find("CheckpointSystem");
+        
+        if (checkpointObject != null)
         {
+            checkpoints = checkpointObject.GetComponent<CheckpointSystem>();
             foreach (var checkpoint in checkpoints.checkpointObjects)
             {
                 _passedCheckpoints.Add(checkpoint, false);
@@ -94,13 +122,86 @@ public class CarController : MonoBehaviour
         }
     }
 
+    /*private void LoadCCInLevel(Scene scene, LoadSceneMode loadSceneMode)
+    {
+        checkpoints = GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>();
+        if (checkpoints != null)
+        {
+            foreach (var checkpoint in checkpoints.checkpointObjects)
+            {
+                _passedCheckpoints.Add(checkpoint, false);
+                Debug.Log(_passedCheckpoints[checkpoint] + " : " + checkpoint);
+            }
+        }
+        else
+        {
+            Debug.Log("Error: no CheckpointSystem object in scene");
+        }
+    }*/
+
     public void FixedUpdate()
     {
         PhysUpdateDriving();
         PhysUpdateForces();
         PhysUpdateAirControl();
         PhysUpdateAcceleration();
-  }
+        PhysUpdatePowerups();
+    }
+
+    private void PhysUpdatePowerups()
+    {
+        _wallShieldTimer = _wallShieldTimer <= 0 ? 0 : _wallShieldTimer - Time.fixedDeltaTime;
+        Debug.Log("Shield Timer: " + _wallShieldTimer);
+        
+        if (_wallShieldTimer > 0)
+        {
+            if (!transform.GetChild(0).gameObject.activeInHierarchy)
+            {
+                transform.GetChild(0).gameObject.SetActive(true);
+            }
+        }
+        else
+        {
+            if (transform.GetChild(0).gameObject.activeInHierarchy)
+            {
+                transform.GetChild(0).gameObject.SetActive(false);
+            }
+        }
+        
+        if (_activatePowerup)
+        {
+            switch (currentPowerup)
+            {
+                case PowerupType.None:
+                    Debug.Log("No powerup equipped!");
+                    break;
+                case PowerupType.Superboost:
+                    currentPowerup = PowerupType.None;
+                    if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
+                    {                
+                        _rigidbody.velocity = transform.forward * superBoostForce;
+                    }
+                    else
+                    {
+                        _rigidbody.AddForce(transform.forward * superBoostForce, ForceMode.VelocityChange);
+                    }
+                    break;
+                case PowerupType.BouncyWallShield:
+                    _wallShieldTimer = wallShieldTime;
+                    currentPowerup = PowerupType.None;
+                    break;
+                case PowerupType.AirBlast:
+                    currentPowerup = PowerupType.None;
+                    break;
+                case PowerupType.GrapplingHook:
+                    currentPowerup = PowerupType.None;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+        
+    }
     
     private void PhysUpdateAcceleration()
     {
@@ -125,7 +226,8 @@ public class CarController : MonoBehaviour
     private void PhysUpdateForces()
     {
         _pushDelay = _pushDelay <= 0 ? 0 : _pushDelay - Time.fixedDeltaTime;
-        
+        _padDelay = _padDelay <= 0 ? 0 : _padDelay - Time.fixedDeltaTime;
+ 
         if (_pushUp && !_grounded && _pushDelay <= 0.0f)
         {
             _pushDelay = jumpCooldown;
@@ -138,16 +240,37 @@ public class CarController : MonoBehaviour
             _pushDelay = jumpCooldown;
             _rigidbody.AddForce(transform.up * (pushForceAmount * 700.0f), ForceMode.Force);
         }
+        if (_Hit.transform != null)
+        {
+            if (_Hit.transform.CompareTag("JumpPad") && _padDelay <= 0)
+            {
+                _padDelay = padCooldown;
+                _rigidbody.AddForce(transform.up * (jumpPadForce * 700.0f * 1.5f), ForceMode.Force);
+            }
+
+            if (_Hit.transform.CompareTag("BoostPad") && _padDelay <= 0)
+            {
+                _padDelay = padCooldown;
+                if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
+                {
+                    _rigidbody.velocity = -_Hit.transform.forward * boostPadForce;
+                }
+                else
+                {
+                    _rigidbody.AddForce(-_Hit.transform.forward * boostPadForce, ForceMode.VelocityChange);
+                }
+            }
+        }
     }
 
     private void PhysUpdateAirControl()
     {
         if (!_grounded)
         {
-            if (_moveForward) _rigidbody.AddTorque(transform.right * airControlForce, ForceMode.Force);
-            if (_moveBackward) _rigidbody.AddTorque(-transform.right * airControlForce, ForceMode.Force);
-            if (_moveLeft) _rigidbody.AddTorque(-transform.up/20, ForceMode.VelocityChange);
-            if (_moveRight) _rigidbody.AddTorque(transform.up/20, ForceMode.VelocityChange);
+            //if (_moveForward) _rigidbody.AddTorque(transform.right * airControlForce, ForceMode.Force);
+            //if (_moveBackward) _rigidbody.AddTorque(-transform.right * airControlForce, ForceMode.Force);
+            if (_moveLeft) _rigidbody.AddTorque(-transform.up/15, ForceMode.VelocityChange);
+            if (_moveRight) _rigidbody.AddTorque(transform.up/15, ForceMode.VelocityChange);
             if (_rollLeft) _rigidbody.AddTorque(transform.forward/15, ForceMode.VelocityChange);
             if (_rollRight) _rigidbody.AddTorque(-transform.forward/15, ForceMode.VelocityChange);
         }
@@ -164,17 +287,31 @@ public class CarController : MonoBehaviour
 
         if (_moveLeft)
         {
-            _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, -1, Time.deltaTime * 5.0f);
+            if (_moveBackward)
+            {
+                _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 1, Time.deltaTime * 5.0f);
+            }
+            else
+            {
+                _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, -1, Time.deltaTime * 5.0f);
+            }
         }
         else if (_moveRight)
         {
-            _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 1, Time.deltaTime * 5.0f);
+            if (_moveBackward)
+            {
+                _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, -1, Time.deltaTime * 5.0f);
+            }
+            else
+            {
+                _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 1, Time.deltaTime * 5.0f);
+            }
         }
         else
         {
             _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 0, Time.deltaTime * 5.0f);
         }
-        
+
         float currentSteeringValue = maxSteeringAngle * _currentSteeringMulti;
 
         foreach (var axle in axles)
@@ -219,10 +356,13 @@ public class CarController : MonoBehaviour
         }
         if (_moveForward) _rigidbody.AddForce(transform.forward * accelerationForce, ForceMode.Acceleration);
         if (_moveBackward) _rigidbody.AddForce(-transform.forward * accelerationForce, ForceMode.Acceleration);
-        if (_moveLeft) _rigidbody.AddForce(transform.right * (accelerationForce), ForceMode.Acceleration);
-        if (_moveRight) _rigidbody.AddForce(-transform.right * (accelerationForce), ForceMode.Acceleration);
-        
-        
+
+        if (_grounded)
+        {
+            if (_moveLeft) _rigidbody.AddForce(transform.right * (accelerationForce), ForceMode.Acceleration);
+            if (_moveRight) _rigidbody.AddForce(-transform.right * (accelerationForce), ForceMode.Acceleration);
+        }
+
     }
 
     public bool GetBoost()
@@ -255,6 +395,8 @@ public class CarController : MonoBehaviour
             _resetDelay = resetCooldown;
             _playerManager.GoToSpawn();
         }
+        
+        
     }
     
     
@@ -292,6 +434,12 @@ public class CarController : MonoBehaviour
             Vector3 direction = collision.contacts[0].point - transform.position;
             _rigidbody.velocity = -(direction.normalized * bounciness);
         }
+
+        if (collision.transform.CompareTag("WallShield"))
+        {
+            Vector3 direction = collision.contacts[0].point - transform.position;
+            _rigidbody.velocity = -(direction.normalized * bounciness * 2);
+        }
     }
 
     private void OnTriggerEnter(Collider collider)
@@ -318,6 +466,8 @@ public class CarController : MonoBehaviour
             _hitEliminationZone = true;
             _playerManager.EliminateCurrentPlayer();
         }
+
+        
     }
 
     // Input Actions
@@ -375,21 +525,27 @@ public class CarController : MonoBehaviour
     {
         float value = context.ReadValue<float>();
         _rollLeft = value > 0;
-        //Debug.Log("Boost detected");
+        //Debug.Log("Roll Left detected");
     }
     // Roll Right
     public void RollRight(InputAction.CallbackContext context)
     {
         float value = context.ReadValue<float>();
         _rollRight = value > 0;
-        //Debug.Log("Boost detected");
+        //Debug.Log("Roll Right detected");
     }
     // Reset
     public void Reset(InputAction.CallbackContext context)
     {
         float value = context.ReadValue<float>();
         _reset = value > 0;
-        //Debug.Log("Boost detected");
+        //Debug.Log("Reset detected");
+    }
+    public void ActivatePowerup(InputAction.CallbackContext context)
+    {
+        float value = context.ReadValue<float>();
+        _activatePowerup = value > 0;
+        //Debug.Log("Activate Powerup detected");
     }
 
     [Serializable]
