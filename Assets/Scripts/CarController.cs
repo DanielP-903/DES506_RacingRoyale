@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 
 public enum PowerupType
@@ -44,7 +45,8 @@ public class CarController : MonoBehaviour
     public float padCooldown = 2.0f;
 
     [Header("Powerup Properties")] 
-    public PowerupType currentPowerup;
+    public SO_Powerup currentPowerup;
+    public PowerupType currentPowerupType;
     public float superBoostForce = 50.0f;
     public float wallShieldTime = 15.0f;
     
@@ -84,6 +86,8 @@ public class CarController : MonoBehaviour
     private Transform _currentRespawnPoint;
     public CheckpointSystem checkpoints;
 
+    public Image _powerupIcon;
+    public List<ParticleSystem> boostEffects = new List<ParticleSystem>();
     private void Start()
     {
         _passedFinishLine = false;
@@ -107,6 +111,8 @@ public class CarController : MonoBehaviour
     {
         _passedFinishLine = false;
         GameObject checkpointObject = GameObject.Find("CheckpointSystem");
+
+        _powerupIcon = GameObject.Find("Powerup Icon").gameObject.GetComponent<Image>();
         
         if (checkpointObject != null)
         {
@@ -166,18 +172,24 @@ public class CarController : MonoBehaviour
             if (transform.GetChild(0).gameObject.activeInHierarchy)
             {
                 transform.GetChild(0).gameObject.SetActive(false);
+                _powerupIcon.gameObject.SetActive(false);
             }
         }
         
         if (_activatePowerup)
         {
-            switch (currentPowerup)
+            switch (currentPowerupType)
             {
                 case PowerupType.None:
                     Debug.Log("No powerup equipped!");
                     break;
                 case PowerupType.Superboost:
-                    currentPowerup = PowerupType.None;
+                    StartCoroutine(DelayRemoveIcon());
+                    currentPowerupType = PowerupType.None;
+                    foreach (var effect in boostEffects)
+                    {
+                        effect.Play();
+                    }
                     if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
                     {                
                         _rigidbody.velocity = transform.forward * superBoostForce;
@@ -189,19 +201,29 @@ public class CarController : MonoBehaviour
                     break;
                 case PowerupType.BouncyWallShield:
                     _wallShieldTimer = wallShieldTime;
-                    currentPowerup = PowerupType.None;
+                    currentPowerupType = PowerupType.None;
                     break;
                 case PowerupType.AirBlast:
-                    currentPowerup = PowerupType.None;
+                    currentPowerupType = PowerupType.None;
                     break;
                 case PowerupType.GrapplingHook:
-                    currentPowerup = PowerupType.None;
+                    currentPowerupType = PowerupType.None;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
         
+    }
+
+    private IEnumerator DelayRemoveIcon()
+    {
+        yield return new WaitForSeconds(1);
+        _powerupIcon.gameObject.SetActive(false);
+        foreach (var effect in boostEffects)
+        {
+            effect.Stop();
+        }
     }
     
     private void PhysUpdateAcceleration()
@@ -211,6 +233,10 @@ public class CarController : MonoBehaviour
         // BOOST FUNCTIONALITY
         if (_boost && _boostDelay <= 0)
         {
+            foreach (var effect in boostEffects)
+            {
+                effect.Play();
+            }
             _boostDelay = boostCooldown;
             if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
             {                
@@ -221,6 +247,8 @@ public class CarController : MonoBehaviour
                 _rigidbody.AddForce(transform.forward * boostForceAmount, ForceMode.VelocityChange);
             }
         }
+
+        
     }
 
     // For updating rigidbody forces acting upon the car
@@ -289,7 +317,6 @@ public class CarController : MonoBehaviour
         if (_moveLeft)
         {
             _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, -1, Time.deltaTime * 5.0f);
-
             // if (_moveBackward)
             // {
             //     _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 1, Time.deltaTime * 5.0f);
@@ -352,20 +379,16 @@ public class CarController : MonoBehaviour
 
         if (!_moveForward && !_moveBackward)
         {
-            brakeTorque = 1500.0f;
+            brakeTorque = 1000.0f;
+        }
+        else if (_drift)
+        {
+            brakeTorque = driftForceAmount;
+            axles[0].motor = false; 
         }
         else
         {
             brakeTorque = 0.0f;
-        }
-
-        if (_drift)
-        {
-            brakeTorque = driftForceAmount;
-            axles[0].motor = false;
-        }
-        else
-        {
             axles[0].motor = true;
         }
         
@@ -484,8 +507,11 @@ public class CarController : MonoBehaviour
 
         if (collider.transform.CompareTag("Powerup"))
         {
-            currentPowerup = collider.transform.parent.GetComponent<PowerupSpawner>().GetCurrentPowerup().powerupType;
+            currentPowerup = collider.transform.parent.GetComponent<PowerupSpawner>().GetCurrentPowerup();
+            currentPowerupType = currentPowerup.powerupType;
             collider.transform.parent.GetComponent<PowerupSpawner>().ResetTimer();
+            _powerupIcon.sprite = currentPowerup.powerupUIImage;
+            _powerupIcon.gameObject.SetActive(true);
         }
     }
 
@@ -560,6 +586,7 @@ public class CarController : MonoBehaviour
         _reset = value > 0;
         //Debug.Log("Reset detected");
     }
+    // Activate Power
     public void ActivatePowerup(InputAction.CallbackContext context)
     {
         float value = context.ReadValue<float>();

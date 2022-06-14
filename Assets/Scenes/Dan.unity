@@ -34648,7 +34648,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1700898515
 RectTransform:
   m_ObjectHideFlags: 0
@@ -52983,6 +52983,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: de975f91d60c20040899ae79a13a7d78, type: 3}
+--- !u!198 &3348212757874530332 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 8091151771477942751, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+  m_PrefabInstance: {fileID: 4693943579594164523}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &3348212758244999453 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6853901648219108650, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+  m_PrefabInstance: {fileID: 4693943579594164523}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &3348212759259884792 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4157513261080102409, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+  m_PrefabInstance: {fileID: 4693943579594164523}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &3348212759406681083 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 8733064692481768390, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+  m_PrefabInstance: {fileID: 4693943579594164523}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3409136277635275506
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -52990,6 +53010,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2774631454814832548, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
+      propertyPath: m_BindingMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2774631455131860108, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_Name
       value: Main Camera
@@ -53036,11 +53060,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2774631455131860148, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000018722702
+      value: 0.0000000187227
       objectReference: {fileID: 0}
     - target: {fileID: 2774631455131860148, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.00000000441983
+      value: -0.0000000044198294
       objectReference: {fileID: 0}
     - target: {fileID: 2774631455131860148, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -53262,20 +53286,96 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1118674505751619611, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+      propertyPath: brakeTorque
+      value: 4000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1118674505751619611, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
       propertyPath: checkpoints
       value: 
       objectReference: {fileID: 1604882999}
     - target: {fileID: 1118674505751619611, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+      propertyPath: _powerupIcon
+      value: 
+      objectReference: {fileID: 1700898516}
+    - target: {fileID: 1118674505751619611, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
       propertyPath: currentPowerup
-      value: 0
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1118674505751619611, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: driftForceAmount
-      value: 6000
+      propertyPath: superBoostForce
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 1118674505751619611, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+      propertyPath: boostEffects.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1118674505751619611, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+      propertyPath: boostEffects.Array.data[0]
+      value: 
+      objectReference: {fileID: 3348212759259884792}
+    - target: {fileID: 1118674505751619611, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+      propertyPath: boostEffects.Array.data[1]
+      value: 
+      objectReference: {fileID: 3348212757874530332}
+    - target: {fileID: 1118674505751619611, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+      propertyPath: boostEffects.Array.data[2]
+      value: 
+      objectReference: {fileID: 3348212758244999453}
+    - target: {fileID: 1118674505751619611, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+      propertyPath: boostEffects.Array.data[3]
+      value: 
+      objectReference: {fileID: 3348212759406681083}
+    - target: {fileID: 4157513261080102409, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4157513261080102409, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4157513261080102409, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 1.42
+      objectReference: {fileID: 0}
+    - target: {fileID: 6853901648219108650, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6853901648219108650, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6853901648219108650, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 1.42
       objectReference: {fileID: 0}
     - target: {fileID: 7770678307179569261, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
       propertyPath: sceneViewId
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091151771477942751, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091151771477942751, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8091151771477942751, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 1.42
+      objectReference: {fileID: 0}
+    - target: {fileID: 8733064692481768390, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8733064692481768390, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8733064692481768390, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 1.42
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
