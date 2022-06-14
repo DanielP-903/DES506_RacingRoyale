@@ -348,12 +348,18 @@ public class CarController : MonoBehaviour
 
         if (!_moveForward && !_moveBackward)
         {
-            brakeTorque = 1000.0f;
+            brakeTorque = 1500.0f;
         }
         else
         {
             brakeTorque = 0.0f;
         }
+
+        if (_drift)
+        {
+            brakeTorque = 1500.0f;
+        }
+        
         if (_moveForward) _rigidbody.AddForce(transform.forward * accelerationForce, ForceMode.Acceleration);
         if (_moveBackward) _rigidbody.AddForce(-transform.forward * accelerationForce, ForceMode.Acceleration);
 
