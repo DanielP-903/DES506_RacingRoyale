@@ -33,7 +33,7 @@ public class PlayerManager : MonoBehaviour
     private TextMeshProUGUI playerLicenseText;
     #endregion
 
-    // PRIVATE METHODSL START, LOAD, UPDATE
+    // PRIVATE METHODS: START, LOAD, UPDATE
     #region Private Methods
     void Start()
     {
@@ -73,7 +73,6 @@ public class PlayerManager : MonoBehaviour
         playerLicenseText.text = _photonView.Owner.NickName;
     }
     
-    // Update is called once per frame
     void Update()
     {
         if (transform.position.y < -5)
