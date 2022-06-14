@@ -6,9 +6,53 @@ using Photon.Realtime;
 
     public class Launcher : MonoBehaviourPunCallbacks
     {
+        // CHANGEABLE LAUNCHER VARIABLES
+        #region Private Serializable Fields
+
+        /// <summary>
+        /// The maximum number of players per room. When a room is full, it can't be joined by new players, and so new room will be created.
+        /// </summary>
+        [Tooltip("The maximum number of players per room. When a room is full, it can't be joined by new players, and so new room will be created")]
+        [SerializeField]
+        private byte maxPlayersPerRoom = 32;
+
+        #endregion
+        
+        // PUBLIC LAUNCHER VARIABLES
+        #region Public Fields
+
+        [Tooltip("The Ui Panel to let the user enter name, connect and play")]
+        [SerializeField]
+        private GameObject controlPanel;
+        [Tooltip("The UI Label to inform the user that the connection is in progress")]
+        [SerializeField]
+        private GameObject progressLabel;
+
+        #endregion
+
+        // PRIVATE LAUNCHER VARIABLES
+        #region Private Fields
+
+        /// <summary>
+        /// Keep track of the current process. Since connection is asynchronous and is based on several callbacks from Photon,
+        /// we need to keep track of this to properly adjust the behavior when we receive call back by Photon.
+        /// Typically this is used for the OnConnectedToMaster() callback.
+        /// </summary>
+        bool isConnecting;
+
+        /// <summary>
+        /// This client's version number. Users are separated from each other by gameVersion (which allows you to make breaking changes).
+        /// </summary>
+        string gameVersion = "0.11";
+
+
+        #endregion
+        
+        
+        // THIS SECTION IS FOR CALLS TO DO WITH CONNECTING AND DISCONNECTING
         #region MonoBehaviourPunCallbacks Callbacks
-
-
+        
+        // IF CONNECTED TO MASTER SERVER
         public override void OnConnectedToMaster()
         {
             Debug.Log("PUN Basics Tutorial/Launcher: OnConnectedToMaster() was called by PUN");
@@ -20,7 +64,7 @@ using Photon.Realtime;
             }
         }
 
-
+        // IF DISCONNECTED FROM SERVER
         public override void OnDisconnected(DisconnectCause cause)
         {
             progressLabel.SetActive(false);
@@ -29,6 +73,7 @@ using Photon.Realtime;
             Debug.LogWarningFormat("PUN Basics Tutorial/Launcher: OnDisconnected() was called by PUN with reason {0}", cause);
         }
         
+        // IF FAILED TO JOIN RANDOM SERVER
         public override void OnJoinRandomFailed(short returnCode, string message)
         {
             //Debug.Log("PUN Basics Tutorial/Launcher:OnJoinRandomFailed() was called by PUN. No random room available, so we create one.\nCalling: PhotonNetwork.CreateRoom");
@@ -36,7 +81,8 @@ using Photon.Realtime;
             // #Critical: we failed to join a random room, maybe none exists or they are all full. No worries, we create a new room.
             PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = maxPlayersPerRoom });
         }
-
+        
+        // IF JOINED SERVER
         public override void OnJoinedRoom()
         {
             Debug.Log("PUN Basics Tutorial/Launcher: OnJoinedRoom() called by PUN. Now this client is in a room.");
@@ -54,47 +100,6 @@ using Photon.Realtime;
 
 
         #endregion
-        
-        #region Private Serializable Fields
-
-        /// <summary>
-        /// The maximum number of players per room. When a room is full, it can't be joined by new players, and so new room will be created.
-        /// </summary>
-        [Tooltip("The maximum number of players per room. When a room is full, it can't be joined by new players, and so new room will be created")]
-        [SerializeField]
-        private byte maxPlayersPerRoom = 32;
-
-        #endregion
-
-
-        #region Public Fields
-
-        [Tooltip("The Ui Panel to let the user enter name, connect and play")]
-        [SerializeField]
-        private GameObject controlPanel;
-        [Tooltip("The UI Label to inform the user that the connection is in progress")]
-        [SerializeField]
-        private GameObject progressLabel;
-
-        #endregion
-
-        #region Private Fields
-
-        /// <summary>
-        /// Keep track of the current process. Since connection is asynchronous and is based on several callbacks from Photon,
-        /// we need to keep track of this to properly adjust the behavior when we receive call back by Photon.
-        /// Typically this is used for the OnConnectedToMaster() callback.
-        /// </summary>
-        bool isConnecting;
-
-        /// <summary>
-        /// This client's version number. Users are separated from each other by gameVersion (which allows you to make breaking changes).
-        /// </summary>
-        string gameVersion = "0.3";
-
-
-        #endregion
-
 
         #region MonoBehaviour CallBacks
 
