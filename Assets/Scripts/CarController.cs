@@ -25,6 +25,10 @@ public class CarController : MonoBehaviour
     public float airControlForce = 500.0f;
     public float boostForceAmount = 5.0f;
 
+    [Header("Environment Pad")] 
+    public float jumpPadForce = 5.0f;
+    public float boostPadForce = 5.0f;
+    
     [Header("Collisions")] 
     public float bounciness = 100.0f;
     
@@ -32,6 +36,7 @@ public class CarController : MonoBehaviour
     public float jumpCooldown = 2.0f;
     public float boostCooldown = 2.0f;
     public float resetCooldown = 2.0f;
+    public float padCooldown = 2.0f;
     
     [Header("Powerups")]
     //public bool hasForceField = false;
@@ -62,6 +67,7 @@ public class CarController : MonoBehaviour
     private float _pushDelay = 2.0f;
     private float _boostDelay = 2.0f;
     private float _resetDelay = 2.0f;
+    private float _padDelay = 2.0f;
     
     private PlayerManager _playerManager;
     
@@ -110,7 +116,6 @@ public class CarController : MonoBehaviour
             Debug.Log("Error: no CheckpointSystem object in scene");
         }
     }
-    
 
     /*private void LoadCCInLevel(Scene scene, LoadSceneMode loadSceneMode)
     {
@@ -131,11 +136,35 @@ public class CarController : MonoBehaviour
 
     public void FixedUpdate()
     {
+        _padDelay = _padDelay <= 0 ? 0 : _padDelay - Time.fixedDeltaTime;
+        
         PhysUpdateDriving();
         PhysUpdateForces();
         PhysUpdateAirControl();
         PhysUpdateAcceleration();
-  }
+
+        if (_Hit.transform != null)
+        {
+            if (_Hit.transform.CompareTag("JumpPad") && _padDelay <= 0)
+            {
+                _padDelay = padCooldown;
+                _rigidbody.AddForce(transform.up * (jumpPadForce * 700.0f * 1.5f), ForceMode.Force);
+            }
+
+            if (_Hit.transform.CompareTag("BoostPad") && _padDelay <= 0)
+            {
+                _padDelay = padCooldown;
+                if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
+                {
+                    _rigidbody.velocity = -_Hit.transform.forward * boostPadForce;
+                }
+                else
+                {
+                    _rigidbody.AddForce(-_Hit.transform.forward * boostPadForce, ForceMode.VelocityChange);
+                }
+            }
+        }
+    }
     
     private void PhysUpdateAcceleration()
     {
@@ -173,16 +202,17 @@ public class CarController : MonoBehaviour
             _pushDelay = jumpCooldown;
             _rigidbody.AddForce(transform.up * (pushForceAmount * 700.0f), ForceMode.Force);
         }
+
     }
 
     private void PhysUpdateAirControl()
     {
         if (!_grounded)
         {
-            if (_moveForward) _rigidbody.AddTorque(transform.right * airControlForce, ForceMode.Force);
-            if (_moveBackward) _rigidbody.AddTorque(-transform.right * airControlForce, ForceMode.Force);
-            if (_moveLeft) _rigidbody.AddTorque(-transform.up/20, ForceMode.VelocityChange);
-            if (_moveRight) _rigidbody.AddTorque(transform.up/20, ForceMode.VelocityChange);
+            //if (_moveForward) _rigidbody.AddTorque(transform.right * airControlForce, ForceMode.Force);
+            //if (_moveBackward) _rigidbody.AddTorque(-transform.right * airControlForce, ForceMode.Force);
+            if (_moveLeft) _rigidbody.AddTorque(-transform.up/15, ForceMode.VelocityChange);
+            if (_moveRight) _rigidbody.AddTorque(transform.up/15, ForceMode.VelocityChange);
             if (_rollLeft) _rigidbody.AddTorque(transform.forward/15, ForceMode.VelocityChange);
             if (_rollRight) _rigidbody.AddTorque(-transform.forward/15, ForceMode.VelocityChange);
         }
@@ -199,17 +229,31 @@ public class CarController : MonoBehaviour
 
         if (_moveLeft)
         {
-            _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, -1, Time.deltaTime * 5.0f);
+            if (_moveBackward)
+            {
+                _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 1, Time.deltaTime * 5.0f);
+            }
+            else
+            {
+                _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, -1, Time.deltaTime * 5.0f);
+            }
         }
         else if (_moveRight)
         {
-            _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 1, Time.deltaTime * 5.0f);
+            if (_moveBackward)
+            {
+                _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, -1, Time.deltaTime * 5.0f);
+            }
+            else
+            {
+                _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 1, Time.deltaTime * 5.0f);
+            }
         }
         else
         {
             _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 0, Time.deltaTime * 5.0f);
         }
-        
+
         float currentSteeringValue = maxSteeringAngle * _currentSteeringMulti;
 
         foreach (var axle in axles)
@@ -254,10 +298,13 @@ public class CarController : MonoBehaviour
         }
         if (_moveForward) _rigidbody.AddForce(transform.forward * accelerationForce, ForceMode.Acceleration);
         if (_moveBackward) _rigidbody.AddForce(-transform.forward * accelerationForce, ForceMode.Acceleration);
-        if (_moveLeft) _rigidbody.AddForce(transform.right * (accelerationForce), ForceMode.Acceleration);
-        if (_moveRight) _rigidbody.AddForce(-transform.right * (accelerationForce), ForceMode.Acceleration);
-        
-        
+
+        if (_grounded)
+        {
+            if (_moveLeft) _rigidbody.AddForce(transform.right * (accelerationForce), ForceMode.Acceleration);
+            if (_moveRight) _rigidbody.AddForce(-transform.right * (accelerationForce), ForceMode.Acceleration);
+        }
+
     }
 
     public bool GetBoost()
@@ -290,6 +337,8 @@ public class CarController : MonoBehaviour
             _resetDelay = resetCooldown;
             _playerManager.GoToSpawn();
         }
+        
+        
     }
     
     
@@ -353,6 +402,8 @@ public class CarController : MonoBehaviour
             _hitEliminationZone = true;
             _playerManager.EliminateCurrentPlayer();
         }
+
+        
     }
 
     // Input Actions
