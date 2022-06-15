@@ -4933,6 +4933,7 @@ GameObject:
   - component: {fileID: 7770678307179569261}
   - component: {fileID: 3894772900694721693}
   - component: {fileID: 4753270344536567152}
+  - component: {fileID: 4753270344536567159}
   m_Layer: 7
   m_Name: Player Car
   m_TagString: Player
@@ -5022,17 +5023,13 @@ MonoBehaviour:
   boostCooldown: 2
   resetCooldown: 1
   padCooldown: 0.5
-  currentPowerup: {fileID: 0}
-  currentPowerupType: 0
-  superBoostForce: 30
-  wallShieldTime: 15
   checkpoints: {fileID: 0}
-  _powerupIcon: {fileID: 0}
   boostEffects:
   - {fileID: 4157513261080102409}
   - {fileID: 8091151771477942751}
   - {fileID: 6853901648219108650}
   - {fileID: 8733064692481768390}
+  debug: 0
 --- !u!95 &1118674505751619605
 Animator:
   serializedVersion: 3
@@ -5099,7 +5096,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 3894772900694721693}
-  sceneViewId: 0
+  sceneViewId: 1
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &3894772900694721693
@@ -5131,6 +5128,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ghost: {fileID: 11400000, guid: 932d1c60c518f68459399f87d7e644c8, type: 2}
+--- !u!114 &4753270344536567159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1118674505751619608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 731e796292b78b7408548a9777463d39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  superBoostForce: 50
+  wallShieldTime: 15
+  wallShieldBounciness: 10
+  airBlastRadius: 10
+  airBlastForce: 10
+  airBlastTime: 2
+  powerupIcon: {fileID: 0}
 --- !u!1 &1118674506502527236
 GameObject:
   m_ObjectHideFlags: 0

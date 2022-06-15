@@ -25,9 +25,14 @@ public class PlayerPowerups : MonoBehaviour
     private SO_Powerup _currentPowerup;
     private PowerupType _currentPowerupType;    
     private float _wallShieldTimer = 0.0f;
+    private float _airBlastTimer = 0.0f;
 
     private CarController _carController;
     private Rigidbody _rigidbody;
+
+    private bool _airBlasting = false;
+    private SphereCollider _blastCollider; 
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -38,11 +43,13 @@ public class PlayerPowerups : MonoBehaviour
     void FixedUpdate()
     {
         PhysUpdatePowerups();
+        
     }
     
      private void PhysUpdatePowerups()
     {
         _wallShieldTimer = _wallShieldTimer <= 0 ? 0 : _wallShieldTimer - Time.fixedDeltaTime;
+        _airBlastTimer = _airBlastTimer <= 0 ? 0 : _airBlastTimer - Time.fixedDeltaTime;
         //Debug.Log("Shield Timer: " + _wallShieldTimer);
         
         if (_wallShieldTimer > 0)
@@ -58,6 +65,17 @@ public class PlayerPowerups : MonoBehaviour
             {
                 transform.GetChild(0).gameObject.SetActive(false);
                 powerupIcon.gameObject.SetActive(false);
+            }
+        }
+
+        if (_airBlasting)
+        {
+            _blastCollider.radius = Mathf.Lerp(_blastCollider.radius, airBlastRadius, Time.deltaTime);
+            if (_airBlastTimer <= 0)
+            {
+                 Destroy(_blastCollider);
+                _airBlasting = false;
+                _airBlastTimer = 0;
             }
         }
         
@@ -110,11 +128,11 @@ public class PlayerPowerups : MonoBehaviour
      
      private void AirBlast()
      {
-         SphereCollider blast = gameObject.AddComponent<SphereCollider>();
-         blast.isTrigger = true;
-         
-         
-         
+         _blastCollider = gameObject.AddComponent<SphereCollider>();
+         _blastCollider.isTrigger = true;
+         _blastCollider.transform.tag = "Blast";
+         _airBlasting = true;
+         _airBlastTimer = airBlastTime;
          _currentPowerupType = PowerupType.None;
      }
      
