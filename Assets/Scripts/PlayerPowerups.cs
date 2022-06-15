@@ -8,8 +8,10 @@ using UnityEngine.UI;
 public class PlayerPowerups : MonoBehaviour
 {
     [Header("Powerup Properties")] 
+    
     [Header("Super Boost")] 
     public float superBoostForce = 50.0f;
+    
     [Header("Bouncy Wall Shield")]
     public float wallShieldTime = 15.0f;
     public float wallShieldBounciness = 10.0f;
@@ -20,6 +22,11 @@ public class PlayerPowerups : MonoBehaviour
     public float airBlastTime = 2.0f;
     public List<ParticleSystem> airBlastEffects;
 
+    [Header("Grapple Hook")] 
+    public float grappleTime = 2.0f;
+    public float grappleForce = 10.0f;
+    public float achievableDistance = 30.0f;
+    
     [Header("Other")]
     public Image powerupIcon;
     public GameObject _blastObject; 
@@ -33,6 +40,7 @@ public class PlayerPowerups : MonoBehaviour
     private float _wallShieldTimer = 0.0f;
     private float _airBlastTimer = 0.0f;
     private float _superBoostTimer = 0.0f;
+    private float _grappleTimer = 0.0f;
     private Image _powerupIconMask;
     private CarController _carController;
     private Rigidbody _rigidbody;
@@ -43,7 +51,7 @@ public class PlayerPowerups : MonoBehaviour
     {
         _carController = GetComponent<CarController>();
         _rigidbody = GetComponent<Rigidbody>();
-        _blastObject = GameObject.Find("Air Blast Object");
+        _blastObject = transform.GetChild(1).gameObject;//GameObject.Find("Air Blast Object");
         _blastObjectCollider = _blastObject.GetComponent<SphereCollider>();
         _powerupIconMask = powerupIcon.transform.GetChild(0).GetComponent<Image>();
     }
@@ -142,6 +150,7 @@ public class PlayerPowerups : MonoBehaviour
 
      private void GrapplingHook()
      {
+         
          _currentPowerupType = PowerupType.None;
      }
      
