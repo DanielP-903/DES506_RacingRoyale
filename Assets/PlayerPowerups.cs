@@ -17,6 +17,7 @@ public class PlayerPowerups : MonoBehaviour
     [Header("Air Blast")] 
     public float airBlastRadius = 10.0f;
     public float airBlastForce = 10.0f;
+    public float airBlastTime = 2.0f;
     
     [Header("Other")]
     public Image powerupIcon;
@@ -64,19 +65,12 @@ public class PlayerPowerups : MonoBehaviour
         {
             switch (_currentPowerupType)
             {
-                case PowerupType.None:
-                    Debug.Log("No powerup equipped!");
-                    break;
+                case PowerupType.None: Debug.Log("No powerup equipped!"); break;
                 case PowerupType.Superboost: SuperBoost(); break;
                 case PowerupType.BouncyWallShield: BouncyWallShield(); break;
-                case PowerupType.AirBlast:
-                    _currentPowerupType = PowerupType.None;
-                    break;
-                case PowerupType.GrapplingHook:
-                    _currentPowerupType = PowerupType.None;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                case PowerupType.AirBlast: AirBlast(); break;
+                case PowerupType.GrapplingHook: GrapplingHook(); break;
+                default: throw new ArgumentOutOfRangeException();
             }
         }
         
@@ -111,13 +105,16 @@ public class PlayerPowerups : MonoBehaviour
 
      private void GrapplingHook()
      {
-         _wallShieldTimer = wallShieldTime;
          _currentPowerupType = PowerupType.None;
      }
      
      private void AirBlast()
      {
-         _wallShieldTimer = wallShieldTime;
+         SphereCollider blast = gameObject.AddComponent<SphereCollider>();
+         blast.isTrigger = true;
+         
+         
+         
          _currentPowerupType = PowerupType.None;
      }
      
