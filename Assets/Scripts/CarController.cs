@@ -88,6 +88,10 @@ public class CarController : MonoBehaviour
 
     public Image _powerupIcon;
     public List<ParticleSystem> boostEffects = new List<ParticleSystem>();
+
+    [Header("DEBUG MODE")]
+    public bool debug = false;
+
     private void Start()
     {
         _passedFinishLine = false;
@@ -105,6 +109,27 @@ public class CarController : MonoBehaviour
         //SceneManager.sceneLoaded += LoadCCInLevel;
         
         _rigidbody.centerOfMass = centreOfMass.transform.localPosition;
+
+        if (debug)
+        {
+            GameObject checkpointObject = GameObject.Find("CheckpointSystem");
+
+            //_powerupIcon = GameObject.Find("Powerup Icon").gameObject.GetComponent<Image>();
+
+            if (checkpointObject != null)
+            {
+                checkpoints = checkpointObject.GetComponent<CheckpointSystem>();
+                foreach (var checkpoint in checkpoints.checkpointObjects)
+                {
+                    _passedCheckpoints.Add(checkpoint, false);
+                    Debug.Log(_passedCheckpoints[checkpoint] + " : " + checkpoint);
+                }
+            }
+            else
+            {
+                Debug.Log("Error: no CheckpointSystem object in scene");
+            }
+        }
     }
 
     void OnLevelWasLoaded()
