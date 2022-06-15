@@ -78,7 +78,8 @@ public class PlayerPowerups : MonoBehaviour
             _blastObjectCollider.radius = Mathf.Lerp(_blastObjectCollider.radius, airBlastRadius, Time.deltaTime);
             if (_airBlastTimer <= 0)
             {
-                _blastObjectCollider.radius = 0.001f;
+                _blastObject.SetActive(false);
+                _blastObjectCollider.radius = 2;
                 _airBlasting = false;
                 _airBlastTimer = 0;
                 powerupIcon.gameObject.SetActive(false);
@@ -134,7 +135,8 @@ public class PlayerPowerups : MonoBehaviour
      
      private void AirBlast()
      {
-
+        _blastObject.SetActive(true);
+        _blastObjectCollider.radius = 2;
          _airBlasting = true;
          _airBlastTimer = airBlastTime;
          _currentPowerupType = PowerupType.None;
@@ -179,14 +181,15 @@ public class PlayerPowerups : MonoBehaviour
                  _rigidbody.AddForce(-collider.transform.forward * wallShieldBounciness * 2, ForceMode.VelocityChange);
              }        
          }
+         
      }
 
      private void OnTriggerStay(Collider collider)
      {
-         if (collider.transform.CompareTag("Blast"))
+         if (collider.transform.CompareTag("Blast") && collider.transform.parent != transform)
          {
              Vector3 direction = collider.transform.position - transform.position;
-             _rigidbody.AddForce(airBlastForce * - (direction.normalized), ForceMode.VelocityChange); //= -(direction.normalized * airBlastForce);
+             _rigidbody.velocity = -(direction.normalized * airBlastForce);
          }
      }
 }
