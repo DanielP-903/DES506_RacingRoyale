@@ -165,6 +165,7 @@ public class CarController : MonoBehaviour
             if (!transform.GetChild(0).gameObject.activeInHierarchy)
             {
                 transform.GetChild(0).gameObject.SetActive(true);
+                _rigidbody.centerOfMass = centreOfMass.transform.localPosition;
             }
         }
         else
@@ -173,6 +174,7 @@ public class CarController : MonoBehaviour
             {
                 transform.GetChild(0).gameObject.SetActive(false);
                 _powerupIcon.gameObject.SetActive(false);
+                _rigidbody.centerOfMass = centreOfMass.transform.localPosition;
             }
         }
         
@@ -233,10 +235,7 @@ public class CarController : MonoBehaviour
         // BOOST FUNCTIONALITY
         if (_boost && _boostDelay <= 0)
         {
-            foreach (var effect in boostEffects)
-            {
-                effect.Play();
-            }
+            StartCoroutine(ActivateBoostEffect());
             _boostDelay = boostCooldown;
             if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
             {                
@@ -247,8 +246,6 @@ public class CarController : MonoBehaviour
                 _rigidbody.AddForce(transform.forward * boostForceAmount, ForceMode.VelocityChange);
             }
         }
-
-        
     }
 
     // For updating rigidbody forces acting upon the car
@@ -403,6 +400,21 @@ public class CarController : MonoBehaviour
 
     }
 
+    public IEnumerator ActivateBoostEffect()
+    {
+        foreach (var effect in boostEffects)
+        {
+            effect.Play();
+        }
+
+        yield return new WaitForSeconds(2);
+        
+        foreach (var effect in boostEffects)
+        {
+            effect.Stop();
+        }
+    }
+
     public bool GetBoost()
     {
         return _boostDelay <= 0 && _boost;
@@ -472,12 +484,6 @@ public class CarController : MonoBehaviour
             Vector3 direction = collision.contacts[0].point - transform.position;
             _rigidbody.velocity = -(direction.normalized * bounciness);
         }
-
-        if (collision.transform.CompareTag("WallShield"))
-        {
-            Vector3 direction = collision.contacts[0].point - transform.position;
-            _rigidbody.velocity = -(direction.normalized * bounciness * 2);
-        }
     }
 
     private void OnTriggerEnter(Collider collider)
@@ -512,6 +518,18 @@ public class CarController : MonoBehaviour
             collider.transform.parent.GetComponent<PowerupSpawner>().ResetTimer();
             _powerupIcon.sprite = currentPowerup.powerupUIImage;
             _powerupIcon.gameObject.SetActive(true);
+        }
+        
+        if (collider.transform.CompareTag("WallShield"))
+        {
+            if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
+            {                
+                _rigidbody.velocity = -collider.transform.forward * bounciness*2;
+            }
+            else
+            {
+                _rigidbody.AddForce(-collider.transform.forward * bounciness*2, ForceMode.VelocityChange);
+            }        
         }
     }
 
