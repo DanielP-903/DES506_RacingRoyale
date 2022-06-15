@@ -360,7 +360,12 @@ public class GameManager : MonoBehaviourPunCallbacks
                     GameObject.Find("Podium"+i).SetActive(false);
                 }
             }
-            Destroy(GameObject.Find("Main Camera"));
+
+            GameObject mainCam = GameObject.Find("Main Camera");
+            if (mainCam != null)
+            {
+                Destroy(mainCam);
+            }
         }
         // IF ELIMINATED AND NOT PEDESTAL STAGE : SPECTATE RANDOM PLAYER
         else
