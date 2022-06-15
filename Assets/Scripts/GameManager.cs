@@ -265,13 +265,13 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (!foundView)
         {
-            if (GameObject.Find("Danger Wall").transform != null)
+            if (GameObject.Find("Danger Wall") != null)
             {
                 spectateTarget = GameObject.Find("Danger Wall").transform;
             }
         }
 
-        if (spectateTarget != null)
+        if (spectateTarget != null && cvc != null)
         {
             cvc.m_Follow = spectateTarget;
             cvc.m_LookAt = spectateTarget;
