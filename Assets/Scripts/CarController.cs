@@ -428,6 +428,11 @@ public class CarController : MonoBehaviour
             Vector3 direction = collision.contacts[0].point - transform.position;
             _rigidbody.velocity = -(direction.normalized * bounciness);
         }
+        if (collision.transform.CompareTag("Blast"))
+        {
+            Vector3 direction = collision.contacts[0].point - transform.position;
+            _rigidbody.velocity = -(direction.normalized * bounciness);
+        }
     }
 
     private void OnTriggerEnter(Collider collider)
