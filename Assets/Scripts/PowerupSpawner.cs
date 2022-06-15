@@ -52,7 +52,7 @@ public class PowerupSpawner : MonoBehaviour
         
         // MANUAL ASSIGNATION OF POWERUP
         
-        //currentPowerup = powerups[3];
+        currentPowerup = powerups[3];
         
         _powerupCube.SetActive(true);
     }

@@ -53275,14 +53275,12 @@ GameObject:
   m_Component:
   - component: {fileID: 1118674505887138190}
   - component: {fileID: 1118674505887138189}
-  - component: {fileID: 1118674505887138191}
   - component: {fileID: 1118674505887138177}
   - component: {fileID: 1118674505887138176}
   - component: {fileID: 1978116585430156077}
   - component: {fileID: 7770678307316140537}
   - component: {fileID: 3894772900558155017}
   - component: {fileID: 4753270344673658084}
-  - component: {fileID: 4753270344673658083}
   m_Layer: 7
   m_Name: Player Car_1
   m_TagString: Player
@@ -53332,52 +53330,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1118674505887138191
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1118674505887138188}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ddffb28a62db14459910a9bcdc1d72a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  centreOfMass: {fileID: 960657667}
-  motorForce: 2500
-  brakeTorque: 4000
-  maxSteeringAngle: 30
-  axles:
-  - leftWheel: {fileID: 4938869737968805351}
-    rightWheel: {fileID: 1118674505234705142}
-    motor: 1
-    steering: 1
-  - leftWheel: {fileID: 1118674506899485199}
-    rightWheel: {fileID: 1118674506638061713}
-    motor: 0
-    steering: 0
-  pushForceAmount: 700
-  accelerationForce: 5
-  pushForce: {x: 0.5, y: 1, z: 0}
-  torqueVectorAmount: 9000
-  airControlForce: 1000
-  boostForceAmount: 15
-  driftForceAmount: 3000
-  jumpPadForce: 1000
-  boostPadForce: 20
-  bounciness: 10
-  jumpCooldown: 2
-  boostCooldown: 2
-  resetCooldown: 1
-  padCooldown: 0.5
-  checkpoints: {fileID: 1604882999}
-  boostEffects:
-  - {fileID: 4157513261212495773}
-  - {fileID: 8091151771341883467}
-  - {fileID: 6853901648087768254}
-  - {fileID: 8733064692346229330}
-  debug: 1
 --- !u!1 &1118674506638061712
 GameObject:
   m_ObjectHideFlags: 0
@@ -53822,18 +53774,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1896870912279296656, guid: d6aafbcdac224a143a4c3630ae0746ee, type: 3}
-      propertyPath: powerups.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1896870912279296656, guid: d6aafbcdac224a143a4c3630ae0746ee, type: 3}
-      propertyPath: powerups.Array.data[2]
-      value: 
-      objectReference: {fileID: 11400000, guid: 19fabec9aeda0d74dadcbe93e4d4cac6, type: 2}
-    - target: {fileID: 1896870912279296656, guid: d6aafbcdac224a143a4c3630ae0746ee, type: 3}
-      propertyPath: powerups.Array.data[3]
-      value: 
-      objectReference: {fileID: 11400000, guid: d843abe1de5707440afa2ee50b175831, type: 2}
     - target: {fileID: 1896870912279296657, guid: d6aafbcdac224a143a4c3630ae0746ee, type: 3}
       propertyPath: m_Name
       value: Powerup Spawner
@@ -59394,6 +59334,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1118674505751619611, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+      propertyPath: debug
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1118674505751619611, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
       propertyPath: checkpoints
       value: 
       objectReference: {fileID: 1604882999}
@@ -59447,32 +59391,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1118674505751619610, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
   m_PrefabInstance: {fileID: 4693943579594164523}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4753270344673658083
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1118674505887138188}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 731e796292b78b7408548a9777463d39, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  superBoostForce: 50
-  wallShieldTime: 15
-  wallShieldBounciness: 10
-  airBlastRadius: 10
-  airBlastForce: 8
-  airBlastTime: 2
-  airBlastEffects: []
-  grappleTime: 2
-  grappleForce: 10
-  achievableDistance: 30
-  powerupIcon: {fileID: 1700898516}
-  _blastObject: {fileID: 0}
-  _currentPowerup: {fileID: 0}
-  _currentPowerupType: 0
 --- !u!114 &4753270344673658084
 MonoBehaviour:
   m_ObjectHideFlags: 0

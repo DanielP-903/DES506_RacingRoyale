@@ -45,6 +45,7 @@ public class PlayerPowerups : MonoBehaviour
     private CarController _carController;
     private Rigidbody _rigidbody;
     private SphereCollider _blastObjectCollider;
+    private RaycastHit nearestHit;
 
     // Start is called before the first frame update
     void Start()
@@ -60,8 +61,17 @@ public class PlayerPowerups : MonoBehaviour
     {
         PhysUpdatePowerups();
     }
-    
-     private void PhysUpdatePowerups()
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.black;
+        if (nearestHit.transform.CompareTag("Player"))
+        {
+            Gizmos.DrawLine(transform.position, nearestHit.transform.position);
+        }
+    }
+
+    private void PhysUpdatePowerups()
     {
         _wallShieldTimer = _wallShieldTimer <= 0 ? 0 : _wallShieldTimer - Time.fixedDeltaTime;
         _airBlastTimer = _airBlastTimer <= 0 ? 0 : _airBlastTimer - Time.fixedDeltaTime;
@@ -150,8 +160,42 @@ public class PlayerPowerups : MonoBehaviour
 
      private void GrapplingHook()
      {
+         // Detect opponent to grapple to
+         RaycastHit[] hits;
+         hits = Physics.SphereCastAll(transform.position, 5, transform.forward,  achievableDistance);
+         if (hits.Length > 0)
+         {
+             float distance = 1000000.0f;
+             nearestHit = hits[0];
+             foreach (var hit in hits)
+             {
+                 if (hit.distance < distance && hit.transform.CompareTag("Player") && hit.transform.gameObject != transform.gameObject)
+                 {
+                     distance = hit.distance;
+                     nearestHit = hit;
+                 }
+             }
+
+             if (nearestHit.transform.CompareTag("Player") && nearestHit.transform.gameObject != transform.gameObject)
+             {
+                 // Found a player to grapple!
+                 
+  
+                 //_currentPowerupType = PowerupType.None;
+                 Debug.Log("HIT!!!");
+             }
+         }
+         else
+         {
+             Debug.Log("No hit!");
+         }
          
-         _currentPowerupType = PowerupType.None;
+         // Draw line between them
+         
+         
+         // Apply a constant acceleration force towards the player for a limited time
+         
+         
      }
      
      private void AirBlast()
