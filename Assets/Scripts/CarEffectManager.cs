@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class CarEffectManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private CarController cc;
     void Start()
     {
-        
+        cc = GetComponent<CarController>();
     }
 
     // Update is called once per frame

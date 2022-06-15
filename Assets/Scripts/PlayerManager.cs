@@ -7,12 +7,32 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 
-public class PlayerManager : MonoBehaviour
+public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
 {
+    #region IPunObservable implementation
+
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            // We own this player: send the others our data
+            stream.SendNext(boosting);
+        }
+        else
+        {
+            // Network player, receive data
+            this.boosting = (bool)stream.ReceiveNext();
+        }
+    }
+
+
+    #endregion
+    
     // COMPONENTS, INTS AND BOOLS
     #region Private Variables
     private PhotonView _photonView;
-    private CarController _dcc;
+    private CarController _cc;
     private Rigidbody _rb;
     private PlayerManager target;
     private GameManager _gm;
@@ -23,6 +43,8 @@ public class PlayerManager : MonoBehaviour
     private bool completedStage = false;
     private bool eliminated = false;
     private int elimPosition = 0;
+    private bool boosting;
+    private List<ParticleSystem> parts;
     #endregion
 
     // PLAYER NAME UI
@@ -38,47 +60,75 @@ public class PlayerManager : MonoBehaviour
     void Start()
     {
         //SceneManager.sceneLoaded += LoadPMInLevel;
-        DontDestroyOnLoad(this.gameObject);
         _photonView = GetComponent<PhotonView>();
-        _dcc = GetComponent<CarController>();
-        _rb = GetComponent<Rigidbody>();
-        _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
         if (_photonView != null)
         {
             if (_photonView.IsMine)
             {
+                DontDestroyOnLoad(this.gameObject);
+                _cc = GetComponent<CarController>();
+                _rb = GetComponent<Rigidbody>();
+                _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+                
                 mainCam = Camera.main.gameObject;
                 CinemachineVirtualCamera cvc = mainCam.GetComponent<CinemachineVirtualCamera>();
                 DontDestroyOnLoad(mainCam);
                 var transform1 = transform;
                 cvc.m_Follow = transform1;
                 cvc.m_LookAt = transform1;
+                
+                int spawnNumber = playerNumber;
+                if (playerNumber == 0)
+                {
+                    spawnNumber = _gm.GetPlayerNumber();
+                }
+                _spawnLocation = GameObject.Find("SpawnLocation" + spawnNumber).transform;
+        
+                playerNameText.text = _photonView.Owner.NickName;
+                playerLicenseText.text = _photonView.Owner.NickName;
             }
             else
             {
-                Destroy(this);
-                Destroy(_dcc);
+                parts = GetComponent<CarController>().boostEffects;
+                //Destroy(this);
+                Destroy(_cc);
                 Destroy(GetComponent<Rigidbody>());
             }
         }
-
-        int spawnNumber = playerNumber;
-        if (playerNumber == 0)
-        {
-            spawnNumber = _gm.GetPlayerNumber();
-        }
-        _spawnLocation = GameObject.Find("SpawnLocation" + spawnNumber).transform;
-        
-        playerNameText.text = _photonView.Owner.NickName;
-        playerLicenseText.text = _photonView.Owner.NickName;
     }
     
     void Update()
     {
-        if (transform.position.y < -5)
+        if (transform.position.y < -5 && _photonView.IsMine)
         {
             //Debug.Log("Less than 5");
             GoToSpawn();
+        }
+        else if (_photonView.IsMine)
+        {
+            if (_cc.boostEffects[0].isPlaying)
+            {
+                boosting = true;
+            }
+            else
+            {
+                boosting = false;
+            }
+        }
+
+        if (boosting && !_cc.boostEffects[0].isPlaying)
+        {
+            foreach (ParticleSystem part in _cc.boostEffects)
+            {
+                part.Play();
+            }
+        }
+        else if (!boosting && _cc.boostEffects[0].isPlaying)
+        {
+            foreach (ParticleSystem part in _cc.boostEffects)
+            {
+                part.Stop();
+            }
         }
     }
 
