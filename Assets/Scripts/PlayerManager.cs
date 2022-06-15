@@ -68,8 +68,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
                 DontDestroyOnLoad(this.gameObject);
                 _cc = GetComponent<CarController>();
                 _rb = GetComponent<Rigidbody>();
-                _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
-                
+                if (!_cc.debug)
+                {
+                    _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+                }
+
                 mainCam = Camera.main.gameObject;
                 CinemachineVirtualCamera cvc = mainCam.GetComponent<CinemachineVirtualCamera>();
                 DontDestroyOnLoad(mainCam);
@@ -90,9 +93,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
             else
             {
                 parts = GetComponent<CarController>().boostEffects;
+                _cc = GetComponent<CarController>();
                 //Destroy(this);
                 Destroy(_cc);
                 Destroy(GetComponent<Rigidbody>());
+                Destroy(GetComponent<PlayerPowerups>());
             }
         }
     }
