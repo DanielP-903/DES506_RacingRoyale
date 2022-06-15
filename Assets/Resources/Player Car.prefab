@@ -4934,6 +4934,7 @@ GameObject:
   - component: {fileID: 3894772900694721693}
   - component: {fileID: 4753270344536567152}
   - component: {fileID: 4753270344536567159}
+  - component: {fileID: 924256329762550492}
   m_Layer: 7
   m_Name: Player Car
   m_TagString: Player
@@ -5151,6 +5152,18 @@ MonoBehaviour:
   powerupIcon: {fileID: 0}
   _currentPowerup: {fileID: 0}
   _currentPowerupType: 0
+--- !u!114 &924256329762550492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1118674505751619608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b901cb8041881874e8fa118d11fe330c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1118674506502527236
 GameObject:
   m_ObjectHideFlags: 0
