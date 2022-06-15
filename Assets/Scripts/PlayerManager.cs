@@ -7,28 +7,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 
-public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
+public class PlayerManager : MonoBehaviour
 {
-    #region IPunObservable implementation
 
-
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (stream.IsWriting)
-        {
-            // We own this player: send the others our data
-            stream.SendNext(boosting);
-        }
-        else
-        {
-            // Network player, receive data
-            this.boosting = (bool)stream.ReceiveNext();
-        }
-    }
-
-
-    #endregion
-    
     // COMPONENTS, INTS AND BOOLS
     #region Private Variables
     private PhotonView _photonView;
@@ -43,8 +24,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     private bool completedStage = false;
     private bool eliminated = false;
     private int elimPosition = 0;
-    private bool boosting;
-    private List<ParticleSystem> parts;
+    //private bool boosting;
+    //private List<ParticleSystem> parts;
     #endregion
 
     // PLAYER NAME UI
@@ -92,12 +73,12 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
             }
             else
             {
-                parts = GetComponent<CarController>().boostEffects;
+                //parts = GetComponent<CarController>().boostEffects;
                 _cc = GetComponent<CarController>();
-                //Destroy(this);
                 Destroy(_cc);
                 Destroy(GetComponent<Rigidbody>());
                 Destroy(GetComponent<PlayerPowerups>());
+                Destroy(this);
             }
         }
     }
@@ -108,32 +89,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             //Debug.Log("Less than 5");
             GoToSpawn();
-        }
-        else if (_photonView.IsMine)
-        {
-            if (_cc.boostEffects[0].isPlaying)
-            {
-                boosting = true;
-            }
-            else
-            {
-                boosting = false;
-            }
-        }
-
-        if (boosting && !_cc.boostEffects[0].isPlaying)
-        {
-            foreach (ParticleSystem part in _cc.boostEffects)
-            {
-                part.Play();
-            }
-        }
-        else if (!boosting && _cc.boostEffects[0].isPlaying)
-        {
-            foreach (ParticleSystem part in _cc.boostEffects)
-            {
-                part.Stop();
-            }
         }
     }
 
