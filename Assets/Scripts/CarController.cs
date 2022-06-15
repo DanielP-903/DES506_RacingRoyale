@@ -103,11 +103,11 @@ public class CarController : MonoBehaviour
         
         _rigidbody.centerOfMass = centreOfMass.transform.localPosition;
         _playerPowerups.powerupIcon.gameObject.SetActive(false);
-
+        
         if (debug)
         {
             GameObject checkpointObject = GameObject.Find("CheckpointSystem");
-
+            
             //_powerupIcon = GameObject.Find("Powerup Icon").gameObject.GetComponent<Image>();
 
             if (checkpointObject != null)

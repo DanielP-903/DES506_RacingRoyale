@@ -41,7 +41,9 @@ public class PlayerPowerups : MonoBehaviour
     {
         _carController = GetComponent<CarController>();
         _rigidbody = GetComponent<Rigidbody>();
+        _blastObject = GameObject.Find("Air Blast Object");
         _blastObjectCollider = _blastObject.GetComponent<SphereCollider>();
+        
     }
 
     void FixedUpdate()
@@ -76,7 +78,7 @@ public class PlayerPowerups : MonoBehaviour
             _blastObjectCollider.radius = Mathf.Lerp(_blastObjectCollider.radius, airBlastRadius, Time.deltaTime);
             if (_airBlastTimer <= 0)
             {
-                _blastObjectCollider.radius = 0;
+                _blastObjectCollider.radius = 0.001f;
                 _airBlasting = false;
                 _airBlastTimer = 0;
                 powerupIcon.gameObject.SetActive(false);
@@ -184,7 +186,7 @@ public class PlayerPowerups : MonoBehaviour
          if (collider.transform.CompareTag("Blast"))
          {
              Vector3 direction = collider.transform.position - transform.position;
-             _rigidbody.AddForce(airBlastForce * direction, ForceMode.Impulse); //= -(direction.normalized * airBlastForce);
+             _rigidbody.AddForce(airBlastForce * - (direction.normalized), ForceMode.VelocityChange); //= -(direction.normalized * airBlastForce);
          }
      }
 }
