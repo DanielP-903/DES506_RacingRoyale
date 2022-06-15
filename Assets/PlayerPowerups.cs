@@ -33,13 +33,15 @@ public class PlayerPowerups : MonoBehaviour
     private Rigidbody _rigidbody;
 
     private bool _airBlasting = false;
-    private SphereCollider _blastCollider; 
+    public GameObject _blastObject; 
+    private SphereCollider _blastObjectCollider; 
     
     // Start is called before the first frame update
     void Start()
     {
         _carController = GetComponent<CarController>();
         _rigidbody = GetComponent<Rigidbody>();
+        _blastObjectCollider = _blastObject.GetComponent<SphereCollider>();
     }
 
     void FixedUpdate()
@@ -71,10 +73,10 @@ public class PlayerPowerups : MonoBehaviour
 
         if (_airBlasting)
         {
-            _blastCollider.radius = Mathf.Lerp(_blastCollider.radius, airBlastRadius, Time.deltaTime);
+            _blastObjectCollider.radius = Mathf.Lerp(_blastObjectCollider.radius, airBlastRadius, Time.deltaTime);
             if (_airBlastTimer <= 0)
             {
-                 Destroy(_blastCollider);
+                _blastObjectCollider.radius = 0;
                 _airBlasting = false;
                 _airBlastTimer = 0;
                 powerupIcon.gameObject.SetActive(false);
@@ -130,11 +132,7 @@ public class PlayerPowerups : MonoBehaviour
      
      private void AirBlast()
      {
-         
-         
-         _blastCollider = gameObject.AddComponent<SphereCollider>();
-         _blastCollider.isTrigger = true;
-         _blastCollider.transform.tag = "Blast";
+
          _airBlasting = true;
          _airBlastTimer = airBlastTime;
          _currentPowerupType = PowerupType.None;
