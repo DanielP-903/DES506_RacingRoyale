@@ -5099,7 +5099,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 3894772900694721693}
-  sceneViewId: 1
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &3894772900694721693
@@ -5151,10 +5151,13 @@ MonoBehaviour:
   airBlastTime: 1
   airBlastEffects:
   - {fileID: 2574697643737257996}
+  grappleTime: 2
+  grappleForce: 10
+  achievableDistance: 30
   powerupIcon: {fileID: 0}
+  _blastObject: {fileID: 9022575001557040746}
   _currentPowerup: {fileID: 11400000, guid: 19fabec9aeda0d74dadcbe93e4d4cac6, type: 2}
   _currentPowerupType: 3
-  _blastObject: {fileID: 9022575001557040746}
 --- !u!114 &924256329762550492
 MonoBehaviour:
   m_ObjectHideFlags: 0
