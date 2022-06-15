@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private bool _eliminated = false;
     private int _elimPositon = 0;
     private int _playerNumber = 0 ;
+    private Transform spectateTarget;
 
     #endregion
     
@@ -250,17 +251,31 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         CinemachineVirtualCamera cvc = Camera.main.gameObject.GetComponent<CinemachineVirtualCamera>();
             
-        var transform1 = transform;
+        spectateTarget = transform;
+        bool foundView = false;
         foreach (PhotonView pv in PhotonNetwork.PhotonViewCollection)
         {
-            if (!pv.Owner.CustomProperties.ContainsKey("Eliminated"))
+            if (!pv.Owner.CustomProperties.ContainsKey("Eliminated") && pv.gameObject != null)
             {
-                transform1 = pv.gameObject.transform;
+                spectateTarget = pv.gameObject.transform;
+                foundView = true;
                 break;
             }
         }
-        cvc.m_Follow = transform1;
-        cvc.m_LookAt = transform1;
+
+        if (!foundView)
+        {
+            if (GameObject.Find("Danger Wall").transform != null)
+            {
+                spectateTarget = GameObject.Find("Danger Wall").transform;
+            }
+        }
+
+        if (spectateTarget != null)
+        {
+            cvc.m_Follow = spectateTarget;
+            cvc.m_LookAt = spectateTarget;
+        }
     }
     
     void LoadArena(string arenaName)
@@ -357,6 +372,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void Update()
     {
+        if (spectateTarget == null && _eliminated)
+        {
+            Spectate();
+        }
         int elimPlayers;
         TryGetElimPlayers(out elimPlayers);
         if (elimPlayers != 0 && elimPlayers == _totalPlayers && _stage > 0 && _stage < 5)
