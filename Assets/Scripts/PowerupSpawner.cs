@@ -35,13 +35,17 @@ public class PowerupSpawner : MonoBehaviour
     private void SpawnPowerup()
     {
         float randomChance = Random.Range(0, 100);
-        if (randomChance < 50)
+        if (randomChance < 33)
         {
             currentPowerup = powerups[0];
         }
-        else
+        else if (randomChance >= 33 && randomChance < 66)
         {
             currentPowerup = powerups[1];
+        }
+        else if (randomChance >= 66)
+        {
+            currentPowerup = powerups[2];
         }
         transform.GetChild(0).gameObject.SetActive(true);
     }

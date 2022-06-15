@@ -52971,6 +52971,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1896870912279296656, guid: d6aafbcdac224a143a4c3630ae0746ee, type: 3}
+      propertyPath: powerups.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1896870912279296656, guid: d6aafbcdac224a143a4c3630ae0746ee, type: 3}
+      propertyPath: powerups.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 19fabec9aeda0d74dadcbe93e4d4cac6, type: 2}
     - target: {fileID: 1896870912279296657, guid: d6aafbcdac224a143a4c3630ae0746ee, type: 3}
       propertyPath: m_Name
       value: Powerup Spawner
@@ -53364,8 +53372,8 @@ PrefabInstance:
       propertyPath: checkpoints
       value: 
       objectReference: {fileID: 1604882999}
-    - target: {fileID: 1118674505751619611, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: _powerupIcon
+    - target: {fileID: 4753270344536567159, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+      propertyPath: powerupIcon
       value: 
       objectReference: {fileID: 1700898516}
     - target: {fileID: 7770678307179569261, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
@@ -53395,23 +53403,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1118674505751619610, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
   m_PrefabInstance: {fileID: 4693943579594164523}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4753270344536567159
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4753270344536567149}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 731e796292b78b7408548a9777463d39, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentPowerup: {fileID: 0}
-  currentPowerupType: 0
-  superBoostForce: 50
-  wallShieldTime: 15
-  powerupIcon: {fileID: 1700898516}
 --- !u!1 &5865025477206219093 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4668674303829429389, guid: bfb87cdd34d27c244af973cd3dcbcb64, type: 3}
