@@ -76,6 +76,7 @@ public class PlayerPowerups : MonoBehaviour
                  Destroy(_blastCollider);
                 _airBlasting = false;
                 _airBlastTimer = 0;
+                powerupIcon.gameObject.SetActive(false);
             }
         }
         
