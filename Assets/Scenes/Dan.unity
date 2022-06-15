@@ -16400,6 +16400,11 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &272242259 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9022575001557040746, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+  m_PrefabInstance: {fileID: 4693943579594164523}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &298367840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54340,6 +54345,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 777916830871729361, guid: 70ddae5a4a4ba34409d77be0b7a9b6d2, type: 3}
+      propertyPath: ghost
+      value: 
+      objectReference: {fileID: 11400000, guid: 3b27cf8229c61a140b2f149a7a02dcee, type: 2}
     - target: {fileID: 777916830871729362, guid: 70ddae5a4a4ba34409d77be0b7a9b6d2, type: 3}
       propertyPath: m_Name
       value: Ghost Car
@@ -59314,10 +59323,18 @@ PrefabInstance:
       propertyPath: checkpoints
       value: 
       objectReference: {fileID: 1604882999}
+    - target: {fileID: 4753270344536567152, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+      propertyPath: ghost
+      value: 
+      objectReference: {fileID: 11400000, guid: 3b27cf8229c61a140b2f149a7a02dcee, type: 2}
     - target: {fileID: 4753270344536567159, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
       propertyPath: powerupIcon
       value: 
       objectReference: {fileID: 1700898516}
+    - target: {fileID: 4753270344536567159, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+      propertyPath: _blastObject
+      value: 
+      objectReference: {fileID: 272242259}
     - target: {fileID: 4753270344536567159, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
       propertyPath: airBlastTime
       value: 1
@@ -59410,6 +59427,7 @@ MonoBehaviour:
   powerupIcon: {fileID: 1700898516}
   _currentPowerup: {fileID: 0}
   _currentPowerupType: 0
+  _blastObject: {fileID: 0}
 --- !u!114 &4753270344673658084
 MonoBehaviour:
   m_ObjectHideFlags: 0
