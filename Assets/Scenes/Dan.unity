@@ -53078,26 +53078,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: de975f91d60c20040899ae79a13a7d78, type: 3}
---- !u!198 &3348212757874530332 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 8091151771477942751, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-  m_PrefabInstance: {fileID: 4693943579594164523}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &3348212758244999453 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 6853901648219108650, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-  m_PrefabInstance: {fileID: 4693943579594164523}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &3348212759259884792 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 4157513261080102409, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-  m_PrefabInstance: {fileID: 4693943579594164523}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &3348212759406681083 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 8733064692481768390, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-  m_PrefabInstance: {fileID: 4693943579594164523}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3409136277635275506
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -53332,25 +53312,9 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 829313175, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 282206659534688396, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 1118674505370223463, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
     - target: {fileID: 1118674505751619608, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
       propertyPath: m_Name
       value: Player Car
-      objectReference: {fileID: 0}
-    - target: {fileID: 1118674505751619608, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: m_Layer
-      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 1118674505751619610, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
       propertyPath: m_RootOrder
@@ -53397,10 +53361,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1118674505751619611, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: brakeTorque
-      value: 4000
-      objectReference: {fileID: 0}
-    - target: {fileID: 1118674505751619611, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
       propertyPath: checkpoints
       value: 
       objectReference: {fileID: 1604882999}
@@ -53408,181 +53368,9 @@ PrefabInstance:
       propertyPath: _powerupIcon
       value: 
       objectReference: {fileID: 1700898516}
-    - target: {fileID: 1118674505751619611, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: currentPowerup
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1118674505751619611, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: superBoostForce
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 1118674505751619611, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: boostEffects.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1118674505751619611, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: boostEffects.Array.data[0]
-      value: 
-      objectReference: {fileID: 3348212759259884792}
-    - target: {fileID: 1118674505751619611, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: boostEffects.Array.data[1]
-      value: 
-      objectReference: {fileID: 3348212757874530332}
-    - target: {fileID: 1118674505751619611, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: boostEffects.Array.data[2]
-      value: 
-      objectReference: {fileID: 3348212758244999453}
-    - target: {fileID: 1118674505751619611, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: boostEffects.Array.data[3]
-      value: 
-      objectReference: {fileID: 3348212759406681083}
-    - target: {fileID: 1118674506502527236, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 1118674506767621016, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 2855397076751748209, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 3085306003875778987, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 3836199610474160528, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 3883824608468071149, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 4157513261080102409, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: playOnAwake
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4157513261080102409, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: moveWithTransform
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4157513261080102409, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: InitialModule.startLifetime.scalar
-      value: 1.42
-      objectReference: {fileID: 0}
-    - target: {fileID: 4710775621875816551, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 4710775621875816551, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4938869738104327282, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 4974364372929511565, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4996930448491325401, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 5186387353675220336, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 5236795460811753774, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 5709700551408530217, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 5928971856171592984, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 6853901648219108650, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: playOnAwake
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6853901648219108650, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: moveWithTransform
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6853901648219108650, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: InitialModule.startLifetime.scalar
-      value: 1.42
-      objectReference: {fileID: 0}
-    - target: {fileID: 6871293398502682900, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 6871293398502739254, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 6871293398502746342, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 6871293398502776574, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 6871293398502779776, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 7238231484607386768, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
     - target: {fileID: 7770678307179569261, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
       propertyPath: sceneViewId
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8091151771477942751, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: playOnAwake
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8091151771477942751, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: moveWithTransform
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8091151771477942751, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: InitialModule.startLifetime.scalar
-      value: 1.42
-      objectReference: {fileID: 0}
-    - target: {fileID: 8300817774607324931, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 8733064692481768390, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: playOnAwake
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8733064692481768390, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: moveWithTransform
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8733064692481768390, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: InitialModule.startLifetime.scalar
-      value: 1.42
-      objectReference: {fileID: 0}
-    - target: {fileID: 8759403812238349416, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 8796617133496975688, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: m_Layer
-      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
@@ -53607,6 +53395,23 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1118674505751619610, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
   m_PrefabInstance: {fileID: 4693943579594164523}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4753270344536567159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4753270344536567149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 731e796292b78b7408548a9777463d39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentPowerup: {fileID: 0}
+  currentPowerupType: 0
+  superBoostForce: 50
+  wallShieldTime: 15
+  powerupIcon: {fileID: 1700898516}
 --- !u!1 &5865025477206219093 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4668674303829429389, guid: bfb87cdd34d27c244af973cd3dcbcb64, type: 3}

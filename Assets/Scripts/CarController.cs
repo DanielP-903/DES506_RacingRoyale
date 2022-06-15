@@ -43,13 +43,6 @@ public class CarController : MonoBehaviour
     public float boostCooldown = 2.0f;
     public float resetCooldown = 2.0f;
     public float padCooldown = 2.0f;
-
-    [Header("Powerup Properties")] 
-    public SO_Powerup currentPowerup;
-    public PowerupType currentPowerupType;
-    public float superBoostForce = 50.0f;
-    public float wallShieldTime = 15.0f;
-    
     
     private bool _moveForward = false;
     private bool _moveBackward = false;
@@ -74,7 +67,6 @@ public class CarController : MonoBehaviour
     private float _resetDelay = 2.0f;
     private float _padDelay = 2.0f;
     
-    private float _wallShieldTimer = 0.0f;
     
     private PlayerManager _playerManager;
     
@@ -86,9 +78,10 @@ public class CarController : MonoBehaviour
     private Transform _currentRespawnPoint;
     public CheckpointSystem checkpoints;
 
-    public Image _powerupIcon;
     public List<ParticleSystem> boostEffects = new List<ParticleSystem>();
 
+    private PlayerPowerups _playerPowerups;
+    
     [Header("DEBUG MODE")]
     public bool debug = false;
 
@@ -100,7 +93,7 @@ public class CarController : MonoBehaviour
         //_wallShieldTimer = wallShieldTime;
         _rigidbody = GetComponent<Rigidbody>();
         _playerManager = GetComponent<PlayerManager>();
-        
+        _playerPowerups = GetComponent<PlayerPowerups>();
         foreach (var axle in axles)
         {
             axle.leftWheel.brakeTorque = brakeTorque;
@@ -136,9 +129,8 @@ public class CarController : MonoBehaviour
     {
         _passedFinishLine = false;
         GameObject checkpointObject = GameObject.Find("CheckpointSystem");
-
-        _powerupIcon = GameObject.Find("Powerup Icon").gameObject.GetComponent<Image>();
-        
+        _playerPowerups.powerupIcon = GameObject.Find("Powerup Icon").gameObject.GetComponent<Image>();
+        _playerPowerups.powerupIcon.gameObject.SetActive(false);
         if (checkpointObject != null)
         {
             checkpoints = checkpointObject.GetComponent<CheckpointSystem>();
@@ -177,82 +169,8 @@ public class CarController : MonoBehaviour
         PhysUpdateForces();
         PhysUpdateAirControl();
         PhysUpdateAcceleration();
-        PhysUpdatePowerups();
     }
 
-    private void PhysUpdatePowerups()
-    {
-        _wallShieldTimer = _wallShieldTimer <= 0 ? 0 : _wallShieldTimer - Time.fixedDeltaTime;
-        //Debug.Log("Shield Timer: " + _wallShieldTimer);
-        
-        if (_wallShieldTimer > 0)
-        {
-            if (!transform.GetChild(0).gameObject.activeInHierarchy)
-            {
-                transform.GetChild(0).gameObject.SetActive(true);
-                _rigidbody.centerOfMass = centreOfMass.transform.localPosition;
-            }
-        }
-        else
-        {
-            if (transform.GetChild(0).gameObject.activeInHierarchy)
-            {
-                transform.GetChild(0).gameObject.SetActive(false);
-                _powerupIcon.gameObject.SetActive(false);
-                _rigidbody.centerOfMass = centreOfMass.transform.localPosition;
-            }
-        }
-        
-        if (_activatePowerup)
-        {
-            switch (currentPowerupType)
-            {
-                case PowerupType.None:
-                    Debug.Log("No powerup equipped!");
-                    break;
-                case PowerupType.Superboost:
-                    StartCoroutine(DelayRemoveIcon());
-                    currentPowerupType = PowerupType.None;
-                    foreach (var effect in boostEffects)
-                    {
-                        effect.Play();
-                    }
-                    if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
-                    {                
-                        _rigidbody.velocity = transform.forward * superBoostForce;
-                    }
-                    else
-                    {
-                        _rigidbody.AddForce(transform.forward * superBoostForce, ForceMode.VelocityChange);
-                    }
-                    break;
-                case PowerupType.BouncyWallShield:
-                    _wallShieldTimer = wallShieldTime;
-                    currentPowerupType = PowerupType.None;
-                    break;
-                case PowerupType.AirBlast:
-                    currentPowerupType = PowerupType.None;
-                    break;
-                case PowerupType.GrapplingHook:
-                    currentPowerupType = PowerupType.None;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-        
-    }
-
-    private IEnumerator DelayRemoveIcon()
-    {
-        yield return new WaitForSeconds(1);
-        _powerupIcon.gameObject.SetActive(false);
-        foreach (var effect in boostEffects)
-        {
-            effect.Stop();
-        }
-    }
-    
     private void PhysUpdateAcceleration()
     {
         _boostDelay = _boostDelay <= 0 ? 0 : _boostDelay - Time.fixedDeltaTime;
@@ -444,6 +362,11 @@ public class CarController : MonoBehaviour
     {
         return _boostDelay <= 0 && _boost;
     }
+
+    public bool GetActivate()
+    {
+        return _activatePowerup;
+    }
     
     private void Update()
     {
@@ -470,12 +393,8 @@ public class CarController : MonoBehaviour
             _resetDelay = resetCooldown;
             _playerManager.GoToSpawn();
         }
-        
-        
     }
-    
-    
-    
+
     void OnDrawGizmos()
     {
         //Check if there has been a hit yet
@@ -520,6 +439,7 @@ public class CarController : MonoBehaviour
             _passedFinishLine = true;
             _playerManager.CompleteStage();
         }
+        
         if (collider.transform.CompareTag("Checkpoint") && _passedCheckpoints.ContainsKey(collider.gameObject) && !_passedCheckpoints[collider.gameObject])
         {
             _passedCheckpoints[collider.gameObject] = true;
@@ -528,6 +448,7 @@ public class CarController : MonoBehaviour
             Debug.Log("Checkpoint passed: " + collider.gameObject.name + " , " + newSpawnLocation + " , " + _currentRespawnPoint.name + " , " + _playerManager.GetPlayerNumber());
             _playerManager.ChangeSpawnLocation(newSpawnLocation.transform);
         }
+        
         if (collider.transform.CompareTag("EliminationZone") && !_hitEliminationZone)
         {
             // Passed finish line
@@ -536,26 +457,7 @@ public class CarController : MonoBehaviour
             _playerManager.EliminateCurrentPlayer();
         }
 
-        if (collider.transform.CompareTag("Powerup"))
-        {
-            currentPowerup = collider.transform.parent.GetComponent<PowerupSpawner>().GetCurrentPowerup();
-            currentPowerupType = currentPowerup.powerupType;
-            collider.transform.parent.GetComponent<PowerupSpawner>().ResetTimer();
-            _powerupIcon.sprite = currentPowerup.powerupUIImage;
-            _powerupIcon.gameObject.SetActive(true);
-        }
         
-        if (collider.transform.CompareTag("WallShield"))
-        {
-            if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
-            {                
-                _rigidbody.velocity = -collider.transform.forward * bounciness*2;
-            }
-            else
-            {
-                _rigidbody.AddForce(-collider.transform.forward * bounciness*2, ForceMode.VelocityChange);
-            }        
-        }
     }
 
     // Input Actions
