@@ -89,7 +89,11 @@ public class PlayerManager : MonoBehaviour
         {
             if ((SceneManager.GetActiveScene().name == "Launcher" || SceneManager.GetActiveScene().name == "EndStage"))
             {
-                Destroy(mainCam.gameObject);
+                if (mainCam != null)
+                {
+                    Destroy(mainCam.gameObject);
+                }
+                
                 PhotonNetwork.Destroy(this.gameObject);
             }
             else
