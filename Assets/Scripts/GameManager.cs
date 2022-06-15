@@ -243,7 +243,11 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     void Spectate()
     {
-        //GameObject.Find("Speedometer").SetActive(false);
+        if (GameObject.Find("Speedometer"))
+        {
+            GameObject.Find("Speedometer").SetActive(false);
+        }
+
         CinemachineVirtualCamera cvc = Camera.main.gameObject.GetComponent<CinemachineVirtualCamera>();
             
         var transform1 = transform;
