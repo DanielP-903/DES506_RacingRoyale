@@ -102,6 +102,7 @@ public class CarController : MonoBehaviour
         //SceneManager.sceneLoaded += LoadCCInLevel;
         
         _rigidbody.centerOfMass = centreOfMass.transform.localPosition;
+        _playerPowerups.powerupIcon.gameObject.SetActive(false);
 
         if (debug)
         {
@@ -428,11 +429,7 @@ public class CarController : MonoBehaviour
             Vector3 direction = collision.contacts[0].point - transform.position;
             _rigidbody.velocity = -(direction.normalized * bounciness);
         }
-        if (collision.transform.CompareTag("Blast"))
-        {
-            Vector3 direction = collision.contacts[0].point - transform.position;
-            _rigidbody.velocity = -(direction.normalized * bounciness);
-        }
+
     }
 
     private void OnTriggerEnter(Collider collider)
@@ -461,7 +458,7 @@ public class CarController : MonoBehaviour
             _hitEliminationZone = true;
             _playerManager.EliminateCurrentPlayer();
         }
-
+    
         
     }
 
