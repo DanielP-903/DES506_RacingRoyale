@@ -44,7 +44,7 @@ using Photon.Realtime;
         /// <summary>
         /// This client's version number. Users are separated from each other by gameVersion (which allows you to make breaking changes).
         /// </summary>
-        string gameVersion = "0.11.1";
+        string gameVersion = "0.11.2";
 
 
         #endregion

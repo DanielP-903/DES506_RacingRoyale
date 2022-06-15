@@ -102,6 +102,11 @@ public class CarController : MonoBehaviour
         //SceneManager.sceneLoaded += LoadCCInLevel;
         
         _rigidbody.centerOfMass = centreOfMass.transform.localPosition;
+        if (!debug)
+        {
+            _playerPowerups.powerupIcon = GameObject.Find("Powerup Icon").gameObject.GetComponent<Image>();
+        }
+
         _playerPowerups.powerupIcon.gameObject.SetActive(false);
         
         if (debug)
@@ -220,6 +225,7 @@ public class CarController : MonoBehaviour
 
             if (_Hit.transform.CompareTag("BoostPad") && _padDelay <= 0)
             {
+                StartCoroutine(ActivateBoostEffect());
                 _padDelay = padCooldown;
                 if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
                 {
@@ -351,7 +357,7 @@ public class CarController : MonoBehaviour
             effect.Play();
         }
 
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
         
         foreach (var effect in boostEffects)
         {
