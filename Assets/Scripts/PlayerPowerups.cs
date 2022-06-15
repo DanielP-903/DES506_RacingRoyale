@@ -22,20 +22,22 @@ public class PlayerPowerups : MonoBehaviour
 
     [Header("Other")]
     public Image powerupIcon;
+    public GameObject _blastObject; 
 
-
+    
     public SO_Powerup _currentPowerup;
     public PowerupType _currentPowerupType;    
+    
+    private bool _airBlasting = false;
+    private bool _boosting = false;
     private float _wallShieldTimer = 0.0f;
     private float _airBlastTimer = 0.0f;
-
+    private float _superBoostTimer = 0.0f;
+    private Image _powerupIconMask;
     private CarController _carController;
     private Rigidbody _rigidbody;
+    private SphereCollider _blastObjectCollider;
 
-    private bool _airBlasting = false;
-    public GameObject _blastObject; 
-    private SphereCollider _blastObjectCollider; 
-    
     // Start is called before the first frame update
     void Start()
     {
@@ -43,7 +45,7 @@ public class PlayerPowerups : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         _blastObject = GameObject.Find("Air Blast Object");
         _blastObjectCollider = _blastObject.GetComponent<SphereCollider>();
-        
+        _powerupIconMask = powerupIcon.transform.GetChild(0).GetComponent<Image>();
     }
 
     void FixedUpdate()
@@ -55,10 +57,17 @@ public class PlayerPowerups : MonoBehaviour
     {
         _wallShieldTimer = _wallShieldTimer <= 0 ? 0 : _wallShieldTimer - Time.fixedDeltaTime;
         _airBlastTimer = _airBlastTimer <= 0 ? 0 : _airBlastTimer - Time.fixedDeltaTime;
+        _superBoostTimer = _superBoostTimer <= 0 ? 0 : _superBoostTimer - Time.fixedDeltaTime;
         //Debug.Log("Shield Timer: " + _wallShieldTimer);
+
+        if (_boosting)
+        {
+            _powerupIconMask.fillAmount = (1 - _superBoostTimer);
+        }
         
         if (_wallShieldTimer > 0)
         {
+            _powerupIconMask.fillAmount = (wallShieldTime - _wallShieldTimer) / wallShieldTime;
             if (!transform.GetChild(0).gameObject.activeInHierarchy)
             {
                 transform.GetChild(0).gameObject.SetActive(true);
@@ -68,6 +77,7 @@ public class PlayerPowerups : MonoBehaviour
         {
             if (transform.GetChild(0).gameObject.activeInHierarchy)
             {
+                _powerupIconMask.fillAmount = 0;
                 transform.GetChild(0).gameObject.SetActive(false);
                 powerupIcon.gameObject.SetActive(false);
             }
@@ -75,9 +85,11 @@ public class PlayerPowerups : MonoBehaviour
 
         if (_airBlasting)
         {
+            _powerupIconMask.fillAmount = (airBlastTime - _airBlastTimer) / airBlastTime;
             _blastObjectCollider.radius = Mathf.Lerp(_blastObjectCollider.radius, airBlastRadius, Time.deltaTime);
             if (_airBlastTimer <= 0)
             {
+                _powerupIconMask.fillAmount = 0;
                 _blastObject.SetActive(false);
                 _blastObjectCollider.radius = 2;
                 _airBlasting = false;
@@ -151,22 +163,29 @@ public class PlayerPowerups : MonoBehaviour
      
      private IEnumerator DelayRemoveIcon()
      {
+         _superBoostTimer = 1;
+         _boosting = true;
          yield return new WaitForSeconds(1);
          powerupIcon.gameObject.SetActive(false);
          foreach (var effect in _carController.boostEffects)
          {
              effect.Stop();
          }
+         
+         _powerupIconMask.fillAmount = 0;
+
+         _boosting = false;
      }
 
      private void OnTriggerEnter(Collider collider)
      {
-         if (collider.transform.CompareTag("Powerup"))
+         if (collider.transform.CompareTag("Powerup") && _airBlastTimer <= 0 && _wallShieldTimer <= 0)
          {
              _currentPowerup = collider.transform.parent.GetComponent<PowerupSpawner>().GetCurrentPowerup();
              _currentPowerupType = _currentPowerup.powerupType;
              collider.transform.parent.GetComponent<PowerupSpawner>().ResetTimer();
              powerupIcon.sprite = _currentPowerup.powerupUIImage;
+             _powerupIconMask.sprite = _currentPowerup.powerupUIImage;
              powerupIcon.gameObject.SetActive(true);
          }
         
