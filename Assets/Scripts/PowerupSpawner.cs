@@ -11,12 +11,14 @@ public class PowerupSpawner : MonoBehaviour
     private float _spawnTimer = 0.0f;
 
     private SO_Powerup currentPowerup;
+    private GameObject _powerupCube;
 
     // Start is called before the first frame update
     void Start()
     {
         _spawnTimer = spawnDelay;
-        transform.GetChild(0).gameObject.SetActive(false);
+        _powerupCube = transform.GetChild(0).gameObject;
+        _powerupCube.SetActive(false);
     }
 
     // Update is called once per frame
@@ -47,13 +49,18 @@ public class PowerupSpawner : MonoBehaviour
         {
             currentPowerup = powerups[2];
         }
-        transform.GetChild(0).gameObject.SetActive(true);
+        
+        // MANUAL ASSIGNATION OF POWERUP
+        
+        currentPowerup = powerups[3];
+        
+        _powerupCube.SetActive(true);
     }
 
     public void ResetTimer()
     {
         _spawnTimer = spawnDelay;
-        transform.GetChild(0).gameObject.SetActive(false);
+        _powerupCube.SetActive(false);
     }
 
     public SO_Powerup GetCurrentPowerup()
