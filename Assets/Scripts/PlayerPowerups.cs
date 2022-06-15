@@ -51,7 +51,7 @@ public class PlayerPowerups : MonoBehaviour
     {
         _carController = GetComponent<CarController>();
         _rigidbody = GetComponent<Rigidbody>();
-        _blastObject = GameObject.Find("Air Blast Object");
+        _blastObject = transform.GetChild(1).gameObject;//GameObject.Find("Air Blast Object");
         _blastObjectCollider = _blastObject.GetComponent<SphereCollider>();
         _powerupIconMask = powerupIcon.transform.GetChild(0).GetComponent<Image>();
     }
