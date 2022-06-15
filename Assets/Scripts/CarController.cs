@@ -138,7 +138,7 @@ public class CarController : MonoBehaviour
         GameObject checkpointObject = GameObject.Find("CheckpointSystem");
 
         _powerupIcon = GameObject.Find("Powerup Icon").gameObject.GetComponent<Image>();
-        
+        _powerupIcon.gameObject.SetActive(false);
         if (checkpointObject != null)
         {
             checkpoints = checkpointObject.GetComponent<CheckpointSystem>();
@@ -470,12 +470,8 @@ public class CarController : MonoBehaviour
             _resetDelay = resetCooldown;
             _playerManager.GoToSpawn();
         }
-        
-        
     }
-    
-    
-    
+
     void OnDrawGizmos()
     {
         //Check if there has been a hit yet
@@ -520,6 +516,7 @@ public class CarController : MonoBehaviour
             _passedFinishLine = true;
             _playerManager.CompleteStage();
         }
+        
         if (collider.transform.CompareTag("Checkpoint") && _passedCheckpoints.ContainsKey(collider.gameObject) && !_passedCheckpoints[collider.gameObject])
         {
             _passedCheckpoints[collider.gameObject] = true;
@@ -528,6 +525,7 @@ public class CarController : MonoBehaviour
             Debug.Log("Checkpoint passed: " + collider.gameObject.name + " , " + newSpawnLocation + " , " + _currentRespawnPoint.name + " , " + _playerManager.GetPlayerNumber());
             _playerManager.ChangeSpawnLocation(newSpawnLocation.transform);
         }
+        
         if (collider.transform.CompareTag("EliminationZone") && !_hitEliminationZone)
         {
             // Passed finish line
@@ -549,11 +547,11 @@ public class CarController : MonoBehaviour
         {
             if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
             {                
-                _rigidbody.velocity = -collider.transform.forward * bounciness*2;
+                _rigidbody.velocity = -collider.transform.forward * bounciness * 2;
             }
             else
             {
-                _rigidbody.AddForce(-collider.transform.forward * bounciness*2, ForceMode.VelocityChange);
+                _rigidbody.AddForce(-collider.transform.forward * bounciness * 2, ForceMode.VelocityChange);
             }        
         }
     }
