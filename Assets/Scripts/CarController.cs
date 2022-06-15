@@ -458,11 +458,7 @@ public class CarController : MonoBehaviour
             _hitEliminationZone = true;
             _playerManager.EliminateCurrentPlayer();
         }
-        if (collider.transform.CompareTag("Blast"))
-        {
-            Vector3 direction = collider.transform.position - transform.position;
-            _rigidbody.velocity = -(direction.normalized * bounciness);
-        }
+    
         
     }
 

@@ -18,12 +18,14 @@ public class PlayerPowerups : MonoBehaviour
     public float airBlastRadius = 10.0f;
     public float airBlastForce = 10.0f;
     public float airBlastTime = 2.0f;
-    
+    public List<ParticleSystem> airBlastEffects;
+
     [Header("Other")]
     public Image powerupIcon;
 
-    private SO_Powerup _currentPowerup;
-    private PowerupType _currentPowerupType;    
+
+    public SO_Powerup _currentPowerup;
+    public PowerupType _currentPowerupType;    
     private float _wallShieldTimer = 0.0f;
     private float _airBlastTimer = 0.0f;
 
@@ -43,7 +45,6 @@ public class PlayerPowerups : MonoBehaviour
     void FixedUpdate()
     {
         PhysUpdatePowerups();
-        
     }
     
      private void PhysUpdatePowerups()
@@ -129,12 +130,18 @@ public class PlayerPowerups : MonoBehaviour
      
      private void AirBlast()
      {
+         
+         
          _blastCollider = gameObject.AddComponent<SphereCollider>();
          _blastCollider.isTrigger = true;
          _blastCollider.transform.tag = "Blast";
          _airBlasting = true;
          _airBlastTimer = airBlastTime;
          _currentPowerupType = PowerupType.None;
+         foreach (var effect in airBlastEffects)
+         {
+             effect.Play();
+         }
      }
      
      #endregion
@@ -171,6 +178,15 @@ public class PlayerPowerups : MonoBehaviour
              {
                  _rigidbody.AddForce(-collider.transform.forward * wallShieldBounciness * 2, ForceMode.VelocityChange);
              }        
+         }
+     }
+
+     private void OnTriggerStay(Collider collider)
+     {
+         if (collider.transform.CompareTag("Blast"))
+         {
+             Vector3 direction = collider.transform.position - transform.position;
+             _rigidbody.AddForce(airBlastForce * direction, ForceMode.Impulse); //= -(direction.normalized * airBlastForce);
          }
      }
 }
