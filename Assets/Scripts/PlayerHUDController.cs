@@ -61,8 +61,8 @@ public class PlayerHUDController : MonoBehaviour
             }
         }
         
-        Debug.Log("There is a QUICK FIX at line 65 of PlayerHUDController");
-        _playerRef = listOfPlayers[0];
+        //Debug.Log("There is a QUICK FIX at line 65 of PlayerHUDController");
+        //_playerRef = listOfPlayers[0];
         
         //_playerRef = GameObject.FindGameObjectWithTag("Player");
         _carController = _playerRef.GetComponent<CarController>();

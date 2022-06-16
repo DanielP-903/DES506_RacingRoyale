@@ -104,10 +104,14 @@ public class CarController : MonoBehaviour
         _rigidbody.centerOfMass = centreOfMass.transform.localPosition;
         if (!debug)
         {
-            _playerPowerups.powerupIcon = GameObject.Find("Powerup Icon").gameObject.GetComponent<Image>();
+            GameObject icon = GameObject.Find("Powerup Icon");
+            if (icon)
+            {
+                _playerPowerups.powerupIcon = icon.gameObject.GetComponent<Image>();  
+                _playerPowerups.powerupIcon.gameObject.SetActive(false);
+            }
         }
 
-        _playerPowerups.powerupIcon.gameObject.SetActive(false);
         
         if (debug)
         {

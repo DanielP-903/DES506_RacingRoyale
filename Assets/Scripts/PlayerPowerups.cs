@@ -62,6 +62,17 @@ public class PlayerPowerups : MonoBehaviour
 
     }
 
+    void OnLevelWasLoaded()
+    {
+        _carController = GetComponent<CarController>();
+        _rigidbody = GetComponent<Rigidbody>();
+        blastObject = transform.GetChild(1).gameObject;
+        _blastObjectCollider = blastObject.GetComponent<SphereCollider>();
+        _powerupIconMask = powerupIcon.transform.GetChild(0).GetComponent<Image>();
+        grappleLineObject = transform.GetChild(2).gameObject;
+        _grappleLine = grappleLineObject.GetComponent<LineRenderer>();
+    }
+
     void FixedUpdate()
     {
         PhysUpdatePowerups();
@@ -84,11 +95,14 @@ public class PlayerPowerups : MonoBehaviour
         _wallShieldTimer = _wallShieldTimer <= 0 ? 0 : _wallShieldTimer - Time.fixedDeltaTime;
         _airBlastTimer = _airBlastTimer <= 0 ? 0 : _airBlastTimer - Time.fixedDeltaTime;
         _superBoostTimer = _superBoostTimer <= 0 ? 0 : _superBoostTimer - Time.fixedDeltaTime;
+        _grappleTimer = _grappleTimer <= 0 ? 0 : _grappleTimer - Time.fixedDeltaTime;
         //Debug.Log("Shield Timer: " + _wallShieldTimer);
 
 
         if (_grappling && _nearestHit.transform != null)
         {      
+            _powerupIconMask.fillAmount = (grappleTime - _superBoostTimer)/grappleTime;
+
             _grappleLine.startColor = Color.green;
             _grappleLine.endColor = Color.red;
             
