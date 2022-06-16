@@ -48,6 +48,7 @@ public class PlayerHUDController : MonoBehaviour
     IEnumerator waitTime()
     {
         yield return new WaitForSeconds(1);
+        
         GameObject[] listOfPlayers = GameObject.FindGameObjectsWithTag("Player");
         foreach (GameObject player in listOfPlayers)
         {
@@ -59,6 +60,10 @@ public class PlayerHUDController : MonoBehaviour
                 hasFoundPlayer = true;
             }
         }
+        
+        //Debug.Log("There is a QUICK FIX at line 65 of PlayerHUDController");
+        //_playerRef = listOfPlayers[0];
+        
         //_playerRef = GameObject.FindGameObjectWithTag("Player");
         _carController = _playerRef.GetComponent<CarController>();
         _rigidbodyRef = _carController.GetComponent<Rigidbody>();
