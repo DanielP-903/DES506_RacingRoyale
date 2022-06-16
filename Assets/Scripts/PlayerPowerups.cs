@@ -29,14 +29,14 @@ public class PlayerPowerups : MonoBehaviour
     
     [Header("Other")]
     public Image powerupIcon;
-    public GameObject _blastObject; 
-
     
-    public SO_Powerup _currentPowerup;
-    public PowerupType _currentPowerupType;    
-    
+    private GameObject grappleLineObject;
+    private GameObject blastObject;
+    private SO_Powerup currentPowerup;
+    private PowerupType currentPowerupType;
     private bool _airBlasting = false;
     private bool _boosting = false;
+    private bool _grappling = false;
     private float _wallShieldTimer = 0.0f;
     private float _airBlastTimer = 0.0f;
     private float _superBoostTimer = 0.0f;
@@ -45,16 +45,21 @@ public class PlayerPowerups : MonoBehaviour
     private CarController _carController;
     private Rigidbody _rigidbody;
     private SphereCollider _blastObjectCollider;
-    private RaycastHit nearestHit;
-
+    private RaycastHit _nearestHit;
+    private LineRenderer _grappleLine;
+    
     // Start is called before the first frame update
     void Start()
     {
         _carController = GetComponent<CarController>();
         _rigidbody = GetComponent<Rigidbody>();
-        _blastObject = transform.GetChild(1).gameObject;//GameObject.Find("Air Blast Object");
-        _blastObjectCollider = _blastObject.GetComponent<SphereCollider>();
+        blastObject = transform.GetChild(1).gameObject;
+        _blastObjectCollider = blastObject.GetComponent<SphereCollider>();
         _powerupIconMask = powerupIcon.transform.GetChild(0).GetComponent<Image>();
+        grappleLineObject = transform.GetChild(2).gameObject;
+        _grappleLine = grappleLineObject.GetComponent<LineRenderer>();
+        _grappleLine.startColor = Color.green;
+        _grappleLine.endColor = Color.red;
     }
 
     void FixedUpdate()
@@ -64,11 +69,14 @@ public class PlayerPowerups : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.black;
-        if (nearestHit.transform.CompareTag("Player"))
-        {
-            Gizmos.DrawLine(transform.position, nearestHit.transform.position);
-        }
+        // if (_nearestHit.Equals(null))
+        // {
+        //     Gizmos.color = Color.black;
+        //     if (_nearestHit.transform.CompareTag("Player"))
+        //     {
+        //         Gizmos.DrawLine(transform.position, _nearestHit.transform.position);
+        //     }
+        // }
     }
 
     private void PhysUpdatePowerups()
@@ -78,6 +86,17 @@ public class PlayerPowerups : MonoBehaviour
         _superBoostTimer = _superBoostTimer <= 0 ? 0 : _superBoostTimer - Time.fixedDeltaTime;
         //Debug.Log("Shield Timer: " + _wallShieldTimer);
 
+
+        if (_grappling && _nearestHit.transform != null)
+        {
+            // Draw line between them
+            Vector3[] positions = new Vector3[2];
+            positions[0] = transform.position;
+            positions[1] = _nearestHit.transform.position;
+                 
+            _grappleLine.SetPositions(positions);
+        }
+        
         if (_boosting)
         {
             _powerupIconMask.fillAmount = (1 - _superBoostTimer);
@@ -108,7 +127,7 @@ public class PlayerPowerups : MonoBehaviour
             if (_airBlastTimer <= 0)
             {
                 _powerupIconMask.fillAmount = 0;
-                _blastObject.SetActive(false);
+                blastObject.SetActive(false);
                 _blastObjectCollider.radius = 2;
                 _airBlasting = false;
                 _airBlastTimer = 0;
@@ -118,7 +137,7 @@ public class PlayerPowerups : MonoBehaviour
         
         if (_carController.GetActivate())
         {
-            switch (_currentPowerupType)
+            switch (currentPowerupType)
             {
                 case PowerupType.None: Debug.Log("No powerup equipped!"); break;
                 case PowerupType.Superboost: SuperBoost(); break;
@@ -137,7 +156,7 @@ public class PlayerPowerups : MonoBehaviour
      private void SuperBoost()
      {
          StartCoroutine(DelayRemoveIcon());
-         _currentPowerupType = PowerupType.None;
+         currentPowerupType = PowerupType.None;
          foreach (var effect in _carController.boostEffects)
          {
              effect.Play();
@@ -155,7 +174,7 @@ public class PlayerPowerups : MonoBehaviour
      private void BouncyWallShield()
      {
          _wallShieldTimer = wallShieldTime;
-         _currentPowerupType = PowerupType.None;
+         currentPowerupType = PowerupType.None;
      }
 
      private void GrapplingHook()
@@ -166,45 +185,53 @@ public class PlayerPowerups : MonoBehaviour
          if (hits.Length > 0)
          {
              float distance = 1000000.0f;
-             nearestHit = hits[0];
+             _nearestHit = hits[0];
              foreach (var hit in hits)
              {
                  if (hit.distance < distance && hit.transform.CompareTag("Player") && hit.transform.gameObject != transform.gameObject)
                  {
                      distance = hit.distance;
-                     nearestHit = hit;
+                     _nearestHit = hit;
                  }
              }
 
-             if (nearestHit.transform.CompareTag("Player") && nearestHit.transform.gameObject != transform.gameObject)
+             if (_nearestHit.transform.CompareTag("Player") && _nearestHit.transform.gameObject != transform.gameObject)
              {
                  // Found a player to grapple!
-                 
-  
-                 //_currentPowerupType = PowerupType.None;
+                 grappleLineObject.SetActive(true);
+                 StartCoroutine(Grapple());
+                 currentPowerupType = PowerupType.None;
                  Debug.Log("HIT!!!");
+             }
+             else
+             {
+                 Debug.Log("No hit!");
+                 grappleLineObject.SetActive(false);
              }
          }
          else
          {
              Debug.Log("No hit!");
+             grappleLineObject.SetActive(false);
          }
-         
-         // Draw line between them
-         
-         
+     }
+
+     private IEnumerator Grapple()
+     {
          // Apply a constant acceleration force towards the player for a limited time
-         
-         
+         _grappling = true;
+         yield return new WaitForSeconds(grappleTime);
+         _grappling = false;
+         grappleLineObject.SetActive(false);
      }
      
      private void AirBlast()
      {
-        _blastObject.SetActive(true);
-        _blastObjectCollider.radius = 2;
+         blastObject.SetActive(true);
+         _blastObjectCollider.radius = 2;
          _airBlasting = true;
          _airBlastTimer = airBlastTime;
-         _currentPowerupType = PowerupType.None;
+         currentPowerupType = PowerupType.None;
          foreach (var effect in airBlastEffects)
          {
              effect.Play();
@@ -234,11 +261,11 @@ public class PlayerPowerups : MonoBehaviour
      {
          if (collider.transform.CompareTag("Powerup") && _airBlastTimer <= 0 && _wallShieldTimer <= 0)
          {
-             _currentPowerup = collider.transform.parent.GetComponent<PowerupSpawner>().GetCurrentPowerup();
-             _currentPowerupType = _currentPowerup.powerupType;
+             currentPowerup = collider.transform.parent.GetComponent<PowerupSpawner>().GetCurrentPowerup();
+             currentPowerupType = currentPowerup.powerupType;
              collider.transform.parent.GetComponent<PowerupSpawner>().ResetTimer();
-             powerupIcon.sprite = _currentPowerup.powerupUIImage;
-             _powerupIconMask.sprite = _currentPowerup.powerupUIImage;
+             powerupIcon.sprite = currentPowerup.powerupUIImage;
+             _powerupIconMask.sprite = currentPowerup.powerupUIImage;
              powerupIcon.gameObject.SetActive(true);
          }
         
