@@ -143,7 +143,7 @@ public class CarController : MonoBehaviour
             foreach (var checkpoint in checkpoints.checkpointObjects)
             {
                 _passedCheckpoints.Add(checkpoint, false);
-                Debug.Log(_passedCheckpoints[checkpoint] + " : " + checkpoint);
+                //Debug.Log(_passedCheckpoints[checkpoint] + " : " + checkpoint);
             }
         }
         else

@@ -26,6 +26,7 @@ public class PlayerPowerups : MonoBehaviour
     public float grappleTime = 2.0f;
     public float grappleForce = 10.0f;
     public float achievableDistance = 30.0f;
+    public float grappleThreshold = 1.0f;
     
     [Header("Other")]
     public Image powerupIcon;
@@ -58,8 +59,7 @@ public class PlayerPowerups : MonoBehaviour
         _powerupIconMask = powerupIcon.transform.GetChild(0).GetComponent<Image>();
         grappleLineObject = transform.GetChild(2).gameObject;
         _grappleLine = grappleLineObject.GetComponent<LineRenderer>();
-        _grappleLine.startColor = Color.green;
-        _grappleLine.endColor = Color.red;
+
     }
 
     void FixedUpdate()
@@ -88,13 +88,35 @@ public class PlayerPowerups : MonoBehaviour
 
 
         if (_grappling && _nearestHit.transform != null)
-        {
+        {      
+            _grappleLine.startColor = Color.green;
+            _grappleLine.endColor = Color.red;
+            
             // Draw line between them
             Vector3[] positions = new Vector3[2];
             positions[0] = transform.position;
             positions[1] = _nearestHit.transform.position;
                  
             _grappleLine.SetPositions(positions);
+            
+            // Drag player towards grappled player
+            
+            if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
+            {
+                _rigidbody.velocity = (_nearestHit.transform.position - transform.position).normalized * grappleForce;
+            }
+            else
+            {
+                //_rigidbody.velocity = (_nearestHit.transform.position - transform.position).normalized * grappleForce;
+                _rigidbody.AddForce((_nearestHit.transform.position - transform.position).normalized * grappleForce, ForceMode.VelocityChange);
+            }
+            
+            if ((_nearestHit.transform.position - transform.position).magnitude < grappleThreshold)
+            {
+                _grappling = false;
+                grappleLineObject.SetActive(false);
+                powerupIcon.gameObject.SetActive(false);
+            }
         }
         
         if (_boosting)
@@ -221,8 +243,12 @@ public class PlayerPowerups : MonoBehaviour
          // Apply a constant acceleration force towards the player for a limited time
          _grappling = true;
          yield return new WaitForSeconds(grappleTime);
-         _grappling = false;
-         grappleLineObject.SetActive(false);
+         if (_grappling)
+         {
+            _grappling = false;
+            grappleLineObject.SetActive(false);
+            powerupIcon.gameObject.SetActive(false);
+        }
      }
      
      private void AirBlast()
