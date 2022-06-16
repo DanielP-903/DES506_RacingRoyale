@@ -154,6 +154,8 @@ public class CarController : MonoBehaviour
         {
             Debug.Log("Error: no CheckpointSystem object in scene");
         }
+        
+        
     }
 
     /*private void LoadCCInLevel(Scene scene, LoadSceneMode loadSceneMode)

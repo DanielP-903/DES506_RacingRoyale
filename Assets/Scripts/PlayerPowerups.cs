@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using ExitGames.Client.Photon.StructWrapping;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -56,6 +57,7 @@ public class PlayerPowerups : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         blastObject = transform.GetChild(1).gameObject;
         _blastObjectCollider = blastObject.GetComponent<SphereCollider>();
+        powerupIcon = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(3).GetComponent<Image>();
         _powerupIconMask = powerupIcon.transform.GetChild(0).GetComponent<Image>();
         grappleLineObject = transform.GetChild(2).gameObject;
         _grappleLine = grappleLineObject.GetComponent<LineRenderer>();
@@ -68,6 +70,7 @@ public class PlayerPowerups : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         blastObject = transform.GetChild(1).gameObject;
         _blastObjectCollider = blastObject.GetComponent<SphereCollider>();
+        powerupIcon = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(3).GetComponent<Image>();
         _powerupIconMask = powerupIcon.transform.GetChild(0).GetComponent<Image>();
         grappleLineObject = transform.GetChild(2).gameObject;
         _grappleLine = grappleLineObject.GetComponent<LineRenderer>();

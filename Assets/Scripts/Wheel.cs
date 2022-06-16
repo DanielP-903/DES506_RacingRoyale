@@ -17,6 +17,6 @@ public class Wheel : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.localRotation = Quaternion.Euler(0,(90 + _wheelCollider.steerAngle),_wheelCollider.rpm);
+        transform.localRotation = Quaternion.Euler(_wheelCollider.rpm,(_wheelCollider.steerAngle),0);
     }
 }

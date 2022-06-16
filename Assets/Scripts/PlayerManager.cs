@@ -81,6 +81,13 @@ public class PlayerManager : MonoBehaviour
                 Destroy(this);
             }
         }
+        else
+        {
+            playerNumber = _gm.GetPlayerNumber();
+            Debug.Log("Photon view NOT DETECTED during start function of PlayerManager" + playerNumber);
+        }
+        
+        //playerNumber = _gm.GetPlayerNumber();
     }
     
     void Update()
@@ -108,6 +115,10 @@ public class PlayerManager : MonoBehaviour
             }
             else
             {
+                if (SceneManager.GetActiveScene().name == "WaitingArea")
+                {
+                    Debug.Log("In waiting area!");    
+                }
                 
                 if (SceneManager.GetActiveScene().name == "Stage1")
                 {
@@ -123,6 +134,11 @@ public class PlayerManager : MonoBehaviour
                 Debug.Log(_spawnLocation + "- Player: " + playerNumber + " Name: " +_photonView.Owner.NickName);
 
             }
+        }
+        else
+        {
+            playerNumber = _gm.GetPlayerNumber();
+            Debug.Log("ERROR: NO PHOTON VIEW DETECTED! On player " + playerNumber);
         }
     }
     #endregion
