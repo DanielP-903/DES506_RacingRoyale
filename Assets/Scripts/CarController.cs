@@ -15,15 +15,13 @@ public enum PowerupType
 
 public class CarController : MonoBehaviour
 {
-    [Header("Car Driving Physics")]
-    public GameObject centreOfMass;
+    [Header("Car Driving Physics")] public GameObject centreOfMass;
     public float motorForce = 0;
     public float brakeTorque = 1000;
     public float maxSteeringAngle = 0;
     public List<Axle> axles;
-    
-    [Header("Forces")]
-    public float pushForceAmount = 5.0f;
+
+    [Header("Forces")] public float pushForceAmount = 5.0f;
     public float accelerationForce = 5.0f;
     public Vector3 pushForce = Vector3.up;
     public float torqueVectorAmount = 1.0f;
@@ -31,19 +29,16 @@ public class CarController : MonoBehaviour
     public float boostForceAmount = 5.0f;
     public float driftForceAmount = 3000.0f;
 
-    [Header("Environment Pad")] 
-    public float jumpPadForce = 5.0f;
+    [Header("Environment Pad")] public float jumpPadForce = 5.0f;
     public float boostPadForce = 5.0f;
-    
-    [Header("Collisions")] 
-    public float bounciness = 100.0f;
-    
-    [Header("Cooldowns (in seconds)")]
-    public float jumpCooldown = 2.0f;
+
+    [Header("Collisions")] public float bounciness = 100.0f;
+
+    [Header("Cooldowns (in seconds)")] public float jumpCooldown = 2.0f;
     public float boostCooldown = 2.0f;
     public float resetCooldown = 2.0f;
     public float padCooldown = 2.0f;
-    
+
     private bool _moveForward = false;
     private bool _moveBackward = false;
     private bool _moveRight = false;
@@ -58,18 +53,18 @@ public class CarController : MonoBehaviour
     private bool _grounded = false;
 
     private float _currentSteeringMulti;
-    
+
     private bool _passedFinishLine = false;
     private bool _hitEliminationZone = false;
-    
+
     private float _pushDelay = 2.0f;
     private float _boostDelay = 2.0f;
     private float _resetDelay = 2.0f;
     private float _padDelay = 2.0f;
-    
-    
+
+
     private PlayerManager _playerManager;
-    
+
     private Rigidbody _rigidbody;
     private bool _HitDetect;
     private RaycastHit _Hit;
@@ -81,9 +76,8 @@ public class CarController : MonoBehaviour
     public List<ParticleSystem> boostEffects = new List<ParticleSystem>();
 
     private PlayerPowerups _playerPowerups;
-    
-    [Header("DEBUG MODE")]
-    public bool debug = false;
+
+    [Header("DEBUG MODE")] public bool debug = false;
 
     private void Start()
     {
@@ -100,23 +94,23 @@ public class CarController : MonoBehaviour
             axle.rightWheel.brakeTorque = brakeTorque;
         }
         //SceneManager.sceneLoaded += LoadCCInLevel;
-        
+
         _rigidbody.centerOfMass = centreOfMass.transform.localPosition;
         if (!debug)
         {
             GameObject icon = GameObject.Find("Powerup Icon");
             if (icon)
             {
-                _playerPowerups.powerupIcon = icon.gameObject.GetComponent<Image>();  
+                _playerPowerups.powerupIcon = icon.gameObject.GetComponent<Image>();
                 _playerPowerups.powerupIcon.gameObject.SetActive(false);
             }
         }
 
-        
+
         if (debug)
         {
             GameObject checkpointObject = GameObject.Find("CheckpointSystem");
-            
+
             //_powerupIcon = GameObject.Find("Powerup Icon").gameObject.GetComponent<Image>();
 
             if (checkpointObject != null)
@@ -154,8 +148,8 @@ public class CarController : MonoBehaviour
         {
             Debug.Log("Error: no CheckpointSystem object in scene");
         }
-        
-        
+
+
     }
 
     /*private void LoadCCInLevel(Scene scene, LoadSceneMode loadSceneMode)
@@ -177,10 +171,20 @@ public class CarController : MonoBehaviour
 
     public void FixedUpdate()
     {
+        PhysRestrictVelocities();
         PhysUpdateDriving();
         PhysUpdateForces();
         PhysUpdateAirControl();
         PhysUpdateAcceleration();
+    }
+
+    private void PhysRestrictVelocities()
+    {
+        Vector3 newValues = new Vector3(_rigidbody.angularVelocity.x,_rigidbody.angularVelocity.y,_rigidbody.angularVelocity.z);
+        newValues.x = Mathf.Clamp(newValues.x, -1, 1);
+        newValues.y = Mathf.Clamp(newValues.y, -1, 1);
+        newValues.z = Mathf.Clamp(newValues.z, -1, 1);
+        _rigidbody.angularVelocity = newValues;
     }
 
     private void PhysUpdateAcceleration()
