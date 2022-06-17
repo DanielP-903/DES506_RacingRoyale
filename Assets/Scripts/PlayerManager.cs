@@ -42,11 +42,13 @@ public class PlayerManager : MonoBehaviour
     {
         //SceneManager.sceneLoaded += LoadPMInLevel;
         _photonView = GetComponent<PhotonView>();
+        playerNameText.text = _photonView.Owner.NickName;
+        playerLicenseText.text = _photonView.Owner.NickName;
         if (_photonView != null)
         {
+            DontDestroyOnLoad(this.gameObject);
             if (_photonView.IsMine)
             {
-                DontDestroyOnLoad(this.gameObject);
                 _cc = GetComponent<CarController>();
                 _rb = GetComponent<Rigidbody>();
                 if (!_cc.debug)
@@ -67,9 +69,6 @@ public class PlayerManager : MonoBehaviour
                     spawnNumber = _gm.GetPlayerNumber();
                 }
                 _spawnLocation = GameObject.Find("SpawnLocation" + spawnNumber).transform;
-        
-                playerNameText.text = _photonView.Owner.NickName;
-                playerLicenseText.text = _photonView.Owner.NickName;
             }
             else
             {
