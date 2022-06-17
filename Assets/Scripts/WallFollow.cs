@@ -1,65 +1,95 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 
 public class WallFollow : MonoBehaviour
 {
-    public List<GameObject> routes = new List<GameObject>();
+    public GameObject path;
 
+    public float startDelay = 3.0f;
     public float chaseSpeed = 1.0f;
+    public TextMeshProUGUI startDelayText;
     private BezierCurveGenerator _bezierCurveGenerator;
 
-    public int routeNumber = 0;
+    private float _startDelayTimer = 0.0f;
+    
+    
+    private int routeNumber = 0;
 
     private float _tValue;
 
+    private bool _begin = false;
     // Start is called before the first frame update
     void Start()
     {
+        _bezierCurveGenerator = path.GetComponent<BezierCurveGenerator>();
         routeNumber = 0;
         _tValue = 0.0f;
+        _startDelayTimer = startDelay;
+        _begin = false;
     }
 
+    public float GetStartDelayTimer()
+    {
+        return _startDelayTimer;
+    }
+    
     // Update is called once per frame
     void Update()
     {
-        Vector3 p0 = routes[routeNumber].transform.GetChild(0).position;
-        Vector3 p1 = routes[routeNumber].transform.GetChild(1).position;
-        Vector3 p2 = routes[routeNumber].transform.GetChild(2).position;
-        Vector3 p3 = routes[routeNumber].transform.GetChild(3).position;
-
-        _tValue += Time.deltaTime * chaseSpeed;
-
-        Vector3 oldPosition = transform.position;
-        
-        // Reference: https://en.wikipedia.org/wiki/B%C3%A9zier_curve
-        Vector3 newPosition = 
-            Mathf.Pow(1 - _tValue, 3) * p0 +
-            3 * Mathf.Pow(1 - _tValue, 2) * _tValue * p1 +
-            3 * (1 - _tValue) * Mathf.Pow(_tValue, 2) * p2 +
-            Mathf.Pow(_tValue, 3) * p3;
-        
-        transform.position = newPosition;
-        
-        Vector3 difference = newPosition - oldPosition;
-
-        float rotationAngle = Mathf.Atan2(difference.x, difference.z) * Mathf.Rad2Deg;
-
-        transform.rotation = Quaternion.Euler(0, rotationAngle, 0);
-        
-        if (_tValue > 1)
+     
+        if (_begin)
         {
-            //Debug.Log("_tValue is > 1");
-            _tValue = 0.0f;
-            routeNumber++;
-            if (routeNumber > routes.Count - 1)
+            _tValue += Time.deltaTime * chaseSpeed;
+
+            Vector3 oldPosition = transform.position;
+
+            var newPosition = Mathf.Pow(1 - _tValue, 3) * _bezierCurveGenerator.controlPoints[routeNumber].position +
+                              3 * Mathf.Pow(1 - _tValue, 2) * _tValue * _bezierCurveGenerator.controlPoints[routeNumber + 1].position +
+                              3 * (1 - _tValue) * Mathf.Pow(_tValue, 2) * _bezierCurveGenerator.controlPoints[routeNumber + 2].position +
+                              Mathf.Pow(_tValue, 3) * _bezierCurveGenerator.controlPoints[routeNumber + 3].position;
+
+            transform.position = newPosition;
+
+            Vector3 difference = newPosition - oldPosition;
+
+            float rotationAngle = Mathf.Atan2(difference.x, difference.z) * Mathf.Rad2Deg;
+
+            transform.rotation = Quaternion.Euler(0, rotationAngle, 0);
+
+            if (_tValue > 1)
             {
-                routeNumber = 0;
+                //Debug.Log("_tValue is > 1");
+                _tValue = 0.0f;
+                routeNumber += 3;
+                if (routeNumber >= _bezierCurveGenerator.controlPoints.Count - 1)
+                {
+                    routeNumber = 0;
+                }
             }
         }
-        
+        else
+        {
+            _startDelayTimer = _startDelayTimer <= 0 ? 0 : _startDelayTimer - Time.deltaTime;
+            startDelayText.text = ((int)_startDelayTimer).ToString();
+            if (_startDelayTimer < 1)
+            {
+                StartCoroutine(RemoveDelayText());
+                _startDelayTimer = startDelay;
+                _begin = true;
+            }
+        }
+
+    }
+
+    private IEnumerator RemoveDelayText()
+    {
+        startDelayText.text = "GO";
+        yield return new WaitForSeconds(2);
+        startDelayText.text = "";
     }
 
 }

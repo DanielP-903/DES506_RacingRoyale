@@ -8,10 +8,12 @@ using TMPro;
 public class PlayerHUDController : MonoBehaviour
 {
     public TextMeshProUGUI speedText;
+    
+    
     private GameObject _playerRef;
     private CarController _carController;
     private Rigidbody _rigidbodyRef;
-
+    
     private bool hasFoundPlayer = false;
 
     [HideInInspector] public float currentSpeed = 0.0f;
@@ -43,6 +45,7 @@ public class PlayerHUDController : MonoBehaviour
             currentSpeed = (Mathf.Round(_rigidbodyRef.velocity.magnitude * 2.2369362912f));
             speedText.text = "Speed: " + currentSpeed + " MPH";
         }
+        
     }
 
     IEnumerator waitTime()
