@@ -56,6 +56,11 @@ public class PlayerHUDController : MonoBehaviour
         foreach (GameObject player in listOfPlayers)
         {
             //Debug.Log("Player: " + player);
+            if (!player.GetComponent<PhotonView>())
+            {
+                continue;
+            }
+            
             if (player.GetComponent<PhotonView>().IsMine)
             {
                 _playerRef = player;

@@ -133,7 +133,7 @@ public class CarController : MonoBehaviour
     {
         _passedFinishLine = false;
         GameObject checkpointObject = GameObject.Find("CheckpointSystem");
-        _playerPowerups.powerupIcon = GameObject.Find("Powerup Icon").gameObject.GetComponent<Image>();
+        _playerPowerups.powerupIcon = GameObject.FindGameObjectWithTag("PowerupIcon").gameObject.GetComponent<Image>();
         _playerPowerups.powerupIcon.gameObject.SetActive(false);
         if (checkpointObject != null)
         {
@@ -443,9 +443,9 @@ public class CarController : MonoBehaviour
         if (collision.transform.CompareTag("Player"))
         {
             Vector3 direction = collision.contacts[0].point - transform.position;
-            _rigidbody.velocity = -(direction.normalized * bounciness);
+            _rigidbody.velocity = -(direction.normalized * bounciness) * Time.fixedDeltaTime * 50;
+            Debug.Log("HIT ANOTHER PLAYER WITH RIGIDBODY VELOCITY: " + _rigidbody.velocity);
         }
-
     }
 
     private void OnTriggerEnter(Collider collider)
