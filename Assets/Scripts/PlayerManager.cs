@@ -42,6 +42,16 @@ public class PlayerManager : MonoBehaviour
     {
         //SceneManager.sceneLoaded += LoadPMInLevel;
         _photonView = GetComponent<PhotonView>();
+        if (_photonView.Owner == null)
+        {
+            playerNameText.text = "Guest";
+            playerLicenseText.text = "Guest";
+        }
+        else
+        {
+            playerNameText.text = _photonView.Owner.NickName;
+            playerLicenseText.text = _photonView.Owner.NickName;
+        }
         if (_photonView != null)
         {
             if (_photonView.IsMine)
@@ -62,10 +72,18 @@ public class PlayerManager : MonoBehaviour
                 cvc.m_LookAt = transform1;
                 
                 int spawnNumber = playerNumber;
-                if (playerNumber == 0)
+                if (_gm != null)
                 {
-                    spawnNumber = _gm.GetPlayerNumber();
+                    if (playerNumber == 0)
+                    {
+                        spawnNumber = _gm.GetPlayerNumber();
+                    }
                 }
+                else
+                {
+                    Debug.Log("GameManager does not exist!");
+                }
+
                 _spawnLocation = GameObject.Find("SpawnLocation" + spawnNumber).transform;
         
                 playerNameText.text = _photonView.Owner.NickName;
