@@ -182,7 +182,7 @@ public class CarController : MonoBehaviour
     {
         Vector3 newValues = new Vector3(_rigidbody.angularVelocity.x,_rigidbody.angularVelocity.y,_rigidbody.angularVelocity.z);
         newValues.x = Mathf.Clamp(newValues.x, -1, 1);
-        newValues.y = Mathf.Clamp(newValues.y, -1, 1);
+        newValues.y = Mathf.Clamp(newValues.y, -2, 2);
         newValues.z = Mathf.Clamp(newValues.z, -1, 1);
         _rigidbody.angularVelocity = newValues;
     }
@@ -443,7 +443,7 @@ public class CarController : MonoBehaviour
         if (collision.transform.CompareTag("Player"))
         {
             Vector3 direction = collision.contacts[0].point - transform.position;
-            _rigidbody.velocity = -(direction.normalized * bounciness) * Time.fixedDeltaTime * 50;
+            _rigidbody.velocity = -(direction.normalized * bounciness); //Time.fixedDeltaTime * 50;
             Debug.Log("HIT ANOTHER PLAYER WITH RIGIDBODY VELOCITY: " + _rigidbody.velocity);
         }
     }
