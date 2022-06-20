@@ -54,9 +54,9 @@ public class PlayerManager : MonoBehaviour
         }
         if (_photonView != null)
         {
+            DontDestroyOnLoad(this.gameObject);
             if (_photonView.IsMine)
             {
-                DontDestroyOnLoad(this.gameObject);
                 _cc = GetComponent<CarController>();
                 _rb = GetComponent<Rigidbody>();
                 if (!_cc.debug)
@@ -85,9 +85,6 @@ public class PlayerManager : MonoBehaviour
                 }
 
                 _spawnLocation = GameObject.Find("SpawnLocation" + spawnNumber).transform;
-        
-                playerNameText.text = _photonView.Owner.NickName;
-                playerLicenseText.text = _photonView.Owner.NickName;
             }
             else
             {
