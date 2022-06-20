@@ -7,10 +7,11 @@ public class CarEffectManager : MonoBehaviourPunCallbacks, IPunObservable
 {
     private ParticleSystem[] flame;
     private ParticleSystem air;
+    private GameObject backWall;
     private PhotonView pv;
     private bool boosting;
     private bool airblasting;
-    private bool backWall;
+    private bool backWalling;
     private bool hooking;
     
     #region IPunObservable implementation
@@ -21,19 +22,23 @@ public class CarEffectManager : MonoBehaviourPunCallbacks, IPunObservable
             // We own this player: send the others our data
             stream.SendNext(boosting);
             stream.SendNext(airblasting);
-            Debug.Log("Stream Sending");
+            stream.SendNext(backWalling);
+            //Debug.Log("Stream Sending");
         }
         else
         {
             // Network player, receive data
             this.boosting = (bool)stream.ReceiveNext();
             this.airblasting = (bool)stream.ReceiveNext();
+            this.backWalling = (bool)stream.ReceiveNext();
         }
     }
     #endregion
     
     void Start()
     {
+        backWall = transform.Find("BouncyWallShield").gameObject;
+        backWall.SetActive(false);
         flame = transform.Find("BoostEffect").GetComponentsInChildren<ParticleSystem>();
         air = transform.Find("AirBlast").GetComponent<ParticleSystem>();
         pv = GetComponent<PhotonView>();
@@ -45,22 +50,9 @@ public class CarEffectManager : MonoBehaviourPunCallbacks, IPunObservable
         if (pv.IsMine)
         {
             //Debug.Log(boosting +" :Boost");
-            if (flame[0].isPlaying)
-            {
-                boosting = true;
-            }
-            else
-            {
-                boosting = false;
-            }
-            if (air.isPlaying)
-            {
-                airblasting = true;
-            }
-            else
-            {
-                airblasting = false;
-            }
+            boosting = flame[0].isPlaying;
+            airblasting = air.isPlaying;
+            backWalling = backWall.activeSelf;
         }
         else
         {
@@ -85,6 +77,14 @@ public class CarEffectManager : MonoBehaviourPunCallbacks, IPunObservable
             else
             {
                 air.Stop();
+            }
+            if (backWalling)
+            {
+                backWall.SetActive(true);
+            }
+            else
+            {
+                backWall.SetActive(false);
             }
         }
     }
