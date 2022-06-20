@@ -47,7 +47,7 @@ public class PowerupSpawner : MonoBehaviour
         }
         else if (randomChance >= 50 && randomChance < 75)
         {
-            currentPowerup = powerups[2];
+            currentPowerup = powerups[2]; // NOTE: THIS SHOULD BE [2] BUT AIR BLAST IS NOT WORKING
         }
         else if (randomChance >= 75)
         {
