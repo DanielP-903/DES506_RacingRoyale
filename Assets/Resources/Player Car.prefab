@@ -5212,6 +5212,7 @@ GameObject:
   - component: {fileID: 4753270344536567152}
   - component: {fileID: 4753270344536567159}
   - component: {fileID: 924256329762550492}
+  - component: {fileID: 3936345832946547057}
   m_Layer: 7
   m_Name: Player Car
   m_TagString: Player
@@ -5384,6 +5385,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 3894772900694721693}
   - {fileID: 924256329762550492}
+  - {fileID: 3936345832946547057}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -5453,6 +5455,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b901cb8041881874e8fa118d11fe330c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3936345832946547057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1118674505751619608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 1
+  m_TeleportEnabled: 1
+  m_TeleportIfDistanceGreaterThan: 3
 --- !u!1 &1118674506502527236
 GameObject:
   m_ObjectHideFlags: 0

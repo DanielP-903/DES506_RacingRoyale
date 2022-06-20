@@ -92,7 +92,7 @@ public class PlayerManager : MonoBehaviour
                 _cc = GetComponent<CarController>();
                 Destroy(transform.Find("InputSystem").gameObject);
                 Destroy(_cc);
-                Destroy(GetComponent<Rigidbody>());
+                //Destroy(GetComponent<Rigidbody>());
                 Destroy(GetComponent<PlayerPowerups>());
                 Destroy(this);
             }
