@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -46,8 +47,10 @@ public class CarController : MonoBehaviour
     private bool _pushUp = false;
     private bool _drift = false;
     private bool _boost = false;
-    private bool _rollLeft = false;
-    private bool _rollRight = false;
+    private bool _airLeft = false;
+    private bool _airRight = false;
+    private bool _airUp = false;
+    private bool _airDown = false;
     private bool _reset = false;
     private bool _activatePowerup = false;
     private bool _grounded = false;
@@ -182,7 +185,7 @@ public class CarController : MonoBehaviour
     {
         Vector3 newValues = new Vector3(_rigidbody.angularVelocity.x,_rigidbody.angularVelocity.y,_rigidbody.angularVelocity.z);
         newValues.x = Mathf.Clamp(newValues.x, -1, 1);
-        newValues.y = Mathf.Clamp(newValues.y, -1, 1);
+        newValues.y = Mathf.Clamp(newValues.y, -2, 2);
         newValues.z = Mathf.Clamp(newValues.z, -1, 1);
         _rigidbody.angularVelocity = newValues;
     }
@@ -253,12 +256,25 @@ public class CarController : MonoBehaviour
     {
         if (!_grounded)
         {
-            //if (_moveForward) _rigidbody.AddTorque(transform.right * airControlForce, ForceMode.Force);
-            //if (_moveBackward) _rigidbody.AddTorque(-transform.right * airControlForce, ForceMode.Force);
-            if (_moveLeft) _rigidbody.AddTorque(-transform.up/15, ForceMode.VelocityChange);
-            if (_moveRight) _rigidbody.AddTorque(transform.up/15, ForceMode.VelocityChange);
-            if (_rollLeft) _rigidbody.AddTorque(transform.forward/15, ForceMode.VelocityChange);
-            if (_rollRight) _rigidbody.AddTorque(-transform.forward/15, ForceMode.VelocityChange);
+            if (_airDown)   _rigidbody.AddTorque(transform.right*150, ForceMode.Force);
+            if (_airUp)     _rigidbody.AddTorque(-transform.right*150, ForceMode.Force);
+            if (_moveLeft)  _rigidbody.AddTorque(-transform.up*150, ForceMode.Force);
+            if (_moveRight) _rigidbody.AddTorque(transform.up*150, ForceMode.Force);
+            if (_airLeft)   _rigidbody.AddTorque(transform.forward*1500, ForceMode.Force);
+            if (_airRight)  _rigidbody.AddTorque(-transform.forward*1500, ForceMode.Force);
+
+            
+            //TODO: Update the tilting functionality in air to make it more controllable
+            // Quaternion before, after;
+            //
+            // before = transform.rotation;
+            //
+            // if (_airDown)   transform.Rotate(0,0,0);
+            // if (_airUp)     transform.Rotate(0,0,0);
+            // if (_moveLeft)  transform.Rotate(0,0,0);
+            // if (_moveRight) transform.Rotate(0,0,0);
+            // if (_airLeft)   transform.rotation = Quaternion.Slerp(before,quaternion.Euler(before.x + 0, before.y + 0, before.z - Time.fixedDeltaTime), Time.fixedDeltaTime);
+            // if (_airRight)  transform.rotation = Quaternion.Slerp(before,quaternion.Euler(before.x + 0, before.y + 0, before.z + Time.fixedDeltaTime), Time.fixedDeltaTime);
         }
     }
     
@@ -443,7 +459,7 @@ public class CarController : MonoBehaviour
         if (collision.transform.CompareTag("Player"))
         {
             Vector3 direction = collision.contacts[0].point - transform.position;
-            _rigidbody.velocity = -(direction.normalized * bounciness) * Time.fixedDeltaTime * 50;
+            _rigidbody.velocity = -(direction.normalized * bounciness); //Time.fixedDeltaTime * 50;
             Debug.Log("HIT ANOTHER PLAYER WITH RIGIDBODY VELOCITY: " + _rigidbody.velocity);
         }
     }
@@ -529,19 +545,34 @@ public class CarController : MonoBehaviour
         //Debug.Log("Boost detected");
     }
     // Roll Left
-    public void RollLeft(InputAction.CallbackContext context)
+    public void AirLeft(InputAction.CallbackContext context)
     {
         float value = context.ReadValue<float>();
-        _rollLeft = value > 0;
+        _airLeft = value > 0;
         //Debug.Log("Roll Left detected");
     }
     // Roll Right
-    public void RollRight(InputAction.CallbackContext context)
+    public void AirRight(InputAction.CallbackContext context)
     {
         float value = context.ReadValue<float>();
-        _rollRight = value > 0;
+        _airRight = value > 0;
         //Debug.Log("Roll Right detected");
     }
+    // Pitch Up
+    public void AirUp(InputAction.CallbackContext context)
+    {
+        float value = context.ReadValue<float>();
+        _airUp = value > 0;
+        //Debug.Log("Roll Left detected");
+    }
+    // Pitch Down
+    public void AirDown(InputAction.CallbackContext context)
+    {
+        float value = context.ReadValue<float>();
+        _airDown = value > 0;
+        //Debug.Log("Roll Right detected");
+    }
+    
     // Reset
     public void Reset(InputAction.CallbackContext context)
     {

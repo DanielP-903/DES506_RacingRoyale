@@ -62,22 +62,6 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Roll Left",
-                    "type": "Button",
-                    "id": "40ff5c89-f362-4e38-b733-d79595cf6023",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
-                    "name": "Roll Right",
-                    "type": "Button",
-                    "id": "e4b2b467-0292-459c-b402-4f6d18dea59d",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
                     "name": "Reset",
                     "type": "Button",
                     "id": "42d6e48b-b35b-40e7-a7bd-45e7cfe266e8",
@@ -90,6 +74,38 @@
                     "type": "Button",
                     "id": "cafcc3cc-faaf-4884-8532-829fa3b1b1d2",
                     "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Roll Left",
+                    "type": "Value",
+                    "id": "40ff5c89-f362-4e38-b733-d79595cf6023",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Roll Right",
+                    "type": "Value",
+                    "id": "e4b2b467-0292-459c-b402-4f6d18dea59d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Pitch Up",
+                    "type": "Value",
+                    "id": "57fa5966-762a-4a69-9931-e1248a0a2627",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Pitch Down",
+                    "type": "Value",
+                    "id": "c35e890b-28b0-4147-b08f-75ca57c06511",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
                 }
@@ -174,28 +190,6 @@
                 },
                 {
                     "name": "",
-                    "id": "0a761007-0804-4883-8564-b38a90ec1646",
-                    "path": "<Keyboard>/q",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Roll Left",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "6567bca8-76bb-4c1e-af21-73f214a2f6a1",
-                    "path": "<Keyboard>/e",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Roll Right",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "36063364-f8a9-4d2c-9508-38a7761f55e9",
                     "path": "<Keyboard>/r",
                     "interactions": "",
@@ -213,6 +207,50 @@
                     "processors": "",
                     "groups": "",
                     "action": "Activate Powerup",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6567bca8-76bb-4c1e-af21-73f214a2f6a1",
+                    "path": "<Keyboard>/rightArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Roll Right",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0a761007-0804-4883-8564-b38a90ec1646",
+                    "path": "<Keyboard>/leftArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Roll Left",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c541c581-274d-4046-82d3-c3aecad442a8",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pitch Up",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "56b669e0-80e1-4308-bb9d-9e79b9a38078",
+                    "path": "<Keyboard>/downArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pitch Down",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

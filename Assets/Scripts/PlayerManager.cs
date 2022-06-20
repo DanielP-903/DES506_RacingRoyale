@@ -54,9 +54,9 @@ public class PlayerManager : MonoBehaviour
         }
         if (_photonView != null)
         {
+            DontDestroyOnLoad(this.gameObject);
             if (_photonView.IsMine)
             {
-                DontDestroyOnLoad(this.gameObject);
                 _cc = GetComponent<CarController>();
                 _rb = GetComponent<Rigidbody>();
                 if (!_cc.debug)
@@ -65,6 +65,10 @@ public class PlayerManager : MonoBehaviour
                 }
 
                 mainCam = Camera.main.gameObject;
+                AudioSource source = mainCam.GetComponent<AudioSource>();
+                source.loop = true;
+                source.clip = Resources.Load<AudioClip>("Audio/Music/MenuMusic1");
+                source.Play();
                 CinemachineVirtualCamera cvc = mainCam.GetComponent<CinemachineVirtualCamera>();
                 DontDestroyOnLoad(mainCam);
                 var transform1 = transform;
@@ -85,16 +89,14 @@ public class PlayerManager : MonoBehaviour
                 }
 
                 _spawnLocation = GameObject.Find("SpawnLocation" + spawnNumber).transform;
-        
-                playerNameText.text = _photonView.Owner.NickName;
-                playerLicenseText.text = _photonView.Owner.NickName;
             }
             else
             {
                 //parts = GetComponent<CarController>().boostEffects;
                 _cc = GetComponent<CarController>();
+                Destroy(transform.Find("InputSystem").gameObject);
                 Destroy(_cc);
-                Destroy(GetComponent<Rigidbody>());
+                //Destroy(GetComponent<Rigidbody>());
                 Destroy(GetComponent<PlayerPowerups>());
                 Destroy(this);
             }
@@ -119,7 +121,7 @@ public class PlayerManager : MonoBehaviour
 
     void OnLevelWasLoaded()
     {
-        Debug.Log("PlayerManger Loading Level");
+        //Debug.Log("PlayerManger Loading Level");
         if (_photonView != null)
         {
             if ((SceneManager.GetActiveScene().name == "Launcher" || SceneManager.GetActiveScene().name == "EndStage"))
@@ -128,19 +130,30 @@ public class PlayerManager : MonoBehaviour
                 {
                     Destroy(mainCam.gameObject);
                 }
-                
+                AudioSource source = Camera.main.GetComponent<AudioSource>();
+                source.loop = true;
+                source.clip = Resources.Load<AudioClip>("Audio/Music/MenuMusic1");
+                source.Play();
                 PhotonNetwork.Destroy(this.gameObject);
             }
             else
             {
                 if (SceneManager.GetActiveScene().name == "WaitingArea")
                 {
-                    Debug.Log("In waiting area!");    
+                    //Debug.Log("In waiting area!");    
+                    AudioSource source = Camera.main.GetComponent<AudioSource>();
+                    source.loop = true;
+                    source.clip = Resources.Load<AudioClip>("Audio/Music/MenuMusic1");
+                    source.Play();
                 }
                 
                 if (SceneManager.GetActiveScene().name == "Stage1")
                 {
                     playerNumber = _gm.setPlayerNumber();
+                    AudioSource source = Camera.main.GetComponent<AudioSource>();
+                    source.loop = true;
+                    source.clip = Resources.Load<AudioClip>("Audio/Music/TrackMusic1");
+                    source.Play();
                 }
                 else
                 {
@@ -149,14 +162,14 @@ public class PlayerManager : MonoBehaviour
                 completedStage = false;
                 _spawnLocation = GameObject.Find("SpawnLocation" + playerNumber).transform;
                 GoToSpawn();
-                Debug.Log(_spawnLocation + "- Player: " + playerNumber + " Name: " +_photonView.Owner.NickName);
+                //Debug.Log(_spawnLocation + "- Player: " + playerNumber + " Name: " +_photonView.Owner.NickName);
 
             }
         }
         else
         {
             playerNumber = _gm.GetPlayerNumber();
-            Debug.Log("ERROR: NO PHOTON VIEW DETECTED! On player " + playerNumber);
+            //Debug.Log("ERROR: NO PHOTON VIEW DETECTED! On player " + playerNumber);
         }
     }
     #endregion
@@ -193,7 +206,7 @@ public class PlayerManager : MonoBehaviour
     {
         if (!completedStage)
         {
-            Debug.Log("Stage Completed Player: " + GetPlayerNumber());
+            //Debug.Log("Stage Completed Player: " + GetPlayerNumber());
             completedStage = true;
             GameManager.TryGetFinishedPlayers(out int num, _gm.GetStageNum());
             num = num + 1;
@@ -203,11 +216,11 @@ public class PlayerManager : MonoBehaviour
                 elimPosition = num;
                 if (elimPosition < 5)
                 {
-                    Debug.Log("Finished at:" +elimPosition);
+                    //Debug.Log("Finished at:" +elimPosition);
                     GameManager.SetTop3Players(_photonView.Owner.NickName, elimPosition);
                     string t3;
                     GameManager.TryGetTop3Players(out t3, elimPosition);
-                    Debug.Log(t3);
+                    //Debug.Log(t3);
                 }
             }
         }
@@ -217,7 +230,7 @@ public class PlayerManager : MonoBehaviour
     {
         if (!completedStage && !eliminated)
         {
-            Debug.Log("Player: "+_photonView.Owner.NickName + " Eliminated.");
+            //Debug.Log("Player: "+_photonView.Owner.NickName + " Eliminated.");
          
             ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
             {
@@ -231,17 +244,17 @@ public class PlayerManager : MonoBehaviour
             
             if (elimPosition < 5)
             {
-                Debug.Log("Finished at:" +elimPosition);
+                //Debug.Log("Finished at:" +elimPosition);
                 GameManager.SetTop3Players(_photonView.Owner.NickName, elimPosition);
                 string t3;
                 GameManager.TryGetTop3Players(out t3, elimPosition);
-                Debug.Log(t3);
+                //Debug.Log(t3);
             }
             
             num = num + 1;
             GameManager.SetElimPlayers(num);
             _gm.EliminatePlayer(elimPosition);
-            Debug.Log("Player: "+_photonView.Owner.NickName + " Eliminated with Position "+elimPosition + "/"+_gm.GetTotalPlayers());
+            //Debug.Log("Player: "+_photonView.Owner.NickName + " Eliminated with Position "+elimPosition + "/"+_gm.GetTotalPlayers());
             PhotonNetwork.Destroy(this.gameObject);
         }
     }

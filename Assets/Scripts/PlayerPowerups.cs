@@ -8,8 +8,6 @@ using UnityEngine.UI;
 
 public class PlayerPowerups : MonoBehaviour
 {
-    [Header("Powerup Properties")] 
-    
     [Header("Super Boost")] 
     public float superBoostForce = 50.0f;
     
@@ -61,7 +59,7 @@ public class PlayerPowerups : MonoBehaviour
         _powerupIconMask = powerupIcon.transform.GetChild(0).GetComponent<Image>();
         grappleLineObject = transform.GetChild(2).gameObject;
         _grappleLine = grappleLineObject.GetComponent<LineRenderer>();
-
+        blastObject.SetActive(false);
     }
 
     void OnLevelWasLoaded()
@@ -74,6 +72,8 @@ public class PlayerPowerups : MonoBehaviour
         _powerupIconMask = powerupIcon.transform.GetChild(0).GetComponent<Image>();
         grappleLineObject = transform.GetChild(2).gameObject;
         _grappleLine = grappleLineObject.GetComponent<LineRenderer>();
+        blastObject.SetActive(false);
+        Debug.Log("Blast object is active? " + blastObject.activeInHierarchy);
     }
 
     void FixedUpdate()
@@ -311,7 +311,7 @@ public class PlayerPowerups : MonoBehaviour
              _powerupIconMask.sprite = currentPowerup.powerupUIImage;
              powerupIcon.gameObject.SetActive(true);
          }
-        
+         
          if (collider.transform.CompareTag("WallShield"))
          {
              if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
@@ -324,11 +324,7 @@ public class PlayerPowerups : MonoBehaviour
              }        
          }
          
-     }
-
-     private void OnTriggerStay(Collider collider)
-     {
-         if (collider.transform.CompareTag("Blast") && collider.transform.parent != transform)
+         if (collider.transform.CompareTag("Blast") && collider.transform.parent.gameObject != transform.gameObject)
          {
              Vector3 direction = collider.transform.position - transform.position;
              _rigidbody.velocity = -(direction.normalized * airBlastForce);

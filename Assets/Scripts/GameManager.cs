@@ -121,7 +121,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             }
         }
         _playerNumber = counter;
-        Debug.Log("CurrentPlayerNumberAfterSet: "+_playerNumber);
+        //Debug.Log("CurrentPlayerNumberAfterSet: "+_playerNumber);
         return counter;
     }
     
@@ -299,8 +299,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void Start()
     {
         //Debug.Log("Running!");
-        
-        
+
         SceneManager.sceneLoaded += LoadPlayerInLevel;
         DontDestroyOnLoad(this.gameObject);
         _timer = GameObject.Find("Timer").GetComponent<TextMeshProUGUI>();
