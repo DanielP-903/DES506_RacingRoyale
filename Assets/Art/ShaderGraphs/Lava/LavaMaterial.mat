@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7754593302884539864
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 4
 --- !u!21 &2100000
 Material:
   serializedVersion: 6
@@ -7,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: DissolveCatOrange
-  m_Shader: {fileID: -6465566751694194690, guid: 088bc3b0f3d86c1419175c30ab4876a6, type: 3}
+  m_Name: LavaMaterial
+  m_Shader: {fileID: -6465566751694194690, guid: 62c7118880c2d654dbbc9e67f0290693, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -19,18 +32,6 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - Texture2D_38abff57a1354ea29ff925d53c9e6016:
-        m_Texture: {fileID: 2800000, guid: 773ba13aafab6ab439ec82fa5ed2e4ee, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - Texture2D_53597752076e40bd8487e419ccba6e0f:
-        m_Texture: {fileID: 2800000, guid: 76505b4baefbc134e81a54424b03c7e5, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - Texture2D_c3c3afe119524dc487f92d156fe70dc4:
-        m_Texture: {fileID: 2800000, guid: e1f7fa8dc31934045b58b4faba0d277e, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -88,9 +89,13 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_054e8e85596f4176b8cebfcf1608376f: -1.29
-    - Vector1_95fa03ba16e14356b037c047c0250518: 0.1
-    - Vector1_e31caad1b18745b8889c71c061672d96: 55
+    - Vector1_1b15b08bae8b4e0083cab1458fa3ab7b: 5.41
+    - Vector1_3ca536125a23466a92ee8e87d494573c: 0.1
+    - Vector1_5243a7d0097e4e5a993c5a2eed5d174e: 0.18
+    - Vector1_60f087a54c75451ca5b2a8ec532b7d9f: 3.89
+    - Vector1_8b142ca858204860afc16d3ee5a20781: 0.2
+    - Vector1_bf7875759f93496f802fb7e17da2a897: 3.86
+    - Vector1_c1e2842fc8974841bfaa6bd154dc8eb4: 0.06
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
@@ -118,22 +123,13 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - Color_c0771cea52db4b3583c7482301d3be8d: {r: 0.5481434, g: 0, b: 1, a: 1}
+    - Color_00f8614e2e3843e4a96efc7fa4949375: {r: 0.8301887, g: 0.48577636, b: 0, a: 1}
+    - Color_e196ba5fb29945169625854c014905ba: {r: 1, g: 0.43138316, b: 0, a: 1}
+    - Color_ebbe6a51c7af47e4b4d54565f7120af2: {r: 0.972549, g: 0, b: 0.0380797, a: 0.972549}
+    - Vector2_822132c6e9bb48dfabcd0f1daeab7d0a: {r: 0.15, g: 0.1, b: 0, a: 0}
+    - Vector2_ca787802fd3442449cde632ab42b8418: {r: 0.27, g: 0.24, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
---- !u!114 &7463609658879722273
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 4
