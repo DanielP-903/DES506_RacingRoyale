@@ -90,6 +90,7 @@ public class PlayerManager : MonoBehaviour
             {
                 //parts = GetComponent<CarController>().boostEffects;
                 _cc = GetComponent<CarController>();
+                Destroy(transform.Find("InputSystem"));
                 Destroy(_cc);
                 Destroy(GetComponent<Rigidbody>());
                 Destroy(GetComponent<PlayerPowerups>());
