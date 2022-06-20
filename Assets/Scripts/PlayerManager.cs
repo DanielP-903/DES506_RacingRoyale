@@ -65,6 +65,10 @@ public class PlayerManager : MonoBehaviour
                 }
 
                 mainCam = Camera.main.gameObject;
+                AudioSource source = mainCam.GetComponent<AudioSource>();
+                source.loop = true;
+                source.clip = Resources.Load<AudioClip>("Audio/Music/MenuMusic1");
+                source.Play();
                 CinemachineVirtualCamera cvc = mainCam.GetComponent<CinemachineVirtualCamera>();
                 DontDestroyOnLoad(mainCam);
                 var transform1 = transform;
@@ -126,7 +130,10 @@ public class PlayerManager : MonoBehaviour
                 {
                     Destroy(mainCam.gameObject);
                 }
-                
+                AudioSource source = Camera.main.GetComponent<AudioSource>();
+                source.loop = true;
+                source.clip = Resources.Load<AudioClip>("Audio/Music/MenuMusic1");
+                source.Play();
                 PhotonNetwork.Destroy(this.gameObject);
             }
             else
@@ -134,11 +141,19 @@ public class PlayerManager : MonoBehaviour
                 if (SceneManager.GetActiveScene().name == "WaitingArea")
                 {
                     //Debug.Log("In waiting area!");    
+                    AudioSource source = Camera.main.GetComponent<AudioSource>();
+                    source.loop = true;
+                    source.clip = Resources.Load<AudioClip>("Audio/Music/MenuMusic1");
+                    source.Play();
                 }
                 
                 if (SceneManager.GetActiveScene().name == "Stage1")
                 {
                     playerNumber = _gm.setPlayerNumber();
+                    AudioSource source = Camera.main.GetComponent<AudioSource>();
+                    source.loop = true;
+                    source.clip = Resources.Load<AudioClip>("Audio/Music/TrackMusic1");
+                    source.Play();
                 }
                 else
                 {
