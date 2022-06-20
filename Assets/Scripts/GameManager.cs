@@ -121,7 +121,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             }
         }
         _playerNumber = counter;
-        Debug.Log("CurrentPlayerNumberAfterSet: "+_playerNumber);
+        //Debug.Log("CurrentPlayerNumberAfterSet: "+_playerNumber);
         return counter;
     }
     
