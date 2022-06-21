@@ -56,6 +56,10 @@ public class CarController : MonoBehaviour
     private bool _reset = false;
     private bool _activatePowerup = false;
     private bool _grounded = false;
+    private bool _onOil = false;
+    private bool _onOilPreviousFrame = false;
+    
+    private Vector3 _savedOilVelocity;
 
     private float _currentSteeringMulti;
 
@@ -272,6 +276,11 @@ public class CarController : MonoBehaviour
                 }
             }
         }
+
+        if (_onOil && !_boost)
+        {
+            _rigidbody.velocity = Vector3.Lerp(_rigidbody.velocity, _savedOilVelocity, Time.deltaTime* 10);
+        }
     }
 
     private void PhysUpdateAirControl()
@@ -449,7 +458,16 @@ public class CarController : MonoBehaviour
         
         _HitDetect = Physics.BoxCast(transform.position + transform.up, transform.localScale, -transform.up, out _Hit, transform.rotation, 1);
         _grounded = _HitDetect;
+        
+        if (_Hit.transform != null)
+            _onOil = _Hit.transform.CompareTag("OilSlip");
 
+        if (_onOil != _onOilPreviousFrame)
+        {
+            _savedOilVelocity = _rigidbody.velocity;
+        }
+        
+        
         // var leftCheck = Physics.Raycast(axles[0].leftWheel.transform.position + axles[0].leftWheel.transform.up, -axles[0].leftWheel.transform.up, out _leftHit, 1.0f);
         // var rightCheck = Physics.Raycast(axles[0].rightWheel.transform.position + axles[0].rightWheel.transform.up, -axles[0].rightWheel.transform.up, out _rightHit, 1.0f);
         // _groundedL = leftCheck;
@@ -461,6 +479,8 @@ public class CarController : MonoBehaviour
             _resetDelay = resetCooldown;
             _playerManager.GoToSpawn();
         }
+
+        _onOilPreviousFrame = _onOil;
     }
 
     void OnDrawGizmos()

@@ -85,10 +85,6 @@ public class CameraShake : MonoBehaviour
             }
         }
         
-        //Debug.Log("There is a QUICK FIX at line 65 of PlayerHUDController");
-        //_playerRef = listOfPlayers[0];
-        
-        //_playerRef = GameObject.FindGameObjectWithTag("Player");
         _rb = _target.GetComponent<Rigidbody>();
         _cc = _target.GetComponent<CarController>();
     }
