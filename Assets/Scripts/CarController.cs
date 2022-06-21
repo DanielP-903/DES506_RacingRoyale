@@ -196,20 +196,24 @@ public class CarController : MonoBehaviour
     {
         //TODO: Thought: Restrict the angular velocities IN AIR to prevent constant drifting?
         Vector3 newValues = new Vector3(_rigidbody.angularVelocity.x,_rigidbody.angularVelocity.y,_rigidbody.angularVelocity.z);
-
-        if (!_grounded) // In the air
-        {
-            newValues.x = Mathf.Clamp(newValues.x, -1, 1);
-            newValues.y = Mathf.Clamp(newValues.y, -3, 3);
-            newValues.z = Mathf.Clamp(newValues.z, -1, 1);
-        }
-        else // On the ground
-        {
-            newValues.x = Mathf.Clamp(newValues.x, -1, 1);
-            newValues.y = Mathf.Clamp(newValues.y, -3, 3);
-            newValues.z = Mathf.Clamp(newValues.z, -1, 1);
-
-        }
+        newValues.x = Mathf.Clamp(newValues.x, -1, 1);
+        newValues.y = Mathf.Clamp(newValues.y, -3, 3);
+        newValues.z = Mathf.Clamp(newValues.z, -1, 1);
+        // if (!_grounded) // In the air
+        // {
+        //     newValues.x = Mathf.Clamp(newValues.x, -0.3f, 0.3f);
+        //     newValues.y = Mathf.Clamp(newValues.y, -0.5f, 0.5f);
+        //     newValues.z = Mathf.Clamp(newValues.z, -0.3f, 0.3f);
+        //
+        //  
+        // }
+        // else // On the ground
+        // {
+        //     newValues.x = Mathf.Clamp(newValues.x, -1, 1);
+        //     newValues.y = Mathf.Clamp(newValues.y, -3, 3);
+        //     newValues.z = Mathf.Clamp(newValues.z, -1, 1);
+        //
+        // }
         _rigidbody.angularVelocity = newValues;
     }
 
@@ -286,7 +290,15 @@ public class CarController : MonoBehaviour
             if (_moveRight) _rigidbody.AddTorque(transform.up/15, ForceMode.VelocityChange);
             if (_airLeft)   _rigidbody.AddTorque(transform.forward/15, ForceMode.VelocityChange);
             if (_airRight)  _rigidbody.AddTorque(-transform.forward/15, ForceMode.VelocityChange);
-
+            
+            if (!_airLeft && !_airRight)
+            {
+                _rigidbody.angularVelocity= new Vector3(_rigidbody.angularVelocity.x,_rigidbody.angularVelocity.y,0);
+            }
+            if (!_airUp && !_airDown)
+            {
+                _rigidbody.angularVelocity = new Vector3(0,_rigidbody.angularVelocity.y,_rigidbody.angularVelocity.z);
+            }
             
             //TODO: Update the tilting functionality in air to make it more controllable
             // Quaternion before, after;
