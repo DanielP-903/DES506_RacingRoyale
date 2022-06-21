@@ -14,6 +14,8 @@ public class PlayerManager : MonoBehaviour
     #region Private Variables
     private PhotonView _photonView;
     private CarController _cc;
+    private MeshRenderer _mRend;
+    private MeshFilter _mFilt;
     private Rigidbody _rb;
     private PlayerManager target;
     private GameManager _gm;
@@ -42,6 +44,17 @@ public class PlayerManager : MonoBehaviour
     {
         //SceneManager.sceneLoaded += LoadPMInLevel;
         _photonView = GetComponent<PhotonView>();
+        _mRend = transform.Find("CarMesh").GetComponent<MeshRenderer>();
+        _mFilt = transform.Find("CarMesh").GetComponent<MeshFilter>();
+        _photonView.Owner.CustomProperties.Add("Skin", PlayerPrefs.GetInt("Skin"));
+        int skinNum = 0;
+        object skinNumFromProps;
+        if (_photonView.Owner.CustomProperties.TryGetValue("Skin", out skinNumFromProps))
+        {
+            skinNum = (int)skinNumFromProps;
+        }
+        _mRend.material = GameObject.Find("DataManager").GetComponent<DataManager>().GetMats()[skinNum];
+        _mFilt.mesh = GameObject.Find("DataManager").GetComponent<DataManager>().GetMesh()[skinNum];
         if (_photonView.Owner == null)
         {
             playerNameText.text = "Guest";
@@ -128,12 +141,10 @@ public class PlayerManager : MonoBehaviour
             {
                 if (mainCam != null)
                 {
+                    Debug.Log("MainCamDestroyed");
                     Destroy(mainCam.gameObject);
                 }
-                AudioSource source = Camera.main.GetComponent<AudioSource>();
-                source.loop = true;
-                source.clip = Resources.Load<AudioClip>("Audio/Music/MenuMusic1");
-                source.Play();
+                Debug.Log("PlayerManagerDestroyed");
                 PhotonNetwork.Destroy(this.gameObject);
             }
             else
