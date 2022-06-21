@@ -43,7 +43,7 @@ public class PlayerHUDController : MonoBehaviour
         if (hasFoundPlayer)
         {
             currentSpeed = (Mathf.Round(_rigidbodyRef.velocity.magnitude * 2.2369362912f));
-            speedText.text = currentSpeed + " MPH";
+            speedText.text = currentSpeed.ToString();
         }
         
     }

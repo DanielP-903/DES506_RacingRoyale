@@ -58,6 +58,7 @@ public class CarController : MonoBehaviour
     private bool _grounded = false;
     private bool _onOil = false;
     private bool _onOilPreviousFrame = false;
+    private bool _boostPlaying = false;
     
     private Vector3 _savedOilVelocity;
 
@@ -277,9 +278,9 @@ public class CarController : MonoBehaviour
             }
         }
 
-        if (_onOil && !_boost)
+        if (_onOil && !_boostPlaying && _rigidbody.velocity.magnitude * 2.2369362912f > 30)
         {
-            _rigidbody.velocity = Vector3.Lerp(_rigidbody.velocity, _savedOilVelocity, Time.deltaTime* 10);
+            _rigidbody.velocity = Vector3.Lerp(_rigidbody.velocity, new Vector3(_savedOilVelocity.x, _rigidbody.velocity.y, _savedOilVelocity.z), Time.deltaTime* 10);
         }
     }
 
@@ -422,7 +423,11 @@ public class CarController : MonoBehaviour
             effect.Play();
         }
 
+        _boostPlaying = true;
+        
         yield return new WaitForSeconds(1);
+        
+        _boostPlaying = false;
         
         foreach (var effect in boostEffects)
         {
@@ -464,7 +469,12 @@ public class CarController : MonoBehaviour
 
         if (_onOil != _onOilPreviousFrame)
         {
-            _savedOilVelocity = _rigidbody.velocity;
+            _savedOilVelocity = new Vector3(_rigidbody.velocity.x, 0, _rigidbody.velocity.z);
+            
+            if (_savedOilVelocity.magnitude * 2.2369362912f < 30)
+            {
+                _savedOilVelocity = new Vector3(30 / 2.2369362912f , 0, 30 / 2.2369362912f );
+            }
         }
         
         
