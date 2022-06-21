@@ -157,6 +157,8 @@ public class CarController : MonoBehaviour
         {
             Debug.Log("Error: no CheckpointSystem object in scene");
         }
+        //_mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        //_cameraShake = _mainCam.GetComponent<CameraShake>();
     }
 
     /*private void LoadCCInLevel(Scene scene, LoadSceneMode loadSceneMode)
@@ -187,11 +189,10 @@ public class CarController : MonoBehaviour
 
     private void PhysRestrictVelocities()
     {
-        
         //TODO: Thought: Restrict the angular velocities IN AIR to prevent constant drifting?
         Vector3 newValues = new Vector3(_rigidbody.angularVelocity.x,_rigidbody.angularVelocity.y,_rigidbody.angularVelocity.z);
         newValues.x = Mathf.Clamp(newValues.x, -1, 1);
-        newValues.y = Mathf.Clamp(newValues.y, -2, 2);
+        newValues.y = Mathf.Clamp(newValues.y, -3, 3);
         newValues.z = Mathf.Clamp(newValues.z, -1, 1);
         _rigidbody.angularVelocity = newValues;
     }
@@ -203,7 +204,7 @@ public class CarController : MonoBehaviour
         // BOOST FUNCTIONALITY
         if (_boost && _boostDelay <= 0)
         {
-            _cameraShake.ShakeImmediate(3, 1);
+            //_cameraShake.ShakeImmediate(3, 1);
             StartCoroutine(ActivateBoostEffect());
             _boostDelay = boostCooldown;
             if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
