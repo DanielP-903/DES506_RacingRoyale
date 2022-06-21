@@ -20,8 +20,10 @@ public class CarController : MonoBehaviour
     public float motorForce = 0;
     public float brakeTorque = 1000;
     public float maxSteeringAngle = 0;
+    public float terminalVelocity = 120;
     public List<Axle> axles;
-
+    
+    
     [Header("Forces")] public float pushForceAmount = 5.0f;
     public float accelerationForce = 5.0f;
     public Vector3 pushForce = Vector3.up;
@@ -185,36 +187,28 @@ public class CarController : MonoBehaviour
 
     public void FixedUpdate()
     {
-        PhysRestrictVelocities();
         PhysUpdateDriving();
         PhysUpdateForces();
         PhysUpdateAirControl();
         PhysUpdateAcceleration();
+        PhysRestrictVelocities();
     }
 
     private void PhysRestrictVelocities()
     {
-        //TODO: Thought: Restrict the angular velocities IN AIR to prevent constant drifting?
         Vector3 newValues = new Vector3(_rigidbody.angularVelocity.x,_rigidbody.angularVelocity.y,_rigidbody.angularVelocity.z);
         newValues.x = Mathf.Clamp(newValues.x, -1, 1);
         newValues.y = Mathf.Clamp(newValues.y, -3, 3);
         newValues.z = Mathf.Clamp(newValues.z, -1, 1);
-        // if (!_grounded) // In the air
-        // {
-        //     newValues.x = Mathf.Clamp(newValues.x, -0.3f, 0.3f);
-        //     newValues.y = Mathf.Clamp(newValues.y, -0.5f, 0.5f);
-        //     newValues.z = Mathf.Clamp(newValues.z, -0.3f, 0.3f);
-        //
-        //  
-        // }
-        // else // On the ground
-        // {
-        //     newValues.x = Mathf.Clamp(newValues.x, -1, 1);
-        //     newValues.y = Mathf.Clamp(newValues.y, -3, 3);
-        //     newValues.z = Mathf.Clamp(newValues.z, -1, 1);
-        //
-        // }
         _rigidbody.angularVelocity = newValues;
+        
+         Vector3 newLinearValues = _rigidbody.velocity = new Vector3(_rigidbody.velocity.x,_rigidbody.velocity.y,_rigidbody.velocity.z);
+         newLinearValues.x = Mathf.Clamp(newLinearValues.x, -terminalVelocity / 2.2369362912f, terminalVelocity/ 2.2369362912f);
+         newLinearValues.y = Mathf.Clamp(newLinearValues.y, -terminalVelocity / 2.2369362912f, terminalVelocity/ 2.2369362912f);
+         newLinearValues.z = Mathf.Clamp(newLinearValues.z, -terminalVelocity / 2.2369362912f, terminalVelocity/ 2.2369362912f);
+        _rigidbody.velocity = newLinearValues;
+        
+        //float terminalSpeed = (Mathf.Round(_rigidbody.velocity.magnitude ));
     }
 
     private void PhysUpdateAcceleration()

@@ -44,9 +44,13 @@ public class CameraShake : MonoBehaviour
         {
             _shakeTimer = _shakeTimer <= 0 ? 0 : _shakeTimer - Time.fixedDeltaTime;
 
-            if (_cc.GetGrounded())
+            if (_cc.GetGrounded() && (_rb.velocity.magnitude * 2.2369362912f) > 60)
             {
-                _noiseSettings.m_AmplitudeGain = _rb.velocity.magnitude / 100;
+                _noiseSettings.m_AmplitudeGain = (_rb.velocity.magnitude*2) / 100;
+            }
+            else
+            {
+                _noiseSettings.m_AmplitudeGain = 0;
             }
 
             _noiseSettings.m_AmplitudeGain = Mathf.Clamp(_noiseSettings.m_AmplitudeGain, 0, 1);

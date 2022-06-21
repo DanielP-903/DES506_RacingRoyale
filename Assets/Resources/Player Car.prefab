@@ -5285,6 +5285,7 @@ MonoBehaviour:
   motorForce: 2500
   brakeTorque: 4000
   maxSteeringAngle: 30
+  terminalVelocity: 120
   axles:
   - leftWheel: {fileID: 4938869738104327283}
     rightWheel: {fileID: 1118674505370223458}
@@ -5318,7 +5319,7 @@ MonoBehaviour:
   - {fileID: 3948226075170510160}
   - {fileID: 8802323346062192948}
   - {fileID: 6235770666139569348}
-  debug: 0
+  debug: 1
 --- !u!95 &1118674505751619605
 Animator:
   serializedVersion: 3
@@ -5387,7 +5388,7 @@ MonoBehaviour:
   - {fileID: 3894772900694721693}
   - {fileID: 924256329762550492}
   - {fileID: 3936345832946547057}
-  sceneViewId: 0
+  sceneViewId: 1
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &3894772900694721693
