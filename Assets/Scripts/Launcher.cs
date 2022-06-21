@@ -123,6 +123,10 @@ using Photon.Realtime;
         {
             progressLabel.SetActive(false);
             controlPanel.SetActive(true);
+
+            Destroy(GameObject.Find("PlayerCamera"));
+            Destroy(GameObject.Find("GameManager"));
+            
             AudioSource source = Camera.main.GetComponent<AudioSource>();
             source.loop = true;
             source.clip = Resources.Load<AudioClip>("Audio/Music/MenuMusic1");

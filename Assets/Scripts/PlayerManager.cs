@@ -128,12 +128,10 @@ public class PlayerManager : MonoBehaviour
             {
                 if (mainCam != null)
                 {
+                    Debug.Log("MainCamDestroyed");
                     Destroy(mainCam.gameObject);
                 }
-                AudioSource source = Camera.main.GetComponent<AudioSource>();
-                source.loop = true;
-                source.clip = Resources.Load<AudioClip>("Audio/Music/MenuMusic1");
-                source.Play();
+                Debug.Log("PlayerManagerDestroyed");
                 PhotonNetwork.Destroy(this.gameObject);
             }
             else

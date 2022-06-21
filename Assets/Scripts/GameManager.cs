@@ -394,6 +394,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         int playersCompleted;
         switch (SceneManager.GetActiveScene().name)
         {
+            case "Launcher":
+                Destroy(this.gameObject);
+                break;
             case "WaitingArea":
                 CountdownTimer.TryGetStartTime(out var hit);
                 if (PhotonNetwork.CurrentRoom.IsOpen &&
