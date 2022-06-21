@@ -20,8 +20,10 @@ public class CarController : MonoBehaviour
     public float motorForce = 0;
     public float brakeTorque = 1000;
     public float maxSteeringAngle = 0;
+    public float terminalVelocity = 120;
     public List<Axle> axles;
-
+    
+    
     [Header("Forces")] public float pushForceAmount = 5.0f;
     public float accelerationForce = 5.0f;
     public Vector3 pushForce = Vector3.up;
@@ -54,6 +56,10 @@ public class CarController : MonoBehaviour
     private bool _reset = false;
     private bool _activatePowerup = false;
     private bool _grounded = false;
+    private bool _onOil = false;
+    private bool _onOilPreviousFrame = false;
+    
+    private Vector3 _savedOilVelocity;
 
     private float _currentSteeringMulti;
 
@@ -185,32 +191,28 @@ public class CarController : MonoBehaviour
 
     public void FixedUpdate()
     {
-        PhysRestrictVelocities();
         PhysUpdateDriving();
         PhysUpdateForces();
         PhysUpdateAirControl();
         PhysUpdateAcceleration();
+        PhysRestrictVelocities();
     }
 
     private void PhysRestrictVelocities()
     {
-        //TODO: Thought: Restrict the angular velocities IN AIR to prevent constant drifting?
         Vector3 newValues = new Vector3(_rigidbody.angularVelocity.x,_rigidbody.angularVelocity.y,_rigidbody.angularVelocity.z);
-
-        if (!_grounded) // In the air
-        {
-            newValues.x = Mathf.Clamp(newValues.x, -1, 1);
-            newValues.y = Mathf.Clamp(newValues.y, -3, 3);
-            newValues.z = Mathf.Clamp(newValues.z, -1, 1);
-        }
-        else // On the ground
-        {
-            newValues.x = Mathf.Clamp(newValues.x, -1, 1);
-            newValues.y = Mathf.Clamp(newValues.y, -3, 3);
-            newValues.z = Mathf.Clamp(newValues.z, -1, 1);
-
-        }
+        newValues.x = Mathf.Clamp(newValues.x, -1, 1);
+        newValues.y = Mathf.Clamp(newValues.y, -3, 3);
+        newValues.z = Mathf.Clamp(newValues.z, -1, 1);
         _rigidbody.angularVelocity = newValues;
+        
+         Vector3 newLinearValues = _rigidbody.velocity = new Vector3(_rigidbody.velocity.x,_rigidbody.velocity.y,_rigidbody.velocity.z);
+         newLinearValues.x = Mathf.Clamp(newLinearValues.x, -terminalVelocity / 2.2369362912f, terminalVelocity/ 2.2369362912f);
+         newLinearValues.y = Mathf.Clamp(newLinearValues.y, -terminalVelocity / 2.2369362912f, terminalVelocity/ 2.2369362912f);
+         newLinearValues.z = Mathf.Clamp(newLinearValues.z, -terminalVelocity / 2.2369362912f, terminalVelocity/ 2.2369362912f);
+        _rigidbody.velocity = newLinearValues;
+        
+        //float terminalSpeed = (Mathf.Round(_rigidbody.velocity.magnitude ));
     }
 
     private void PhysUpdateAcceleration()
@@ -274,6 +276,11 @@ public class CarController : MonoBehaviour
                 }
             }
         }
+
+        if (_onOil && !_boost)
+        {
+            _rigidbody.velocity = Vector3.Lerp(_rigidbody.velocity, _savedOilVelocity, Time.deltaTime* 10);
+        }
     }
 
     private void PhysUpdateAirControl()
@@ -286,7 +293,15 @@ public class CarController : MonoBehaviour
             if (_moveRight) _rigidbody.AddTorque(transform.up/15, ForceMode.VelocityChange);
             if (_airLeft)   _rigidbody.AddTorque(transform.forward/15, ForceMode.VelocityChange);
             if (_airRight)  _rigidbody.AddTorque(-transform.forward/15, ForceMode.VelocityChange);
-
+            
+            if (!_airLeft && !_airRight)
+            {
+                _rigidbody.angularVelocity= new Vector3(_rigidbody.angularVelocity.x,_rigidbody.angularVelocity.y,0);
+            }
+            if (!_airUp && !_airDown)
+            {
+                _rigidbody.angularVelocity = new Vector3(0,_rigidbody.angularVelocity.y,_rigidbody.angularVelocity.z);
+            }
             
             //TODO: Update the tilting functionality in air to make it more controllable
             // Quaternion before, after;
@@ -443,7 +458,16 @@ public class CarController : MonoBehaviour
         
         _HitDetect = Physics.BoxCast(transform.position + transform.up, transform.localScale, -transform.up, out _Hit, transform.rotation, 1);
         _grounded = _HitDetect;
+        
+        if (_Hit.transform != null)
+            _onOil = _Hit.transform.CompareTag("OilSlip");
 
+        if (_onOil != _onOilPreviousFrame)
+        {
+            _savedOilVelocity = _rigidbody.velocity;
+        }
+        
+        
         // var leftCheck = Physics.Raycast(axles[0].leftWheel.transform.position + axles[0].leftWheel.transform.up, -axles[0].leftWheel.transform.up, out _leftHit, 1.0f);
         // var rightCheck = Physics.Raycast(axles[0].rightWheel.transform.position + axles[0].rightWheel.transform.up, -axles[0].rightWheel.transform.up, out _rightHit, 1.0f);
         // _groundedL = leftCheck;
@@ -455,6 +479,8 @@ public class CarController : MonoBehaviour
             _resetDelay = resetCooldown;
             _playerManager.GoToSpawn();
         }
+
+        _onOilPreviousFrame = _onOil;
     }
 
     void OnDrawGizmos()
