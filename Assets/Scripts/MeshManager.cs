@@ -1,16 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Rendering;
+
 using UnityEngine;
 
 public class MeshManager : MonoBehaviour
 {
-    const string playerMeshPrefKey = "PlayerMeshMat";
-
-    [SerializeField]
+    const string playerMeshPrefKey = "Skin";
+    
     private Mesh[] meshArray;
-    [SerializeField]
     private Material[] matArray;
+
+    private DataManager dm;
 
     private MeshRenderer carMeshRend;
     private MeshFilter carMeshFilt;
@@ -19,16 +19,13 @@ public class MeshManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        dm = GameObject.Find("DataManager").GetComponent<DataManager>();
+        meshArray = dm.GetMesh();
+        matArray = dm.GetMats();
         carMeshRend = GameObject.Find("Selector Car").transform.Find("CarMesh").GetComponent<MeshRenderer>();
         carMeshFilt = GameObject.Find("Selector Car").transform.Find("CarMesh").GetComponent<MeshFilter>();
         meshMatNum = PlayerPrefs.HasKey(playerMeshPrefKey) ? PlayerPrefs.GetInt(playerMeshPrefKey) : 0;
         setSkin(meshMatNum);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void nextSkin()
