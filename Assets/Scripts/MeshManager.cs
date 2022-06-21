@@ -13,20 +13,15 @@ public class MeshManager : MonoBehaviour
     private Material[] matArray;
 
     private MeshRenderer carMeshRend;
+    private MeshFilter carMeshFilt;
     private int meshMatNum = 0;
     
     // Start is called before the first frame update
     void Start()
     {
         carMeshRend = GameObject.Find("Selector Car").transform.Find("CarMesh").GetComponent<MeshRenderer>();
-        if (PlayerPrefs.HasKey(playerMeshPrefKey))
-        {
-            meshMatNum = PlayerPrefs.GetInt(playerMeshPrefKey);
-        }
-        else
-        {
-            meshMatNum = 0;
-        }
+        carMeshFilt = GameObject.Find("Selector Car").transform.Find("CarMesh").GetComponent<MeshFilter>();
+        meshMatNum = PlayerPrefs.HasKey(playerMeshPrefKey) ? PlayerPrefs.GetInt(playerMeshPrefKey) : 0;
         setSkin(meshMatNum);
     }
 
@@ -38,16 +33,28 @@ public class MeshManager : MonoBehaviour
 
     public void nextSkin()
     {
-        
+        meshMatNum++;
+        if (meshMatNum > meshArray.Length-1)
+        {
+            meshMatNum = 0;
+        }
+        setSkin(meshMatNum);
     }
 
     public void previousSkin()
     {
-        
+        meshMatNum--;
+        if (meshMatNum < 0)
+        {
+            meshMatNum = meshArray.Length-1;
+        }
+        setSkin(meshMatNum);
     }
 
     void setSkin(int value)
     {
         PlayerPrefs.SetInt(playerMeshPrefKey, value);
+        carMeshRend.material = matArray[value];
+        carMeshFilt.mesh = meshArray[value];
     }
 }
