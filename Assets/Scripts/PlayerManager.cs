@@ -46,13 +46,30 @@ public class PlayerManager : MonoBehaviour
         _photonView = GetComponent<PhotonView>();
         _mRend = transform.Find("CarMesh").GetComponent<MeshRenderer>();
         _mFilt = transform.Find("CarMesh").GetComponent<MeshFilter>();
-        _photonView.Owner.CustomProperties.Add("Skin", PlayerPrefs.GetInt("Skin"));
-        int skinNum = 0;
         object skinNumFromProps;
+        /*if (_photonView.IsMine && !_photonView.Owner.CustomProperties.TryGetValue("Skin", out skinNumFromProps))
+        {
+            _photonView.Owner.CustomProperties.Add("Skin", PlayerPrefs.GetInt("Skin"));
+        }
+        else if (_photonView.IsMine)
+        {
+            _photonView.Owner.CustomProperties.Remove("Skin");
+            _photonView.Owner.CustomProperties.Add("Skin", PlayerPrefs.GetInt("Skin"));
+        }*/
+
+        int skinNum = 0;
+        if ((int)_photonView.Owner.CustomProperties["Skin"] != null)
+        {
+            skinNum = (int)_photonView.Owner.CustomProperties["Skin"];
+        }
+
+        Debug.Log("FoundSkinNum: "+(int)_photonView.Owner.CustomProperties["Skin"]);
+        /*object skinNumFromProps;
         if (_photonView.Owner.CustomProperties.TryGetValue("Skin", out skinNumFromProps))
         {
             skinNum = (int)skinNumFromProps;
-        }
+            Debug.Log("FoundSkinNum");
+        }*/ 
         _mRend.material = GameObject.Find("DataManager").GetComponent<DataManager>().GetMats()[skinNum];
         _mFilt.mesh = GameObject.Find("DataManager").GetComponent<DataManager>().GetMesh()[skinNum];
         if (_photonView.Owner == null)

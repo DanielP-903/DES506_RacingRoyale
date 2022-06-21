@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
-
+using ExitGames.Client.Photon;
+using Photon.Pun;
 using UnityEngine;
 
 public class MeshManager : MonoBehaviour
 {
     const string playerMeshPrefKey = "Skin";
+    private ExitGames.Client.Photon.Hashtable playerCustomProperties;
     
     private Mesh[] meshArray;
     private Material[] matArray;
@@ -25,6 +27,7 @@ public class MeshManager : MonoBehaviour
         carMeshRend = GameObject.Find("Selector Car").transform.Find("CarMesh").GetComponent<MeshRenderer>();
         carMeshFilt = GameObject.Find("Selector Car").transform.Find("CarMesh").GetComponent<MeshFilter>();
         meshMatNum = PlayerPrefs.HasKey(playerMeshPrefKey) ? PlayerPrefs.GetInt(playerMeshPrefKey) : 0;
+        playerCustomProperties = new ExitGames.Client.Photon.Hashtable();
         setSkin(meshMatNum);
     }
 
@@ -51,7 +54,9 @@ public class MeshManager : MonoBehaviour
     void setSkin(int value)
     {
         PlayerPrefs.SetInt(playerMeshPrefKey, value);
+        playerCustomProperties["Skin"] = value;
         carMeshRend.material = matArray[value];
         carMeshFilt.mesh = meshArray[value];
+        PhotonNetwork.LocalPlayer.CustomProperties = playerCustomProperties;
     }
 }
