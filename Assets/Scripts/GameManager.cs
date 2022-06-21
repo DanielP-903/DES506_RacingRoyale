@@ -83,7 +83,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             //LoadArena();
         }
     }
-    
+
     #endregion
     
     // PUBLIC METHODS: LEAVE, GETPLAYERNUM, SETPLAYERNUM, RETURNPLAYERNUM, ELIMPLAYER, GETTOTAL, GETSTAGE

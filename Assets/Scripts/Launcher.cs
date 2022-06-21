@@ -168,7 +168,7 @@ using Photon.Realtime;
         {
             Application.Quit();
         }
-        
-    #endregion
+
+        #endregion
     
 }

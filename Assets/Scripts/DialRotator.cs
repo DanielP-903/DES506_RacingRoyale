@@ -22,7 +22,7 @@ public class DialRotator : MonoBehaviour
     private void Update()
     {
         _rotationalValue = Mathf.Clamp(hudRef.currentSpeed, 0, 120);
-        _toAngle = new Quaternion(0, 0, (-_rotationalValue) * Mathf.Deg2Rad + (endAngles.z * Mathf.Deg2Rad), 1);
+        _toAngle = new Quaternion(0, 0, (-(_rotationalValue*1.8f) + 120) * Mathf.Deg2Rad + (endAngles.z * Mathf.Deg2Rad), 1);
         _rectTransform.rotation = Quaternion.Lerp(_rectTransform.rotation, _toAngle, 10*Time.deltaTime);
     }
 }

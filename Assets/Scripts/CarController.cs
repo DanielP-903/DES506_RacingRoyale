@@ -20,8 +20,10 @@ public class CarController : MonoBehaviour
     public float motorForce = 0;
     public float brakeTorque = 1000;
     public float maxSteeringAngle = 0;
+    public float terminalVelocity = 120;
     public List<Axle> axles;
-
+    
+    
     [Header("Forces")] public float pushForceAmount = 5.0f;
     public float accelerationForce = 5.0f;
     public Vector3 pushForce = Vector3.up;
@@ -54,6 +56,11 @@ public class CarController : MonoBehaviour
     private bool _reset = false;
     private bool _activatePowerup = false;
     private bool _grounded = false;
+    private bool _onOil = false;
+    private bool _onOilPreviousFrame = false;
+    private bool _boostPlaying = false;
+    
+    private Vector3 _savedOilVelocity;
 
     private float _currentSteeringMulti;
 
@@ -85,43 +92,89 @@ public class CarController : MonoBehaviour
     
     [Header("DEBUG MODE")] public bool debug = false;
 
-    private void Start()
-    {
-        _passedFinishLine = false;
-        _pushDelay = jumpCooldown;
-        _boostDelay = boostCooldown;
-        //_wallShieldTimer = wallShieldTime;
-        _rigidbody = GetComponent<Rigidbody>();
-        _playerManager = GetComponent<PlayerManager>();
-        _playerPowerups = GetComponent<PlayerPowerups>();
-        foreach (var axle in axles)
-        {
-            axle.leftWheel.brakeTorque = brakeTorque;
-            axle.rightWheel.brakeTorque = brakeTorque;
-        }
-        //SceneManager.sceneLoaded += LoadCCInLevel;
+    #region Initialisation
 
-        _rigidbody.centerOfMass = centreOfMass.transform.localPosition;
-        if (!debug)
+        private void Start()
         {
-            GameObject icon = GameObject.Find("Powerup Icon");
-            if (icon)
+            _passedFinishLine = false;
+            _pushDelay = jumpCooldown;
+            _boostDelay = boostCooldown;
+            //_wallShieldTimer = wallShieldTime;
+            _rigidbody = GetComponent<Rigidbody>();
+            _playerManager = GetComponent<PlayerManager>();
+            _playerPowerups = GetComponent<PlayerPowerups>();
+            foreach (var axle in axles)
             {
-                _playerPowerups.powerupIcon = icon.gameObject.GetComponent<Image>();
-                _playerPowerups.powerupIcon.gameObject.SetActive(false);
+                axle.leftWheel.brakeTorque = brakeTorque;
+                axle.rightWheel.brakeTorque = brakeTorque;
             }
+            //SceneManager.sceneLoaded += LoadCCInLevel;
+    
+            _rigidbody.centerOfMass = centreOfMass.transform.localPosition;
+            if (!debug)
+            {
+                GameObject icon = GameObject.Find("Powerup Icon");
+                if (icon)
+                {
+                    _playerPowerups.powerupIcon = icon.gameObject.GetComponent<Image>();
+                    _playerPowerups.powerupIcon.gameObject.SetActive(false);
+                }
+            }
+    
+    
+            if (debug)
+            {
+                GameObject checkpointObject = GameObject.Find("CheckpointSystem");
+    
+                //_powerupIcon = GameObject.Find("Powerup Icon").gameObject.GetComponent<Image>();
+    
+                if (checkpointObject != null)
+                {
+                    checkpoints = checkpointObject.GetComponent<CheckpointSystem>();
+                    foreach (var checkpoint in checkpoints.checkpointObjects)
+                    {
+                        _passedCheckpoints.Add(checkpoint, false);
+                        Debug.Log(_passedCheckpoints[checkpoint] + " : " + checkpoint);
+                    }
+                }
+                else
+                {
+                    Debug.Log("Error: no CheckpointSystem object in scene");
+                }
+            }
+    
+            _mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+            _cameraShake = _mainCam.GetComponent<CameraShake>();
         }
-
-
-        if (debug)
+    
+        void OnLevelWasLoaded()
         {
+            _passedFinishLine = false;
             GameObject checkpointObject = GameObject.Find("CheckpointSystem");
-
-            //_powerupIcon = GameObject.Find("Powerup Icon").gameObject.GetComponent<Image>();
-
+            _playerPowerups.powerupIcon = GameObject.FindGameObjectWithTag("PowerupIcon").gameObject.GetComponent<Image>();
+            _playerPowerups.powerupIcon.gameObject.SetActive(false);
             if (checkpointObject != null)
             {
                 checkpoints = checkpointObject.GetComponent<CheckpointSystem>();
+                foreach (var checkpoint in checkpoints.checkpointObjects)
+                {
+                    _passedCheckpoints.Add(checkpoint, false);
+                    //Debug.Log(_passedCheckpoints[checkpoint] + " : " + checkpoint);
+                }
+            }
+            else
+            {
+                Debug.Log("Error: no CheckpointSystem object in scene");
+            }
+            //_mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+            //_cameraShake = _mainCam.GetComponent<CameraShake>();
+        }
+    
+        /*private void LoadCCInLevel(Scene scene, LoadSceneMode loadSceneMode)
+        {
+            checkpoints = GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>();
+            if (checkpoints != null)
+            {
                 foreach (var checkpoint in checkpoints.checkpointObjects)
                 {
                     _passedCheckpoints.Add(checkpoint, false);
@@ -132,68 +185,35 @@ public class CarController : MonoBehaviour
             {
                 Debug.Log("Error: no CheckpointSystem object in scene");
             }
-        }
+        }*/
 
-        _mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-        _cameraShake = _mainCam.GetComponent<CameraShake>();
-    }
 
-    void OnLevelWasLoaded()
-    {
-        _passedFinishLine = false;
-        GameObject checkpointObject = GameObject.Find("CheckpointSystem");
-        _playerPowerups.powerupIcon = GameObject.FindGameObjectWithTag("PowerupIcon").gameObject.GetComponent<Image>();
-        _playerPowerups.powerupIcon.gameObject.SetActive(false);
-        if (checkpointObject != null)
-        {
-            checkpoints = checkpointObject.GetComponent<CheckpointSystem>();
-            foreach (var checkpoint in checkpoints.checkpointObjects)
-            {
-                _passedCheckpoints.Add(checkpoint, false);
-                //Debug.Log(_passedCheckpoints[checkpoint] + " : " + checkpoint);
-            }
-        }
-        else
-        {
-            Debug.Log("Error: no CheckpointSystem object in scene");
-        }
-    }
-
-    /*private void LoadCCInLevel(Scene scene, LoadSceneMode loadSceneMode)
-    {
-        checkpoints = GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>();
-        if (checkpoints != null)
-        {
-            foreach (var checkpoint in checkpoints.checkpointObjects)
-            {
-                _passedCheckpoints.Add(checkpoint, false);
-                Debug.Log(_passedCheckpoints[checkpoint] + " : " + checkpoint);
-            }
-        }
-        else
-        {
-            Debug.Log("Error: no CheckpointSystem object in scene");
-        }
-    }*/
+    #endregion
 
     public void FixedUpdate()
     {
-        PhysRestrictVelocities();
         PhysUpdateDriving();
         PhysUpdateForces();
         PhysUpdateAirControl();
         PhysUpdateAcceleration();
+        PhysRestrictVelocities();
     }
 
     private void PhysRestrictVelocities()
     {
-        
-        //TODO: Thought: Restrict the angular velocities IN AIR to prevent constant drifting?
         Vector3 newValues = new Vector3(_rigidbody.angularVelocity.x,_rigidbody.angularVelocity.y,_rigidbody.angularVelocity.z);
         newValues.x = Mathf.Clamp(newValues.x, -1, 1);
-        newValues.y = Mathf.Clamp(newValues.y, -2, 2);
+        newValues.y = Mathf.Clamp(newValues.y, -3, 3);
         newValues.z = Mathf.Clamp(newValues.z, -1, 1);
         _rigidbody.angularVelocity = newValues;
+        
+         Vector3 newLinearValues = _rigidbody.velocity = new Vector3(_rigidbody.velocity.x,_rigidbody.velocity.y,_rigidbody.velocity.z);
+         newLinearValues.x = Mathf.Clamp(newLinearValues.x, -terminalVelocity / 2.2369362912f, terminalVelocity/ 2.2369362912f);
+         newLinearValues.y = Mathf.Clamp(newLinearValues.y, -terminalVelocity / 2.2369362912f, terminalVelocity/ 2.2369362912f);
+         newLinearValues.z = Mathf.Clamp(newLinearValues.z, -terminalVelocity / 2.2369362912f, terminalVelocity/ 2.2369362912f);
+        _rigidbody.velocity = newLinearValues;
+        
+        //float terminalSpeed = (Mathf.Round(_rigidbody.velocity.magnitude ));
     }
 
     private void PhysUpdateAcceleration()
@@ -203,7 +223,7 @@ public class CarController : MonoBehaviour
         // BOOST FUNCTIONALITY
         if (_boost && _boostDelay <= 0)
         {
-            _cameraShake.ShakeImmediate(3, 1);
+            //_cameraShake.ShakeImmediate(3, 1);
             StartCoroutine(ActivateBoostEffect());
             _boostDelay = boostCooldown;
             if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
@@ -257,19 +277,32 @@ public class CarController : MonoBehaviour
                 }
             }
         }
+
+        if (_onOil && !_boostPlaying && _rigidbody.velocity.magnitude * 2.2369362912f > 30)
+        {
+            _rigidbody.velocity = Vector3.Lerp(_rigidbody.velocity, new Vector3(_savedOilVelocity.x, _rigidbody.velocity.y, _savedOilVelocity.z), Time.deltaTime* 10);
+        }
     }
 
     private void PhysUpdateAirControl()
     {
         if (!_grounded)
         {
-            if (_airDown)   _rigidbody.AddTorque(transform.right/15, ForceMode.VelocityChange);
-            if (_airUp)     _rigidbody.AddTorque(-transform.right/15, ForceMode.VelocityChange);
+            if (_airDown)   _rigidbody.AddTorque(-transform.right/15, ForceMode.VelocityChange);
+            if (_airUp)     _rigidbody.AddTorque(transform.right/15, ForceMode.VelocityChange);
             if (_moveLeft)  _rigidbody.AddTorque(-transform.up/15, ForceMode.VelocityChange);
             if (_moveRight) _rigidbody.AddTorque(transform.up/15, ForceMode.VelocityChange);
             if (_airLeft)   _rigidbody.AddTorque(transform.forward/15, ForceMode.VelocityChange);
             if (_airRight)  _rigidbody.AddTorque(-transform.forward/15, ForceMode.VelocityChange);
-
+            
+            if (!_airLeft && !_airRight)
+            {
+                _rigidbody.angularVelocity= new Vector3(_rigidbody.angularVelocity.x,_rigidbody.angularVelocity.y,0);
+            }
+            if (!_airUp && !_airDown)
+            {
+                _rigidbody.angularVelocity = new Vector3(0,_rigidbody.angularVelocity.y,_rigidbody.angularVelocity.z);
+            }
             
             //TODO: Update the tilting functionality in air to make it more controllable
             // Quaternion before, after;
@@ -390,7 +423,11 @@ public class CarController : MonoBehaviour
             effect.Play();
         }
 
+        _boostPlaying = true;
+        
         yield return new WaitForSeconds(1);
+        
+        _boostPlaying = false;
         
         foreach (var effect in boostEffects)
         {
@@ -426,7 +463,21 @@ public class CarController : MonoBehaviour
         
         _HitDetect = Physics.BoxCast(transform.position + transform.up, transform.localScale, -transform.up, out _Hit, transform.rotation, 1);
         _grounded = _HitDetect;
+        
+        if (_Hit.transform != null)
+            _onOil = _Hit.transform.CompareTag("OilSlip");
 
+        if (_onOil != _onOilPreviousFrame)
+        {
+            _savedOilVelocity = new Vector3(_rigidbody.velocity.x, 0, _rigidbody.velocity.z);
+            
+            if (_savedOilVelocity.magnitude * 2.2369362912f < 30)
+            {
+                _savedOilVelocity = new Vector3(30 / 2.2369362912f , 0, 30 / 2.2369362912f );
+            }
+        }
+        
+        
         // var leftCheck = Physics.Raycast(axles[0].leftWheel.transform.position + axles[0].leftWheel.transform.up, -axles[0].leftWheel.transform.up, out _leftHit, 1.0f);
         // var rightCheck = Physics.Raycast(axles[0].rightWheel.transform.position + axles[0].rightWheel.transform.up, -axles[0].rightWheel.transform.up, out _rightHit, 1.0f);
         // _groundedL = leftCheck;
@@ -438,6 +489,8 @@ public class CarController : MonoBehaviour
             _resetDelay = resetCooldown;
             _playerManager.GoToSpawn();
         }
+
+        _onOilPreviousFrame = _onOil;
     }
 
     void OnDrawGizmos()
