@@ -80,6 +80,9 @@ public class CarController : MonoBehaviour
 
     private PlayerPowerups _playerPowerups;
 
+    private Camera _mainCam;
+    private CameraShake _cameraShake;
+    
     [Header("DEBUG MODE")] public bool debug = false;
 
     private void Start()
@@ -130,6 +133,9 @@ public class CarController : MonoBehaviour
                 Debug.Log("Error: no CheckpointSystem object in scene");
             }
         }
+
+        _mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        _cameraShake = _mainCam.GetComponent<CameraShake>();
     }
 
     void OnLevelWasLoaded()
@@ -151,8 +157,6 @@ public class CarController : MonoBehaviour
         {
             Debug.Log("Error: no CheckpointSystem object in scene");
         }
-
-
     }
 
     /*private void LoadCCInLevel(Scene scene, LoadSceneMode loadSceneMode)
@@ -183,6 +187,8 @@ public class CarController : MonoBehaviour
 
     private void PhysRestrictVelocities()
     {
+        
+        //TODO: Thought: Restrict the angular velocities IN AIR to prevent constant drifting?
         Vector3 newValues = new Vector3(_rigidbody.angularVelocity.x,_rigidbody.angularVelocity.y,_rigidbody.angularVelocity.z);
         newValues.x = Mathf.Clamp(newValues.x, -1, 1);
         newValues.y = Mathf.Clamp(newValues.y, -2, 2);
@@ -197,6 +203,7 @@ public class CarController : MonoBehaviour
         // BOOST FUNCTIONALITY
         if (_boost && _boostDelay <= 0)
         {
+            _cameraShake.ShakeImmediate(3, 1);
             StartCoroutine(ActivateBoostEffect());
             _boostDelay = boostCooldown;
             if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
@@ -256,12 +263,12 @@ public class CarController : MonoBehaviour
     {
         if (!_grounded)
         {
-            if (_airDown)   _rigidbody.AddTorque(transform.right*150, ForceMode.Force);
-            if (_airUp)     _rigidbody.AddTorque(-transform.right*150, ForceMode.Force);
-            if (_moveLeft)  _rigidbody.AddTorque(-transform.up*150, ForceMode.Force);
-            if (_moveRight) _rigidbody.AddTorque(transform.up*150, ForceMode.Force);
-            if (_airLeft)   _rigidbody.AddTorque(transform.forward*1500, ForceMode.Force);
-            if (_airRight)  _rigidbody.AddTorque(-transform.forward*1500, ForceMode.Force);
+            if (_airDown)   _rigidbody.AddTorque(transform.right/15, ForceMode.VelocityChange);
+            if (_airUp)     _rigidbody.AddTorque(-transform.right/15, ForceMode.VelocityChange);
+            if (_moveLeft)  _rigidbody.AddTorque(-transform.up/15, ForceMode.VelocityChange);
+            if (_moveRight) _rigidbody.AddTorque(transform.up/15, ForceMode.VelocityChange);
+            if (_airLeft)   _rigidbody.AddTorque(transform.forward/15, ForceMode.VelocityChange);
+            if (_airRight)  _rigidbody.AddTorque(-transform.forward/15, ForceMode.VelocityChange);
 
             
             //TODO: Update the tilting functionality in air to make it more controllable
@@ -394,6 +401,11 @@ public class CarController : MonoBehaviour
     public bool GetBoost()
     {
         return _boostDelay <= 0 && _boost;
+    }
+    
+    public bool GetGrounded()
+    {
+        return _grounded;
     }
 
     public bool GetActivate()
