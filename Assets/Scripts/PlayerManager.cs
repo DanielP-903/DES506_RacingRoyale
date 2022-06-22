@@ -36,6 +36,9 @@ public class PlayerManager : MonoBehaviour
     private TextMeshProUGUI playerNameText;
     [SerializeField]
     private TextMeshProUGUI playerLicenseText;
+
+    [SerializeField] private bool debugMode;
+    
     #endregion
 
     // PRIVATE METHODS: START, LOAD, UPDATE
@@ -57,21 +60,25 @@ public class PlayerManager : MonoBehaviour
             _photonView.Owner.CustomProperties.Add("Skin", PlayerPrefs.GetInt("Skin"));
         }*/
 
-        int skinNum = 0;
-        if ((int)_photonView.Owner.CustomProperties["Skin"] != null)
+        if (!debugMode)
         {
-            skinNum = (int)_photonView.Owner.CustomProperties["Skin"];
+            int skinNum = 0;
+            if ((int)_photonView.Owner.CustomProperties["Skin"] != null)
+            {
+                skinNum = (int)_photonView.Owner.CustomProperties["Skin"];
+            }
+
+            Debug.Log("FoundSkinNum: " + (int)_photonView.Owner.CustomProperties["Skin"]);
+            /*object skinNumFromProps;
+            if (_photonView.Owner.CustomProperties.TryGetValue("Skin", out skinNumFromProps))
+            {
+                skinNum = (int)skinNumFromProps;
+                Debug.Log("FoundSkinNum");
+            }*/
+            _mRend.material = GameObject.Find("DataManager").GetComponent<DataManager>().GetMats()[skinNum];
+            _mFilt.mesh = GameObject.Find("DataManager").GetComponent<DataManager>().GetMesh()[skinNum];
         }
 
-        Debug.Log("FoundSkinNum: "+(int)_photonView.Owner.CustomProperties["Skin"]);
-        /*object skinNumFromProps;
-        if (_photonView.Owner.CustomProperties.TryGetValue("Skin", out skinNumFromProps))
-        {
-            skinNum = (int)skinNumFromProps;
-            Debug.Log("FoundSkinNum");
-        }*/ 
-        _mRend.material = GameObject.Find("DataManager").GetComponent<DataManager>().GetMats()[skinNum];
-        _mFilt.mesh = GameObject.Find("DataManager").GetComponent<DataManager>().GetMesh()[skinNum];
         if (_photonView.Owner == null)
         {
             playerNameText.text = "Guest";

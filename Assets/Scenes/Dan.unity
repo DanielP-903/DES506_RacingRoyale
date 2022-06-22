@@ -60229,6 +60229,14 @@ PrefabInstance:
       propertyPath: m_FrequencyGain
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2774631454814832549, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
+      propertyPath: m_VerticalDamping
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2774631454814832549, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
+      propertyPath: m_HorizontalDamping
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 2774631455131860108, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_Name
       value: Main Camera
@@ -77279,10 +77287,6 @@ PrefabInstance:
       propertyPath: powerupIcon
       value: 
       objectReference: {fileID: 1700898516}
-    - target: {fileID: 7770678307179569261, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
-      propertyPath: sceneViewId
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
 --- !u!4 &8719868883581582720
