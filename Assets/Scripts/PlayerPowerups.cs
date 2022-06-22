@@ -27,26 +27,38 @@ public class PlayerPowerups : MonoBehaviour
     public float achievableDistance = 30.0f;
     public float grappleThreshold = 1.0f;
     
+    [Header("Punching Glove")] 
+    public float punchTime = 2.0f;
+    public float punchingForce = 10.0f;
+    public float achievablePunchRange = 30.0f;
+    //public float punchThreshold = 1.0f;
+
+    
     [Header("Other")]
     public Image powerupIcon;
     
     private GameObject grappleLineObject;
+    private GameObject punchObject;
+    private GameObject punchGlove;
     private GameObject blastObject;
     private SO_Powerup currentPowerup;
     private PowerupType currentPowerupType;
     private bool _airBlasting = false;
     private bool _boosting = false;
     private bool _grappling = false;
+    private bool _punching = false;
     private float _wallShieldTimer = 0.0f;
     private float _airBlastTimer = 0.0f;
     private float _superBoostTimer = 0.0f;
     private float _grappleTimer = 0.0f;
+    private float _punchTimer = 0.0f;
     private Image _powerupIconMask;
     private CarController _carController;
     private Rigidbody _rigidbody;
     private SphereCollider _blastObjectCollider;
     private RaycastHit _nearestHit;
     private LineRenderer _grappleLine;
+    private LineRenderer _punchLine; // haha
     
     // Start is called before the first frame update
     void Start()
@@ -59,6 +71,9 @@ public class PlayerPowerups : MonoBehaviour
         _powerupIconMask = powerupIcon.transform.GetChild(0).GetComponent<Image>();
         grappleLineObject = transform.GetChild(2).gameObject;
         _grappleLine = grappleLineObject.GetComponent<LineRenderer>();
+        punchObject = transform.GetChild(2).gameObject;
+        punchGlove = transform.GetChild(3).gameObject;
+        _punchLine = grappleLineObject.GetComponent<LineRenderer>();
         blastObject.SetActive(false);
     }
 
@@ -72,6 +87,9 @@ public class PlayerPowerups : MonoBehaviour
         _powerupIconMask = powerupIcon.transform.GetChild(0).GetComponent<Image>();
         grappleLineObject = transform.GetChild(2).gameObject;
         _grappleLine = grappleLineObject.GetComponent<LineRenderer>();
+        punchObject = transform.GetChild(2).gameObject;
+        punchGlove = transform.GetChild(3).gameObject;
+        _punchLine = grappleLineObject.GetComponent<LineRenderer>();
         blastObject.SetActive(false);
         Debug.Log("Blast object is active? " + blastObject.activeInHierarchy);
     }
@@ -99,12 +117,26 @@ public class PlayerPowerups : MonoBehaviour
         _airBlastTimer = _airBlastTimer <= 0 ? 0 : _airBlastTimer - Time.fixedDeltaTime;
         _superBoostTimer = _superBoostTimer <= 0 ? 0 : _superBoostTimer - Time.fixedDeltaTime;
         _grappleTimer = _grappleTimer <= 0 ? 0 : _grappleTimer - Time.fixedDeltaTime;
-        //Debug.Log("Shield Timer: " + _wallShieldTimer);
+        _punchTimer = _punchTimer <= 0 ? 0 : _punchTimer - Time.fixedDeltaTime;
 
+        if (_punching && _nearestHit.transform != null)
+        {
+            _powerupIconMask.fillAmount = (punchTime - _punchTimer)/punchTime;
+            _punchLine.startColor = Color.green;
+            _punchLine.endColor = Color.red;
+            
+            // Draw line between them
+            Vector3[] positions = new Vector3[2];
+            positions[0] = transform.position;
+            positions[1] = Vector3.Lerp(transform.position + transform.forward,  _nearestHit.transform.position, (punchTime - _punchTimer) / punchTime );
+            
+            _punchLine.SetPositions(positions);
+            punchGlove.transform.position = positions[1];
+        }
 
         if (_grappling && _nearestHit.transform != null)
         {      
-            _powerupIconMask.fillAmount = (grappleTime - _superBoostTimer)/grappleTime;
+            _powerupIconMask.fillAmount = (grappleTime - _grappleTimer)/grappleTime;
 
             _grappleLine.startColor = Color.green;
             _grappleLine.endColor = Color.red;
@@ -183,6 +215,7 @@ public class PlayerPowerups : MonoBehaviour
                 case PowerupType.BouncyWallShield: BouncyWallShield(); break;
                 case PowerupType.AirBlast: AirBlast(); break;
                 case PowerupType.GrapplingHook: GrapplingHook(); break;
+                case PowerupType.PunchingGlove: PunchingGlove(); break;
                 default: throw new ArgumentOutOfRangeException();
             }
         }
@@ -214,6 +247,71 @@ public class PlayerPowerups : MonoBehaviour
      {
          _wallShieldTimer = wallShieldTime;
          currentPowerupType = PowerupType.None;
+     }
+
+     private void DetectPunch()
+     {
+         // Reset line between them
+         Vector3[] positions = new Vector3[2];
+         positions[0] = transform.position + transform.forward;;
+         positions[1] = transform.position + transform.forward;
+            
+         _punchLine.SetPositions(positions);
+         punchGlove.transform.position = positions[1];
+   
+         _punching = false;
+         punchObject.SetActive(false);
+         punchGlove.SetActive(false);
+         powerupIcon.gameObject.SetActive(false);
+         _powerupIconMask.fillAmount = 0;
+         currentPowerupType = PowerupType.None;
+     }
+     
+     private void PunchingGlove()
+     {
+         // Detect opponent to grapple to
+         RaycastHit[] hits;
+         hits = Physics.SphereCastAll(transform.position, 5, transform.forward,  achievablePunchRange);
+         if (hits.Length > 0)
+         {
+             float distance = 1000000.0f;
+             _nearestHit = hits[0];
+             foreach (var hit in hits)
+             {
+                 if (hit.distance < distance && hit.transform.CompareTag("Player") && hit.transform.gameObject != transform.gameObject)
+                 {
+                     distance = hit.distance;
+                     _nearestHit = hit;
+                 }
+             }
+
+             if (_nearestHit.transform.CompareTag("Player") && _nearestHit.transform.gameObject != transform.gameObject)
+             {
+                 // Found a player to punch!
+
+                 punchObject.transform.position += transform.forward;
+                 punchGlove.transform.position += transform.forward;
+                 punchObject.SetActive(true);
+                 punchGlove.SetActive(true);
+                 
+                 StartCoroutine(Punch());
+                 //currentPowerupType = PowerupType.None;
+                 _punchTimer = punchTime;
+                 Debug.Log("HIT!!!");
+             }
+             else
+             {
+                 Debug.Log("No hit!");
+                 punchObject.SetActive(false);
+                 punchGlove.SetActive(false);
+             }
+         }
+         else
+         {
+             Debug.Log("No hit!");
+             punchObject.SetActive(false);
+             punchGlove.SetActive(false);
+         }
      }
 
      private void GrapplingHook()
@@ -265,9 +363,37 @@ public class PlayerPowerups : MonoBehaviour
             _grappling = false;
             grappleLineObject.SetActive(false);
             powerupIcon.gameObject.SetActive(false);
+
         }
      }
-     
+     private IEnumerator Punch()
+     {            
+         // Reset line
+         Vector3[] positions = new Vector3[2];
+         positions[0] = transform.position + transform.forward;;
+         positions[1] = transform.position + transform.forward;
+            
+         _punchLine.SetPositions(positions);
+         punchGlove.transform.position = positions[1];
+         // Apply a constant acceleration force towards the player for a limited time
+         _punching = true;
+         yield return new WaitForSeconds(3.0f);
+         if (_punching)
+         {    
+             // Reset line between them
+             Vector3[] positions2 = new Vector3[2];
+             positions2[0] = transform.position + transform.forward;;
+             positions2[1] = transform.position + transform.forward;
+            
+             currentPowerupType = PowerupType.None;
+             _punchLine.SetPositions(positions2);
+             punchGlove.transform.position = positions2[1];
+             _punching = false;
+             punchObject.SetActive(false);
+             punchGlove.SetActive(false);
+             powerupIcon.gameObject.SetActive(false);
+         }
+     }
      private void AirBlast()
      {
          blastObject.SetActive(true);
@@ -282,8 +408,7 @@ public class PlayerPowerups : MonoBehaviour
      }
      
      #endregion
-     
-     
+
      private IEnumerator DelayRemoveIcon()
      {
          _superBoostTimer = 1;
@@ -328,6 +453,15 @@ public class PlayerPowerups : MonoBehaviour
          {
              Vector3 direction = collider.transform.position - transform.position;
              _rigidbody.velocity = -(direction.normalized * airBlastForce);
+         }
+         
+         if (collider.transform.CompareTag("PunchingGlove") && collider.transform.parent.gameObject != transform.gameObject)
+         {
+             Vector3 direction = collider.transform.position - transform.position;
+              _rigidbody.velocity = -(direction.normalized * punchingForce); //Time.fixedDeltaTime * 50;
+             //_rigidbody.AddForce(-(direction.normalized * punchingForce)); 
+             Debug.Log("Ouch!! Hit with velocity: " + _rigidbody.velocity);
+             collider.transform.parent.GetComponent<PlayerPowerups>().DetectPunch();
          }
      }
 }
