@@ -26,8 +26,8 @@ public class PlayerManager : MonoBehaviour
     private bool completedStage = false;
     private bool eliminated = false;
     private int elimPosition = 0;
-    //private bool boosting;
-    //private List<ParticleSystem> parts;
+    private bool ready = false;
+    public TextMeshProUGUI startDelayText;
     #endregion
 
     // PLAYER NAME UI
@@ -43,6 +43,33 @@ public class PlayerManager : MonoBehaviour
 
     // PRIVATE METHODS: START, LOAD, UPDATE
     #region Private Methods
+    public static bool TryGetReadyPlayers(out int readyPlayers, int stageNum)
+    {
+        readyPlayers = 0;
+
+        object readyPlayersFromProps;
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("ReadyPlayers"+stageNum, out readyPlayersFromProps))
+        {
+            readyPlayers = (int)readyPlayersFromProps;
+            return true;
+        }
+
+        return false;
+    }
+    public static void SetReadyPlayers(int num, int stageNum)
+    {
+        int readyPlayers;
+        bool wasSet = TryGetReadyPlayers(out readyPlayers, stageNum);
+
+        ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
+        {
+            {"ReadyPlayers"+stageNum, (int)num}
+        };
+        PhotonNetwork.CurrentRoom.SetCustomProperties(props);
+        bool wasSet2 = TryGetReadyPlayers(out readyPlayers, stageNum);
+
+        //Debug.Log("Set Custom Props for Finished Players: "+ props.ToStringFull() + " wasSet: "+wasSet+" NewValue: "+finishedPlayers + " , wasSet2: " + wasSet2);
+    }
     void Start()
     {
         if (debugMode)
@@ -159,6 +186,18 @@ public class PlayerManager : MonoBehaviour
             //Debug.Log("Less than 5");
             GoToSpawn();
         }
+
+       if (ready)
+       {
+           int readyPlayers;
+           TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
+           if (PhotonNetwork.IsMasterClient && _gm.GetStageNum() > 0 && _gm.GetStageNum() < 5 && readyPlayers >= _gm.GetTotalPlayers())
+           {
+               _photonView.RPC("startDelayTimer", RpcTarget.All);
+           }
+
+           ready = false;
+       }
     }
 
     void OnLevelWasLoaded()
@@ -166,6 +205,12 @@ public class PlayerManager : MonoBehaviour
         //Debug.Log("PlayerManger Loading Level");
         if (_photonView != null)
         {
+            startDelayText = GameObject.Find("Start Delay").GetComponent<TextMeshProUGUI>();
+            int readyPlayers;
+            TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
+            ready = true;
+            SetReadyPlayers(readyPlayers+1, _gm.GetStageNum());
+            
             if ((SceneManager.GetActiveScene().name == "Launcher" || SceneManager.GetActiveScene().name == "EndStage"))
             {
                 if (mainCam != null)
@@ -297,6 +342,35 @@ public class PlayerManager : MonoBehaviour
             //Debug.Log("Player: "+_photonView.Owner.NickName + " Eliminated with Position "+elimPosition + "/"+_gm.GetTotalPlayers());
             PhotonNetwork.Destroy(this.gameObject);
         }
+    }
+    #endregion
+    
+    #region RPCs
+
+    [PunRPC]
+    void startDelayTimer()
+    {
+        StartCoroutine(countdownTimer());
+    }
+
+    IEnumerator countdownTimer()
+    {
+        startDelayText.color = Color.white;
+        float timeLeft = _gm.GetStartDelay();
+        while (timeLeft > 0)
+        {
+            startDelayText.text = timeLeft.ToString();
+            timeLeft -= 0.01f;
+            yield return new WaitForSeconds(0.01f);
+        }
+        //Start Code Here
+        Debug.Log("StartedRACE!");
+        while (startDelayText.color.a > 0)
+        {
+            startDelayText.color = new Color(startDelayText.color.r, startDelayText.color.g, startDelayText.color.b, startDelayText.color.a - 0.01f);
+            yield return new WaitForSeconds(0.01f);
+        }
+        
     }
     #endregion
 }
