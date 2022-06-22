@@ -31,9 +31,10 @@ public class PlayerPowerups : MonoBehaviour
     public float punchTime = 2.0f;
     public float punchingForce = 10.0f;
     public float achievablePunchRange = 30.0f;
-    //public float punchThreshold = 1.0f;
-
     
+    [Header("Warp Portal")] 
+    public float warpPortalTime = 15.0f;
+
     [Header("Other")]
     public Image powerupIcon;
     
@@ -41,6 +42,9 @@ public class PlayerPowerups : MonoBehaviour
     private GameObject punchObject;
     private GameObject punchGlove;
     private GameObject blastObject;
+    private GameObject wallObject;
+    private GameObject warpObject;
+
     private SO_Powerup currentPowerup;
     private PowerupType currentPowerupType;
     private bool _airBlasting = false;
@@ -48,6 +52,7 @@ public class PlayerPowerups : MonoBehaviour
     private bool _grappling = false;
     private bool _punching = false;
     private float _wallShieldTimer = 0.0f;
+    private float _warpPortalTimer = 0.0f;
     private float _airBlastTimer = 0.0f;
     private float _superBoostTimer = 0.0f;
     private float _grappleTimer = 0.0f;
@@ -65,6 +70,7 @@ public class PlayerPowerups : MonoBehaviour
     {
         _carController = GetComponent<CarController>();
         _rigidbody = GetComponent<Rigidbody>();
+        wallObject = transform.GetChild(0).gameObject;
         blastObject = transform.GetChild(1).gameObject;
         _blastObjectCollider = blastObject.GetComponent<SphereCollider>();
         powerupIcon = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(3).GetComponent<Image>();
@@ -74,6 +80,7 @@ public class PlayerPowerups : MonoBehaviour
         punchObject = transform.GetChild(2).gameObject;
         punchGlove = transform.GetChild(3).gameObject;
         _punchLine = grappleLineObject.GetComponent<LineRenderer>();
+        warpObject = transform.GetChild(4).gameObject;
         blastObject.SetActive(false);
     }
 
@@ -81,6 +88,7 @@ public class PlayerPowerups : MonoBehaviour
     {
         _carController = GetComponent<CarController>();
         _rigidbody = GetComponent<Rigidbody>();
+        wallObject = transform.GetChild(0).gameObject;
         blastObject = transform.GetChild(1).gameObject;
         _blastObjectCollider = blastObject.GetComponent<SphereCollider>();
         powerupIcon = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(3).GetComponent<Image>();
@@ -90,6 +98,7 @@ public class PlayerPowerups : MonoBehaviour
         punchObject = transform.GetChild(2).gameObject;
         punchGlove = transform.GetChild(3).gameObject;
         _punchLine = grappleLineObject.GetComponent<LineRenderer>();
+        warpObject = transform.GetChild(4).gameObject;
         blastObject.SetActive(false);
         Debug.Log("Blast object is active? " + blastObject.activeInHierarchy);
     }
@@ -118,6 +127,7 @@ public class PlayerPowerups : MonoBehaviour
         _superBoostTimer = _superBoostTimer <= 0 ? 0 : _superBoostTimer - Time.fixedDeltaTime;
         _grappleTimer = _grappleTimer <= 0 ? 0 : _grappleTimer - Time.fixedDeltaTime;
         _punchTimer = _punchTimer <= 0 ? 0 : _punchTimer - Time.fixedDeltaTime;
+        _warpPortalTimer = _warpPortalTimer <= 0 ? 0 : _warpPortalTimer - Time.fixedDeltaTime;
 
         if (_punching && _nearestHit.transform != null)
         {
@@ -176,21 +186,40 @@ public class PlayerPowerups : MonoBehaviour
         if (_wallShieldTimer > 0)
         {
             _powerupIconMask.fillAmount = (wallShieldTime - _wallShieldTimer) / wallShieldTime;
-            if (!transform.GetChild(0).gameObject.activeInHierarchy)
+            if (!wallObject.activeInHierarchy)
             {
-                transform.GetChild(0).gameObject.SetActive(true);
+                wallObject.SetActive(true);
             }
         }
         else
         {
-            if (transform.GetChild(0).gameObject.activeInHierarchy)
+            if (wallObject.activeInHierarchy)
             {
                 _powerupIconMask.fillAmount = 0;
-                transform.GetChild(0).gameObject.SetActive(false);
+                wallObject.SetActive(false);
                 powerupIcon.gameObject.SetActive(false);
             }
         }
 
+        if (_warpPortalTimer > 0)
+        {
+            _powerupIconMask.fillAmount = (warpPortalTime - _warpPortalTimer) / warpPortalTime;
+            if (!warpObject.activeInHierarchy)
+            {
+                warpObject.SetActive(true);
+            }
+        }
+        else
+        {
+            if (warpObject.activeInHierarchy)
+            {
+                _powerupIconMask.fillAmount = 0;
+                warpObject.SetActive(false);
+                powerupIcon.gameObject.SetActive(false);
+            }
+        }
+
+        
         if (_airBlasting)
         {
             _powerupIconMask.fillAmount = (airBlastTime - _airBlastTimer) / airBlastTime;
@@ -216,6 +245,7 @@ public class PlayerPowerups : MonoBehaviour
                 case PowerupType.AirBlast: AirBlast(); break;
                 case PowerupType.GrapplingHook: GrapplingHook(); break;
                 case PowerupType.PunchingGlove: PunchingGlove(); break;
+                case PowerupType.WarpPortal: WarpPortal(); break;
                 default: throw new ArgumentOutOfRangeException();
             }
         }
@@ -246,6 +276,12 @@ public class PlayerPowerups : MonoBehaviour
      private void BouncyWallShield()
      {
          _wallShieldTimer = wallShieldTime;
+         currentPowerupType = PowerupType.None;
+     }
+     
+     private void WarpPortal()
+     {
+         _warpPortalTimer = warpPortalTime;
          currentPowerupType = PowerupType.None;
      }
 
@@ -462,6 +498,12 @@ public class PlayerPowerups : MonoBehaviour
              //_rigidbody.AddForce(-(direction.normalized * punchingForce)); 
              Debug.Log("Ouch!! Hit with velocity: " + _rigidbody.velocity);
              collider.transform.parent.GetComponent<PlayerPowerups>().DetectPunch();
+         }
+         
+           
+         if (collider.transform.CompareTag("WarpPortal"))
+         {
+             _carController.ResetPlayer();
          }
      }
 }
