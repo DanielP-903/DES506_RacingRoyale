@@ -446,9 +446,9 @@ public class CarController : MonoBehaviour
         }
     }
 
-    public bool GetBoost()
+    public float GetBoosDelay()
     {
-        return _boostDelay <= 0 && _boost;
+        return _boostDelay;
     }
     
     public bool GetGrounded()
