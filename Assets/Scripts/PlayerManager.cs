@@ -45,6 +45,11 @@ public class PlayerManager : MonoBehaviour
     #region Private Methods
     void Start()
     {
+        if (debugMode)
+        {
+            Debug.Log("DEBUG MODE IS ACTIVE! (PlayerManager)");
+        }
+        
         //SceneManager.sceneLoaded += LoadPMInLevel;
         _photonView = GetComponent<PhotonView>();
         _mRend = transform.Find("CarMesh").GetComponent<MeshRenderer>();
@@ -149,7 +154,7 @@ public class PlayerManager : MonoBehaviour
     
     void Update()
     {
-        if (transform.position.y < -5 && _photonView.IsMine)
+       if (transform.position.y < -5 && _photonView.IsMine)
         {
             //Debug.Log("Less than 5");
             GoToSpawn();

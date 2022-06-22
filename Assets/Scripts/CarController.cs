@@ -96,6 +96,11 @@ public class CarController : MonoBehaviour
 
         private void Start()
         {
+            if (debug)
+            {
+                Debug.Log("DEBUG MODE IS ACTIVE! (CarController)");
+            }
+            
             _passedFinishLine = false;
             _pushDelay = jumpCooldown;
             _boostDelay = boostCooldown;
@@ -149,6 +154,11 @@ public class CarController : MonoBehaviour
     
         void OnLevelWasLoaded()
         {
+            if (debug)
+            {
+                Debug.Log("DEBUG MODE IS ACTIVE! (CarController)");
+            }
+            
             _passedFinishLine = false;
             GameObject checkpointObject = GameObject.Find("CheckpointSystem");
             _playerPowerups.powerupIcon = GameObject.FindGameObjectWithTag("PowerupIcon").gameObject.GetComponent<Image>();
@@ -294,15 +304,16 @@ public class CarController : MonoBehaviour
             if (_moveRight) _rigidbody.AddTorque(transform.up/15, ForceMode.VelocityChange);
             if (_airLeft)   _rigidbody.AddTorque(transform.forward/15, ForceMode.VelocityChange);
             if (_airRight)  _rigidbody.AddTorque(-transform.forward/15, ForceMode.VelocityChange);
-            
-            if (!_airLeft && !_airRight)
+
+            if (!_airLeft && !_airRight && !_airUp && !_airDown)
             {
-                _rigidbody.angularVelocity= new Vector3(_rigidbody.angularVelocity.x,_rigidbody.angularVelocity.y,0);
+                _rigidbody.angularVelocity = new Vector3(_rigidbody.angularVelocity.x, _rigidbody.angularVelocity.y, Mathf.Clamp(_rigidbody.angularVelocity.z, -0.1f, 0.1f));
+                _rigidbody.angularVelocity = new Vector3(Mathf.Clamp(_rigidbody.angularVelocity.x, -0.1f, 0.1f), _rigidbody.angularVelocity.y, _rigidbody.angularVelocity.z);
             }
-            if (!_airUp && !_airDown)
-            {
-                _rigidbody.angularVelocity = new Vector3(0,_rigidbody.angularVelocity.y,_rigidbody.angularVelocity.z);
-            }
+            // if (!_airUp && !_airDown)
+            // {
+            //     _rigidbody.angularVelocity = new Vector3(0,_rigidbody.angularVelocity.y,_rigidbody.angularVelocity.z);
+            // }
             
             //TODO: Update the tilting functionality in air to make it more controllable
             // Quaternion before, after;
@@ -452,8 +463,9 @@ public class CarController : MonoBehaviour
     
     private void Update()
     {
-        WheelCollider currentWheel = axles[0].leftWheel;
         
+        
+        WheelCollider currentWheel = axles[0].leftWheel;
         float currentTorque = currentWheel.motorTorque;
         float currentBrake = currentWheel.brakeTorque;
         float currentRpm = currentWheel.rpm;
