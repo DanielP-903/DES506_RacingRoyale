@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 public enum PowerupType
 {
-    None, Superboost, BouncyWallShield, AirBlast, GrapplingHook, PunchingGlove
+    None, Superboost, BouncyWallShield, AirBlast, GrapplingHook, PunchingGlove, WarpPortal
 }
 
 public class CarController : MonoBehaviour
@@ -499,12 +499,17 @@ public class CarController : MonoBehaviour
         if (_reset && _resetDelay <= 0)
         {
             _resetDelay = resetCooldown;
-            _playerManager.GoToSpawn();
+            ResetPlayer();
         }
 
         _onOilPreviousFrame = _onOil;
     }
 
+    public void ResetPlayer()
+    {
+        _playerManager.GoToSpawn();
+    }
+    
     void OnDrawGizmos()
     {
         //Check if there has been a hit yet
