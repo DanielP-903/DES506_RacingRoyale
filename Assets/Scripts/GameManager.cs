@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     [Tooltip("Time spent waiting in lobby before game starts")] [SerializeField]
     private float waitingTime;
+    [Tooltip("Time spent waiting before a round starts")] [SerializeField]
+    private float startDelay = 3.0f;
     
     #endregion
     
@@ -145,6 +147,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     public int GetStageNum()
     {
         return _stage;
+    }
+
+    public float GetStartDelay()
+    {
+        return startDelay;
     }
     
     #endregion
@@ -391,6 +398,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 LoadArena("EndStage");
             }
         }
+
         int playersCompleted;
         switch (SceneManager.GetActiveScene().name)
         {
@@ -490,6 +498,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
 
     #endregion
+
+    
     
 }
 

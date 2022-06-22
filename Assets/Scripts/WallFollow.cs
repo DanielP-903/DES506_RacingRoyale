@@ -74,7 +74,7 @@ public class WallFollow : MonoBehaviour
         else
         {
             _startDelayTimer = _startDelayTimer <= 0 ? 0 : _startDelayTimer - Time.deltaTime;
-            startDelayText.text = ((int)_startDelayTimer).ToString();
+            //startDelayText.text = ((int)_startDelayTimer).ToString();
             if (_startDelayTimer < 1)
             {
                 StartCoroutine(RemoveDelayText());
@@ -87,9 +87,9 @@ public class WallFollow : MonoBehaviour
 
     private IEnumerator RemoveDelayText()
     {
-        startDelayText.text = "GO";
+        //startDelayText.text = "GO";
         yield return new WaitForSeconds(2);
-        startDelayText.text = "";
+        //startDelayText.text = "";
     }
 
 }
