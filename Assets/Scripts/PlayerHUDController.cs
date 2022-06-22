@@ -8,6 +8,7 @@ using TMPro;
 public class PlayerHUDController : MonoBehaviour
 {
     public TextMeshProUGUI speedText;
+    public Slider boostSlider;
     
     
     private GameObject _playerRef;
@@ -44,6 +45,8 @@ public class PlayerHUDController : MonoBehaviour
         {
             currentSpeed = (Mathf.Round(_rigidbodyRef.velocity.magnitude * 2.2369362912f));
             speedText.text = currentSpeed.ToString();
+
+            boostSlider.value = (_carController.boostCooldown - _carController.GetBoosDelay())/_carController.boostCooldown;
         }
         
     }
