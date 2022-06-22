@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Cinemachine;
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
+using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
@@ -61,14 +62,23 @@ public class PlayerManager : MonoBehaviour
         int readyPlayers;
         bool wasSet = TryGetReadyPlayers(out readyPlayers, stageNum);
 
-        ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
+        if (!wasSet)
         {
-            {"ReadyPlayers"+stageNum, (int)num}
-        };
-        PhotonNetwork.CurrentRoom.SetCustomProperties(props);
-        bool wasSet2 = TryGetReadyPlayers(out readyPlayers, stageNum);
+            ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
+            {
+                { "ReadyPlayers" + stageNum, (int)num }
+            };
+            PhotonNetwork.CurrentRoom.SetCustomProperties(props);
 
-        //Debug.Log("Set Custom Props for Finished Players: "+ props.ToStringFull() + " wasSet: "+wasSet+" NewValue: "+finishedPlayers + " , wasSet2: " + wasSet2);
+            bool wasSet2 = TryGetReadyPlayers(out readyPlayers, stageNum);
+
+            Debug.Log("Set Custom Props for Finished Players: " + props.ToStringFull() + " wasSet: " + wasSet +
+                      " NewValue: " + readyPlayers + " , wasSet2: " + wasSet2);
+        }
+        else
+        {
+            PhotonNetwork.CurrentRoom.CustomProperties["ReadyPlayers" + stageNum] = num;
+        }
     }
     void Start()
     {
@@ -76,7 +86,7 @@ public class PlayerManager : MonoBehaviour
         {
             Debug.Log("DEBUG MODE IS ACTIVE! (PlayerManager)");
         }
-        
+        SetReadyPlayers(0, 1);
         //SceneManager.sceneLoaded += LoadPMInLevel;
         _photonView = GetComponent<PhotonView>();
         _mRend = transform.Find("CarMesh").GetComponent<MeshRenderer>();
@@ -189,8 +199,10 @@ public class PlayerManager : MonoBehaviour
 
        if (ready)
        {
+           Debug.Log("Ready!");
            int readyPlayers;
            TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
+           Debug.Log( (readyPlayers +":"+ _gm.GetTotalPlayers()));
            if (PhotonNetwork.IsMasterClient && _gm.GetStageNum() > 0 && _gm.GetStageNum() < 5 && readyPlayers >= _gm.GetTotalPlayers())
            {
                _photonView.RPC("startDelayTimer", RpcTarget.All);
@@ -208,8 +220,9 @@ public class PlayerManager : MonoBehaviour
             startDelayText = GameObject.Find("Start Delay").GetComponent<TextMeshProUGUI>();
             int readyPlayers;
             TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
+            readyPlayers += 1;
+            SetReadyPlayers(readyPlayers, _gm.GetStageNum());
             ready = true;
-            SetReadyPlayers(readyPlayers+1, _gm.GetStageNum());
             
             if ((SceneManager.GetActiveScene().name == "Launcher" || SceneManager.GetActiveScene().name == "EndStage"))
             {
@@ -359,7 +372,7 @@ public class PlayerManager : MonoBehaviour
         float timeLeft = _gm.GetStartDelay();
         while (timeLeft > 0)
         {
-            startDelayText.text = timeLeft.ToString();
+            startDelayText.text = timeLeft.ToString("F2");
             timeLeft -= 0.01f;
             yield return new WaitForSeconds(0.01f);
         }
