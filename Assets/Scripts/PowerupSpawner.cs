@@ -37,26 +37,29 @@ public class PowerupSpawner : MonoBehaviour
     private void SpawnPowerup()
     {
         float randomChance = Random.Range(0, 100);
-        if (randomChance < 25)
+        if (randomChance < 20)
         {
             currentPowerup = powerups[0];
         }
-        else if (randomChance >= 25 && randomChance < 50)
+        else if (randomChance >= 20 && randomChance < 40)
         {
             currentPowerup = powerups[1];
         }
-        else if (randomChance >= 50 && randomChance < 75)
+        else if (randomChance >= 40 && randomChance < 60)
         {
             currentPowerup = powerups[2]; // NOTE: THIS SHOULD BE [2] BUT AIR BLAST IS NOT WORKING
         }
-        else if (randomChance >= 75)
+        else if (randomChance >= 60 && randomChance < 80)
         {
             currentPowerup = powerups[3];
         }
+        else if (randomChance > 80)
+        {
+            currentPowerup = powerups[4];
+        }
         
         // MANUAL ASSIGNATION OF POWERUP
-        
-        //currentPowerup = powerups[3];
+        //currentPowerup = powerups[4];
         
         _powerupCube.SetActive(true);
     }

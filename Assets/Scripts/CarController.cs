@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 public enum PowerupType
 {
-    None, Superboost, BouncyWallShield, AirBlast, GrapplingHook
+    None, Superboost, BouncyWallShield, AirBlast, GrapplingHook, PunchingGlove
 }
 
 public class CarController : MonoBehaviour
@@ -539,6 +539,8 @@ public class CarController : MonoBehaviour
             _rigidbody.velocity = -(direction.normalized * bounciness); //Time.fixedDeltaTime * 50;
             Debug.Log("HIT ANOTHER PLAYER WITH RIGIDBODY VELOCITY: " + _rigidbody.velocity);
         }
+        
+       
     }
 
     private void OnTriggerEnter(Collider collider)
@@ -567,7 +569,7 @@ public class CarController : MonoBehaviour
             _hitEliminationZone = true;
             _playerManager.EliminateCurrentPlayer();
         }
-    
+      
         
     }
 
