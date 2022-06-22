@@ -79,10 +79,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="12172">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="12172" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -139,6 +139,7 @@
       <workItem from="1655712577183" duration="6022000" />
       <workItem from="1655735737069" duration="1082000" />
       <workItem from="1655798583837" duration="19137000" />
+      <workItem from="1655884998016" duration="3225000" />
     </task>
     <servers />
   </component>
@@ -167,16 +168,17 @@
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/PlayerHUDController.cs</url>
-          <line>75</line>
-          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\PlayerHUDController.cs" initialLine="75" containingFunctionPresentation="method 'waitTime'" />
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/PlayerPowerups.cs</url>
-          <line>104</line>
-          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\PlayerPowerups.cs" initialLine="106" containingFunctionPresentation="method 'PhysUpdatePowerups'" />
-          <option name="timeStamp" value="11" />
+          <url>file://$PROJECT_DIR$/Assets/Scripts/PlayerManager.cs</url>
+          <line>70</line>
+          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\PlayerManager.cs" initialLine="60" containingFunctionPresentation="method 'Start'">
+            <startOffsets>
+              <option value="2090" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2150" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="16" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

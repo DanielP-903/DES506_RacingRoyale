@@ -25,7 +25,6 @@ public class CameraShake : MonoBehaviour
     {
         _virtualCamera = GetComponent<CinemachineVirtualCamera>();
         _noiseSettings = _virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
-        _shakeTimer = 0;
         StartCoroutine(WaitForPlayer());
     }
 
@@ -33,7 +32,6 @@ public class CameraShake : MonoBehaviour
     {
         _virtualCamera = GetComponent<CinemachineVirtualCamera>();
         _noiseSettings = _virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
-        _shakeTimer = 0;
     }
     
 
@@ -42,8 +40,6 @@ public class CameraShake : MonoBehaviour
     {
         if (_hasFoundPlayer)
         {
-            _shakeTimer = _shakeTimer <= 0 ? 0 : _shakeTimer - Time.fixedDeltaTime;
-
             if (_cc.GetGrounded() && (_rb.velocity.magnitude * 2.2369362912f) > 60)
             {
                 _noiseSettings.m_AmplitudeGain = (_rb.velocity.magnitude*2) / 100;
@@ -57,12 +53,7 @@ public class CameraShake : MonoBehaviour
         }
     }
 
-    public void ShakeImmediate(float length, float intensity)
-    {
-        _shakeTime = length;
-        _shakeTimer = _shakeTime;
-        _intensity = intensity;
-    }
+
     
     IEnumerator WaitForPlayer()
     {

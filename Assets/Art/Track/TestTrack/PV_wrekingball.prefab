@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: -2738532020271137135}
   - component: {fileID: 5901893356585517859}
   - component: {fileID: 365489292207065509}
-  - component: {fileID: 6162509257859823092}
+  - component: {fileID: 4032147214853590582}
   m_Layer: 0
   m_Name: pCube2
   m_TagString: Untagged
@@ -99,8 +99,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!64 &6162509257859823092
-MeshCollider:
+--- !u!135 &4032147214853590582
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -109,10 +109,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 5302568919011541938, guid: 2813b11f9767d40458fb3422cd129725, type: 3}
+  serializedVersion: 2
+  m_Radius: 0.005610399
+  m_Center: {x: 0, y: 5.550264e-10, z: 0.000016976039}
 --- !u!1 &-1079226149706078363
 GameObject:
   m_ObjectHideFlags: 0
@@ -125,7 +124,7 @@ GameObject:
   - component: {fileID: -6525850959458147833}
   - component: {fileID: -6090807732870949735}
   - component: {fileID: 4742684130890615241}
-  - component: {fileID: 8612094084554633452}
+  - component: {fileID: 2018042632459740326}
   m_Layer: 0
   m_Name: pTorus9
   m_TagString: Untagged
@@ -212,8 +211,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!64 &8612094084554633452
-MeshCollider:
+--- !u!136 &2018042632459740326
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -222,10 +221,10 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 566819825560819117, guid: 2813b11f9767d40458fb3422cd129725, type: 3}
+  m_Radius: 0.6268063
+  m_Height: 26.892916
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7538237821082451601
 GameObject:
   m_ObjectHideFlags: 0
