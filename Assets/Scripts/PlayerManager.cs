@@ -49,12 +49,14 @@ public class PlayerManager : MonoBehaviour
         readyPlayers = 0;
 
         object readyPlayersFromProps;
+
         if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("ReadyPlayers"+stageNum, out readyPlayersFromProps))
         {
             readyPlayers = (int)readyPlayersFromProps;
             return true;
         }
-
+        
+        
         return false;
     }
     public static void SetReadyPlayers(int num, int stageNum)
@@ -86,7 +88,12 @@ public class PlayerManager : MonoBehaviour
         {
             Debug.Log("DEBUG MODE IS ACTIVE! (PlayerManager)");
         }
-        SetReadyPlayers(0, 1);
+
+        if (!debugMode)
+        {
+            SetReadyPlayers(0, 1);
+        }
+
         //SceneManager.sceneLoaded += LoadPMInLevel;
         _photonView = GetComponent<PhotonView>();
         _mRend = transform.Find("CarMesh").GetComponent<MeshRenderer>();
