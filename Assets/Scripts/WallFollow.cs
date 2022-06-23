@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WallFollow : MonoBehaviour
 {
@@ -12,12 +13,17 @@ public class WallFollow : MonoBehaviour
     public float startDelay = 3.0f;
     public float chaseSpeed = 1.0f;
     public TextMeshProUGUI startDelayText;
+    public GameObject wallOMeter;
     private BezierCurveGenerator _bezierCurveGenerator;
+
+    private Slider _wallOMeterSlider;
+    private GameObject _wallOMeterPlayer;
 
     private float _startDelayTimer = 0.0f;
     
-    
     private int routeNumber = 0;
+    private Vector3 endPos;
+    private Vector3 startPos;
 
     private float _tValue;
 
@@ -30,6 +36,13 @@ public class WallFollow : MonoBehaviour
         _tValue = 0.0f;
         _startDelayTimer = startDelay;
         _begin = false;
+
+        _wallOMeterSlider = wallOMeter.GetComponent<Slider>();
+        _wallOMeterPlayer = wallOMeter.transform.GetChild(2).gameObject;
+
+        endPos = _bezierCurveGenerator.controlPoints[_bezierCurveGenerator.controlPoints.Count - 1].transform.position;
+        startPos = _bezierCurveGenerator.controlPoints[0].transform.position;
+
     }
 
     public float GetStartDelayTimer()
@@ -40,7 +53,8 @@ public class WallFollow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-     
+        _wallOMeterSlider.value = (endPos - transform.position).magnitude / (endPos - startPos).magnitude;
+        
         if (_begin)
         {
             _tValue += Time.deltaTime * chaseSpeed;
