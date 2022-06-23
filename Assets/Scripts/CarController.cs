@@ -216,13 +216,16 @@ public class CarController : MonoBehaviour
         newValues.y = Mathf.Clamp(newValues.y, -3, 3);
         newValues.z = Mathf.Clamp(newValues.z, -1, 1);
         _rigidbody.angularVelocity = newValues;
-        
-         Vector3 newLinearValues = _rigidbody.velocity = new Vector3(_rigidbody.velocity.x,_rigidbody.velocity.y,_rigidbody.velocity.z);
-         newLinearValues.x = Mathf.Clamp(newLinearValues.x, -terminalVelocity / 2.2369362912f, terminalVelocity/ 2.2369362912f);
-         newLinearValues.y = Mathf.Clamp(newLinearValues.y, -terminalVelocity / 2.2369362912f, terminalVelocity/ 2.2369362912f);
-         newLinearValues.z = Mathf.Clamp(newLinearValues.z, -terminalVelocity / 2.2369362912f, terminalVelocity/ 2.2369362912f);
-        _rigidbody.velocity = newLinearValues;
-        
+
+        if (!_boostPlaying)
+        {
+            Vector3 newLinearValues = _rigidbody.velocity = new Vector3(_rigidbody.velocity.x, _rigidbody.velocity.y, _rigidbody.velocity.z);
+            newLinearValues.x = Mathf.Clamp(newLinearValues.x, -terminalVelocity / 2.2369362912f, terminalVelocity / 2.2369362912f);
+            newLinearValues.y = Mathf.Clamp(newLinearValues.y, -terminalVelocity / 2.2369362912f, terminalVelocity / 2.2369362912f);
+            newLinearValues.z = Mathf.Clamp(newLinearValues.z, -terminalVelocity / 2.2369362912f, terminalVelocity / 2.2369362912f);
+            _rigidbody.velocity = newLinearValues;
+        }
+
         //float terminalSpeed = (Mathf.Round(_rigidbody.velocity.magnitude ));
     }
 
@@ -403,7 +406,7 @@ public class CarController : MonoBehaviour
 
         if (!_moveForward && !_moveBackward)
         {
-            brakeTorque = 1000.0f;
+            brakeTorque = 1500.0f;
         }
         else if (_drift)
         {
