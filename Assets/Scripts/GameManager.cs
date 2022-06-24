@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     [Tooltip("The prefab to use for representing the timer")]
     private TextMeshProUGUI _timer;
+    private TextMeshProUGUI _placeCounter;
     private PhotonView _photonView;
     private int _stage = 1;
     private int _totalPlayers = 0;
@@ -310,6 +311,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         SceneManager.sceneLoaded += LoadPlayerInLevel;
         DontDestroyOnLoad(this.gameObject);
         _timer = GameObject.Find("Timer").GetComponent<TextMeshProUGUI>();
+        GameObject.Find("PlaceCounter").SetActive(false);
         if (playerPrefab == null)
         {
             Debug.LogError("<Color=Red><a>Missing</a></Color> playerPrefab Reference. Please set it up in GameObject 'Game Manager'",this);
@@ -334,7 +336,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void LoadPlayerInLevel(Scene scene, LoadSceneMode loadSceneMode)
     {
-        //_timer = GameObject.Find("Timer").GetComponent<TextMeshProUGUI>();
+        _placeCounter = GameObject.Find("PlaceCounter").GetComponent<TextMeshProUGUI>();
+        _timer = GameObject.Find("Timer").GetComponent<TextMeshProUGUI>();
         //Debug.Log("GameManager Loading Level");
         if (scene.name == "Launcher")
         {
@@ -406,6 +409,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 Destroy(this.gameObject);
                 break;
             case "WaitingArea":
+                //_placeCounter.gameObject.SetActive(false);
                 CountdownTimer.TryGetStartTime(out var hit);
                 if (PhotonNetwork.CurrentRoom.IsOpen &&
                     (PhotonNetwork.ServerTimestamp - hit) / 1000f > waitingTime)
@@ -429,8 +433,16 @@ public class GameManager : MonoBehaviourPunCallbacks
                 _timer.text = sec + ":" + milSec;
                 break;
             case "Stage1":
-                //_timer.gameObject.SetActive(false);
+                _timer.gameObject.SetActive(false);
                 TryGetFinishedPlayers(out playersCompleted, _stage);
+                if (Mathf.Ceil((float)_totalPlayers / 2) - playersCompleted == 1)
+                {
+                    _placeCounter.text = "1 place left!";
+                }
+                else
+                {
+                    _placeCounter.text = Mathf.Ceil((float)_totalPlayers / 2) - playersCompleted + " places left!";
+                }
                 //Debug.Log("Name: "+SceneManager.GetActiveScene().name + " Stage: " + _stage + " Players Finished: "+playersCompleted+" Goal: " + (_totalPlayers/2));
                 
                 if (_stage == 1 && playersCompleted >= (float)_totalPlayers/2)
@@ -445,8 +457,16 @@ public class GameManager : MonoBehaviourPunCallbacks
 
                 break;
             case "Stage2":
-                //_timer.gameObject.SetActive(false);
+                _timer.gameObject.SetActive(false);
                 TryGetFinishedPlayers(out playersCompleted, _stage);
+                if (Mathf.Ceil((float)_totalPlayers / 4) - playersCompleted == 1)
+                {
+                    _placeCounter.text = "1 place left!";
+                }
+                else
+                {
+                    _placeCounter.text = Mathf.Ceil((float)_totalPlayers / 4) - playersCompleted + " places left!";
+                }
                 //Debug.Log("Name: "+SceneManager.GetActiveScene().name + " Stage: " + _stage + " Players Finished: "+playersCompleted+" Goal: " + (PhotonNetwork.CurrentRoom.MaxPlayers/4));
                 
                 if (_stage == 2 && playersCompleted >= (float)_totalPlayers/4)
@@ -461,8 +481,16 @@ public class GameManager : MonoBehaviourPunCallbacks
                 
                 break;
             case "Stage3":
-                //_timer.gameObject.SetActive(false);
+                _timer.gameObject.SetActive(false);
                 TryGetFinishedPlayers(out playersCompleted, _stage);
+                if (Mathf.Ceil((float)_totalPlayers / 8) - playersCompleted == 1)
+                {
+                    _placeCounter.text = "1 place left!";
+                }
+                else
+                {
+                    _placeCounter.text = Mathf.Ceil((float)_totalPlayers / 8) - playersCompleted + " places left!";
+                }
                 //Debug.Log("Name: "+SceneManager.GetActiveScene().name + " Stage: " + _stage + " Players Finished: "+playersCompleted+" Goal: " + (PhotonNetwork.CurrentRoom.MaxPlayers/8));
                 
                 if (_stage == 3 && playersCompleted >= (float)_totalPlayers/8)
@@ -477,9 +505,11 @@ public class GameManager : MonoBehaviourPunCallbacks
                 
                 break;
             case "Stage4":
-                //_timer.gameObject.SetActive(false);
+                _timer.gameObject.SetActive(false);
                 TryGetFinishedPlayers(out playersCompleted, _stage);
                 TryGetElimPlayers(out elimPlayers);
+                _placeCounter.text = Mathf.Ceil(_totalPlayers - elimPlayers) + " players left!";
+                
                 //Debug.Log("Name: "+SceneManager.GetActiveScene().name + " Stage: " + _stage + " Players Finished: "+(_totalPlayers - elimPlayers)+" Goal: 0");
                 
                 if (_stage == 4 && playersCompleted >= (float)_totalPlayers/16)
