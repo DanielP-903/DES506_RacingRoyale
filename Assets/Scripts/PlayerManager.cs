@@ -305,6 +305,11 @@ public class PlayerManager : MonoBehaviour
         
     }
 
+    public Transform GetSpawnLocation()
+    {
+        return _spawnLocation;
+    }
+    
     public void ChangeSpawnLocation(Transform newSpawn)
     {
         _spawnLocation = newSpawn;
