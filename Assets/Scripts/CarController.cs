@@ -1,12 +1,19 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
+using Cinemachine.PostFX;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using ColorParameter = UnityEngine.Rendering.PostProcessing.ColorParameter;
+using FloatParameter = UnityEngine.Rendering.PostProcessing.FloatParameter;
+using Vignette = UnityEngine.Rendering.Universal.Vignette;
 
 
 public enum PowerupType
@@ -24,7 +31,8 @@ public class CarController : MonoBehaviour
     public List<Axle> axles;
     
     
-    [Header("Forces")] public float pushForceAmount = 5.0f;
+    [Header("Forces")] 
+    public float pushForceAmount = 5.0f;
     public float accelerationForce = 5.0f;
     public Vector3 pushForce = Vector3.up;
     public float torqueVectorAmount = 1.0f;
@@ -32,16 +40,22 @@ public class CarController : MonoBehaviour
     public float boostForceAmount = 5.0f;
     public float driftForceAmount = 3000.0f;
 
-    [Header("Environment Pad")] public float jumpPadForce = 5.0f;
+    [Header("Environment Pad")] 
+    public float jumpPadForce = 5.0f;
     public float boostPadForce = 5.0f;
 
-    [Header("Collisions")] public float bounciness = 100.0f;
+    [Header("Collisions")] 
+    public float bounciness = 100.0f;
 
-    [Header("Cooldowns (in seconds)")] public float jumpCooldown = 2.0f;
+    [Header("Cooldowns (in seconds)")] 
+    public float jumpCooldown = 2.0f;
     public float boostCooldown = 2.0f;
     public float resetCooldown = 2.0f;
     public float padCooldown = 2.0f;
 
+    [Header("Other")] 
+    public float maxWallDistanceAlert = 30.0f;
+    
     private bool _moveForward = false;
     private bool _moveBackward = false;
     private bool _moveRight = false;
@@ -87,8 +101,13 @@ public class CarController : MonoBehaviour
 
     private PlayerPowerups _playerPowerups;
 
+    private GameObject _wall;
+    
     private Camera _mainCam;
+    private Image _vignette;
     private CameraShake _cameraShake;
+
+    [HideInInspector] private int _currentCheckpointNo = 0;
     
     [Header("DEBUG MODE")] public bool debug = false;
 
@@ -108,6 +127,8 @@ public class CarController : MonoBehaviour
             _rigidbody = GetComponent<Rigidbody>();
             _playerManager = GetComponent<PlayerManager>();
             _playerPowerups = GetComponent<PlayerPowerups>();
+            
+
             foreach (var axle in axles)
             {
                 axle.leftWheel.brakeTorque = brakeTorque;
@@ -129,10 +150,13 @@ public class CarController : MonoBehaviour
     
             if (debug)
             {
-                GameObject checkpointObject = GameObject.Find("CheckpointSystem");
-    
+                 _wall = GameObject.Find("Danger Wall");
+                
+                 GameObject checkpointObject = GameObject.Find("CheckpointSystem");
+                checkpointObject.GetComponent<CheckpointSystem>();
                 //_powerupIcon = GameObject.Find("Powerup Icon").gameObject.GetComponent<Image>();
-    
+                
+                
                 if (checkpointObject != null)
                 {
                     checkpoints = checkpointObject.GetComponent<CheckpointSystem>();
@@ -150,6 +174,20 @@ public class CarController : MonoBehaviour
     
             _mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
             _cameraShake = _mainCam.GetComponent<CameraShake>();
+
+            GameObject canvas = GameObject.Find("Canvas");
+            
+//            _vignette = canvas.transform.GetChild(6).GetComponent<Image>();
+
+            // if (_mainCam.GetComponent<CinemachineVolumeSettings>().m_Profile.components.Find(Vignette tmp))
+            // {
+            //     _vignette = tmp;
+            //     _vignette.parameters[0]
+            // }
+            // else
+            // {
+            //     Debug.Log("Something went wrong with the vignette");
+            // }
         }
     
         void OnLevelWasLoaded()
@@ -159,6 +197,7 @@ public class CarController : MonoBehaviour
                 Debug.Log("DEBUG MODE IS ACTIVE! (CarController)");
             }
             
+            //_wall = GameObject.Find("Danger Wall");
             _passedFinishLine = false;
             GameObject checkpointObject = GameObject.Find("CheckpointSystem");
             _playerPowerups.powerupIcon = GameObject.FindGameObjectWithTag("PowerupIcon").gameObject.GetComponent<Image>();
@@ -196,8 +235,7 @@ public class CarController : MonoBehaviour
                 Debug.Log("Error: no CheckpointSystem object in scene");
             }
         }*/
-
-
+        
     #endregion
 
     public void FixedUpdate()
@@ -335,7 +373,7 @@ public class CarController : MonoBehaviour
     // For updating driving physics with wheel colliders
     private void PhysUpdateDriving()
     {
-        float motorMultiplier = _moveForward ? 1 : _moveBackward ? -1 : 0;
+        float motorMultiplier = _moveForward ? 1 : _moveBackward ? -0.5f : 0;
   
         float currentMotorValue = motorForce * motorMultiplier;
 
@@ -466,8 +504,6 @@ public class CarController : MonoBehaviour
     
     private void Update()
     {
-        
-        
         WheelCollider currentWheel = axles[0].leftWheel;
         float currentTorque = currentWheel.motorTorque;
         float currentBrake = currentWheel.brakeTorque;
@@ -491,12 +527,6 @@ public class CarController : MonoBehaviour
                 _savedOilVelocity = new Vector3(30 / 2.2369362912f , 0, 30 / 2.2369362912f );
             }
         }
-        
-        
-        // var leftCheck = Physics.Raycast(axles[0].leftWheel.transform.position + axles[0].leftWheel.transform.up, -axles[0].leftWheel.transform.up, out _leftHit, 1.0f);
-        // var rightCheck = Physics.Raycast(axles[0].rightWheel.transform.position + axles[0].rightWheel.transform.up, -axles[0].rightWheel.transform.up, out _rightHit, 1.0f);
-        // _groundedL = leftCheck;
-        // _groundedR = rightCheck;
 
         _resetDelay = _resetDelay <= 0 ? 0 : _resetDelay - Time.deltaTime;
         if (_reset && _resetDelay <= 0)
@@ -506,6 +536,12 @@ public class CarController : MonoBehaviour
         }
 
         _onOilPreviousFrame = _onOil;
+
+        // float distanceToWall = Vector3.Distance(transform.position, _wall.transform.position);
+        // distanceToWall = Mathf.Clamp(distanceToWall, 0, maxWallDistanceAlert);
+        //
+        // _vignette.color = Color.Lerp(Color.clear, Color.magenta, (maxWallDistanceAlert-distanceToWall)/maxWallDistanceAlert);
+        
     }
 
     public void ResetPlayer()
