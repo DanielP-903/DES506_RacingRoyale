@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
@@ -26,11 +27,21 @@ public class WallFollow : MonoBehaviour
     private Vector3 startPos;
 
     private float _tValue;
+    private float _tValuePersistant;
+    private float _tValueMax;
 
     private bool _begin = false;
+    
+    private GameObject _playerRef;
+    private CarController _carController;
+    private Rigidbody _rigidbodyRef;
+    
+    private bool hasFoundPlayer = false;
     // Start is called before the first frame update
     void Start()
     {
+        hasFoundPlayer = false;
+        StartCoroutine(waitTime());
         _bezierCurveGenerator = path.GetComponent<BezierCurveGenerator>();
         routeNumber = 0;
         _tValue = 0.0f;
@@ -43,6 +54,8 @@ public class WallFollow : MonoBehaviour
         endPos = _bezierCurveGenerator.controlPoints[_bezierCurveGenerator.controlPoints.Count - 1].transform.position;
         startPos = _bezierCurveGenerator.controlPoints[0].transform.position;
 
+        _tValueMax = Mathf.Floor(_bezierCurveGenerator.controlPoints.Count / 3);
+        Debug.Log("_tValueMax = " + _tValueMax);
     }
 
     public float GetStartDelayTimer()
@@ -53,19 +66,40 @@ public class WallFollow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _wallOMeterSlider.value = (endPos - transform.position).magnitude / (endPos - startPos).magnitude;
+        // _wallOMeterSlider.value = Vector3.Lerp(_wallOMeterPlayer.transform.position, endPos, (transform.position-startPos).magnitude).magnitude;
+        //_wallOMeterSlider.value = (transform.position - startPos).magnitude /(endPos - transform.position).magnitude;
+        
+        _wallOMeterSlider.value = Mathf.Lerp(_tValueMax, 0, (_tValueMax - _tValuePersistant)/_tValueMax);
+
+      
         
         if (_begin)
         {
             _tValue += Time.deltaTime * chaseSpeed;
-
+            _tValuePersistant += Time.deltaTime * chaseSpeed;
             Vector3 oldPosition = transform.position;
 
             var newPosition = Mathf.Pow(1 - _tValue, 3) * _bezierCurveGenerator.controlPoints[routeNumber].position +
                               3 * Mathf.Pow(1 - _tValue, 2) * _tValue * _bezierCurveGenerator.controlPoints[routeNumber + 1].position +
                               3 * (1 - _tValue) * Mathf.Pow(_tValue, 2) * _bezierCurveGenerator.controlPoints[routeNumber + 2].position +
                               Mathf.Pow(_tValue, 3) * _bezierCurveGenerator.controlPoints[routeNumber + 3].position;
+            
+            if (hasFoundPlayer)
+            {
+                float distanceToStart = (_playerRef.transform.position - startPos).magnitude;
+                float distanceToEnd = (endPos - _playerRef.transform.position).normalized.magnitude;
 
+                
+
+                Vector3 newValues = _wallOMeterPlayer.transform.position;
+                newValues.y = Mathf.Lerp(-100, 100, distanceToEnd);
+                newValues.y = Mathf.Clamp( newValues.y, -100, 100);
+                _wallOMeterPlayer.transform.position = newValues;
+                
+                //_wallOMeterSlider.value = Mathf.Lerp(_tValueMax, 0, (_tValueMax - _tValuePersistant)/_tValueMax);
+
+            }
+            
             transform.position = newPosition;
 
             Vector3 difference = newPosition - oldPosition;
@@ -82,6 +116,7 @@ public class WallFollow : MonoBehaviour
                 if (routeNumber >= _bezierCurveGenerator.controlPoints.Count - 1)
                 {
                     routeNumber = 0;
+                    _tValuePersistant = 0.0f;
                 }
             }
         }
@@ -105,5 +140,28 @@ public class WallFollow : MonoBehaviour
         yield return new WaitForSeconds(2);
         //startDelayText.text = "";
     }
-
+    IEnumerator waitTime()
+    {
+        yield return new WaitForSeconds(1);
+        
+        GameObject[] listOfPlayers = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject player in listOfPlayers)
+        {
+            //Debug.Log("Player: " + player);
+            if (!player.GetComponent<PhotonView>())
+            {
+                continue;
+            }
+            
+            if (player.GetComponent<PhotonView>().IsMine)
+            {
+                _playerRef = player;
+                //Debug.Log("Player Found");
+                hasFoundPlayer = true;
+            }
+        }
+        
+        _carController = _playerRef.GetComponent<CarController>();
+        _rigidbodyRef = _carController.GetComponent<Rigidbody>();
+    }
 }

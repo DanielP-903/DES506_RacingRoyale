@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine.Audio;
 
-    public class Launcher : MonoBehaviourPunCallbacks
+public class Launcher : MonoBehaviourPunCallbacks
     {
         // --- VARS ---
         // CHANGEABLE LAUNCHER VARIABLES (MAX PLAYERS HERE)
@@ -28,6 +29,18 @@ using Photon.Realtime;
         [Tooltip("The UI Label to inform the user that the connection is in progress")]
         [SerializeField]
         private GameObject progressLabel;
+        [Tooltip("The Ui Panel for Options")]
+        [SerializeField]
+        private GameObject optionsPanel;
+        [Tooltip("The Ui Panel for Credits")]
+        [SerializeField]
+        private GameObject creditsPanel;
+        [Tooltip("The Ui 3d Car Display")]
+        [SerializeField]
+        private GameObject selectorCar;
+        [Tooltip("Audio Mixer for the Game")]
+        [SerializeField]
+        private AudioMixer mixer;
 
         #endregion
 
@@ -122,6 +135,8 @@ using Photon.Realtime;
         void Start()
         {
             progressLabel.SetActive(false);
+            optionsPanel.SetActive(false);
+            creditsPanel.SetActive(false);
             controlPanel.SetActive(true);
 
             Destroy(GameObject.Find("PlayerCamera"));
@@ -133,9 +148,10 @@ using Photon.Realtime;
             source.Play();
         }
         
+        
         #endregion
 
-        // CONNECT AND QUIT METHODS CALLED BY BUTTONS
+        // CONNECT AND MENU METHODS CALLED BY BUTTONS
         #region Public Methods
         
         /// <summary>
@@ -167,6 +183,48 @@ using Photon.Realtime;
         public void QuitGame()
         {
             Application.Quit();
+        }
+        
+        public void GoToOptions()
+        {
+            progressLabel.SetActive(false);
+            optionsPanel.SetActive(true);
+            creditsPanel.SetActive(false);
+            controlPanel.SetActive(false);
+            selectorCar.SetActive(false);
+        }
+
+        public void GoToCredits()
+        {
+            progressLabel.SetActive(false);
+            optionsPanel.SetActive(false);
+            creditsPanel.SetActive(true);
+            controlPanel.SetActive(false);
+            selectorCar.SetActive(false);
+        }
+
+        public void GoBackToMenu()
+        {
+            progressLabel.SetActive(false);
+            optionsPanel.SetActive(false);
+            creditsPanel.SetActive(false);
+            controlPanel.SetActive(true);
+            selectorCar.SetActive(true);
+        }
+
+        public void ChangeMaster(float newVol)
+        {
+            mixer.SetFloat("Master", newVol);
+        }
+        
+        public void ChangeMusic(float newVol)
+        {
+            mixer.SetFloat("Music", newVol);
+        }
+        
+        public void ChangeSound(float newVol)
+        {
+            mixer.SetFloat("Sound", newVol);
         }
 
         #endregion
