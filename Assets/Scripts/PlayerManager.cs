@@ -22,13 +22,14 @@ public class PlayerManager : MonoBehaviour
     private GameManager _gm;
     private Transform _spawnLocation;
     private GameObject mainCam;
-
+    private GameObject startBlocker;
+    public TextMeshProUGUI startDelayText;
+    
     private int playerNumber = 0;
     private bool completedStage = false;
     private bool eliminated = false;
     private int elimPosition = 0;
     private bool ready = false;
-    public TextMeshProUGUI startDelayText;
     #endregion
 
     // PLAYER NAME UI
@@ -224,6 +225,8 @@ public class PlayerManager : MonoBehaviour
         //Debug.Log("PlayerManger Loading Level");
         if (_photonView != null)
         {
+            SetReadyPlayers(0, _gm.GetStageNum());
+            startBlocker = GameObject.Find("StartBlocker");
             startDelayText = GameObject.Find("Start Delay").GetComponent<TextMeshProUGUI>();
             int readyPlayers;
             TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
@@ -384,6 +387,8 @@ public class PlayerManager : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
         }
         //Start Code Here
+        startBlocker.SetActive(false);
+        startDelayText.text = "Go!";
         Debug.Log("StartedRACE!");
         while (startDelayText.color.a > 0)
         {
