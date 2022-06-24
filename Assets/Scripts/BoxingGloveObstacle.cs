@@ -6,7 +6,7 @@ public class BoxingGloveObstacle : MonoBehaviour
 {
     public float speed = 2.5f, distance = 50f, waitTime = 5f;
     public bool doUp = true;
-    public GameObject BoxingGloveEnd;
+    //public GameObject BoxingGloveEnd;
     private Vector3 startPosition, endPosition;
 
     // Start is called before the first frame update
