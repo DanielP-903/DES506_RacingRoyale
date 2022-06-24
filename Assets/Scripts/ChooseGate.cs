@@ -22,8 +22,6 @@ public class ChooseGate : MonoBehaviour
 
         MoveGate();
 
-       
-
     }
 
     IEnumerator GateUp()
@@ -36,10 +34,6 @@ public class ChooseGate : MonoBehaviour
             doUp = !doUp;
         }
         
-        
-
-
-
     }
 
     void MoveGate()
