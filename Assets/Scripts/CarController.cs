@@ -55,6 +55,7 @@ public class CarController : MonoBehaviour
 
     [Header("Other")] 
     public float maxWallDistanceAlert = 30.0f;
+    public GameObject minimapArrow;
     
     private bool _moveForward = false;
     private bool _moveBackward = false;
@@ -86,9 +87,9 @@ public class CarController : MonoBehaviour
     private float _resetDelay = 2.0f;
     private float _padDelay = 2.0f;
 
-
+    
+    
     private PlayerManager _playerManager;
-
     private Rigidbody _rigidbody;
     private bool _HitDetect;
     private RaycastHit _Hit;

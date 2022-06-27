@@ -9,12 +9,14 @@ public class MinimapController : MonoBehaviour
     private GameObject _playerRef;
     private bool hasFoundPlayer = false;
     private CarController _carController;
-    
+
+    public float yOffset = 20;
     // Start is called before the first frame update
     void Start()
     {
         hasFoundPlayer = false;
         StartCoroutine(waitTime());
+        GetComponent<Camera>().orthographicSize = yOffset;
     }
 
     // Update is called once per frame
@@ -24,7 +26,7 @@ public class MinimapController : MonoBehaviour
         {
             Vector3 newPos = new Vector3(_playerRef.transform.position.x, _playerRef.transform.position.y, _playerRef.transform.position.z)
                 {
-                    y = 20
+                    y = yOffset
                 };
             transform.position = newPos;
             transform.rotation = Quaternion.Euler(90.0f, _playerRef.transform.eulerAngles.y, 0.0f);
@@ -53,6 +55,8 @@ public class MinimapController : MonoBehaviour
         }
         
         _carController = _playerRef.GetComponent<CarController>();
+        _carController.minimapArrow.SetActive(false);
+
     }
 }
 
