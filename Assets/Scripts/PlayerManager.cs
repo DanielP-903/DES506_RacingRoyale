@@ -211,9 +211,11 @@ public class PlayerManager : MonoBehaviour
            int readyPlayers;
            TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
            Debug.Log( (readyPlayers +":"+ _gm.GetTotalPlayers()));
-           if (PhotonNetwork.IsMasterClient && _gm.GetStageNum() > 0 && _gm.GetStageNum() < 5 && readyPlayers >= _gm.GetTotalPlayers())
+           // && readyPlayers >= _gm.GetTotalPlayers()
+           if (_gm.GetStageNum() > 0 && _gm.GetStageNum() < 5)
            {
-               _photonView.RPC("startDelayTimer", RpcTarget.All);
+               //_photonView.RPC("startDelayTimer", RpcTarget.All);
+               startDelayTimer();
            }
 
            ready = false;
