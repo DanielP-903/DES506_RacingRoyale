@@ -601,7 +601,10 @@ public class CarController : MonoBehaviour
         {
             _passedCheckpoints[collider.gameObject] = true;
             _currentRespawnPoint = collider.gameObject.transform;
-            GameObject newSpawnLocation = GameObject.Find(_currentRespawnPoint.name + _playerManager.GetPlayerNumber());
+            //GameObject newSpawnLocation = GameObject.Find(_currentRespawnPoint.name + _playerManager.GetPlayerNumber());
+            int playerNo = _playerManager.GetPlayerNumber();
+            GameObject newSpawnLocation = collider.gameObject.transform.GetChild(playerNo).gameObject;
+            
             Debug.Log("Checkpoint passed: " + collider.gameObject.name + " , " + newSpawnLocation + " , " + _currentRespawnPoint.name + " , " + _playerManager.GetPlayerNumber());
             _playerManager.ChangeSpawnLocation(newSpawnLocation.transform);
         }
