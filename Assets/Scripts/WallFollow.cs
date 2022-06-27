@@ -14,11 +14,11 @@ public class WallFollow : MonoBehaviour
     public float startDelay = 3.0f;
     public float chaseSpeed = 1.0f;
     public TextMeshProUGUI startDelayText;
-    public GameObject wallOMeter;
+    //public GameObject wallOMeter;
     private BezierCurveGenerator _bezierCurveGenerator;
 
-    private Slider _wallOMeterSlider;
-    private GameObject _wallOMeterPlayer;
+    //private Slider _wallOMeterSlider;
+    //private GameObject _wallOMeterPlayer;
 
     private float _startDelayTimer = 0.0f;
     
