@@ -106,8 +106,6 @@ public class CarController : MonoBehaviour
     private Camera _mainCam;
     private Image _vignette;
     private CameraShake _cameraShake;
-
-    [HideInInspector] private int _currentCheckpointNo = 0;
     
     [Header("DEBUG MODE")] public bool debug = false;
 

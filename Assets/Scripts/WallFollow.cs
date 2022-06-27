@@ -36,12 +36,12 @@ public class WallFollow : MonoBehaviour
     private CarController _carController;
     private Rigidbody _rigidbodyRef;
     
-    private bool hasFoundPlayer = false;
+    //private bool hasFoundPlayer = false;
     private CheckpointSystem _checkpointSystem;
     // Start is called before the first frame update
     void Start()
     {
-        hasFoundPlayer = false;
+        //hasFoundPlayer = false;
         StartCoroutine(waitTime());
         _bezierCurveGenerator = path.GetComponent<BezierCurveGenerator>();
         _checkpointSystem = GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>();
@@ -163,7 +163,7 @@ public class WallFollow : MonoBehaviour
             {
                 _playerRef = player;
                 //Debug.Log("Player Found");
-                hasFoundPlayer = true;
+                //hasFoundPlayer = true;
             }
         }
         
