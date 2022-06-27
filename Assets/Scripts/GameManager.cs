@@ -155,6 +155,11 @@ public class GameManager : MonoBehaviourPunCallbacks
         return startDelay;
     }
     
+    public void changeSpectateTarget(bool next = true)
+    {
+        
+    }
+    
     #endregion
 
     // CUSTOM PROPS METHODS: GET/SET ELIM, TOP3 AND FINISHED
