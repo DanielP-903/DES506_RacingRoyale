@@ -345,6 +345,7 @@ public class PlayerManager : MonoBehaviour
     {
         if (!completedStage && !eliminated)
         {
+            startDelayText.color = new Color(startDelayText.color.r, startDelayText.color.g, startDelayText.color.b, 0);
             //Debug.Log("Player: "+_photonView.Owner.NickName + " Eliminated.");
          
             ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
