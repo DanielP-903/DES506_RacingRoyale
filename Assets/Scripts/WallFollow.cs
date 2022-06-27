@@ -37,19 +37,21 @@ public class WallFollow : MonoBehaviour
     private Rigidbody _rigidbodyRef;
     
     private bool hasFoundPlayer = false;
+    private CheckpointSystem _checkpointSystem;
     // Start is called before the first frame update
     void Start()
     {
         hasFoundPlayer = false;
         StartCoroutine(waitTime());
         _bezierCurveGenerator = path.GetComponent<BezierCurveGenerator>();
+        _checkpointSystem = GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>();
         routeNumber = 0;
         _tValue = 0.0f;
         _startDelayTimer = startDelay;
         _begin = false;
 
-        _wallOMeterSlider = wallOMeter.GetComponent<Slider>();
-        _wallOMeterPlayer = wallOMeter.transform.GetChild(2).gameObject;
+        //_wallOMeterSlider = wallOMeter.GetComponent<Slider>();
+        //_wallOMeterPlayer = wallOMeter.transform.GetChild(2).gameObject;
 
         endPos = _bezierCurveGenerator.controlPoints[_bezierCurveGenerator.controlPoints.Count - 1].transform.position;
         startPos = _bezierCurveGenerator.controlPoints[0].transform.position;
@@ -69,7 +71,7 @@ public class WallFollow : MonoBehaviour
         // _wallOMeterSlider.value = Vector3.Lerp(_wallOMeterPlayer.transform.position, endPos, (transform.position-startPos).magnitude).magnitude;
         //_wallOMeterSlider.value = (transform.position - startPos).magnitude /(endPos - transform.position).magnitude;
         
-        _wallOMeterSlider.value = Mathf.Lerp(_tValueMax, 0, (_tValueMax - _tValuePersistant)/_tValueMax);
+        //_wallOMeterSlider.value = Mathf.Lerp(_tValueMax, 0, (_tValueMax - _tValuePersistant)/_tValueMax);
 
       
         
@@ -84,21 +86,25 @@ public class WallFollow : MonoBehaviour
                               3 * (1 - _tValue) * Mathf.Pow(_tValue, 2) * _bezierCurveGenerator.controlPoints[routeNumber + 2].position +
                               Mathf.Pow(_tValue, 3) * _bezierCurveGenerator.controlPoints[routeNumber + 3].position;
             
-            if (hasFoundPlayer)
-            {
-                float distanceToStart = (_playerRef.transform.position - startPos).magnitude;
-                float distanceToEnd = (endPos - _playerRef.transform.position).normalized.magnitude;
-
-                
-
-                Vector3 newValues = _wallOMeterPlayer.transform.position;
-                newValues.y = Mathf.Lerp(-100, 100, distanceToEnd);
-                newValues.y = Mathf.Clamp( newValues.y, -100, 100);
-                _wallOMeterPlayer.transform.position = newValues;
-                
-                //_wallOMeterSlider.value = Mathf.Lerp(_tValueMax, 0, (_tValueMax - _tValuePersistant)/_tValueMax);
-
-            }
+            // if (hasFoundPlayer)
+            // {
+            //     
+            //     float distanceToStart = Vector3.Distance(_playerRef.transform.position, startPos) - 5.0f;
+            //     float distanceToEnd = Vector3.Distance(_playerRef.transform.position, endPos) - 5.0f;
+            //     float distanceToLastCheckpoint = Vector3.Distance(_playerRef.transform.position, _playerRef.GetComponent<PlayerManager>().GetSpawnLocation().position);
+            //     float distanceToNextCheckpoint = Vector3.Distance(_playerRef.transform.position, (_checkpointSystem.));
+            //     
+            //     float maxDistance = 100.0f;
+            //     Vector3 newValues = _wallOMeterPlayer.transform.position;
+            //     newValues.y = Mathf.Lerp(180, 670,  (distanceToNextCheckpoint- distanceToLastCheckpoint)/distanceToLastCheckpoint);
+            //     Debug.Log("newValues.y = " + newValues.y);
+            //     Debug.Log("distanceToEnd = " + distanceToEnd);
+            //     Debug.Log("distanceToStart = " + distanceToStart);
+            //     _wallOMeterPlayer.transform.position = newValues;
+            //     
+            //     //_wallOMeterSlider.value = Mathf.Lerp(_tValueMax, 0, (_tValueMax - _tValuePersistant)/_tValueMax);
+            //
+            // }
             
             transform.position = newPosition;
 
