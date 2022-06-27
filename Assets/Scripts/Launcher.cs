@@ -146,6 +146,19 @@ public class Launcher : MonoBehaviourPunCallbacks
             source.loop = true;
             source.clip = Resources.Load<AudioClip>("Audio/Music/MenuMusic1");
             source.Play();
+
+            if (PlayerPrefs.HasKey("MasterVol"))
+            {
+                mixer.SetFloat("Master", PlayerPrefs.GetFloat("MasterVol"));
+            }
+            if (PlayerPrefs.HasKey("MusicVol"))
+            {
+                mixer.SetFloat("Music", PlayerPrefs.GetFloat("MusicVol"));
+            }
+            if (PlayerPrefs.HasKey("SoundVol"))
+            {
+                mixer.SetFloat("Sound", PlayerPrefs.GetFloat("SoundVol"));
+            }
         }
         
         
@@ -214,16 +227,19 @@ public class Launcher : MonoBehaviourPunCallbacks
 
         public void ChangeMaster(float newVol)
         {
+            PlayerPrefs.SetFloat("MasterVol", newVol);
             mixer.SetFloat("Master", newVol);
         }
         
         public void ChangeMusic(float newVol)
         {
+            PlayerPrefs.SetFloat("MusicVol", newVol);
             mixer.SetFloat("Music", newVol);
         }
         
         public void ChangeSound(float newVol)
         {
+            PlayerPrefs.SetFloat("SoundVol", newVol);
             mixer.SetFloat("Sound", newVol);
         }
 
