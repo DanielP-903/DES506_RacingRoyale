@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private int _elimPositon = 0;
     private int _playerNumber = 0 ;
     private Transform spectateTarget;
+    private GameObject spectateMenu;
 
     #endregion
     
@@ -154,10 +155,49 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         return startDelay;
     }
-    
-    public void changeSpectateTarget(bool next = true)
+
+    public void SetSpectateMenu(GameObject newMenu)
     {
-        
+        spectateMenu = newMenu;
+    }
+    
+    public void ChangeSpectateTarget(bool next = true)
+    {
+        int index = 0;
+        ArrayList spectateTargets = new ArrayList();
+        spectateTargets.Add(GameObject.Find("Danger Wall").transform);
+        foreach (PhotonView pv in PhotonNetwork.PhotonViewCollection)
+        {
+            if (!pv.Owner.CustomProperties.ContainsKey("Eliminated") && pv.gameObject != null)
+            {
+                spectateTargets.Add(pv.gameObject.transform);
+                Debug.Log("AddedToSpec");
+                if (spectateTarget = pv.gameObject.transform)
+                {
+                    Debug.Log("IndexSet");
+                    index = spectateTargets.IndexOf(spectateTarget);
+                }
+            }
+
+            if (next)
+            {
+                index++;
+                if (index >= spectateTargets.Count)
+                {
+                    index = 0;
+                }
+            }
+            else
+            {
+                index--;
+                if (index < 0)
+                {
+                    index = spectateTargets.Count-1;
+                }
+            }
+            Debug.Log("Index: "+index);
+            spectateTarget = (Transform)spectateTargets[index];
+        }
     }
     
     #endregion
@@ -261,6 +301,10 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             GameObject.Find("Speedometer").SetActive(false);
         }
+        if (spectateMenu != null)
+        {
+            spectateMenu.SetActive(true);
+        }
 
         CinemachineVirtualCamera cvc = Camera.main.gameObject.GetComponent<CinemachineVirtualCamera>();
             
@@ -341,8 +385,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void LoadPlayerInLevel(Scene scene, LoadSceneMode loadSceneMode)
     {
-        _placeCounter = GameObject.Find("PlaceCounter").GetComponent<TextMeshProUGUI>();
-        _timer = GameObject.Find("Timer").GetComponent<TextMeshProUGUI>();
+        
         //Debug.Log("GameManager Loading Level");
         if (scene.name == "Launcher")
         {
@@ -350,13 +393,15 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
         //Debug.Log("Loaded Player- Elim?: "+_eliminated+" PlayerNum: "+_playerNumber);
         // IF NOT PEDESTAL STAGE AND NOT ELIMINATED : CREATE PLAYER CAR AND SET PHOTON VIEW
-        if (scene.name != "EndStage" && !_eliminated)
+        if (scene.name != "EndStage")
         {
-            
+            _placeCounter = GameObject.Find("PlaceCounter").GetComponent<TextMeshProUGUI>();
+            _timer = GameObject.Find("Timer").GetComponent<TextMeshProUGUI>();
         }
         // UPON REACHING PEDESTAL STAGE
         else if (scene.name == "EndStage")
         {
+            //spectateMenu.SetActive(false);
             for (int i = 1; i < 5; i++)
             {
                 //Top3PlayerData t3;
@@ -438,7 +483,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 _timer.text = sec + ":" + milSec;
                 break;
             case "Stage1":
-                _timer.gameObject.SetActive(false);
+                //_timer.gameObject.SetActive(false);
                 TryGetFinishedPlayers(out playersCompleted, _stage);
                 if (Mathf.Ceil((float)_totalPlayers / 2) - playersCompleted == 1)
                 {
@@ -462,7 +507,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
                 break;
             case "Stage2":
-                _timer.gameObject.SetActive(false);
+                //_timer.gameObject.SetActive(false);
                 TryGetFinishedPlayers(out playersCompleted, _stage);
                 if (Mathf.Ceil((float)_totalPlayers / 4) - playersCompleted == 1)
                 {
@@ -486,7 +531,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 
                 break;
             case "Stage3":
-                _timer.gameObject.SetActive(false);
+                //_timer.gameObject.SetActive(false);
                 TryGetFinishedPlayers(out playersCompleted, _stage);
                 if (Mathf.Ceil((float)_totalPlayers / 8) - playersCompleted == 1)
                 {
@@ -510,7 +555,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 
                 break;
             case "Stage4":
-                _timer.gameObject.SetActive(false);
+                //_timer.gameObject.SetActive(false);
                 TryGetFinishedPlayers(out playersCompleted, _stage);
                 TryGetElimPlayers(out elimPlayers);
                 _placeCounter.text = Mathf.Ceil(_totalPlayers - elimPlayers) + " players left!";
