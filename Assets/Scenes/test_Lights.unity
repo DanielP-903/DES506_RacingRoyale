@@ -3731,6 +3731,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 343551070638925032, guid: fe196a3db4b153341a104f8397f15f46, type: 3}
+      propertyPath: m_ApplyActiveColorSpace
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 343551070638925033, guid: fe196a3db4b153341a104f8397f15f46, type: 3}
       propertyPath: m_Name
       value: Confetti
@@ -3745,7 +3749,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 343551070638925034, guid: fe196a3db4b153341a104f8397f15f46, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 30
+      value: 24.57
       objectReference: {fileID: 0}
     - target: {fileID: 343551070638925034, guid: fe196a3db4b153341a104f8397f15f46, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3778,6 +3782,62 @@ PrefabInstance:
     - target: {fileID: 343551070638925034, guid: fe196a3db4b153341a104f8397f15f46, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 343551070638925035, guid: fe196a3db4b153341a104f8397f15f46, type: 3}
+      propertyPath: ForceModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 343551070638925035, guid: fe196a3db4b153341a104f8397f15f46, type: 3}
+      propertyPath: ForceModule.x.scalar
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 343551070638925035, guid: fe196a3db4b153341a104f8397f15f46, type: 3}
+      propertyPath: ForceModule.y.scalar
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 343551070638925035, guid: fe196a3db4b153341a104f8397f15f46, type: 3}
+      propertyPath: ForceModule.z.scalar
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 343551070638925035, guid: fe196a3db4b153341a104f8397f15f46, type: 3}
+      propertyPath: ForceModule.x.minScalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 343551070638925035, guid: fe196a3db4b153341a104f8397f15f46, type: 3}
+      propertyPath: ForceModule.y.minScalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 343551070638925035, guid: fe196a3db4b153341a104f8397f15f46, type: 3}
+      propertyPath: ForceModule.z.minScalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 343551070638925035, guid: fe196a3db4b153341a104f8397f15f46, type: 3}
+      propertyPath: ForceModule.inWorldSpace
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 343551070638925035, guid: fe196a3db4b153341a104f8397f15f46, type: 3}
+      propertyPath: ForceModule.x.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 343551070638925035, guid: fe196a3db4b153341a104f8397f15f46, type: 3}
+      propertyPath: ForceModule.y.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 343551070638925035, guid: fe196a3db4b153341a104f8397f15f46, type: 3}
+      propertyPath: ForceModule.z.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 343551070638925035, guid: fe196a3db4b153341a104f8397f15f46, type: 3}
+      propertyPath: ForceModule.randomizePerFrame
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 343551070638925035, guid: fe196a3db4b153341a104f8397f15f46, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 343551070638925035, guid: fe196a3db4b153341a104f8397f15f46, type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fe196a3db4b153341a104f8397f15f46, type: 3}
