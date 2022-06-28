@@ -107,6 +107,7 @@ public class CarController : MonoBehaviour
     private VisualEffect _speedLinesEffect;
     private VisualEffect _speedCircleEffect;
     private CameraShake _cameraShake;
+    private Image _dangerPressureImg;
     
     [Header("DEBUG MODE")] public bool debug = false;
 
@@ -176,6 +177,7 @@ public class CarController : MonoBehaviour
 
             GameObject canvas = GameObject.Find("Canvas");
 
+            _dangerPressureImg = canvas.transform.GetChild(0).GetComponent<Image>();
             _speedLinesEffect = _mainCam.transform.GetChild(2).gameObject.GetComponent<VisualEffect>();
             _speedCircleEffect = _mainCam.transform.GetChild(3).gameObject.GetComponent<VisualEffect>();
             _speedCircleEffect.Stop();
@@ -187,8 +189,8 @@ public class CarController : MonoBehaviour
             {
                 Debug.Log("DEBUG MODE IS ACTIVE! (CarController)");
             }
-            
-            //_wall = GameObject.Find("Danger Wall");
+
+            _wall = GameObject.FindGameObjectWithTag("EliminationZone");
             _passedFinishLine = false;
             GameObject checkpointObject = GameObject.Find("CheckpointSystem");
             _playerPowerups.powerupIcon = GameObject.FindGameObjectWithTag("PowerupIcon").gameObject.GetComponent<Image>();
@@ -208,6 +210,16 @@ public class CarController : MonoBehaviour
             }
             //_mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
             //_cameraShake = _mainCam.GetComponent<CameraShake>();
+            
+            _mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+            _cameraShake = _mainCam.GetComponent<CameraShake>();
+
+            GameObject canvas = GameObject.Find("Canvas");
+
+            _dangerPressureImg = canvas.transform.GetChild(0).GetComponent<Image>();
+            _speedLinesEffect = _mainCam.transform.GetChild(2).gameObject.GetComponent<VisualEffect>();
+            _speedCircleEffect = _mainCam.transform.GetChild(3).gameObject.GetComponent<VisualEffect>();
+            _speedCircleEffect.Stop();
         }
     
         /*private void LoadCCInLevel(Scene scene, LoadSceneMode loadSceneMode)
@@ -284,6 +296,7 @@ public class CarController : MonoBehaviour
         float clampedVelocity = Mathf.Clamp((_rigidbody.velocity.magnitude * 2.2369362912f) - 60, 0, 100);
         _newAlpha.x = Mathf.Lerp(0.2f, 0, (100 - clampedVelocity) / 100);
         _newAlpha.y = Mathf.Lerp(0.5f, 0, (100 - clampedVelocity) / 100);
+        
         // if (!_boostPlaying)
         // {
         //     _newAlpha.x = Mathf.Lerp(0.2f, 0, (100 - clampedVelocity) / 100);
@@ -459,7 +472,7 @@ public class CarController : MonoBehaviour
 
         if (!_moveForward && !_moveBackward)
         {
-            brakeTorque = 1500.0f;
+            brakeTorque = 8000.0f;
         }
         else if (_drift)
         {
@@ -483,6 +496,11 @@ public class CarController : MonoBehaviour
 
     }
 
+    public void PlayCircleEffect()
+    {
+        _speedCircleEffect.Play();
+    }
+    
     public IEnumerator ActivateBoostEffect()
     {
         foreach (var effect in boostEffects)
@@ -552,11 +570,12 @@ public class CarController : MonoBehaviour
 
         _onOilPreviousFrame = _onOil;
 
-        // float distanceToWall = Vector3.Distance(transform.position, _wall.transform.position);
-        // distanceToWall = Mathf.Clamp(distanceToWall, 0, maxWallDistanceAlert);
-        //
-        // _vignette.color = Color.Lerp(Color.clear, Color.magenta, (maxWallDistanceAlert-distanceToWall)/maxWallDistanceAlert);
-        
+        if (_wall)
+        {
+            float distanceToWall = Vector3.Distance(transform.position, _wall.transform.position);
+            distanceToWall = Mathf.Clamp(distanceToWall, 0, maxWallDistanceAlert);
+            _dangerPressureImg.color = Color.Lerp(Color.clear, Color.magenta, (maxWallDistanceAlert - distanceToWall) / maxWallDistanceAlert);
+        }
     }
 
     public void ResetPlayer()
