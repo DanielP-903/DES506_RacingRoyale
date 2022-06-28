@@ -73,7 +73,7 @@ public class PlayerPowerups : MonoBehaviour
         wallObject = transform.GetChild(0).gameObject;
         blastObject = transform.GetChild(1).gameObject;
         _blastObjectCollider = blastObject.GetComponent<SphereCollider>();
-        powerupIcon = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(3).GetComponent<Image>();
+        powerupIcon = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(4).GetComponent<Image>();
         _powerupIconMask = powerupIcon.transform.GetChild(0).GetComponent<Image>();
         grappleLineObject = transform.GetChild(2).gameObject;
         _grappleLine = grappleLineObject.GetComponent<LineRenderer>();
@@ -91,7 +91,7 @@ public class PlayerPowerups : MonoBehaviour
         wallObject = transform.GetChild(0).gameObject;
         blastObject = transform.GetChild(1).gameObject;
         _blastObjectCollider = blastObject.GetComponent<SphereCollider>();
-        powerupIcon = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(3).GetComponent<Image>();
+        powerupIcon = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(4).GetComponent<Image>();
         _powerupIconMask = powerupIcon.transform.GetChild(0).GetComponent<Image>();
         grappleLineObject = transform.GetChild(2).gameObject;
         _grappleLine = grappleLineObject.GetComponent<LineRenderer>();
@@ -248,6 +248,11 @@ public class PlayerPowerups : MonoBehaviour
                 case PowerupType.WarpPortal: WarpPortal(); break;
                 default: throw new ArgumentOutOfRangeException();
             }
+
+            if (_wallShieldTimer < wallShieldTime - 1.0f)
+            {
+                _wallShieldTimer = 0.0f;
+            }
         }
         
         
@@ -263,6 +268,7 @@ public class PlayerPowerups : MonoBehaviour
          {
              effect.Play();
          }
+         _carController.PlayCircleEffect();
          if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
          {                
              _rigidbody.velocity = transform.forward * superBoostForce;
@@ -463,7 +469,7 @@ public class PlayerPowerups : MonoBehaviour
 
      private void OnTriggerEnter(Collider collider)
      {
-         if (collider.transform.CompareTag("Powerup") && _airBlastTimer <= 0 && _wallShieldTimer <= 0)
+         if (collider.transform.CompareTag("Powerup") && _warpPortalTimer <= 0 && _wallShieldTimer <= 0 && !_boosting && !_grappling && !_punching && !_airBlasting)
          {
              currentPowerup = collider.transform.parent.GetComponent<PowerupSpawner>().GetCurrentPowerup();
              currentPowerupType = currentPowerup.powerupType;
@@ -471,6 +477,7 @@ public class PlayerPowerups : MonoBehaviour
              powerupIcon.sprite = currentPowerup.powerupUIImage;
              _powerupIconMask.sprite = currentPowerup.powerupUIImage;
              powerupIcon.gameObject.SetActive(true);
+             _powerupIconMask.fillAmount = 0;
          }
          
          if (collider.transform.CompareTag("WallShield"))
