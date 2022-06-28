@@ -18008,7 +18008,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 886733854}
-  m_RootOrder: 118
+  m_RootOrder: 84
   m_LocalEulerAnglesHint: {x: 0, y: 450, z: 0}
 --- !u!64 &448801937
 MeshCollider:
@@ -31493,7 +31493,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 886733854}
-  m_RootOrder: 113
+  m_RootOrder: 53
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &625915891
 GameObject:
@@ -35353,6 +35353,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3329970067499980417, guid: 40daae4553a2ac34482c2c6405137304, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3993519484873524395, guid: 40daae4553a2ac34482c2c6405137304, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -35452,6 +35456,14 @@ PrefabInstance:
     - target: {fileID: 5256434471863928045, guid: 40daae4553a2ac34482c2c6405137304, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5608751721039562756, guid: 40daae4553a2ac34482c2c6405137304, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6744379327355611833, guid: 40daae4553a2ac34482c2c6405137304, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SpectateNext
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 40daae4553a2ac34482c2c6405137304, type: 3}
@@ -35636,6 +35648,7 @@ Transform:
   - {fileID: 1521075228}
   - {fileID: 20516847}
   - {fileID: 1772677801}
+  - {fileID: 620043768}
   - {fileID: 109441529}
   - {fileID: 751157065}
   - {fileID: 540947751}
@@ -35666,6 +35679,7 @@ Transform:
   - {fileID: 931961139}
   - {fileID: 2080126077}
   - {fileID: 2022868451}
+  - {fileID: 448801936}
   - {fileID: 152065930}
   - {fileID: 613621525}
   - {fileID: 721805867}
@@ -35696,12 +35710,10 @@ Transform:
   - {fileID: 1157154394}
   - {fileID: 1423011575}
   - {fileID: 1020838833}
-  - {fileID: 620043768}
   - {fileID: 1433030567}
   - {fileID: 1203865507}
   - {fileID: 1185915090}
   - {fileID: 368084170}
-  - {fileID: 448801936}
   - {fileID: 728868558}
   - {fileID: 2095008593}
   - {fileID: 342020732}
