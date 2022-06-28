@@ -869,6 +869,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1553398100933319906, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1553398100933319906, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 2774631455131860108, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_Name
       value: Main Camera
@@ -932,6 +940,10 @@ PrefabInstance:
     - target: {fileID: 2774631455131860148, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7131954699361099840, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
@@ -63321,6 +63333,75 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6888531124192092250}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &7054977196950663712
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1820898816095816623, guid: d1786b4f331c497469b1c7561a62acfc, type: 3}
+      propertyPath: sceneViewId
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395585337563863607, guid: d1786b4f331c497469b1c7561a62acfc, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9013264047944745944, guid: d1786b4f331c497469b1c7561a62acfc, type: 3}
+      propertyPath: m_RootOrder
+      value: 19
+      objectReference: {fileID: 0}
+    - target: {fileID: 9013264047944745944, guid: d1786b4f331c497469b1c7561a62acfc, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -11.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9013264047944745944, guid: d1786b4f331c497469b1c7561a62acfc, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 100.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 9013264047944745944, guid: d1786b4f331c497469b1c7561a62acfc, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 16.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9013264047944745944, guid: d1786b4f331c497469b1c7561a62acfc, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9013264047944745944, guid: d1786b4f331c497469b1c7561a62acfc, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9013264047944745944, guid: d1786b4f331c497469b1c7561a62acfc, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.000000014901159
+      objectReference: {fileID: 0}
+    - target: {fileID: 9013264047944745944, guid: d1786b4f331c497469b1c7561a62acfc, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9013264047944745944, guid: d1786b4f331c497469b1c7561a62acfc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9013264047944745944, guid: d1786b4f331c497469b1c7561a62acfc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9013264047944745944, guid: d1786b4f331c497469b1c7561a62acfc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9013264047944745945, guid: d1786b4f331c497469b1c7561a62acfc, type: 3}
+      propertyPath: checkpoints
+      value: 
+      objectReference: {fileID: 7596445856374011841}
+    - target: {fileID: 9013264047944745946, guid: d1786b4f331c497469b1c7561a62acfc, type: 3}
+      propertyPath: m_Name
+      value: BotCar
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d1786b4f331c497469b1c7561a62acfc, type: 3}
 --- !u!1 &7596445856374011840
 GameObject:
   m_ObjectHideFlags: 0

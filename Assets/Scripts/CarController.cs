@@ -11,6 +11,7 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.VFX;
 using ColorParameter = UnityEngine.Rendering.PostProcessing.ColorParameter;
 using FloatParameter = UnityEngine.Rendering.PostProcessing.FloatParameter;
 using Vignette = UnityEngine.Rendering.Universal.Vignette;
@@ -76,19 +77,17 @@ public class CarController : MonoBehaviour
     private bool _boostPlaying = false;
     
     private Vector3 _savedOilVelocity;
+    private Vector2 _newAlpha;
 
     private float _currentSteeringMulti;
-
+    
     private bool _passedFinishLine = false;
     private bool _hitEliminationZone = false;
-
     private float _pushDelay = 2.0f;
     private float _boostDelay = 2.0f;
     private float _resetDelay = 2.0f;
     private float _padDelay = 2.0f;
 
-    
-    
     private PlayerManager _playerManager;
     private Rigidbody _rigidbody;
     private bool _HitDetect;
@@ -105,8 +104,10 @@ public class CarController : MonoBehaviour
     private GameObject _wall;
     
     private Camera _mainCam;
-    private Image _vignette;
+    private VisualEffect _speedLinesEffect;
+    private VisualEffect _speedCircleEffect;
     private CameraShake _cameraShake;
+    private Image _dangerPressureImg;
     
     [Header("DEBUG MODE")] public bool debug = false;
 
@@ -175,18 +176,11 @@ public class CarController : MonoBehaviour
             _cameraShake = _mainCam.GetComponent<CameraShake>();
 
             GameObject canvas = GameObject.Find("Canvas");
-            
-//            _vignette = canvas.transform.GetChild(6).GetComponent<Image>();
 
-            // if (_mainCam.GetComponent<CinemachineVolumeSettings>().m_Profile.components.Find(Vignette tmp))
-            // {
-            //     _vignette = tmp;
-            //     _vignette.parameters[0]
-            // }
-            // else
-            // {
-            //     Debug.Log("Something went wrong with the vignette");
-            // }
+            _dangerPressureImg = canvas.transform.GetChild(0).GetComponent<Image>();
+            _speedLinesEffect = _mainCam.transform.GetChild(2).gameObject.GetComponent<VisualEffect>();
+            _speedCircleEffect = _mainCam.transform.GetChild(3).gameObject.GetComponent<VisualEffect>();
+            _speedCircleEffect.Stop();
         }
     
         void OnLevelWasLoaded()
@@ -195,8 +189,8 @@ public class CarController : MonoBehaviour
             {
                 Debug.Log("DEBUG MODE IS ACTIVE! (CarController)");
             }
-            
-            //_wall = GameObject.Find("Danger Wall");
+
+            _wall = GameObject.FindGameObjectWithTag("EliminationZone");
             _passedFinishLine = false;
             GameObject checkpointObject = GameObject.Find("CheckpointSystem");
             _playerPowerups.powerupIcon = GameObject.FindGameObjectWithTag("PowerupIcon").gameObject.GetComponent<Image>();
@@ -216,6 +210,16 @@ public class CarController : MonoBehaviour
             }
             //_mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
             //_cameraShake = _mainCam.GetComponent<CameraShake>();
+            
+            _mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+            _cameraShake = _mainCam.GetComponent<CameraShake>();
+
+            GameObject canvas = GameObject.Find("Canvas");
+
+            _dangerPressureImg = canvas.transform.GetChild(0).GetComponent<Image>();
+            _speedLinesEffect = _mainCam.transform.GetChild(2).gameObject.GetComponent<VisualEffect>();
+            _speedCircleEffect = _mainCam.transform.GetChild(3).gameObject.GetComponent<VisualEffect>();
+            _speedCircleEffect.Stop();
         }
     
         /*private void LoadCCInLevel(Scene scene, LoadSceneMode loadSceneMode)
@@ -273,6 +277,7 @@ public class CarController : MonoBehaviour
         // BOOST FUNCTIONALITY
         if (_boost && _boostDelay <= 0)
         {
+            _speedCircleEffect.Play();
             //_cameraShake.ShakeImmediate(3, 1);
             StartCoroutine(ActivateBoostEffect());
             _boostDelay = boostCooldown;
@@ -285,6 +290,30 @@ public class CarController : MonoBehaviour
                 _rigidbody.AddForce(transform.forward * boostForceAmount, ForceMode.VelocityChange);
             }
         }
+
+ 
+
+        float clampedVelocity = Mathf.Clamp((_rigidbody.velocity.magnitude * 2.2369362912f) - 60, 0, 100);
+        _newAlpha.x = Mathf.Lerp(0.2f, 0, (100 - clampedVelocity) / 100);
+        _newAlpha.y = Mathf.Lerp(0.5f, 0, (100 - clampedVelocity) / 100);
+        
+        // if (!_boostPlaying)
+        // {
+        //     _newAlpha.x = Mathf.Lerp(0.2f, 0, (100 - clampedVelocity) / 100);
+        //     _newAlpha.y = Mathf.Lerp(0.5f, 0, (100 - clampedVelocity) / 100);
+        //     // _newAlpha.x = Mathf.Lerp(_newAlpha.x, 0.2f, Time.deltaTime);
+        //     // _newAlpha.y = Mathf.Lerp(_newAlpha.y, 0.2f, Time.deltaTime);
+        // }
+        // else
+        // {
+        //     _newAlpha.x = Mathf.Lerp(0.2f, 0, (100 - clampedVelocity) / 100);
+        //     _newAlpha.y = Mathf.Lerp(0.5f, 0, (100 - clampedVelocity) / 100);
+        //     _newAlpha.x = 0.2f;
+        //     _newAlpha.y = 0.5f;
+        // }
+
+        _speedLinesEffect.SetVector2("Alpha Values", _newAlpha);
+    
     }
 
     // For updating rigidbody forces acting upon the car
@@ -443,7 +472,7 @@ public class CarController : MonoBehaviour
 
         if (!_moveForward && !_moveBackward)
         {
-            brakeTorque = 1500.0f;
+            brakeTorque = 8000.0f;
         }
         else if (_drift)
         {
@@ -467,6 +496,11 @@ public class CarController : MonoBehaviour
 
     }
 
+    public void PlayCircleEffect()
+    {
+        _speedCircleEffect.Play();
+    }
+    
     public IEnumerator ActivateBoostEffect()
     {
         foreach (var effect in boostEffects)
@@ -486,7 +520,7 @@ public class CarController : MonoBehaviour
         }
     }
 
-    public float GetBoosDelay()
+    public float GetBoostDelay()
     {
         return _boostDelay;
     }
@@ -536,11 +570,12 @@ public class CarController : MonoBehaviour
 
         _onOilPreviousFrame = _onOil;
 
-        // float distanceToWall = Vector3.Distance(transform.position, _wall.transform.position);
-        // distanceToWall = Mathf.Clamp(distanceToWall, 0, maxWallDistanceAlert);
-        //
-        // _vignette.color = Color.Lerp(Color.clear, Color.magenta, (maxWallDistanceAlert-distanceToWall)/maxWallDistanceAlert);
-        
+        if (_wall)
+        {
+            float distanceToWall = Vector3.Distance(transform.position, _wall.transform.position);
+            distanceToWall = Mathf.Clamp(distanceToWall, 0, maxWallDistanceAlert);
+            _dangerPressureImg.color = Color.Lerp(Color.clear, Color.magenta, (maxWallDistanceAlert - distanceToWall) / maxWallDistanceAlert);
+        }
     }
 
     public void ResetPlayer()
@@ -697,7 +732,6 @@ public class CarController : MonoBehaviour
         _airDown = value > 0;
         //Debug.Log("Roll Right detected");
     }
-    
     // Reset
     public void Reset(InputAction.CallbackContext context)
     {

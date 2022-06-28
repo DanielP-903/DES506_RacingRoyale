@@ -4,20 +4,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="873a249a-5863-4717-a004-718a85933296" name="Changes" comment="" />
+    <list default="true" id="873a249a-5863-4717-a004-718a85933296" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.DES506_RacingRoyale/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DES506_RacingRoyale/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Stage1.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Stage1.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Assets/MinimapController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/BotCarController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/CameraShake.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/CarController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/DialRotator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/GameManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/GhostPlayer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/GhostRecorder.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Launcher.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/MeshManager.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/MinimapController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/PlayerHUDController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/PlayerManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/PlayerNameInputField.cs" root0="FORCE_HIGHLIGHTING" />
@@ -28,14 +35,6 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/WallFollow.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Wheel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/WreckingBall.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Dictionaries/Assets/SerializableDictionary/Example/SerializableDictionaryExample.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Dictionaries/Assets/SerializableDictionary/SerializableDictionary.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Dictionaries/Assets/TestDictionary.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Team7-DES509/Assets/Scripts/Crafting/GameManager.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Team7-DES509/Assets/Scripts/Crafting/Ingredient.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Team7-DES509/Assets/Scripts/Crafting/RecipeList.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Team7-DES509/Assets/Scripts/Crafting/TeaMaker.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../mat301_ai_coursework_daniel_paul/MAT301_AI_Coursework_Daniel_Paul/Assets/Scripts/FuzzyAgent.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -161,7 +160,8 @@
       <workItem from="1656074881673" duration="9071000" />
       <workItem from="1656317421512" duration="3230000" />
       <workItem from="1656324305720" duration="4025000" />
-      <workItem from="1656404175506" duration="595000" />
+      <workItem from="1656404175506" duration="5735000" />
+      <workItem from="1656412494513" duration="757000" />
     </task>
     <servers />
   </component>
@@ -171,6 +171,17 @@
   <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="true" />
   <component name="UnityUnitTestConfiguration" currentTestLauncher="EditMode" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>
@@ -179,29 +190,15 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/Scripts/CarController.cs</url>
-          <line>278</line>
-          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\CarController.cs" initialLine="202" containingFunctionPresentation="method 'OnLevelWasLoaded'">
-            <startOffsets>
-              <option value="6694" />
-            </startOffsets>
-            <endOffsets>
-              <option value="6805" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="25" />
+          <line>615</line>
+          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\CarController.cs" initialLine="601" containingFunctionPresentation="method 'OnTriggerEnter'" />
+          <option name="timeStamp" value="26" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/Scripts/CarController.cs</url>
-          <line>599</line>
-          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\CarController.cs" initialLine="601" containingFunctionPresentation="method 'OnTriggerEnter'">
-            <startOffsets>
-              <option value="22494" />
-            </startOffsets>
-            <endOffsets>
-              <option value="22541" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="26" />
+          <line>283</line>
+          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\CarController.cs" initialLine="281" containingFunctionPresentation="method 'PhysUpdateAcceleration'" />
+          <option name="timeStamp" value="28" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
