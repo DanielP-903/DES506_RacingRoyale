@@ -106,6 +106,7 @@ public class CarController : MonoBehaviour
     private Camera _mainCam;
     private VisualEffect _speedLinesEffect;
     private VisualEffect _speedCircleEffect;
+    private VisualEffect _dangerWallEffect;
     private CameraShake _cameraShake;
     private Image _dangerPressureImg;
     
@@ -180,6 +181,7 @@ public class CarController : MonoBehaviour
             _dangerPressureImg = canvas.transform.GetChild(0).GetComponent<Image>();
             _speedLinesEffect = _mainCam.transform.GetChild(2).gameObject.GetComponent<VisualEffect>();
             _speedCircleEffect = _mainCam.transform.GetChild(3).gameObject.GetComponent<VisualEffect>();
+            _dangerWallEffect = _mainCam.transform.GetChild(4).gameObject.GetComponent<VisualEffect>();
             _speedCircleEffect.Stop();
         }
     
@@ -219,6 +221,7 @@ public class CarController : MonoBehaviour
             _dangerPressureImg = canvas.transform.GetChild(0).GetComponent<Image>();
             _speedLinesEffect = _mainCam.transform.GetChild(2).gameObject.GetComponent<VisualEffect>();
             _speedCircleEffect = _mainCam.transform.GetChild(3).gameObject.GetComponent<VisualEffect>();
+            _dangerWallEffect = _mainCam.transform.GetChild(4).gameObject.GetComponent<VisualEffect>();
             _speedCircleEffect.Stop();
         }
     
@@ -575,6 +578,10 @@ public class CarController : MonoBehaviour
             float distanceToWall = Vector3.Distance(transform.position, _wall.transform.position);
             distanceToWall = Mathf.Clamp(distanceToWall, 0, maxWallDistanceAlert);
             _dangerPressureImg.color = Color.Lerp(Color.clear, Color.magenta, (maxWallDistanceAlert - distanceToWall) / maxWallDistanceAlert);
+            Vector2 newAlphaWall;
+            newAlphaWall.x = Mathf.Lerp(0,0.5f, ((maxWallDistanceAlert-30.0f) - distanceToWall) / (maxWallDistanceAlert-30.0f));
+            newAlphaWall.y = Mathf.Lerp(0,1,  ((maxWallDistanceAlert-30.0f) - distanceToWall) / (maxWallDistanceAlert-30.0f));
+            _dangerWallEffect.SetVector2("Alpha Values", newAlphaWall);
         }
     }
 
