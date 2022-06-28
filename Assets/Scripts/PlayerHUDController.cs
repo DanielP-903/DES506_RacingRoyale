@@ -46,7 +46,7 @@ public class PlayerHUDController : MonoBehaviour
             currentSpeed = (Mathf.Round(_rigidbodyRef.velocity.magnitude * 2.2369362912f));
             speedText.text = currentSpeed.ToString();
 
-            boostSlider.value = (_carController.boostCooldown - _carController.GetBoosDelay())/_carController.boostCooldown;
+            boostSlider.value = (_carController.boostCooldown - _carController.GetBoostDelay())/_carController.boostCooldown;
         }
         
     }
