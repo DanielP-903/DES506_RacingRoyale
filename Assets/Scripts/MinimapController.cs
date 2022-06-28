@@ -18,6 +18,14 @@ public class MinimapController : MonoBehaviour
         StartCoroutine(waitTime());
         GetComponent<Camera>().orthographicSize = yOffset;
     }
+    
+    
+    void OnLevelWasLoaded()
+    {
+        GetComponent<Camera>().orthographicSize = yOffset;
+        GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
+    }
+
 
     // Update is called once per frame
     void Update()
@@ -26,7 +34,7 @@ public class MinimapController : MonoBehaviour
         {
             Vector3 newPos = new Vector3(_playerRef.transform.position.x, _playerRef.transform.position.y, _playerRef.transform.position.z)
                 {
-                    y = yOffset
+                    y = _playerRef.transform.position.y + yOffset
                 };
             transform.position = newPos;
             transform.rotation = Quaternion.Euler(90.0f, _playerRef.transform.eulerAngles.y, 0.0f);
