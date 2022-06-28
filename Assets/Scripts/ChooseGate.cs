@@ -5,14 +5,18 @@ using UnityEngine;
 public class ChooseGate : MonoBehaviour
 {
     public float speed = 2.5f, distance = 50f, waitTime = 5f;
-    public bool doUp = true;
+    public bool moveGate = true, reverse;
     private Vector3 startPosition, endPosition;
 
     // Start is called before the first frame update
     void Start()
     {
-        startPosition = transform.position;
-        endPosition = new Vector3(transform.position.x, transform.position.y + distance, transform.position.z);
+        startPosition = transform.localPosition;
+        if (reverse)
+        {
+            distance = distance * -1;
+        }
+        endPosition = new Vector3(transform.localPosition.x, transform.localPosition.y , transform.localPosition.z + distance);
         StartCoroutine(GateUp());
     }
 
@@ -31,17 +35,27 @@ public class ChooseGate : MonoBehaviour
         {
             yield return new WaitForSeconds(waitTime);
 
-            doUp = !doUp;
+            moveGate = !moveGate;
         }
         
     }
 
     void MoveGate()
     {
-        if(doUp)
-            transform.position = Vector3.MoveTowards(transform.position, endPosition, speed * Time.deltaTime);
+
+        if (moveGate)
+        {
+            if (Vector3.Distance(transform.localPosition, endPosition) > 0.1f)
+                transform.localPosition = Vector3.MoveTowards(transform.localPosition, endPosition, speed * Time.deltaTime);
+            
+                
+        }
         else
-            transform.position = Vector3.MoveTowards(transform.position, startPosition, speed * Time.deltaTime);
+        {
+            if (Vector3.Distance(transform.localPosition, startPosition) > 0.1f)
+                transform.localPosition = Vector3.MoveTowards(transform.localPosition, startPosition, speed * Time.deltaTime);
+        }
+            
     }
 }
     
