@@ -166,6 +166,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         int index = 0;
         ArrayList spectateTargets = new ArrayList();
         spectateTargets.Add(GameObject.Find("Danger Wall").transform);
+        CinemachineVirtualCamera cvc = Camera.main.gameObject.GetComponent<CinemachineVirtualCamera>();
+        Debug.Log(spectateTargets[0]);
         foreach (PhotonView pv in PhotonNetwork.PhotonViewCollection)
         {
             if (!pv.Owner.CustomProperties.ContainsKey("Eliminated") && pv.gameObject != null)
@@ -178,25 +180,36 @@ public class GameManager : MonoBehaviourPunCallbacks
                     index = spectateTargets.IndexOf(spectateTarget);
                 }
             }
+        }
 
-            if (next)
+        foreach (Transform t in spectateTargets)
+        {
+            Debug.Log("Item: "+t);
+        }
+        if (next)
+        {
+            index++;
+            Debug.Log("IndexAfter: "+index);
+            if (index >= spectateTargets.Count)
             {
-                index++;
-                if (index >= spectateTargets.Count)
-                {
-                    index = 0;
-                }
+                Debug.Log("IndexReset");
+                index = 0;
             }
-            else
+        }
+        else
+        {
+            index--;
+            if (index < 0)
             {
-                index--;
-                if (index < 0)
-                {
-                    index = spectateTargets.Count-1;
-                }
+                index = spectateTargets.Count-1;
             }
-            Debug.Log("Index: "+index);
-            spectateTarget = (Transform)spectateTargets[index];
+        }
+        Debug.Log("Index: "+index);
+        spectateTarget = (Transform)spectateTargets[index];
+        if (spectateTarget != null && cvc != null)
+        {
+            cvc.m_Follow = spectateTarget;
+            cvc.m_LookAt = spectateTarget;
         }
     }
     
