@@ -44,7 +44,7 @@ public class WallFollow : MonoBehaviour
         //hasFoundPlayer = false;
         StartCoroutine(waitTime());
         _bezierCurveGenerator = path.GetComponent<BezierCurveGenerator>();
-        _checkpointSystem = GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>();
+        _checkpointSystem = GameObject.FindGameObjectWithTag("CheckpointSystem").GetComponent<CheckpointSystem>();
         routeNumber = 0;
         _tValue = 0.0f;
         _startDelayTimer = startDelay;

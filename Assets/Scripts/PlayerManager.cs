@@ -154,7 +154,7 @@ public class PlayerManager : MonoBehaviour
                 mainCam = Camera.main.gameObject;
                 AudioSource source = mainCam.GetComponent<AudioSource>();
                 source.loop = true;
-                source.clip = Resources.Load<AudioClip>("Audio/Music/MenuMusic1");
+                source.clip = Resources.Load<AudioClip>("Audio/Music/NewMusic");
                 source.Play();
                 CinemachineVirtualCamera cvc = mainCam.GetComponent<CinemachineVirtualCamera>();
                 DontDestroyOnLoad(mainCam);
