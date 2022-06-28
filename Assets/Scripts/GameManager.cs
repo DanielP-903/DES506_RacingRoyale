@@ -174,10 +174,10 @@ public class GameManager : MonoBehaviourPunCallbacks
             {
                 spectateTargets.Add(pv.gameObject.transform);
                 Debug.Log("AddedToSpec");
-                if (spectateTarget = pv.gameObject.transform)
+                if (spectateTarget == pv.gameObject.transform)
                 {
-                    Debug.Log("IndexSet");
                     index = spectateTargets.IndexOf(spectateTarget);
+                    Debug.Log("IndexSet: "+index);
                 }
             }
         }
