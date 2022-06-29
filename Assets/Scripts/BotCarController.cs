@@ -30,22 +30,27 @@ public class BotCarController : MonoBehaviour
         {
             _cc.BotRight();
             _cc.BotForward();
+            _cc.BotNotLeft();
         }
 
         else if (detectRight() && detectForward())
         {
             _cc.BotLeft();
             _cc.BotForward();
+            _cc.BotNotRight();
         }
         
         else if (detectForward())
         {
             _cc.BotLeft();
             _cc.BotForward();
+            _cc.BotNotRight();
         }
         else
         {
             _cc.BotForward();
+            _cc.BotNotRight();
+            _cc.BotNotLeft();
         }
     }
 
