@@ -92,10 +92,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="10908">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="10908" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -166,6 +166,7 @@
       <workItem from="1656412494513" duration="1352000" />
       <workItem from="1656419253507" duration="8432000" />
       <workItem from="1656493862352" duration="601000" />
+      <workItem from="1656497572138" duration="2883000" />
     </task>
     <servers />
   </component>
@@ -177,24 +178,5 @@
   <component name="UnityUnitTestConfiguration" currentTestLauncher="EditMode" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/CarController.cs</url>
-          <line>580</line>
-          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\CarController.cs" initialLine="579" containingFunctionPresentation="method 'Update'">
-            <startOffsets>
-              <option value="22320" />
-            </startOffsets>
-            <endOffsets>
-              <option value="22341" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="30" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
