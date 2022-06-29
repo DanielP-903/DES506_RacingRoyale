@@ -5,21 +5,21 @@ using UnityEngine;
 public class ChooseGate : MonoBehaviour
 {
     public float speed = 2.5f, distance = 50f, waitTime = 10f;
-    public bool gateClosed;
-    public bool reverse;
+    public bool gateClosed,reverse;
     public GameObject counterpartGate;
     private Vector3 startPosition, endPosition;
+    private Coroutine gateRoutine;
 
     // Start is called before the first frame update
     void Start()
     {
-        startPosition = transform.localPosition;
         if (reverse)
         {
             distance = distance * -1;
         }
+        startPosition = transform.localPosition;
         endPosition = new Vector3(transform.localPosition.x, transform.localPosition.y , transform.localPosition.z + distance);
-        StartCoroutine(GateUp());
+        gateRoutine = StartCoroutine(GateUp());
     }
 
     // Update is called once per frame
@@ -37,7 +37,7 @@ public class ChooseGate : MonoBehaviour
         {
             yield return new WaitForSeconds(waitTime);
 
-        gateClosed = !gateClosed;
+            gateClosed = !gateClosed;
         }
 
     }
@@ -60,25 +60,23 @@ public class ChooseGate : MonoBehaviour
             
     }
 
-    //public void ChangeCounterpart()
-    //{
-    //    counterpartGate.GetComponent<ChooseGate>().gateClosed = false;
-    //    counterpartGate.GetComponent<ChooseGate>().StopAllCoroutines();
-    //    Debug.Log(counterpartGate.GetComponent<ChooseGate>().gateClosed);
-    //}
-
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if(other.gameObject.tag == "Player")
-    //    {
-    //        if (counterpartGate.GetComponent<ChooseGate>().gateClosed)
-    //        {
-    //            counterpartGate.GetComponent<ChooseGate>().ChangeCounterpart();
-    //        }
-    //        gateClosed = true;
-    //        StartCoroutine(GateUp());
-    //    }
-    //}
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            if (!counterpartGate.GetComponent<ChooseGate>()) return;
+            ChooseGate choosegate = counterpartGate.GetComponent<ChooseGate>();
+            if (choosegate.gateClosed == true)
+            {
+                choosegate.gateClosed = false;
+                choosegate.StopCoroutine(choosegate.gateRoutine);
+                choosegate.gateRoutine = choosegate.StartCoroutine(choosegate.GateUp());
+            }
+            gateClosed = true;
+            StopCoroutine(gateRoutine);
+            gateRoutine = StartCoroutine(GateUp());
+        }
+    }
 
 
 }
