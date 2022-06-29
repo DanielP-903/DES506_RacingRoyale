@@ -814,6 +814,17 @@ public class CarController : MonoBehaviour
         _pushUp = false;
         //Debug.Log("Space detected");
     }
+    
+    public void BotBoost()
+    {
+        _boost = true;
+        //Debug.Log("Boost detected");
+    }
+    public void BotNotBoost()
+    {
+        _boost = false;
+        //Debug.Log("Boost detected");
+    }
 
     [Serializable]
     public class Axle
