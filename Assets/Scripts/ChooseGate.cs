@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class ChooseGate : MonoBehaviour
 {
-    public float speed = 2.5f, distance = 50f, waitTime = 5f;
-    public bool moveGate = true, reverse;
+    public float speed = 2.5f, distance = 50f, waitTime = 10f;
+    public bool gateClosed;
+    public bool reverse;
+    public GameObject counterpartGate;
     private Vector3 startPosition, endPosition;
 
     // Start is called before the first frame update
@@ -35,15 +37,15 @@ public class ChooseGate : MonoBehaviour
         {
             yield return new WaitForSeconds(waitTime);
 
-            moveGate = !moveGate;
+        gateClosed = !gateClosed;
         }
-        
+
     }
 
     void MoveGate()
     {
 
-        if (moveGate)
+        if (gateClosed)
         {
             if (Vector3.Distance(transform.localPosition, endPosition) > 0.1f)
                 transform.localPosition = Vector3.MoveTowards(transform.localPosition, endPosition, speed * Time.deltaTime);
@@ -57,5 +59,27 @@ public class ChooseGate : MonoBehaviour
         }
             
     }
+
+    //public void ChangeCounterpart()
+    //{
+    //    counterpartGate.GetComponent<ChooseGate>().gateClosed = false;
+    //    counterpartGate.GetComponent<ChooseGate>().StopAllCoroutines();
+    //    Debug.Log(counterpartGate.GetComponent<ChooseGate>().gateClosed);
+    //}
+
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if(other.gameObject.tag == "Player")
+    //    {
+    //        if (counterpartGate.GetComponent<ChooseGate>().gateClosed)
+    //        {
+    //            counterpartGate.GetComponent<ChooseGate>().ChangeCounterpart();
+    //        }
+    //        gateClosed = true;
+    //        StartCoroutine(GateUp());
+    //    }
+    //}
+
+
 }
     
