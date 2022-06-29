@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="873a249a-5863-4717-a004-718a85933296" name="Changes" comment="" />
+    <list default="true" id="873a249a-5863-4717-a004-718a85933296" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Assets/BotCarController.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BotCarController.cs.meta" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -25,18 +28,9 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/PowerupSpawner.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/RotationObstacle.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/SO_Powerup.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UIElementRotator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/WallFollow.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Wheel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/WreckingBall.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Dictionaries/Assets/SerializableDictionary/Example/SerializableDictionaryExample.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Dictionaries/Assets/SerializableDictionary/SerializableDictionary.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Dictionaries/Assets/TestDictionary.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Team7-DES509/Assets/Scripts/Crafting/GameManager.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Team7-DES509/Assets/Scripts/Crafting/Ingredient.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Team7-DES509/Assets/Scripts/Crafting/RecipeList.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Team7-DES509/Assets/Scripts/Crafting/TeaMaker.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../mat301_ai_coursework_daniel_paul/MAT301_AI_Coursework_Daniel_Paul/Assets/Scripts/FuzzyAgent.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -75,7 +69,7 @@
       <method v="2" />
     </configuration>
     <configuration name="UnitTests (batch mode)" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="C:\Program Files\Unity 2020.3.0\Editor\Unity.exe" />
+      <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\2020.3.0f1\Editor\Unity.exe" />
       <option name="PROGRAM_PARAMETERS" value="-runTests -batchmode -projectPath M:\GitHub\DES506_RacingRoyale -testResults Logs/results.xml -testPlatform EditMode -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="M:\GitHub\DES506_RacingRoyale" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -92,10 +86,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="15524">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="15524" />
+      <option name="pid" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -165,6 +159,7 @@
       <workItem from="1656404175506" duration="5735000" />
       <workItem from="1656412494513" duration="1352000" />
       <workItem from="1656419253507" duration="7449000" />
+      <workItem from="1656493465111" duration="594000" />
     </task>
     <servers />
   </component>
@@ -182,28 +177,14 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/Scripts/CarController.cs</url>
-          <line>639</line>
-          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\CarController.cs" initialLine="601" containingFunctionPresentation="method 'OnTriggerEnter'">
-            <startOffsets>
-              <option value="23696" />
-            </startOffsets>
-            <endOffsets>
-              <option value="23743" />
-            </endOffsets>
-          </properties>
+          <line>665</line>
+          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\CarController.cs" initialLine="601" containingFunctionPresentation="method 'OnTriggerEnter'" />
           <option name="timeStamp" value="26" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/Scripts/CarController.cs</url>
-          <line>575</line>
-          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\CarController.cs" initialLine="572" containingFunctionPresentation="method 'Update'">
-            <startOffsets>
-              <option value="21787" />
-            </startOffsets>
-            <endOffsets>
-              <option value="21873" />
-            </endOffsets>
-          </properties>
+          <line>601</line>
+          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\CarController.cs" initialLine="572" containingFunctionPresentation="method 'Update'" />
           <option name="timeStamp" value="29" />
         </line-breakpoint>
       </breakpoints>
