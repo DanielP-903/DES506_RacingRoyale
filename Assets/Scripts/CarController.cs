@@ -222,6 +222,7 @@ public class CarController : MonoBehaviour
             _speedLinesEffect = _mainCam.transform.GetChild(2).gameObject.GetComponent<VisualEffect>();
             _speedCircleEffect = _mainCam.transform.GetChild(3).gameObject.GetComponent<VisualEffect>();
             _dangerWallEffect = _mainCam.transform.GetChild(4).gameObject.GetComponent<VisualEffect>();
+            _dangerWallEffect.SetVector2("Alpha Values", new Vector2(0,0));
             _speedCircleEffect.Stop();
         }
     
@@ -612,8 +613,6 @@ public class CarController : MonoBehaviour
         }
         
         Gizmos.color = Color.cyan;
-        //Gizmos.DrawSphere(transform.position + (transform.up/4), 0.1f);
-        //Gizmos.DrawSphere(GetComponent<BoxCollider>().bounds.center- (transform.up/4), 0.1f);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -621,10 +620,14 @@ public class CarController : MonoBehaviour
         if (collision.transform.CompareTag("Player"))
         {
             Vector3 direction = collision.contacts[0].point - transform.position;
-            _rigidbody.velocity = -(direction.normalized * bounciness); //Time.fixedDeltaTime * 50;
+            _rigidbody.velocity = -(direction.normalized * bounciness);
             Debug.Log("HIT ANOTHER PLAYER WITH RIGIDBODY VELOCITY: " + _rigidbody.velocity);
         }
-        
+        if (collision.transform.CompareTag("SpinningTop"))
+        {
+            Vector3 direction = collision.contacts[0].point - transform.position;
+            _rigidbody.velocity = -(direction.normalized * 15);
+        }
        
     }
 
@@ -813,6 +816,17 @@ public class CarController : MonoBehaviour
     {
         _pushUp = false;
         //Debug.Log("Space detected");
+    }
+    
+    public void BotBoost()
+    {
+        _boost = true;
+        //Debug.Log("Boost detected");
+    }
+    public void BotNotBoost()
+    {
+        _boost = false;
+        //Debug.Log("Boost detected");
     }
 
     [Serializable]

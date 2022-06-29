@@ -13,7 +13,7 @@ public class BotCarController : MonoBehaviour
     void Start()
     {
         _cc = GetComponent<CarController>();
-        layerMask = LayerMask.GetMask("Player");
+        layerMask = LayerMask.GetMask("Player", "Checkpoint");
         layerMask = ~layerMask;
         carBody = transform.Find("CarMesh");
     }
@@ -26,39 +26,77 @@ public class BotCarController : MonoBehaviour
 
     void decideBehaviour()
     {
-        if (detectLeft() && detectForward())
+        detectLeftPit();
+        detectRightPit();
+        if ((detectLeft() && detectForward() && !detectTooClose()) || (!detectLeftPit() && detectRightPit()))
         {
+            Debug.Log("TurningToRight");
             _cc.BotRight();
             _cc.BotForward();
             _cc.BotNotLeft();
+            _cc.BotNotBackward();
         }
 
-        else if (detectRight() && detectForward())
+        else if ((detectRight()  && detectForward() && !detectTooClose()) || (!detectRightPit() && detectLeftPit()))
         {
+            Debug.Log("TurningToLeft");
             _cc.BotLeft();
             _cc.BotForward();
             _cc.BotNotRight();
+            _cc.BotNotBackward();
         }
         
-        else if (detectForward())
+        else if (detectForward() && !detectTooClose())
         {
             _cc.BotLeft();
             _cc.BotForward();
             _cc.BotNotRight();
+            _cc.BotNotBackward();
+        }
+        else if (detectTooClose())
+        {
+            _cc.BotNotForward();
+            _cc.BotBackward();
         }
         else
         {
             _cc.BotForward();
             _cc.BotNotRight();
             _cc.BotNotLeft();
+            _cc.BotNotBackward();
+        }
+
+        if (!_cc.GetGrounded())
+        {
+            _cc.BotBoost();
+        }
+        else
+        {
+            _cc.BotNotBoost();
         }
     }
 
     bool detectForward()
     {
-        Debug.DrawRay(transform.position,  transform.TransformDirection(Vector3.forward) * 5f, Color.magenta);
-        if (Physics.Raycast(transform.position,  transform.TransformDirection(Vector3.forward), 5f, layerMask))
+        RaycastHit hit;
+        Debug.DrawRay(transform.position,  transform.TransformDirection(Vector3.forward) * 8f, Color.magenta);
+        if (Physics.Raycast(transform.position,  transform.TransformDirection(Vector3.forward), out hit, 5f, layerMask))
         {
+            Debug.Log("Forward Detected!: "+hit.collider.gameObject);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    bool detectTooClose()
+    {
+        RaycastHit hit;
+        Debug.DrawRay(transform.position,  transform.TransformDirection(Vector3.forward) * 3f, Color.magenta);
+        if (Physics.Raycast(transform.position,  transform.TransformDirection(Vector3.forward), out hit, 5f, layerMask))
+        {
+            Debug.Log("Too Close!: "+hit.collider.gameObject);
             return true;
         }
         else
@@ -92,9 +130,32 @@ public class BotCarController : MonoBehaviour
             return false;
         }
     }
-
-    void MoveForward()
+    
+    bool detectLeftPit()
     {
-        _cc.BotForward();
+        Debug.DrawRay(transform.position - transform.right * 5, transform.TransformDirection(Vector3.down) * 5f, Color.cyan);
+        if (Physics.Raycast(transform.position - transform.right * 5,  transform.TransformDirection(Vector3.down), 5f, layerMask))
+        {
+            return true;
+        }
+        else
+        {
+            Debug.Log("NothingToLeft");
+            return false;
+        }
+    }
+    
+    bool detectRightPit()
+    {
+        Debug.DrawRay(transform.position + transform.right * 5, transform.TransformDirection(Vector3.down) * 5f, Color.cyan);
+        if (Physics.Raycast(transform.position + transform.right * 5,  transform.TransformDirection(Vector3.down), 5f, layerMask))
+        {
+            return true;
+        }
+        else
+        {
+            Debug.Log("NothingToRight");
+            return false;
+        }
     }
 }

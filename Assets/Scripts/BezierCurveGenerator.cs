@@ -17,11 +17,11 @@ public class BezierCurveGenerator : MonoBehaviour
     public void AddNewCurve()
     {
         GameObject newControlPoint1 = new GameObject("ControlPoint_" + (controlPoints.Count));
-        newControlPoint1.transform.position = controlPoints[controlPoints.Count - 1].transform.position + new Vector3(0, 0, 10 * direction);
+        newControlPoint1.transform.position = controlPoints[controlPoints.Count - 1].transform.position + new Vector3(0, 0, 5 * -controlPoints[controlPoints.Count-1].transform.forward.magnitude);
         GameObject newControlPoint2 = new GameObject("ControlPoint_" + (controlPoints.Count+1));
-        newControlPoint2.transform.position = controlPoints[controlPoints.Count - 1].transform.position + new Vector3(10, 0, 10 * direction);    
+        newControlPoint2.transform.position = controlPoints[controlPoints.Count - 1].transform.position + new Vector3(0, 0, 10 * -controlPoints[controlPoints.Count-1].transform.forward.magnitude);    
         GameObject newControlPoint3 = new GameObject("ControlPoint_" + (controlPoints.Count+2));
-        newControlPoint3.transform.position = controlPoints[controlPoints.Count - 1].transform.position + new Vector3(10, 0, 0);
+        newControlPoint3.transform.position = controlPoints[controlPoints.Count - 1].transform.position + new Vector3(0, 0, 15 * -controlPoints[controlPoints.Count-1].transform.forward.magnitude);
 
         newControlPoint1.transform.parent = transform;
         newControlPoint2.transform.parent = transform;
@@ -52,6 +52,7 @@ public class BezierCurveGenerator : MonoBehaviour
     
     private void OnDrawGizmos()
     {
+        Gizmos.color = Color.white;
         if (stepValue < 0.01f) stepValue = 0.01f;
         
         for (float t = 0; t <= 1; t += stepValue)
@@ -71,13 +72,30 @@ public class BezierCurveGenerator : MonoBehaviour
 
         for (int i = 0; i < controlPoints.Count - 1; i += 3)
         {
+            Gizmos.color = Color.green;
             Gizmos.DrawLine(
                 new Vector3(controlPoints[i].position.x, controlPoints[i].position.y, controlPoints[i].position.z),
                 new Vector3(controlPoints[i+1].position.x, controlPoints[i+1].position.y, controlPoints[i+1].position.z));
 
+            Gizmos.color = Color.red;
             Gizmos.DrawLine(
                 new Vector3(controlPoints[i+2].position.x, controlPoints[i+2].position.y, controlPoints[i+2].position.z),
                 new Vector3(controlPoints[i+3].position.x, controlPoints[i+3].position.y, controlPoints[i+3].position.z));
+        }
+
+        for (var index = 0; index < controlPoints.Count; index++)
+        {
+            var point = controlPoints[index];
+            Gizmos.color = Color.yellow;
+            if (index % 3 == 0)
+            {
+                Gizmos.color = Color.magenta;
+                Gizmos.DrawSphere(point.transform.position, 0.5f);
+            }
+            else
+            {
+                Gizmos.DrawSphere(point.transform.position, 0.3f);
+            }
         }
     }
 }

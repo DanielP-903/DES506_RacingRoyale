@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class BoxingGloveObstacle : MonoBehaviour
 {
-    public float speed = 2.5f, distance = 50f, waitTime = 5f;
-    public bool doUp = true;
+    public float outSpeed = 100f, inSpeed = 10f, distance = 50f, waitTime = 5f;
+    public bool doPunch = true;
     //public GameObject BoxingGloveEnd;
     private Vector3 startPosition, endPosition;
 
@@ -21,7 +21,7 @@ public class BoxingGloveObstacle : MonoBehaviour
     void FixedUpdate()
     {
 
-        MoveGate();
+        MovePunch();
 
     }
 
@@ -32,36 +32,36 @@ public class BoxingGloveObstacle : MonoBehaviour
         {
             yield return new WaitForSeconds(waitTime);
 
-            doUp = !doUp;
+            doPunch = !doPunch;
         }
         
     }
 
-    void MoveGate()
+    void MovePunch()
     {
-        if(doUp)
-            transform.position = Vector3.MoveTowards(transform.position, endPosition, speed * Time.deltaTime);
+        if(doPunch)
+            transform.position = Vector3.MoveTowards(transform.position, endPosition, outSpeed * Time.deltaTime);
         else
-            transform.position = Vector3.MoveTowards(transform.position, startPosition, speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, startPosition, inSpeed * Time.deltaTime);
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
+    //private void OnCollisionEnter(Collision collision)
+    //{
         
-        if(collision.gameObject.tag == "Player")
-        {
-            Debug.Log("collided");
-            GameObject hitPlayer = collision.gameObject;
-            if (hitPlayer.GetComponent<Rigidbody>())
-            {
-                hitPlayer.GetComponent<Rigidbody>().AddForce(Vector3.right);
-            }
+    //    if(collision.gameObject.tag == "Player")
+    //    {
+    //        //Debug.Log("collided");
+    //        //GameObject hitPlayer = collision.gameObject;
+    //        //if (hitPlayer.GetComponent<Rigidbody>())
+    //        //{
+    //        //    hitPlayer.GetComponent<Rigidbody>().AddForce(Vector3.right);
+    //        //}
             
             
-            //ContactPoint contactPoint = collision.GetContact(0);
+    //        //ContactPoint contactPoint = collision.GetContact(0);
             
-        }
-    }
+    //    }
+    //}
 
 }
     
