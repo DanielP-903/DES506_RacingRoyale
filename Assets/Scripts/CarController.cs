@@ -222,6 +222,7 @@ public class CarController : MonoBehaviour
             _speedLinesEffect = _mainCam.transform.GetChild(2).gameObject.GetComponent<VisualEffect>();
             _speedCircleEffect = _mainCam.transform.GetChild(3).gameObject.GetComponent<VisualEffect>();
             _dangerWallEffect = _mainCam.transform.GetChild(4).gameObject.GetComponent<VisualEffect>();
+            _dangerWallEffect.SetVector2("Alpha Values", new Vector2(0,0));
             _speedCircleEffect.Stop();
         }
     
