@@ -612,8 +612,6 @@ public class CarController : MonoBehaviour
         }
         
         Gizmos.color = Color.cyan;
-        //Gizmos.DrawSphere(transform.position + (transform.up/4), 0.1f);
-        //Gizmos.DrawSphere(GetComponent<BoxCollider>().bounds.center- (transform.up/4), 0.1f);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -621,10 +619,14 @@ public class CarController : MonoBehaviour
         if (collision.transform.CompareTag("Player"))
         {
             Vector3 direction = collision.contacts[0].point - transform.position;
-            _rigidbody.velocity = -(direction.normalized * bounciness); //Time.fixedDeltaTime * 50;
+            _rigidbody.velocity = -(direction.normalized * bounciness);
             Debug.Log("HIT ANOTHER PLAYER WITH RIGIDBODY VELOCITY: " + _rigidbody.velocity);
         }
-        
+        if (collision.transform.CompareTag("SpinningTop"))
+        {
+            Vector3 direction = collision.contacts[0].point - transform.position;
+            _rigidbody.velocity = -(direction.normalized * 15);
+        }
        
     }
 
@@ -779,11 +781,51 @@ public class CarController : MonoBehaviour
         _moveRight = true;
         //Debug.Log("Right detected");
     }
+    
+    public void BotNotForward()
+    {
+        _moveForward = false;
+        //Debug.Log("Forward detected");
+    }
+    // S
+    public void BotNotBackward()
+    {
+        _moveBackward = false;
+        //Debug.Log("Backward detected");
+    }
+    // A
+    public void BotNotLeft()
+    {
+        _moveLeft = false;
+        //Debug.Log("Left detected");
+    }
+    // D
+    public void BotNotRight()
+    {
+        _moveRight = false;
+        //Debug.Log("Right detected");
+    }
     // Space
     public void BotSpace()
     {
         _pushUp = true;
         //Debug.Log("Space detected");
+    }
+    public void BotNotSpace()
+    {
+        _pushUp = false;
+        //Debug.Log("Space detected");
+    }
+    
+    public void BotBoost()
+    {
+        _boost = true;
+        //Debug.Log("Boost detected");
+    }
+    public void BotNotBoost()
+    {
+        _boost = false;
+        //Debug.Log("Boost detected");
     }
 
     [Serializable]
