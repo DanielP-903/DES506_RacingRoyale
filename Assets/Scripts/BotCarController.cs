@@ -13,7 +13,7 @@ public class BotCarController : MonoBehaviour
     void Start()
     {
         _cc = GetComponent<CarController>();
-        layerMask = LayerMask.GetMask("Player") | LayerMask.GetMask("Checkpoint");
+        layerMask = LayerMask.GetMask("Player", "Checkpoint");
         layerMask = ~layerMask;
         carBody = transform.Find("CarMesh");
     }
@@ -26,16 +26,20 @@ public class BotCarController : MonoBehaviour
 
     void decideBehaviour()
     {
-        if (detectLeft() && detectForward() && !detectTooClose())
+        detectLeftPit();
+        detectRightPit();
+        if ((detectLeft() && detectForward() && !detectTooClose()) || (!detectLeftPit() && detectRightPit()))
         {
+            Debug.Log("TurningToRight");
             _cc.BotRight();
             _cc.BotForward();
             _cc.BotNotLeft();
             _cc.BotNotBackward();
         }
 
-        else if (detectRight() && detectForward() && !detectTooClose())
+        else if ((detectRight()  && detectForward() && !detectTooClose()) || (!detectRightPit() && detectLeftPit()))
         {
+            Debug.Log("TurningToLeft");
             _cc.BotLeft();
             _cc.BotForward();
             _cc.BotNotRight();
@@ -123,6 +127,34 @@ public class BotCarController : MonoBehaviour
         }
         else
         {
+            return false;
+        }
+    }
+    
+    bool detectLeftPit()
+    {
+        Debug.DrawRay(transform.position - transform.right * 5, transform.TransformDirection(Vector3.down) * 5f, Color.cyan);
+        if (Physics.Raycast(transform.position - transform.right * 5,  transform.TransformDirection(Vector3.down), 5f, layerMask))
+        {
+            return true;
+        }
+        else
+        {
+            Debug.Log("NothingToLeft");
+            return false;
+        }
+    }
+    
+    bool detectRightPit()
+    {
+        Debug.DrawRay(transform.position + transform.right * 5, transform.TransformDirection(Vector3.down) * 5f, Color.cyan);
+        if (Physics.Raycast(transform.position + transform.right * 5,  transform.TransformDirection(Vector3.down), 5f, layerMask))
+        {
+            return true;
+        }
+        else
+        {
+            Debug.Log("NothingToRight");
             return false;
         }
     }
