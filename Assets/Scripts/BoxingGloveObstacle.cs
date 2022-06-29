@@ -47,7 +47,21 @@ public class BoxingGloveObstacle : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("collided");
+        
+        if(collision.gameObject.tag == "Player")
+        {
+            Debug.Log("collided");
+            GameObject hitPlayer = collision.gameObject;
+            if (hitPlayer.GetComponent<Rigidbody>())
+            {
+                hitPlayer.GetComponent<Rigidbody>().AddForce(Vector3.right);
+            }
+            
+            
+            //ContactPoint contactPoint = collision.GetContact(0);
+            
+        }
     }
+
 }
     
