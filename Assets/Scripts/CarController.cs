@@ -753,6 +753,38 @@ public class CarController : MonoBehaviour
         _activatePowerup = value > 0;
         //Debug.Log("Activate Powerup detected");
     }
+    
+    
+    //AIONLY
+    public void BotForward()
+    {
+        _moveForward = true;
+        //Debug.Log("Forward detected");
+    }
+    // S
+    public void BotBackward()
+    {
+        _moveBackward = true;
+        //Debug.Log("Backward detected");
+    }
+    // A
+    public void BotLeft()
+    {
+        _moveLeft = true;
+        //Debug.Log("Left detected");
+    }
+    // D
+    public void BotRight()
+    {
+        _moveRight = true;
+        //Debug.Log("Right detected");
+    }
+    // Space
+    public void BotSpace()
+    {
+        _pushUp = true;
+        //Debug.Log("Space detected");
+    }
 
     [Serializable]
     public class Axle
