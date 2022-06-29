@@ -6,6 +6,8 @@ using UnityEngine;
 public class Dissolve : MonoBehaviour
 {
     private MeshRenderer _meshRenderer;
+    private MeshRenderer _meshRendererClip;
+    private MeshCollider _meshCollider;
     private static readonly int FadeOutSlider = Shader.PropertyToID("FadeOutSlider");
     private bool _dissolve = false;
     private float _dissolveTimer;
@@ -15,6 +17,8 @@ public class Dissolve : MonoBehaviour
     void Start()
     {
         _meshRenderer = GetComponent<MeshRenderer>();
+        _meshRendererClip = transform.parent.GetChild(0).GetComponent<MeshRenderer>();
+        _meshCollider = GetComponent<MeshCollider>();
         _dissolveTimer = 0.0f;
         _canDetect = true;
         _dissolve = false;
@@ -30,8 +34,13 @@ public class Dissolve : MonoBehaviour
             float dissolveFloat = Mathf.Lerp(1, 0, (3 - _dissolveTimer) / 3);
             _meshRenderer.materials[0].SetFloat(FadeOutSlider, dissolveFloat);
             _meshRenderer.materials[1].SetFloat(FadeOutSlider, dissolveFloat);
-            if (dissolveFloat >= 0.8f)
+            if (_meshRendererClip != null)
             {
+                _meshRendererClip.materials[0].SetFloat(FadeOutSlider, dissolveFloat);
+            }
+            if (dissolveFloat >= 0.5f)
+            {
+                _meshCollider.enabled = false;
             }
         }
     }
