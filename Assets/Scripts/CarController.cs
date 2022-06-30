@@ -183,6 +183,11 @@ public class CarController : MonoBehaviour
             _speedCircleEffect = _mainCam.transform.GetChild(3).gameObject.GetComponent<VisualEffect>();
             _dangerWallEffect = _mainCam.transform.GetChild(4).gameObject.GetComponent<VisualEffect>();
             _speedCircleEffect.Stop();
+     
+            if (SceneManager.GetActiveScene().name == "WaitingArea")
+            {
+                _dangerWallEffect.SetVector2("Alpha Values", new Vector2(0,0));
+            }
         }
     
         void OnLevelWasLoaded()
@@ -224,6 +229,12 @@ public class CarController : MonoBehaviour
             _dangerWallEffect = _mainCam.transform.GetChild(4).gameObject.GetComponent<VisualEffect>();
             _dangerWallEffect.SetVector2("Alpha Values", new Vector2(0,0));
             _speedCircleEffect.Stop();
+            
+            
+            if (SceneManager.GetActiveScene().name == "WaitingArea")
+            {
+                _dangerWallEffect.SetVector2("Alpha Values", new Vector2(0,0));
+            }
         }
     
         /*private void LoadCCInLevel(Scene scene, LoadSceneMode loadSceneMode)
