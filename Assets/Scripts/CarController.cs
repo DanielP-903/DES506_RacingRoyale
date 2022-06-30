@@ -88,6 +88,8 @@ public class CarController : MonoBehaviour
     private float _resetDelay = 2.0f;
     private float _padDelay = 2.0f;
 
+    private float _currentSteeringAngle = 0.0f;
+    
     private PlayerManager _playerManager;
     private Rigidbody _rigidbody;
     private bool _HitDetect;
@@ -420,7 +422,7 @@ public class CarController : MonoBehaviour
   
         float currentMotorValue = motorForce * motorMultiplier;
 
-        maxSteeringAngle = Mathf.Lerp(maxSteeringAngle, _rigidbody.velocity.magnitude * 2.2369362912f > 30 ? 10 : 30, Time.deltaTime * 5);
+        _currentSteeringAngle = Mathf.Lerp(_currentSteeringAngle, _rigidbody.velocity.magnitude * 2.2369362912f > 30 ? 5 : maxSteeringAngle, Time.deltaTime * 5);
 
         if (_moveLeft)
         {
@@ -505,8 +507,10 @@ public class CarController : MonoBehaviour
 
         if (_grounded)
         {
-            if (_moveLeft) _rigidbody.AddForce(transform.right * (accelerationForce), ForceMode.Acceleration);
-            if (_moveRight) _rigidbody.AddForce(-transform.right * (accelerationForce), ForceMode.Acceleration);
+            //if (_moveLeft) _rigidbody.AddForce(transform.right * (accelerationForce/2), ForceMode.Acceleration);
+            //if (_moveRight) _rigidbody.AddForce(-transform.right * (accelerationForce/2), ForceMode.Acceleration);
+            if (_moveLeft) _rigidbody.AddForce(-transform.right * (accelerationForce/20), ForceMode.VelocityChange);
+            if (_moveRight) _rigidbody.AddForce(transform.right * (accelerationForce/20), ForceMode.VelocityChange);
         }
 
     }
