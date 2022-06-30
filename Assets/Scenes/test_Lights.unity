@@ -2358,6 +2358,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -4550031124656453794, guid: a5c93b80e7af4f14e88261ff6dae0053, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: bbbed18a5049ed34eb79aac29795680c, type: 2}
+    - target: {fileID: -4550031124656453794, guid: a5c93b80e7af4f14e88261ff6dae0053, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: bbbed18a5049ed34eb79aac29795680c, type: 2}
     - target: {fileID: 919132149155446097, guid: a5c93b80e7af4f14e88261ff6dae0053, type: 3}
       propertyPath: m_Name
       value: PV_TStraightB
@@ -3269,6 +3277,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PV_TStraight_1
       objectReference: {fileID: 0}
+    - target: {fileID: 6933103957860088296, guid: 4535ae1e26994e24e87d5a2d3925bfd6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 3a2d9ef5bec4b5545b5e192c7de337dc, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4535ae1e26994e24e87d5a2d3925bfd6, type: 3}
 --- !u!1 &1821002365
@@ -4365,11 +4377,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2774631455131860148, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000008497743
+      value: -0.000000008497743
       objectReference: {fileID: 0}
     - target: {fileID: 2774631455131860148, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0000000013428579
+      value: 0.0000000013428579
       objectReference: {fileID: 0}
     - target: {fileID: 2774631455131860148, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
