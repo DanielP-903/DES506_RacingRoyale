@@ -26,44 +26,29 @@ public class BotCarController : MonoBehaviour
 
     void decideBehaviour()
     {
-        detectLeftPit();
-        detectRightPit();
-        if ((detectLeft() && detectForward() && !detectTooClose()) || (!detectLeftPit() && detectRightPit()))
+        if ((detectLeft() && detectForward() && !detectTooClose()) 
+            || (!detectLeftPit() && detectRightPit())
+            || (!detectForwardLeftPit() && detectForwardRightPit()))
         {
-            Debug.Log("TurningToRight");
-            _cc.BotRight();
-            _cc.BotForward();
-            _cc.BotNotLeft();
-            _cc.BotNotBackward();
+            rightTurn();
         }
 
-        else if ((detectRight()  && detectForward() && !detectTooClose()) || (!detectRightPit() && detectLeftPit()))
+        else if ((detectRight()  && detectForward() && !detectTooClose()) 
+                 || (!detectRightPit() && detectLeftPit()) 
+                 || (detectForward() && !detectTooClose())
+                 || (detectForwardLeftPit() && !detectForwardRightPit()))
         {
-            Debug.Log("TurningToLeft");
-            _cc.BotLeft();
-            _cc.BotForward();
-            _cc.BotNotRight();
-            _cc.BotNotBackward();
+            leftTurn();
         }
         
-        else if (detectForward() && !detectTooClose())
-        {
-            _cc.BotLeft();
-            _cc.BotForward();
-            _cc.BotNotRight();
-            _cc.BotNotBackward();
-        }
         else if (detectTooClose())
         {
-            _cc.BotNotForward();
-            _cc.BotBackward();
+            justBackward();
         }
+        
         else
         {
-            _cc.BotForward();
-            _cc.BotNotRight();
-            _cc.BotNotLeft();
-            _cc.BotNotBackward();
+            justForward();
         }
 
         if (!_cc.GetGrounded())
@@ -74,6 +59,49 @@ public class BotCarController : MonoBehaviour
         {
             _cc.BotNotBoost();
         }
+
+        if (!detectForwardPit() && !detectForwardRightPit() && !detectForwardLeftPit())
+        {
+            _cc.BotSpace();
+        }
+        else
+        {
+            _cc.BotNotSpace();
+        }
+    }
+
+    void leftTurn()
+    {
+        Debug.Log("TurningToLeft");
+        _cc.BotLeft();
+        _cc.BotForward();
+        _cc.BotNotRight();
+        _cc.BotNotBackward();
+    }
+
+    void rightTurn()
+    {
+        Debug.Log("TurningToRight");
+        _cc.BotRight();
+        _cc.BotForward();
+        _cc.BotNotLeft();
+        _cc.BotNotBackward();
+    }
+
+    void justForward()
+    {
+        _cc.BotForward();
+        _cc.BotNotRight();
+        _cc.BotNotLeft();
+        _cc.BotNotBackward();
+    }
+
+    void justBackward()
+    {
+        _cc.BotNotForward();
+        _cc.BotNotRight();
+        _cc.BotNotLeft();
+        _cc.BotBackward();
     }
 
     bool detectForward()
@@ -96,7 +124,7 @@ public class BotCarController : MonoBehaviour
         Debug.DrawRay(transform.position,  transform.TransformDirection(Vector3.forward) * 3f, Color.magenta);
         if (Physics.Raycast(transform.position,  transform.TransformDirection(Vector3.forward), out hit, 5f, layerMask))
         {
-            Debug.Log("Too Close!: "+hit.collider.gameObject);
+            //Debug.Log("Too Close!: "+hit.collider.gameObject);
             return true;
         }
         else
@@ -140,7 +168,7 @@ public class BotCarController : MonoBehaviour
         }
         else
         {
-            Debug.Log("NothingToLeft");
+            //Debug.Log("NothingToLeft");
             return false;
         }
     }
@@ -154,7 +182,49 @@ public class BotCarController : MonoBehaviour
         }
         else
         {
-            Debug.Log("NothingToRight");
+            //Debug.Log("NothingToRight");
+            return false;
+        }
+    }
+    
+    bool detectForwardLeftPit()
+    {
+        Debug.DrawRay(transform.position - transform.right * 5 + transform.forward * 5, transform.TransformDirection(Vector3.down) * 5f, Color.cyan);
+        if (Physics.Raycast(transform.position - transform.right * 5 + transform.forward * 5,  transform.TransformDirection(Vector3.down), 5f, layerMask))
+        {
+            return true;
+        }
+        else
+        {
+            //Debug.Log("NothingToLeft");
+            return false;
+        }
+    }
+    
+    bool detectForwardRightPit()
+    {
+        Debug.DrawRay(transform.position + transform.right * 5 + transform.forward * 5, transform.TransformDirection(Vector3.down) * 5f, Color.cyan);
+        if (Physics.Raycast(transform.position + transform.right * 5 + transform.forward * 5,  transform.TransformDirection(Vector3.down), 5f, layerMask))
+        {
+            return true;
+        }
+        else
+        {
+            //Debug.Log("NothingToRight");
+            return false;
+        }
+    }
+    
+    bool detectForwardPit()
+    {
+        Debug.DrawRay(transform.position + transform.forward * 5, transform.TransformDirection(Vector3.down) * 5f, Color.cyan);
+        if (Physics.Raycast(transform.position + transform.forward * 5,  transform.TransformDirection(Vector3.down), 5f, layerMask))
+        {
+            return true;
+        }
+        else
+        {
+            //Debug.Log("NothingToRight");
             return false;
         }
     }
