@@ -41,7 +41,7 @@ public class SpinningTop : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _currentRotation += Time.deltaTime*50;
+        _currentRotation += Time.deltaTime*1000;
         transform.localRotation = Quaternion.Euler(transform.localRotation.x, _currentRotation, transform.localRotation.z);
         
         transform.position = Vector3.MoveTowards(transform.position, _currentNodePos, Time.deltaTime * speed);

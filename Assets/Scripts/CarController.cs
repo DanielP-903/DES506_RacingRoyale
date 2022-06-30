@@ -626,7 +626,7 @@ public class CarController : MonoBehaviour
         if (collision.transform.CompareTag("SpinningTop"))
         {
             Vector3 direction = collision.contacts[0].point - transform.position;
-            _rigidbody.velocity = -(direction.normalized * 15);
+            _rigidbody.velocity = -(direction.normalized * 30);
         }
        
     }
