@@ -460,7 +460,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_RenderShadows: 1
-  m_RequiresDepthTextureOption: 2
+  m_RequiresDepthTextureOption: 1
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
   m_Cameras: []
@@ -588,9 +588,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 2132717346174730411, guid: d6643c6f6427be04c8e16666c13b4bce, type: 2}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 54b38f41d700a254683aaca6016120d7, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.6
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -764,7 +764,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 45
+  orthographic size: 40
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -801,7 +801,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_RenderShadows: 0
-  m_RequiresDepthTextureOption: 2
+  m_RequiresDepthTextureOption: 1
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
   m_Cameras: []
@@ -832,7 +832,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e86c2e76e0235a4e82cd2ed9eed5e8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  yOffset: 45
+  yOffset: 40
 --- !u!1 &7114442244515136977
 GameObject:
   m_ObjectHideFlags: 0
@@ -984,7 +984,7 @@ GameObject:
   - component: {fileID: 4982024799729326492}
   - component: {fileID: 7812705298535837421}
   - component: {fileID: 1033606837190505183}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: WallCloseEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
