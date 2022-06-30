@@ -5,7 +5,7 @@ using UnityEngine;
 public class BoxingGloveObstacle : MonoBehaviour
 {
     public float outSpeed = 100f, inSpeed = 10f, distance = 50f, waitTime = 5f;
-    public bool doPunch = true;
+    private bool doPunch;
     //public GameObject BoxingGloveEnd;
     private Vector3 startPosition, endPosition;
 
