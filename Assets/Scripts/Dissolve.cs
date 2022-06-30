@@ -32,8 +32,10 @@ public class Dissolve : MonoBehaviour
             _dissolveTimer += Time.deltaTime;
             _dissolveTimer = Mathf.Clamp(_dissolveTimer, 0, 3);
             float dissolveFloat = Mathf.Lerp(1, 0, (3 - _dissolveTimer) / 3);
-            _meshRenderer.materials[0].SetFloat(FadeOutSlider, dissolveFloat);
-            _meshRenderer.materials[1].SetFloat(FadeOutSlider, dissolveFloat);
+            foreach (var material in _meshRenderer.materials)
+            {
+                material.SetFloat(FadeOutSlider, dissolveFloat);
+            }
             if (_meshRendererClip != null)
             {
                 _meshRendererClip.materials[0].SetFloat(FadeOutSlider, dissolveFloat);

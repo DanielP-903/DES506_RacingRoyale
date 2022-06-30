@@ -163,6 +163,7 @@ public class CarController : MonoBehaviour
                 if (checkpointObject != null)
                 {
                     checkpoints = checkpointObject.GetComponent<CheckpointSystem>();
+                    _passedCheckpoints.Clear();
                     foreach (var checkpoint in checkpoints.checkpointObjects)
                     {
                         _passedCheckpoints.Add(checkpoint, false);
@@ -270,9 +271,19 @@ public class CarController : MonoBehaviour
     private void PhysRestrictVelocities()
     {
         Vector3 newValues = new Vector3(_rigidbody.angularVelocity.x,_rigidbody.angularVelocity.y,_rigidbody.angularVelocity.z);
-        newValues.x = Mathf.Clamp(newValues.x, -1, 1);
-        newValues.y = Mathf.Clamp(newValues.y, -3, 3);
-        newValues.z = Mathf.Clamp(newValues.z, -1, 1);
+        
+        if (!_grounded)
+        {
+            newValues.x = Mathf.Clamp(newValues.x, -1, 1);
+            newValues.y = Mathf.Clamp(newValues.y, -3, 3);
+            newValues.z = Mathf.Clamp(newValues.z, -1, 1);
+        }
+        else
+        {
+            newValues.x = Mathf.Clamp(newValues.x, -1, 1);
+            newValues.y = Mathf.Clamp(newValues.y, -2, 2);
+            newValues.z = Mathf.Clamp(newValues.z, -1, 1);
+        }
         _rigidbody.angularVelocity = newValues;
 
         if (!_boostPlaying)
@@ -386,8 +397,8 @@ public class CarController : MonoBehaviour
         {
             if (_airDown)   _rigidbody.AddTorque(-transform.right/15, ForceMode.VelocityChange);
             if (_airUp)     _rigidbody.AddTorque(transform.right/15, ForceMode.VelocityChange);
-            if (_moveLeft)  _rigidbody.AddTorque(-transform.up/15, ForceMode.VelocityChange);
-            if (_moveRight) _rigidbody.AddTorque(transform.up/15, ForceMode.VelocityChange);
+            if (_moveLeft)  _rigidbody.AddTorque(-transform.up/60, ForceMode.VelocityChange);
+            if (_moveRight) _rigidbody.AddTorque(transform.up/60, ForceMode.VelocityChange);
             if (_airLeft)   _rigidbody.AddTorque(transform.forward/15, ForceMode.VelocityChange);
             if (_airRight)  _rigidbody.AddTorque(-transform.forward/15, ForceMode.VelocityChange);
 
@@ -422,11 +433,11 @@ public class CarController : MonoBehaviour
   
         float currentMotorValue = motorForce * motorMultiplier;
 
-        _currentSteeringAngle = Mathf.Lerp(_currentSteeringAngle, _rigidbody.velocity.magnitude * 2.2369362912f > 30 ? 5 : maxSteeringAngle, Time.deltaTime * 5);
+        _currentSteeringAngle = Mathf.Lerp(_currentSteeringAngle, _rigidbody.velocity.magnitude * 2.2369362912f > 80 ? 15 : maxSteeringAngle, Time.deltaTime * 5);
 
         if (_moveLeft)
         {
-            _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, -1, Time.deltaTime * 5.0f);
+            _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, -1, Time.deltaTime * 1.0f);
             // if (_moveBackward)
             // {
             //     _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 1, Time.deltaTime * 5.0f);
@@ -438,7 +449,7 @@ public class CarController : MonoBehaviour
         }
         else if (_moveRight)
         {
-            _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 1, Time.deltaTime * 5.0f);
+            _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 1, Time.deltaTime * 1.0f);
             // if (_moveBackward)
             // {
             //     _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, -1, Time.deltaTime * 5.0f);
@@ -450,7 +461,7 @@ public class CarController : MonoBehaviour
         }
         else
         {
-            _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 0, Time.deltaTime * 5.0f);
+            _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 0, Time.deltaTime * 50.0f);
         }
 
         float currentSteeringValue = maxSteeringAngle * _currentSteeringMulti;
@@ -507,10 +518,12 @@ public class CarController : MonoBehaviour
 
         if (_grounded)
         {
-            //if (_moveLeft) _rigidbody.AddForce(transform.right * (accelerationForce/2), ForceMode.Acceleration);
-            //if (_moveRight) _rigidbody.AddForce(-transform.right * (accelerationForce/2), ForceMode.Acceleration);
-            if (_moveLeft) _rigidbody.AddForce(-transform.right * (accelerationForce/20), ForceMode.VelocityChange);
-            if (_moveRight) _rigidbody.AddForce(transform.right * (accelerationForce/20), ForceMode.VelocityChange);
+            if (_moveLeft) _rigidbody.AddForce(transform.right * (accelerationForce/4), ForceMode.Acceleration);
+            if (_moveRight) _rigidbody.AddForce(-transform.right * (accelerationForce/4), ForceMode.Acceleration);
+            //if (_moveLeft) _rigidbody.AddForce((-transform.right) * (accelerationForce/40), ForceMode.VelocityChange);
+            //if (_moveRight) _rigidbody.AddForce((transform.right) * (accelerationForce/40), ForceMode.VelocityChange);
+            //if (_moveLeft) _rigidbody.AddForce((-transform.right + (transform.forward/4)) * (accelerationForce/20), ForceMode.VelocityChange);
+            //if (_moveRight) _rigidbody.AddForce((transform.right + (transform.forward/4)) * (accelerationForce/20), ForceMode.VelocityChange);
         }
 
     }

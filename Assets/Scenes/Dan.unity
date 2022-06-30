@@ -105659,11 +105659,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1118674505751619611, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
       propertyPath: maxSteeringAngle
-      value: 20
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 1118674505751619611, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
       propertyPath: accelerationForce
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1118674505751619611, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+      propertyPath: axles.Array.data[1].steering
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1978116585297259193, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
       propertyPath: debugMode
