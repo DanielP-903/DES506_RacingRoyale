@@ -10,13 +10,13 @@ public class MovingPillars : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        currentPosition = transform.position;
+        currentPosition = transform.localPosition;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        transform.position = new Vector3(reverse ? -Mathf.PingPong(Time.time * speed, distance) + currentPosition.x : Mathf.PingPong(Time.time * speed, distance) + currentPosition.x, transform.position.y, transform.position.z);
+        transform.localPosition = new Vector3(reverse ? -Mathf.PingPong(Time.time * speed, distance) + currentPosition.x : Mathf.PingPong(Time.time * speed, distance) + currentPosition.x, transform.localPosition.y, transform.localPosition.z);
     }
     //private void OnCollisionEnter(Collision collision)
     //{
