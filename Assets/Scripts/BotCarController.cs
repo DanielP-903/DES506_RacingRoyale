@@ -1,27 +1,85 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class BotCarController : MonoBehaviour
 {
+    [SerializeField] private bool _debugMode = false;
     private CarController _cc;
-    private int layerMask;
-    private Transform carBody;
+    private Rigidbody _rb;
+    private int _layerMask;
+    private Transform _carBody;
+    private PhotonView _pv;
+    private GameManager _gm;
+    private Transform _spawnLocation;
+    private int _botNum = -1;
+    private bool touchingReset = false;
+    
     
     // Start is called before the first frame update
     void Start()
     {
-        _cc = GetComponent<CarController>();
-        layerMask = LayerMask.GetMask("Player", "Checkpoint");
-        layerMask = ~layerMask;
-        carBody = transform.Find("CarMesh");
+        if (PhotonNetwork.LocalPlayer.IsMasterClient)
+        {
+            _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+            _botNum = _gm.GetTotalPlayers() + _gm.GetBotNum();
+            _pv = GetComponent<PhotonView>();
+            _cc = GetComponent<CarController>();
+            _rb = GetComponent<Rigidbody>();
+            _layerMask = LayerMask.GetMask("Player", "Checkpoint");
+            _layerMask = ~_layerMask;
+            _carBody = transform.Find("CarMesh");
+            _spawnLocation = GameObject.Find("SpawnLocation" + _botNum).transform;
+        }
+        else if (_debugMode)
+        {
+            _botNum = 1;
+            _pv = GetComponent<PhotonView>();
+            _cc = GetComponent<CarController>();
+            _rb = GetComponent<Rigidbody>();
+            _layerMask = LayerMask.GetMask("Player", "Checkpoint");
+            _layerMask = ~_layerMask;
+            _carBody = transform.Find("CarMesh");
+            _spawnLocation = GameObject.Find("SpawnLocation" + _botNum).transform;
+        }
+        else
+        {
+            Destroy(GetComponent<CarController>());
+            Destroy(GetComponent<Rigidbody>());
+            Destroy(this);
+        }
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
         decideBehaviour();
+        checkReset();
+    }
+
+    void checkReset()
+    {
+        if (transform.position.y < -5 || touchingReset)
+        {
+            goToSpawn();
+        }
+    }
+
+    void goToSpawn()
+    {
+        touchingReset = false;
+        _rb.velocity = Vector3.zero;
+        _rb.angularVelocity = Vector3.zero;
+
+        Transform spawn = _spawnLocation;
+        Transform thisTransform = transform;
+        var rotation = spawn.rotation;
+        var position = spawn.position;
+        thisTransform.rotation = rotation;
+        thisTransform.position = position;
     }
 
     void decideBehaviour()
@@ -72,7 +130,7 @@ public class BotCarController : MonoBehaviour
 
     void leftTurn()
     {
-        Debug.Log("TurningToLeft");
+        //Debug.Log("TurningToLeft");
         _cc.BotLeft();
         _cc.BotForward();
         _cc.BotNotRight();
@@ -81,7 +139,7 @@ public class BotCarController : MonoBehaviour
 
     void rightTurn()
     {
-        Debug.Log("TurningToRight");
+        //Debug.Log("TurningToRight");
         _cc.BotRight();
         _cc.BotForward();
         _cc.BotNotLeft();
@@ -107,10 +165,10 @@ public class BotCarController : MonoBehaviour
     bool detectForward()
     {
         RaycastHit hit;
-        Debug.DrawRay(transform.position,  transform.TransformDirection(Vector3.forward) * 8f, Color.magenta);
-        if (Physics.Raycast(transform.position,  transform.TransformDirection(Vector3.forward), out hit, 5f, layerMask))
+        //Debug.DrawRay(transform.position,  transform.TransformDirection(Vector3.forward) * 8f, Color.magenta);
+        if (Physics.Raycast(transform.position,  transform.TransformDirection(Vector3.forward), out hit, 5f, _layerMask))
         {
-            Debug.Log("Forward Detected!: "+hit.collider.gameObject);
+            //Debug.Log("Forward Detected!: "+hit.collider.gameObject);
             return true;
         }
         else
@@ -121,10 +179,10 @@ public class BotCarController : MonoBehaviour
     bool detectTooClose()
     {
         RaycastHit hit;
-        Debug.DrawRay(transform.position,  transform.TransformDirection(Vector3.forward) * 3f, Color.magenta);
-        if (Physics.Raycast(transform.position,  transform.TransformDirection(Vector3.forward), out hit, 5f, layerMask))
+        //Debug.DrawRay(transform.position,  transform.TransformDirection(Vector3.forward) * 3f, Color.magenta);
+        if (Physics.Raycast(transform.position,  transform.TransformDirection(Vector3.forward), out hit, 5f, _layerMask))
         {
-            //Debug.Log("Too Close!: "+hit.collider.gameObject);
+            ////Debug.Log("Too Close!: "+hit.collider.gameObject);
             return true;
         }
         else
@@ -135,8 +193,8 @@ public class BotCarController : MonoBehaviour
     
     bool detectLeft()
     {//Quaternion.Euler(0, -45, 0) * 
-        Debug.DrawRay(transform.position, Quaternion.Euler(0, -30, 0) * transform.TransformDirection(Vector3.forward) * 5f, Color.magenta);
-        if (Physics.Raycast(transform.position,  Quaternion.Euler(0, -30, 0) * transform.TransformDirection(Vector3.forward), 5f, layerMask))
+        //Debug.DrawRay(transform.position, Quaternion.Euler(0, -30, 0) * transform.TransformDirection(Vector3.forward) * 5f, Color.magenta);
+        if (Physics.Raycast(transform.position,  Quaternion.Euler(0, -30, 0) * transform.TransformDirection(Vector3.forward), 5f, _layerMask))
         {
             return true;
         }
@@ -148,8 +206,8 @@ public class BotCarController : MonoBehaviour
 
     bool detectRight()
     {
-        Debug.DrawRay(transform.position, Quaternion.Euler(0, 30, 0) * transform.TransformDirection(Vector3.forward) * 5f, Color.magenta);
-        if (Physics.Raycast(transform.position,  Quaternion.Euler(0, 30, 0) * transform.TransformDirection(Vector3.forward), 5f, layerMask))
+        //Debug.DrawRay(transform.position, Quaternion.Euler(0, 30, 0) * transform.TransformDirection(Vector3.forward) * 5f, Color.magenta);
+        if (Physics.Raycast(transform.position,  Quaternion.Euler(0, 30, 0) * transform.TransformDirection(Vector3.forward), 5f, _layerMask))
         {
             return true;
         }
@@ -161,71 +219,79 @@ public class BotCarController : MonoBehaviour
     
     bool detectLeftPit()
     {
-        Debug.DrawRay(transform.position - transform.right * 5, transform.TransformDirection(Vector3.down) * 5f, Color.cyan);
-        if (Physics.Raycast(transform.position - transform.right * 5,  transform.TransformDirection(Vector3.down), 5f, layerMask))
+        //Debug.DrawRay(transform.position - transform.right * 5, transform.TransformDirection(Vector3.down) * 5f, Color.cyan);
+        if (Physics.Raycast(transform.position - transform.right * 5,  transform.TransformDirection(Vector3.down), 5f, _layerMask))
         {
             return true;
         }
         else
         {
-            //Debug.Log("NothingToLeft");
+            ////Debug.Log("NothingToLeft");
             return false;
         }
     }
     
     bool detectRightPit()
     {
-        Debug.DrawRay(transform.position + transform.right * 5, transform.TransformDirection(Vector3.down) * 5f, Color.cyan);
-        if (Physics.Raycast(transform.position + transform.right * 5,  transform.TransformDirection(Vector3.down), 5f, layerMask))
+        //Debug.DrawRay(transform.position + transform.right * 5, transform.TransformDirection(Vector3.down) * 5f, Color.cyan);
+        if (Physics.Raycast(transform.position + transform.right * 5,  transform.TransformDirection(Vector3.down), 5f, _layerMask))
         {
             return true;
         }
         else
         {
-            //Debug.Log("NothingToRight");
+            ////Debug.Log("NothingToRight");
             return false;
         }
     }
     
     bool detectForwardLeftPit()
     {
-        Debug.DrawRay(transform.position - transform.right * 5 + transform.forward * 5, transform.TransformDirection(Vector3.down) * 5f, Color.cyan);
-        if (Physics.Raycast(transform.position - transform.right * 5 + transform.forward * 5,  transform.TransformDirection(Vector3.down), 5f, layerMask))
+        //Debug.DrawRay(transform.position - transform.right * 5 + transform.forward * 5, transform.TransformDirection(Vector3.down) * 5f, Color.cyan);
+        if (Physics.Raycast(transform.position - transform.right * 5 + transform.forward * 5,  transform.TransformDirection(Vector3.down), 5f, _layerMask))
         {
             return true;
         }
         else
         {
-            //Debug.Log("NothingToLeft");
+            ////Debug.Log("NothingToLeft");
             return false;
         }
     }
     
     bool detectForwardRightPit()
     {
-        Debug.DrawRay(transform.position + transform.right * 5 + transform.forward * 5, transform.TransformDirection(Vector3.down) * 5f, Color.cyan);
-        if (Physics.Raycast(transform.position + transform.right * 5 + transform.forward * 5,  transform.TransformDirection(Vector3.down), 5f, layerMask))
+        //Debug.DrawRay(transform.position + transform.right * 5 + transform.forward * 5, transform.TransformDirection(Vector3.down) * 5f, Color.cyan);
+        if (Physics.Raycast(transform.position + transform.right * 5 + transform.forward * 5,  transform.TransformDirection(Vector3.down), 5f, _layerMask))
         {
             return true;
         }
         else
         {
-            //Debug.Log("NothingToRight");
+            ////Debug.Log("NothingToRight");
             return false;
         }
     }
     
     bool detectForwardPit()
     {
-        Debug.DrawRay(transform.position + transform.forward * 5, transform.TransformDirection(Vector3.down) * 5f, Color.cyan);
-        if (Physics.Raycast(transform.position + transform.forward * 5,  transform.TransformDirection(Vector3.down), 5f, layerMask))
+        //Debug.DrawRay(transform.position + transform.forward * 5, transform.TransformDirection(Vector3.down) * 5f, Color.cyan);
+        if (Physics.Raycast(transform.position + transform.forward * 5,  transform.TransformDirection(Vector3.down), 5f, _layerMask))
         {
             return true;
         }
         else
         {
-            //Debug.Log("NothingToRight");
+            ////Debug.Log("NothingToRight");
             return false;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "ResetZone")
+        {
+            touchingReset = true;
         }
     }
 }

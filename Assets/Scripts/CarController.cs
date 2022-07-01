@@ -113,6 +113,7 @@ public class CarController : MonoBehaviour
     private Image _dangerPressureImg;
     
     [Header("DEBUG MODE")] public bool debug = false;
+    [Header("BOT MODE")] public bool bot = false;
 
     #region Initialisation
 
@@ -305,7 +306,11 @@ public class CarController : MonoBehaviour
         // BOOST FUNCTIONALITY
         if (_boost && _boostDelay <= 0)
         {
-            _speedCircleEffect.Play();
+            if (!bot)
+            {
+                _speedCircleEffect.Play();
+            }
+
             //_cameraShake.ShakeImmediate(3, 1);
             StartCoroutine(ActivateBoostEffect());
             _boostDelay = boostCooldown;
@@ -340,8 +345,11 @@ public class CarController : MonoBehaviour
         //     _newAlpha.y = 0.5f;
         // }
 
-        _speedLinesEffect.SetVector2("Alpha Values", _newAlpha);
-    
+        if (!bot)
+        {
+            _speedLinesEffect.SetVector2("Alpha Values", _newAlpha);
+        }
+
     }
 
     // For updating rigidbody forces acting upon the car
