@@ -545,7 +545,10 @@ public class CarController : MonoBehaviour
 
     public void PlayCircleEffect()
     {
-        _speedCircleEffect.Play();
+        if (!bot)
+        {
+            _speedCircleEffect.Play();
+        }
     }
     
     public IEnumerator ActivateBoostEffect()
