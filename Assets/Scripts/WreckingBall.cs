@@ -10,12 +10,12 @@ public class WreckingBall : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        currentRotation = transform.rotation;
+        currentRotation = transform.localRotation;
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.localEulerAngles = new Vector3(reverse ? -Mathf.PingPong(Time.time * speed, distance) + currentRotation.x : Mathf.PingPong(Time.time * speed, distance) + currentRotation.x, transform.rotation.y, transform.rotation.z );
+        transform.localEulerAngles = new Vector3(reverse ? -Mathf.PingPong(Time.time * speed, distance) + currentRotation.x : Mathf.PingPong(Time.time * speed, distance) + currentRotation.x, transform.localRotation.y, transform.localRotation.z );
     }
 }
