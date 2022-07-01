@@ -105,7 +105,10 @@ public class PlayerPowerups : MonoBehaviour
 
     void FixedUpdate()
     {
-        PhysUpdatePowerups();
+        if (!_carController.bot)
+        {
+            PhysUpdatePowerups();
+        }
     }
 
     private void OnDrawGizmos()

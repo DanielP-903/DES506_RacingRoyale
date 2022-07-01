@@ -689,21 +689,27 @@ public class CarController : MonoBehaviour
             _passedCheckpoints[collider.gameObject] = true;
             _currentRespawnPoint = collider.gameObject.transform;
             //GameObject newSpawnLocation = GameObject.Find(_currentRespawnPoint.name + _playerManager.GetPlayerNumber());
-            
-            int playerNo = !bot ? _playerManager.GetPlayerNumber() : _botCarController.GetBotNumber();
 
-            GameObject newSpawnLocation = collider.gameObject.transform.GetChild(playerNo).gameObject;
+
+                int playerNo = !bot ? _playerManager.GetPlayerNumber() : _botCarController.GetBotNumber();
+
+                GameObject newSpawnLocation = collider.gameObject.transform.GetChild(playerNo).gameObject;
+
+                Debug.Log("Checkpoint passed: " + collider.gameObject.name + " , " + newSpawnLocation + " , " +
+                          _currentRespawnPoint.name + " , " +
+                          (!bot ? _playerManager.GetPlayerNumber() : _botCarController.GetBotNumber()));
+                if (!bot) _playerManager.ChangeSpawnLocation(newSpawnLocation.transform);
+                else _botCarController.setSpawn(newSpawnLocation.transform);
             
-            Debug.Log("Checkpoint passed: " + collider.gameObject.name + " , " + newSpawnLocation + " , " + _currentRespawnPoint.name + " , " + _playerManager.GetPlayerNumber());
-            _playerManager.ChangeSpawnLocation(newSpawnLocation.transform);
         }
         
         if (collider.transform.CompareTag("EliminationZone") && !_hitEliminationZone)
         {
             // Passed finish line
             Debug.Log("Hit the Elimination Wall");
-            _hitEliminationZone = true;
-            _playerManager.EliminateCurrentPlayer();
+            _hitEliminationZone = true; 
+            if (!bot) _playerManager.EliminateCurrentPlayer();
+
         }
       
         
