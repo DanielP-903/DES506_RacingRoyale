@@ -68,7 +68,7 @@ public class CameraShake : MonoBehaviour
                 continue;
             }
             
-            if (player.GetComponent<PhotonView>().IsMine)
+            if (player.GetComponent<PhotonView>().IsMine && !player.GetComponent<CarController>().bot)
             {
                 _target = player;
                 //Debug.Log("Player Found");

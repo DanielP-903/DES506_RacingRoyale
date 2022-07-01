@@ -64,7 +64,7 @@ public class PlayerHUDController : MonoBehaviour
                 continue;
             }
             
-            if (player.GetComponent<PhotonView>().IsMine)
+            if (player.GetComponent<PhotonView>().IsMine && !player.GetComponent<CarController>().bot)
             {
                 _playerRef = player;
                 //Debug.Log("Player Found");

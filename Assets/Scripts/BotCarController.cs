@@ -78,7 +78,7 @@ public class BotCarController : MonoBehaviour
     {
         _spawnLocation = newSpawn;
     }
-    void goToSpawn()
+    public void goToSpawn()
     {
         touchingReset = false;
         _rb.velocity = Vector3.zero;

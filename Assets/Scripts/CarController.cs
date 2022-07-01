@@ -634,7 +634,8 @@ public class CarController : MonoBehaviour
 
     public void ResetPlayer()
     {
-        _playerManager.GoToSpawn();
+        if (!bot) _playerManager.GoToSpawn();
+        else _botCarController.goToSpawn();
     }
     
     void OnDrawGizmos()
