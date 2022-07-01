@@ -715,6 +715,11 @@ public class CarController : MonoBehaviour
             if (!bot) _playerManager.EliminateCurrentPlayer();
 
         }
+
+        if (collider.transform.CompareTag("ResetZone"))
+        {
+            ResetPlayer();
+        }
       
         
     }

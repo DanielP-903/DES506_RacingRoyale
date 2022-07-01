@@ -584,7 +584,8 @@ public class GameManager : MonoBehaviourPunCallbacks
                     SetFinishedPlayers(0, _stage);
                     if (PhotonNetwork.IsMasterClient)
                     {
-                        LoadArena("Stage3");
+                        //LoadArena("Stage3");
+                        LoadArena("EndStage");
                     }
                 }
                 
