@@ -447,7 +447,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 
                 int elimPlayersTotal = 0;
                 TryGetElimPlayers(out elimPlayersTotal);
-                for (int i = _totalPlayers - elimPlayersTotal; i < playersInScene; i++)
+                for (int i = _totalPlayers - elimPlayersTotal + 1; i < playersInScene; i++)
                 {
                     PhotonNetwork.Instantiate(this.botPrefab.name,
                         new Vector3(0, -100, 0),
