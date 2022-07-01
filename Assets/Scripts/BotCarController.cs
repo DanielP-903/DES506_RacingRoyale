@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Chat.UtilityScripts;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -73,6 +74,10 @@ public class BotCarController : MonoBehaviour
         }
     }
 
+    public void setSpawn(Transform newSpawn)
+    {
+        _spawnLocation = newSpawn;
+    }
     void goToSpawn()
     {
         touchingReset = false;
