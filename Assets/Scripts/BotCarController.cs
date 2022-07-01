@@ -50,7 +50,7 @@ public class BotCarController : MonoBehaviour
         else
         {
             Destroy(GetComponent<CarController>());
-            Destroy(GetComponent<Rigidbody>());
+            //Destroy(GetComponent<Rigidbody>());
             Destroy(this);
         }
     }
