@@ -10,7 +10,9 @@ using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
 using Cinemachine;
+using Photon.Pun.Demo.Cockpit;
 using TMPro;
+using Unity.Mathematics;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
@@ -37,6 +39,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private bool _eliminated = false;
     private int _elimPositon = 0;
     private int _playerNumber = 0 ;
+    private int _totalBots = 0;
     private Transform spectateTarget;
     private GameObject spectateMenu;
 
@@ -47,6 +50,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     
     [Tooltip("The prefab to use for representing the player")]
     public GameObject playerPrefab;
+    [Tooltip("The prefab to use for representing the player")]
+    public GameObject botPrefab;
     
     #endregion
 
@@ -211,6 +216,17 @@ public class GameManager : MonoBehaviourPunCallbacks
             cvc.m_Follow = spectateTarget;
             cvc.m_LookAt = spectateTarget;
         }
+    }
+    
+    public void IncreaseBotNum()
+    {
+        _totalBots++;
+    }
+
+    public int GetBotNum()
+    {
+        _totalBots++;
+        return (_totalBots-1);
     }
     
     #endregion
@@ -398,7 +414,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void LoadPlayerInLevel(Scene scene, LoadSceneMode loadSceneMode)
     {
-        
+        _totalBots = 0;
         //Debug.Log("GameManager Loading Level");
         if (scene.name == "Launcher")
         {
@@ -410,6 +426,34 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             _placeCounter = GameObject.Find("PlaceCounter").GetComponent<TextMeshProUGUI>();
             _timer = GameObject.Find("Timer").GetComponent<TextMeshProUGUI>();
+            if (PhotonNetwork.LocalPlayer.IsMasterClient)
+            {
+                int playersInScene = 0;
+                switch (scene.name)
+                {
+                    case "Stage1":
+                        playersInScene = PhotonNetwork.CurrentRoom.MaxPlayers;
+                        break;
+                    case "Stage2":
+                        playersInScene = PhotonNetwork.CurrentRoom.MaxPlayers/2;
+                        break;
+                    case "Stage3":
+                        playersInScene = PhotonNetwork.CurrentRoom.MaxPlayers/4;
+                        break;
+                    case "Stage4":
+                        playersInScene = PhotonNetwork.CurrentRoom.MaxPlayers/8;
+                        break;
+                }
+                
+                int elimPlayersTotal = 0;
+                TryGetElimPlayers(out elimPlayersTotal);
+                for (int i = _totalPlayers - elimPlayersTotal; i < playersInScene; i++)
+                {
+                    PhotonNetwork.Instantiate(this.botPrefab.name,
+                        new Vector3(0, -100, 0),
+                        quaternion.identity, 0);
+                }
+            }
         }
         // UPON REACHING PEDESTAL STAGE
         else if (scene.name == "EndStage")
