@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Photon.Pun;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MinimapController : MonoBehaviour
 {
@@ -24,6 +25,10 @@ public class MinimapController : MonoBehaviour
     {
         GetComponent<Camera>().orthographicSize = yOffset;
         GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
+        // if (SceneManager.GetActiveScene().name == "EndStage")
+        // {
+        //     gameObject.SetActive(false);
+        // }
     }
 
 
@@ -54,7 +59,7 @@ public class MinimapController : MonoBehaviour
                 continue;
             }
             
-            if (player.GetComponent<PhotonView>().IsMine)
+            if (player.GetComponent<PhotonView>().IsMine && !player.GetComponent<CarController>().bot)
             {
                 _playerRef = player;
                 //Debug.Log("Player Found");

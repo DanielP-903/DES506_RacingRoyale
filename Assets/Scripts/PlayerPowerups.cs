@@ -105,7 +105,10 @@ public class PlayerPowerups : MonoBehaviour
 
     void FixedUpdate()
     {
-        PhysUpdatePowerups();
+        if (!_carController.bot)
+        {
+            PhysUpdatePowerups();
+        }
     }
 
     private void OnDrawGizmos()
@@ -469,7 +472,7 @@ public class PlayerPowerups : MonoBehaviour
 
      private void OnTriggerEnter(Collider collider)
      {
-         if (collider.transform.CompareTag("Powerup") && _warpPortalTimer <= 0 && _wallShieldTimer <= 0 && !_boosting && !_grappling && !_punching && !_airBlasting)
+         if (collider.transform.CompareTag("Powerup") && _warpPortalTimer <= 0 && _wallShieldTimer <= 0 && !_boosting && !_grappling && !_punching && !_airBlasting && !_carController.bot)
          {
              currentPowerup = collider.transform.parent.GetComponent<PowerupSpawner>().GetCurrentPowerup();
              currentPowerupType = currentPowerup.powerupType;

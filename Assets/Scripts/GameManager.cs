@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     private float waitingTime;
     [Tooltip("Time spent waiting before a round starts")] [SerializeField]
     private float startDelay = 3.0f;
+    [Tooltip("Number of Bots to Spawn")] [SerializeField]
+    private int maxBots = 8;
     
     #endregion
     
@@ -447,7 +449,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 
                 int elimPlayersTotal = 0;
                 TryGetElimPlayers(out elimPlayersTotal);
-                for (int i = _totalPlayers - elimPlayersTotal + 1; i < playersInScene; i++)
+                for (int i = _totalPlayers - elimPlayersTotal + 1; i < playersInScene && i < maxBots; i++)
                 {
                     PhotonNetwork.Instantiate(this.botPrefab.name,
                         new Vector3(0, -100, 0),
@@ -582,7 +584,8 @@ public class GameManager : MonoBehaviourPunCallbacks
                     SetFinishedPlayers(0, _stage);
                     if (PhotonNetwork.IsMasterClient)
                     {
-                        LoadArena("Stage3");
+                        //LoadArena("Stage3");
+                        LoadArena("EndStage");
                     }
                 }
                 

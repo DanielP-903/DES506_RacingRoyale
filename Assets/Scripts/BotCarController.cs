@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Chat.UtilityScripts;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Random = UnityEngine.Random;
 
 public class BotCarController : MonoBehaviour
 {
@@ -60,6 +62,11 @@ public class BotCarController : MonoBehaviour
         checkReset();
     }
 
+    public int GetBotNumber()
+    {
+        return _botNum;
+    }
+    
     void checkReset()
     {
         if (transform.position.y < -5 || touchingReset)
@@ -68,7 +75,11 @@ public class BotCarController : MonoBehaviour
         }
     }
 
-    void goToSpawn()
+    public void setSpawn(Transform newSpawn)
+    {
+        _spawnLocation = newSpawn;
+    }
+    public void goToSpawn()
     {
         touchingReset = false;
         _rb.velocity = Vector3.zero;
@@ -84,9 +95,11 @@ public class BotCarController : MonoBehaviour
 
     void decideBehaviour()
     {
+        int randomVal = Random.Range((int)0, (int)250);
         if ((detectLeft() && detectForward() && !detectTooClose()) 
             || (!detectLeftPit() && detectRightPit())
-            || (!detectForwardLeftPit() && detectForwardRightPit()))
+            || (!detectForwardLeftPit() && detectForwardRightPit())
+            || randomVal == 0)
         {
             rightTurn();
         }
@@ -94,12 +107,14 @@ public class BotCarController : MonoBehaviour
         else if ((detectRight()  && detectForward() && !detectTooClose()) 
                  || (!detectRightPit() && detectLeftPit()) 
                  || (detectForward() && !detectTooClose())
-                 || (detectForwardLeftPit() && !detectForwardRightPit()))
+                 || (detectForwardLeftPit() && !detectForwardRightPit())
+                 || randomVal == 1)
         {
             leftTurn();
         }
         
-        else if (detectTooClose())
+        else if (detectTooClose()
+                 || randomVal == 2)
         {
             justBackward();
         }
@@ -292,6 +307,10 @@ public class BotCarController : MonoBehaviour
         if (other.tag == "ResetZone")
         {
             touchingReset = true;
+        }
+        else if (other.tag == "EliminationZone")
+        {
+            Destroy(this.gameObject);
         }
     }
 }
