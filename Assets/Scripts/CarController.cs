@@ -113,7 +113,10 @@ public class CarController : MonoBehaviour
     private Image _dangerPressureImg;
     
     [Header("DEBUG MODE")] public bool debug = false;
+    [Header("BOT MODE")] public bool bot = false;
 
+    private BotCarController _botCarController;
+    
     #region Initialisation
 
         private void Start()
@@ -121,6 +124,11 @@ public class CarController : MonoBehaviour
             if (debug)
             {
                 Debug.Log("DEBUG MODE IS ACTIVE! (CarController)");
+            }
+
+            if (bot)
+            {
+                _botCarController = GetComponent<BotCarController>();
             }
             
             _passedFinishLine = false;
@@ -305,7 +313,11 @@ public class CarController : MonoBehaviour
         // BOOST FUNCTIONALITY
         if (_boost && _boostDelay <= 0)
         {
-            _speedCircleEffect.Play();
+            if (!bot)
+            {
+                _speedCircleEffect.Play();
+            }
+
             //_cameraShake.ShakeImmediate(3, 1);
             StartCoroutine(ActivateBoostEffect());
             _boostDelay = boostCooldown;
@@ -340,8 +352,11 @@ public class CarController : MonoBehaviour
         //     _newAlpha.y = 0.5f;
         // }
 
-        _speedLinesEffect.SetVector2("Alpha Values", _newAlpha);
-    
+        if (!bot)
+        {
+            _speedLinesEffect.SetVector2("Alpha Values", _newAlpha);
+        }
+
     }
 
     // For updating rigidbody forces acting upon the car
@@ -530,7 +545,10 @@ public class CarController : MonoBehaviour
 
     public void PlayCircleEffect()
     {
-        _speedCircleEffect.Play();
+        if (!bot)
+        {
+            _speedCircleEffect.Play();
+        }
     }
     
     public IEnumerator ActivateBoostEffect()
@@ -674,19 +692,27 @@ public class CarController : MonoBehaviour
             _passedCheckpoints[collider.gameObject] = true;
             _currentRespawnPoint = collider.gameObject.transform;
             //GameObject newSpawnLocation = GameObject.Find(_currentRespawnPoint.name + _playerManager.GetPlayerNumber());
-            int playerNo = _playerManager.GetPlayerNumber();
-            GameObject newSpawnLocation = collider.gameObject.transform.GetChild(playerNo).gameObject;
+
+
+                int playerNo = !bot ? _playerManager.GetPlayerNumber() : _botCarController.GetBotNumber();
+
+                GameObject newSpawnLocation = collider.gameObject.transform.GetChild(playerNo).gameObject;
+
+                Debug.Log("Checkpoint passed: " + collider.gameObject.name + " , " + newSpawnLocation + " , " +
+                          _currentRespawnPoint.name + " , " +
+                          (!bot ? _playerManager.GetPlayerNumber() : _botCarController.GetBotNumber()));
+                if (!bot) _playerManager.ChangeSpawnLocation(newSpawnLocation.transform);
+                else _botCarController.setSpawn(newSpawnLocation.transform);
             
-            Debug.Log("Checkpoint passed: " + collider.gameObject.name + " , " + newSpawnLocation + " , " + _currentRespawnPoint.name + " , " + _playerManager.GetPlayerNumber());
-            _playerManager.ChangeSpawnLocation(newSpawnLocation.transform);
         }
         
         if (collider.transform.CompareTag("EliminationZone") && !_hitEliminationZone)
         {
             // Passed finish line
             Debug.Log("Hit the Elimination Wall");
-            _hitEliminationZone = true;
-            _playerManager.EliminateCurrentPlayer();
+            _hitEliminationZone = true; 
+            if (!bot) _playerManager.EliminateCurrentPlayer();
+
         }
       
         
