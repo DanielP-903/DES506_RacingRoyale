@@ -368,9 +368,9 @@ public class CarController : MonoBehaviour
         if (_pushUp && !_grounded && _pushDelay <= 0.0f)
         {
             _pushDelay = jumpCooldown;
-            Vector3 push = Vector3.up + new Vector3(.5f,0,0);
-            _rigidbody.AddForce(push * (pushForceAmount * 500.0f), ForceMode.Force);
-            _rigidbody.AddTorque(transform.forward * pushForceAmount, ForceMode.Impulse);
+            Vector3 push = -transform.up + new Vector3(.5f,0,0);
+            _rigidbody.AddForce(push * (pushForceAmount * 700.0f), ForceMode.Force);
+            _rigidbody.AddTorque(-transform.right * pushForceAmount * 10, ForceMode.VelocityChange);
         }
         else if (_pushUp && _grounded && _pushDelay <= 0.0f)
         {
@@ -448,7 +448,7 @@ public class CarController : MonoBehaviour
   
         float currentMotorValue = motorForce * motorMultiplier;
 
-        _currentSteeringAngle = Mathf.Lerp(_currentSteeringAngle, _rigidbody.velocity.magnitude * 2.2369362912f > 80 ? 15 : maxSteeringAngle, Time.deltaTime * 5);
+        _currentSteeringAngle = Mathf.Lerp(_currentSteeringAngle, _rigidbody.velocity.magnitude * 2.2369362912f > 60 ? 10 : maxSteeringAngle, Time.deltaTime * 50);
 
         if (_moveLeft)
         {
@@ -533,8 +533,20 @@ public class CarController : MonoBehaviour
 
         if (_grounded)
         {
-            if (_moveLeft) _rigidbody.AddForce(transform.right * (accelerationForce/4), ForceMode.Acceleration);
-            if (_moveRight) _rigidbody.AddForce(-transform.right * (accelerationForce/4), ForceMode.Acceleration);
+            if (_rigidbody.velocity.magnitude * 2.2369362912f < 60)
+            {
+                if (_moveLeft) _rigidbody.AddForce(transform.right * (accelerationForce / 4), ForceMode.Acceleration);
+                if (_moveRight) _rigidbody.AddForce(-transform.right * (accelerationForce / 4), ForceMode.Acceleration);
+            }
+            else
+            {
+                if (_moveLeft)
+                    _rigidbody.AddForce((-transform.right + (transform.forward / 4)) * (accelerationForce / 10),
+                        ForceMode.VelocityChange);
+                if (_moveRight)
+                    _rigidbody.AddForce((transform.right + (transform.forward / 4)) * (accelerationForce / 10),
+                        ForceMode.VelocityChange);
+            }
             //if (_moveLeft) _rigidbody.AddForce((-transform.right) * (accelerationForce/40), ForceMode.VelocityChange);
             //if (_moveRight) _rigidbody.AddForce((transform.right) * (accelerationForce/40), ForceMode.VelocityChange);
             //if (_moveLeft) _rigidbody.AddForce((-transform.right + (transform.forward/4)) * (accelerationForce/20), ForceMode.VelocityChange);
