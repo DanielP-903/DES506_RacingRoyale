@@ -60,6 +60,11 @@ public class BotCarController : MonoBehaviour
         checkReset();
     }
 
+    public int GetBotNumber()
+    {
+        return _botNum;
+    }
+    
     void checkReset()
     {
         if (transform.position.y < -5 || touchingReset)

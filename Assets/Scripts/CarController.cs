@@ -115,6 +115,8 @@ public class CarController : MonoBehaviour
     [Header("DEBUG MODE")] public bool debug = false;
     [Header("BOT MODE")] public bool bot = false;
 
+    private BotCarController _botCarController;
+    
     #region Initialisation
 
         private void Start()
@@ -122,6 +124,11 @@ public class CarController : MonoBehaviour
             if (debug)
             {
                 Debug.Log("DEBUG MODE IS ACTIVE! (CarController)");
+            }
+
+            if (bot)
+            {
+                _botCarController = GetComponent<BotCarController>();
             }
             
             _passedFinishLine = false;
@@ -682,7 +689,9 @@ public class CarController : MonoBehaviour
             _passedCheckpoints[collider.gameObject] = true;
             _currentRespawnPoint = collider.gameObject.transform;
             //GameObject newSpawnLocation = GameObject.Find(_currentRespawnPoint.name + _playerManager.GetPlayerNumber());
-            int playerNo = _playerManager.GetPlayerNumber();
+            
+            int playerNo = !bot ? _playerManager.GetPlayerNumber() : _botCarController.GetBotNumber();
+
             GameObject newSpawnLocation = collider.gameObject.transform.GetChild(playerNo).gameObject;
             
             Debug.Log("Checkpoint passed: " + collider.gameObject.name + " , " + newSpawnLocation + " , " + _currentRespawnPoint.name + " , " + _playerManager.GetPlayerNumber());
