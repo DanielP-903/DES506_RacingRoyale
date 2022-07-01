@@ -370,7 +370,7 @@ public class CarController : MonoBehaviour
             _pushDelay = jumpCooldown;
             Vector3 push = -transform.up + new Vector3(.5f,0,0);
             _rigidbody.AddForce(push * (pushForceAmount * 700.0f), ForceMode.Force);
-            _rigidbody.AddTorque(-transform.right * pushForceAmount * 700, ForceMode.VelocityChange);
+            _rigidbody.AddTorque(-transform.right * pushForceAmount * 10, ForceMode.VelocityChange);
         }
         else if (_pushUp && _grounded && _pushDelay <= 0.0f)
         {
@@ -448,7 +448,7 @@ public class CarController : MonoBehaviour
   
         float currentMotorValue = motorForce * motorMultiplier;
 
-        _currentSteeringAngle = Mathf.Lerp(_currentSteeringAngle, _rigidbody.velocity.magnitude * 2.2369362912f > 60 ? 5 : maxSteeringAngle, Time.deltaTime * 50);
+        _currentSteeringAngle = Mathf.Lerp(_currentSteeringAngle, _rigidbody.velocity.magnitude * 2.2369362912f > 60 ? 10 : maxSteeringAngle, Time.deltaTime * 50);
 
         if (_moveLeft)
         {
