@@ -295,7 +295,7 @@ public class PlayerManager : MonoBehaviour
 
     public void GoToSpawn()
     {
-        if (_cs.GetCheckpointElimination(_spawnLocation.parent.gameObject))
+        if (!_spawnLocation.name.Contains("SpawnLocation") && _cs.GetCheckpointElimination(_spawnLocation.parent.gameObject))
         {
             EliminateCurrentPlayer();
         }
