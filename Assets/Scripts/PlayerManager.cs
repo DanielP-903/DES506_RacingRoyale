@@ -23,6 +23,7 @@ public class PlayerManager : MonoBehaviour
     private Transform _spawnLocation;
     private GameObject mainCam;
     private GameObject startBlocker;
+    private CheckpointSystem _cs;
     public TextMeshProUGUI startDelayText;
     
     private int playerNumber = 0;
@@ -229,6 +230,7 @@ public class PlayerManager : MonoBehaviour
         {
             SetReadyPlayers(0, _gm.GetStageNum());
             startBlocker = GameObject.Find("StartBlocker");
+            _cs = GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>();
             startDelayText = GameObject.Find("Start Delay").GetComponent<TextMeshProUGUI>();
             int readyPlayers;
             TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
@@ -293,6 +295,11 @@ public class PlayerManager : MonoBehaviour
 
     public void GoToSpawn()
     {
+        if (!_spawnLocation.name.Contains("SpawnLocation") && _cs.GetCheckpointElimination(_spawnLocation.parent.gameObject))
+        {
+            EliminateCurrentPlayer();
+        }
+        
         _rb.velocity = Vector3.zero;
         _rb.angularVelocity = Vector3.zero;
 

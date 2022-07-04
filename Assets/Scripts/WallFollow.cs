@@ -170,4 +170,14 @@ public class WallFollow : MonoBehaviour
         _carController = _playerRef.GetComponent<CarController>();
         _rigidbodyRef = _carController.GetComponent<Rigidbody>();
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        //Debug.Log("Wall Hit: "+other.gameObject.name+":"+other.tag);
+        if (other.CompareTag("Checkpoint"))
+        {
+            Debug.Log("Hit Checkpoint");
+            _checkpointSystem.EliminateCheckpoint(other.gameObject);
+        }
+    }
 }
