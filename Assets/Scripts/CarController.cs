@@ -365,18 +365,21 @@ public class CarController : MonoBehaviour
         _pushDelay = _pushDelay <= 0 ? 0 : _pushDelay - Time.fixedDeltaTime;
         _padDelay = _padDelay <= 0 ? 0 : _padDelay - Time.fixedDeltaTime;
  
-        if (_pushUp && !_grounded && _pushDelay <= 0.0f)
-        {
-            _pushDelay = jumpCooldown;
-            Vector3 push = -transform.up + new Vector3(.5f,0,0);
-            _rigidbody.AddForce(push * (pushForceAmount * 700.0f), ForceMode.Force);
-            _rigidbody.AddTorque(-transform.right * pushForceAmount * 10, ForceMode.VelocityChange);
-        }
-        else if (_pushUp && _grounded && _pushDelay <= 0.0f)
+        // if (_pushUp && !_grounded && _pushDelay <= 0.0f)
+        // {
+        //     _pushDelay = jumpCooldown;
+        //     Vector3 push = -Vector3.up + new Vector3(.5f,0,0);
+        //     _rigidbody.AddForce(push * (pushForceAmount * 700.0f), ForceMode.Force);
+        //     _rigidbody.AddTorque(-transform.right + ((-transform.up + new Vector3(.5f,0,0))  * 10), ForceMode.VelocityChange);
+        // }
+        //else
+        if (_pushUp && _grounded && _pushDelay <= 0.0f)
         {
             _pushDelay = jumpCooldown;
             _rigidbody.AddForce(transform.up * (pushForceAmount * 700.0f), ForceMode.Force);
         }
+        
+        
         if (_Hit.transform != null)
         {
             if (_Hit.transform.CompareTag("JumpPad") && _padDelay <= 0)
@@ -533,20 +536,22 @@ public class CarController : MonoBehaviour
 
         if (_grounded)
         {
-            if (_rigidbody.velocity.magnitude * 2.2369362912f < 60)
-            {
-                if (_moveLeft) _rigidbody.AddForce(transform.right * (accelerationForce / 4), ForceMode.Acceleration);
-                if (_moveRight) _rigidbody.AddForce(-transform.right * (accelerationForce / 4), ForceMode.Acceleration);
-            }
-            else
-            {
-                if (_moveLeft)
-                    _rigidbody.AddForce((-transform.right + (transform.forward / 4)) * (accelerationForce / 10),
-                        ForceMode.VelocityChange);
-                if (_moveRight)
-                    _rigidbody.AddForce((transform.right + (transform.forward / 4)) * (accelerationForce / 10),
-                        ForceMode.VelocityChange);
-            }
+            if (_moveLeft) _rigidbody.AddForce(transform.right * (accelerationForce / 4), ForceMode.Acceleration);
+            if (_moveRight) _rigidbody.AddForce(-transform.right * (accelerationForce / 4), ForceMode.Acceleration);
+            // if (_rigidbody.velocity.magnitude * 2.2369362912f < 60)
+            // {
+            //     if (_moveLeft) _rigidbody.AddForce(transform.right * (accelerationForce / 4), ForceMode.Acceleration);
+            //     if (_moveRight) _rigidbody.AddForce(-transform.right * (accelerationForce / 4), ForceMode.Acceleration);
+            // }
+            // else
+            // {
+            //     if (_moveLeft)
+            //         _rigidbody.AddForce((-transform.right + (transform.forward / 4)) * (accelerationForce / 4),
+            //             ForceMode.Acceleration);
+            //     if (_moveRight)
+            //         _rigidbody.AddForce((transform.right + (transform.forward / 4)) * (accelerationForce / 4),
+            //             ForceMode.Acceleration);
+            // }
             //if (_moveLeft) _rigidbody.AddForce((-transform.right) * (accelerationForce/40), ForceMode.VelocityChange);
             //if (_moveRight) _rigidbody.AddForce((transform.right) * (accelerationForce/40), ForceMode.VelocityChange);
             //if (_moveLeft) _rigidbody.AddForce((-transform.right + (transform.forward/4)) * (accelerationForce/20), ForceMode.VelocityChange);
