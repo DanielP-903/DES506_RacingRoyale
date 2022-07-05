@@ -53,12 +53,8 @@ public class CarController : MonoBehaviour
     public float resetCooldown = 2.0f;
     public float padCooldown = 2.0f;
 
-    [Header("Other")] 
-    public float maxWallDistanceAlert = 30.0f;
     public GameObject minimapArrow;
-    public List<ParticleSystem> boostEffects = new List<ParticleSystem>();
     public CheckpointSystem checkpoints;
-    public GameObject impactEffectObject;
 
     [Header("DEBUG MODE")] 
     public bool debug;
@@ -86,7 +82,6 @@ public class CarController : MonoBehaviour
     private bool _grounded;
     private bool _onOil;
     private bool _onOilPreviousFrame;
-    private bool _boostPlaying;
     private bool _passedFinishLine;
     private bool _hitEliminationZone;
     private bool _hitDetect;
@@ -102,19 +97,9 @@ public class CarController : MonoBehaviour
     private float _resetDelay = 2.0f;
     private float _padDelay = 2.0f;
     private Vector3 _savedOilVelocity;
-    private Vector2 _newAlpha;
     
     #endregion
-
-    #region VFX
-
-    private VisualEffect _speedLinesEffect;
-    private VisualEffect _speedCircleEffect;
-    private VisualEffect _dangerWallEffect;
-    private VisualEffect _impactEffect;
-
-    #endregion
-
+    
     #region Component-References
 
     private PlayerManager _playerManager;
@@ -129,10 +114,9 @@ public class CarController : MonoBehaviour
     private RaycastHit _hit;
     private Dictionary<GameObject, bool> _passedCheckpoints = new Dictionary<GameObject, bool>();
     private Transform _currentRespawnPoint;
-    private GameObject _wall;
     private Camera _mainCam;
-    private Image _dangerPressureImg;
-
+    private CarVFXHandler _vfxHandler;
+    
     #endregion
    
     #region Initialisation
@@ -155,7 +139,8 @@ public class CarController : MonoBehaviour
             _rigidbody = GetComponent<Rigidbody>();
             _playerManager = GetComponent<PlayerManager>();
             _playerPowerups = GetComponent<PlayerPowerups>();
-
+            _vfxHandler = GetComponent<CarVFXHandler>();
+            
             foreach (var axle in axles)
             {
                 axle.leftWheel.brakeTorque = brakeTorque;
@@ -175,7 +160,6 @@ public class CarController : MonoBehaviour
             
             if (debug)
             {
-                 _wall = GameObject.Find("Danger Wall");
                 
                  GameObject checkpointObject = GameObject.Find("CheckpointSystem");
                 checkpointObject.GetComponent<CheckpointSystem>();
@@ -197,21 +181,6 @@ public class CarController : MonoBehaviour
             }
     
             _mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-            _mainCam.GetComponent<CameraShake>();
-
-            GameObject canvas = GameObject.Find("Canvas");
-
-            _dangerPressureImg = canvas.transform.GetChild(0).GetComponent<Image>();
-            _speedLinesEffect = _mainCam.transform.GetChild(2).gameObject.GetComponent<VisualEffect>();
-            _speedCircleEffect = _mainCam.transform.GetChild(3).gameObject.GetComponent<VisualEffect>();
-            _dangerWallEffect = _mainCam.transform.GetChild(4).gameObject.GetComponent<VisualEffect>();
-            _impactEffect = impactEffectObject.GetComponent<VisualEffect>();
-            _speedCircleEffect.Stop();
-
-            if (SceneManager.GetActiveScene().name == "WaitingArea")
-            {
-                _dangerWallEffect.SetVector2("Alpha Values", new Vector2(0,0));
-            }
         }
     
         void OnLevelWasLoaded()
@@ -221,7 +190,6 @@ public class CarController : MonoBehaviour
                 Debug.Log("DEBUG MODE IS ACTIVE! (CarController)");
             }
 
-            _wall = GameObject.FindGameObjectWithTag("EliminationZone");
             _passedFinishLine = false;
             GameObject checkpointObject = GameObject.Find("CheckpointSystem");
             _playerPowerups.powerupIcon = GameObject.FindGameObjectWithTag("PowerupIcon").gameObject.GetComponent<Image>();
@@ -239,22 +207,6 @@ public class CarController : MonoBehaviour
                 Debug.Log("Error: no CheckpointSystem object in scene");
             }
             _mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-            _mainCam.GetComponent<CameraShake>();
-
-            GameObject canvas = GameObject.Find("Canvas");
-
-            _dangerPressureImg = canvas.transform.GetChild(0).GetComponent<Image>();
-            _speedLinesEffect = _mainCam.transform.GetChild(2).gameObject.GetComponent<VisualEffect>();
-            _speedCircleEffect = _mainCam.transform.GetChild(3).gameObject.GetComponent<VisualEffect>();
-            _dangerWallEffect = _mainCam.transform.GetChild(4).gameObject.GetComponent<VisualEffect>();
-            _dangerWallEffect.SetVector2("Alpha Values", new Vector2(0,0));
-            _speedCircleEffect.Stop();
-            
-            
-            if (SceneManager.GetActiveScene().name == "WaitingArea")
-            {
-                _dangerWallEffect.SetVector2("Alpha Values", new Vector2(0,0));
-            }
         }
 
         #endregion
@@ -288,7 +240,7 @@ public class CarController : MonoBehaviour
         }
         _rigidbody.angularVelocity = newValues;
 
-        if (!_boostPlaying)
+        if (!_vfxHandler.boostPlaying)
         {
             Vector3 newLinearValues = _rigidbody.velocity = new Vector3(_rigidbody.velocity.x, _rigidbody.velocity.y, _rigidbody.velocity.z);
             newLinearValues.x = Mathf.Clamp(newLinearValues.x, -terminalVelocity / 2.2369362912f, terminalVelocity / 2.2369362912f);
@@ -306,14 +258,9 @@ public class CarController : MonoBehaviour
 
         // BOOST FUNCTIONALITY
         if (_boost && _boostDelay <= 0)
-        {
-            if (!bot)
-            {
-                _speedCircleEffect.Play();
-            }
-
-            //_cameraShake.ShakeImmediate(3, 1);
-            StartCoroutine(ActivateBoostEffect());
+        { 
+            _vfxHandler.PlayVFX("BoostEffect");
+            _vfxHandler.StartCoroutine(_vfxHandler.ActivateBoostEffect());
             _boostDelay = boostCooldown;
             if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
             {                
@@ -324,33 +271,6 @@ public class CarController : MonoBehaviour
                 _rigidbody.AddForce(transform.forward * boostForceAmount, ForceMode.VelocityChange);
             }
         }
-
- 
-
-        float clampedVelocity = Mathf.Clamp((_rigidbody.velocity.magnitude * 2.2369362912f) - 60, 0, 100);
-        _newAlpha.x = Mathf.Lerp(0.2f, 0, (100 - clampedVelocity) / 100);
-        _newAlpha.y = Mathf.Lerp(0.5f, 0, (100 - clampedVelocity) / 100);
-        
-        // if (!_boostPlaying)
-        // {
-        //     _newAlpha.x = Mathf.Lerp(0.2f, 0, (100 - clampedVelocity) / 100);
-        //     _newAlpha.y = Mathf.Lerp(0.5f, 0, (100 - clampedVelocity) / 100);
-        //     // _newAlpha.x = Mathf.Lerp(_newAlpha.x, 0.2f, Time.deltaTime);
-        //     // _newAlpha.y = Mathf.Lerp(_newAlpha.y, 0.2f, Time.deltaTime);
-        // }
-        // else
-        // {
-        //     _newAlpha.x = Mathf.Lerp(0.2f, 0, (100 - clampedVelocity) / 100);
-        //     _newAlpha.y = Mathf.Lerp(0.5f, 0, (100 - clampedVelocity) / 100);
-        //     _newAlpha.x = 0.2f;
-        //     _newAlpha.y = 0.5f;
-        // }
-
-        if (!bot)
-        {
-            _speedLinesEffect.SetVector2("Alpha Values", _newAlpha);
-        }
-
     }
 
     // For updating rigidbody forces acting upon the car
@@ -384,7 +304,7 @@ public class CarController : MonoBehaviour
 
             if (_hit.transform.CompareTag("BoostPad") && _padDelay <= 0)
             {
-                StartCoroutine(ActivateBoostEffect());
+                _vfxHandler.StartCoroutine(_vfxHandler.ActivateBoostEffect());
                 _padDelay = padCooldown;
                 if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
                 {
@@ -397,7 +317,7 @@ public class CarController : MonoBehaviour
             }
         }
 
-        if (_onOil && !_boostPlaying && _rigidbody.velocity.magnitude * 2.2369362912f > 30)
+        if (_onOil && !_vfxHandler.boostPlaying && _rigidbody.velocity.magnitude * 2.2369362912f > 30)
         {
             _rigidbody.velocity = Vector3.Lerp(_rigidbody.velocity, new Vector3(_savedOilVelocity.x, _rigidbody.velocity.y, _savedOilVelocity.z), Time.deltaTime* 10);
         }
@@ -405,36 +325,19 @@ public class CarController : MonoBehaviour
 
     private void PhysUpdateAirControl()
     {
-        if (!_grounded)
-        {
-            if (_airDown)   _rigidbody.AddTorque(-transform.right/15, ForceMode.VelocityChange);
-            if (_airUp)     _rigidbody.AddTorque(transform.right/15, ForceMode.VelocityChange);
-            if (_moveLeft)  _rigidbody.AddTorque(-transform.up/60, ForceMode.VelocityChange);
-            if (_moveRight) _rigidbody.AddTorque(transform.up/60, ForceMode.VelocityChange);
-            if (_airLeft)   _rigidbody.AddTorque(transform.forward/15, ForceMode.VelocityChange);
-            if (_airRight)  _rigidbody.AddTorque(-transform.forward/15, ForceMode.VelocityChange);
+        if (_grounded) return;
+        
+        if (_airDown)   _rigidbody.AddTorque(-transform.right/15, ForceMode.VelocityChange);
+        if (_airUp)     _rigidbody.AddTorque(transform.right/15, ForceMode.VelocityChange);
+        if (_moveLeft)  _rigidbody.AddTorque(-transform.up/60, ForceMode.VelocityChange);
+        if (_moveRight) _rigidbody.AddTorque(transform.up/60, ForceMode.VelocityChange);
+        if (_airLeft)   _rigidbody.AddTorque(transform.forward/15, ForceMode.VelocityChange);
+        if (_airRight)  _rigidbody.AddTorque(-transform.forward/15, ForceMode.VelocityChange);
 
-            if (!_airLeft && !_airRight && !_airUp && !_airDown)
-            {
-                _rigidbody.angularVelocity = new Vector3(_rigidbody.angularVelocity.x, _rigidbody.angularVelocity.y, Mathf.Clamp(_rigidbody.angularVelocity.z, -0.1f, 0.1f));
-                _rigidbody.angularVelocity = new Vector3(Mathf.Clamp(_rigidbody.angularVelocity.x, -0.1f, 0.1f), _rigidbody.angularVelocity.y, _rigidbody.angularVelocity.z);
-            }
-            // if (!_airUp && !_airDown)
-            // {
-            //     _rigidbody.angularVelocity = new Vector3(0,_rigidbody.angularVelocity.y,_rigidbody.angularVelocity.z);
-            // }
-            
-            //TODO: Update the tilting functionality in air to make it more controllable
-            // Quaternion before, after;
-            //
-            // before = transform.rotation;
-            //
-            // if (_airDown)   transform.Rotate(0,0,0);
-            // if (_airUp)     transform.Rotate(0,0,0);
-            // if (_moveLeft)  transform.Rotate(0,0,0);
-            // if (_moveRight) transform.Rotate(0,0,0);
-            // if (_airLeft)   transform.rotation = Quaternion.Slerp(before,quaternion.Euler(before.x + 0, before.y + 0, before.z - Time.fixedDeltaTime), Time.fixedDeltaTime);
-            // if (_airRight)  transform.rotation = Quaternion.Slerp(before,quaternion.Euler(before.x + 0, before.y + 0, before.z + Time.fixedDeltaTime), Time.fixedDeltaTime);
+        if (!_airLeft && !_airRight && !_airUp && !_airDown)
+        {
+            _rigidbody.angularVelocity = new Vector3(_rigidbody.angularVelocity.x, _rigidbody.angularVelocity.y, Mathf.Clamp(_rigidbody.angularVelocity.z, -0.1f, 0.1f));
+            _rigidbody.angularVelocity = new Vector3(Mathf.Clamp(_rigidbody.angularVelocity.x, -0.1f, 0.1f), _rigidbody.angularVelocity.y, _rigidbody.angularVelocity.z);
         }
     }
     
@@ -450,26 +353,10 @@ public class CarController : MonoBehaviour
         if (_moveLeft)
         {
             _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, -1, Time.deltaTime * 1.0f);
-            // if (_moveBackward)
-            // {
-            //     _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 1, Time.deltaTime * 5.0f);
-            // }
-            // else
-            // {
-            //     _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, -1, Time.deltaTime * 5.0f);
-            // }
         }
         else if (_moveRight)
         {
             _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 1, Time.deltaTime * 1.0f);
-            // if (_moveBackward)
-            // {
-            //     _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, -1, Time.deltaTime * 5.0f);
-            // }
-            // else
-            // {
-            //     _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 1, Time.deltaTime * 5.0f);
-            // }
         }
         else
         {
@@ -496,14 +383,12 @@ public class CarController : MonoBehaviour
             if (_drift) // New original friction
             {
                 WheelFrictionCurve frictionCurve = axle.leftWheel.forwardFriction;
-               // frictionCurve.stiffness = 1.5f;
                 axle.leftWheel.forwardFriction  = frictionCurve;
                 axle.rightWheel.forwardFriction  = frictionCurve;
             }
             else // Default friction
             {
                 WheelFrictionCurve frictionCurve = axle.leftWheel.forwardFriction;
-                //frictionCurve.stiffness = 1.2f;
                 axle.leftWheel.forwardFriction  = frictionCurve;
                 axle.rightWheel.forwardFriction  = frictionCurve;  
             }
@@ -528,64 +413,15 @@ public class CarController : MonoBehaviour
         if (_moveForward) _rigidbody.AddForce(transform.forward * accelerationForce, ForceMode.Acceleration);
         if (_moveBackward) _rigidbody.AddForce(-transform.forward * accelerationForce, ForceMode.Acceleration);
 
-        if (_grounded)
-        {
-            if (_moveLeft) _rigidbody.AddForce(transform.right * (accelerationForce / 4), ForceMode.Acceleration);
-            if (_moveRight) _rigidbody.AddForce(-transform.right * (accelerationForce / 4), ForceMode.Acceleration);
-            // if (_rigidbody.velocity.magnitude * 2.2369362912f < 60)
-            // {
-            //     if (_moveLeft) _rigidbody.AddForce(transform.right * (accelerationForce / 4), ForceMode.Acceleration);
-            //     if (_moveRight) _rigidbody.AddForce(-transform.right * (accelerationForce / 4), ForceMode.Acceleration);
-            // }
-            // else
-            // {
-            //     if (_moveLeft)
-            //         _rigidbody.AddForce((-transform.right + (transform.forward / 4)) * (accelerationForce / 4),
-            //             ForceMode.Acceleration);
-            //     if (_moveRight)
-            //         _rigidbody.AddForce((transform.right + (transform.forward / 4)) * (accelerationForce / 4),
-            //             ForceMode.Acceleration);
-            // }
-            //if (_moveLeft) _rigidbody.AddForce((-transform.right) * (accelerationForce/40), ForceMode.VelocityChange);
-            //if (_moveRight) _rigidbody.AddForce((transform.right) * (accelerationForce/40), ForceMode.VelocityChange);
-            //if (_moveLeft) _rigidbody.AddForce((-transform.right + (transform.forward/4)) * (accelerationForce/20), ForceMode.VelocityChange);
-            //if (_moveRight) _rigidbody.AddForce((transform.right + (transform.forward/4)) * (accelerationForce/20), ForceMode.VelocityChange);
-        }
+        if (!_grounded) return;
+        
+        if (_moveLeft) _rigidbody.AddForce(transform.right * (accelerationForce / 4), ForceMode.Acceleration);
+        if (_moveRight) _rigidbody.AddForce(-transform.right * (accelerationForce / 4), ForceMode.Acceleration);
 
     }    
 
     #endregion
 
-    #region VFX-Activation
-
-    public void PlayCircleEffect()
-    {
-        if (!bot)
-        {
-            _speedCircleEffect.Play();
-        }
-    }
-
-    private IEnumerator ActivateBoostEffect()
-    {
-        foreach (var effect in boostEffects)
-        {
-            effect.Play();
-        }
-
-        _boostPlaying = true;
-        
-        yield return new WaitForSeconds(1);
-        
-        _boostPlaying = false;
-        
-        foreach (var effect in boostEffects)
-        {
-            effect.Stop();
-        }
-    }
-
-    #endregion
     
     #region Getters
 
@@ -641,16 +477,7 @@ public class CarController : MonoBehaviour
 
         _onOilPreviousFrame = _onOil;
 
-        if (_wall)
-        {
-            float distanceToWall = Vector3.Distance(transform.position, _wall.transform.position);
-            distanceToWall = Mathf.Clamp(distanceToWall, 0, maxWallDistanceAlert);
-            _dangerPressureImg.color = Color.Lerp(Color.clear, Color.magenta, (maxWallDistanceAlert - distanceToWall) / maxWallDistanceAlert);
-            Vector2 newAlphaWall;
-            newAlphaWall.x = Mathf.Lerp(0,0.5f, ((maxWallDistanceAlert-30.0f) - distanceToWall) / (maxWallDistanceAlert-30.0f));
-            newAlphaWall.y = Mathf.Lerp(0,1,  ((maxWallDistanceAlert-30.0f) - distanceToWall) / (maxWallDistanceAlert-30.0f));
-            _dangerWallEffect.SetVector2("Alpha Values", newAlphaWall);
-        }
+        
     }
 
     public void ResetPlayer()
@@ -702,19 +529,18 @@ public class CarController : MonoBehaviour
         // Method 1: Layers
         // if (collision.contacts[0].point.y > transform.position.y - 3.0f && collision.gameObject.layer != 9)
         // {
-        //     impactEffectObject.transform.position = collision.contacts[0].point;
-        //     _impactEffect.Play();
         //     Vector3 direction = collision.contacts[0].point - transform.position;
         //     _rigidbody.velocity = -(direction.normalized * (bounciness/3));
+        //     _vfxHandler.SetImpactLocation(collision.contacts[0].point);
+        //     _vfxHandler.PlayVFX("Impact");
         // }
         
         // Method 2: Y difference
         if (collision.contacts[0].point.y > transform.position.y - 4.0f)
         {
-            impactEffectObject.transform.position = collision.contacts[0].point;
-            _impactEffect.Play();
             Vector3 direction = collision.contacts[0].point - transform.position;
             _rigidbody.velocity = -(direction.normalized * (bounciness/3));
+            _vfxHandler.PlayVFXAtPosition("Impact", collision.contacts[0].point);
         }
     }
 
