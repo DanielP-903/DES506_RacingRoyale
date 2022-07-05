@@ -1,21 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Cinemachine;
-using Cinemachine.PostFX;
-using TMPro;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering;
-using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityEngine.VFX;
-using ColorParameter = UnityEngine.Rendering.PostProcessing.ColorParameter;
-using FloatParameter = UnityEngine.Rendering.PostProcessing.FloatParameter;
-using Vignette = UnityEngine.Rendering.Universal.Vignette;
-
 
 public enum PowerupType
 {
@@ -24,24 +15,32 @@ public enum PowerupType
 
 public class CarController : MonoBehaviour
 {
-    [Header("Car Driving Physics")] public GameObject centreOfMass;
-    public float motorForce = 0;
-    public float brakeTorque = 1000;
-    public float maxSteeringAngle = 0;
+    [Serializable]
+    public class Axle
+    {
+        public WheelCollider leftWheel;
+        public WheelCollider rightWheel;
+        public bool motor;
+        public bool steering;
+    }
+    
+    #region Editable-Vars
+    
+    [Header("Car Driving Physics")] 
+    public GameObject centreOfMass;
+    public float motorForce;
+    [HideInInspector] public float brakeTorque = 1000;
+    public float maxSteeringAngle;
     public float terminalVelocity = 120;
     public List<Axle> axles;
-    
-    
+
     [Header("Forces")] 
     public float pushForceAmount = 5.0f;
     public float accelerationForce = 5.0f;
-    public Vector3 pushForce = Vector3.up;
-    public float torqueVectorAmount = 1.0f;
-    public float airControlForce = 500.0f;
     public float boostForceAmount = 5.0f;
     public float driftForceAmount = 3000.0f;
 
-    [Header("Environment Pad")] 
+    [Header("Environmental Pads")] 
     public float jumpPadForce = 5.0f;
     public float boostPadForce = 5.0f;
 
@@ -57,66 +56,85 @@ public class CarController : MonoBehaviour
     [Header("Other")] 
     public float maxWallDistanceAlert = 30.0f;
     public GameObject minimapArrow;
+    public List<ParticleSystem> boostEffects = new List<ParticleSystem>();
+    public CheckpointSystem checkpoints;
+    public GameObject impactEffectObject;
+
+    [Header("DEBUG MODE")] 
+    public bool debug;
     
-    private bool _moveForward = false;
-    private bool _moveBackward = false;
-    private bool _moveRight = false;
-    private bool _moveLeft = false;
-    private bool _pushUp = false;
-    private bool _drift = false;
-    private bool _boost = false;
-    private bool _airLeft = false;
-    private bool _airRight = false;
-    private bool _airUp = false;
-    private bool _airDown = false;
-    private bool _reset = false;
-    private bool _activatePowerup = false;
-    private bool _grounded = false;
-    private bool _onOil = false;
-    private bool _onOilPreviousFrame = false;
-    private bool _boostPlaying = false;
+    [Header("BOT MODE")] 
+    public bool bot;
     
-    private Vector3 _savedOilVelocity;
-    private Vector2 _newAlpha;
+    #endregion
+    
+    #region Bools
+    
+    private bool _moveForward;
+    private bool _moveBackward;
+    private bool _moveRight;
+    private bool _moveLeft;
+    private bool _pushUp;
+    private bool _drift;
+    private bool _boost;
+    private bool _airLeft;
+    private bool _airRight;
+    private bool _airUp;
+    private bool _airDown;
+    private bool _reset;
+    private bool _activatePowerup;
+    private bool _grounded;
+    private bool _onOil;
+    private bool _onOilPreviousFrame;
+    private bool _boostPlaying;
+    private bool _passedFinishLine;
+    private bool _hitEliminationZone;
+    private bool _hitDetect;
+
+    #endregion
+
+    #region Floats+Vectors
 
     private float _currentSteeringMulti;
-    
-    private bool _passedFinishLine = false;
-    private bool _hitEliminationZone = false;
+    private float _currentSteeringAngle;
     private float _pushDelay = 2.0f;
     private float _boostDelay = 2.0f;
     private float _resetDelay = 2.0f;
     private float _padDelay = 2.0f;
-
-    private float _currentSteeringAngle = 0.0f;
+    private Vector3 _savedOilVelocity;
+    private Vector2 _newAlpha;
     
-    private PlayerManager _playerManager;
-    private Rigidbody _rigidbody;
-    private bool _HitDetect;
-    private RaycastHit _Hit;
+    #endregion
 
-    private Dictionary<GameObject, bool> _passedCheckpoints = new Dictionary<GameObject, bool>();
-    private Transform _currentRespawnPoint;
-    public CheckpointSystem checkpoints;
+    #region VFX
 
-    public List<ParticleSystem> boostEffects = new List<ParticleSystem>();
-
-    private PlayerPowerups _playerPowerups;
-
-    private GameObject _wall;
-    
-    private Camera _mainCam;
     private VisualEffect _speedLinesEffect;
     private VisualEffect _speedCircleEffect;
     private VisualEffect _dangerWallEffect;
-    private CameraShake _cameraShake;
-    private Image _dangerPressureImg;
-    
-    [Header("DEBUG MODE")] public bool debug = false;
-    [Header("BOT MODE")] public bool bot = false;
+    private VisualEffect _impactEffect;
 
+    #endregion
+
+    #region Component-References
+
+    private PlayerManager _playerManager;
+    private Rigidbody _rigidbody;
+    private PlayerPowerups _playerPowerups;
     private BotCarController _botCarController;
-    
+
+    #endregion
+
+    #region Misc
+
+    private RaycastHit _hit;
+    private Dictionary<GameObject, bool> _passedCheckpoints = new Dictionary<GameObject, bool>();
+    private Transform _currentRespawnPoint;
+    private GameObject _wall;
+    private Camera _mainCam;
+    private Image _dangerPressureImg;
+
+    #endregion
+   
     #region Initialisation
 
         private void Start()
@@ -134,18 +152,15 @@ public class CarController : MonoBehaviour
             _passedFinishLine = false;
             _pushDelay = jumpCooldown;
             _boostDelay = boostCooldown;
-            //_wallShieldTimer = wallShieldTime;
             _rigidbody = GetComponent<Rigidbody>();
             _playerManager = GetComponent<PlayerManager>();
             _playerPowerups = GetComponent<PlayerPowerups>();
-            
 
             foreach (var axle in axles)
             {
                 axle.leftWheel.brakeTorque = brakeTorque;
                 axle.rightWheel.brakeTorque = brakeTorque;
             }
-            //SceneManager.sceneLoaded += LoadCCInLevel;
     
             _rigidbody.centerOfMass = centreOfMass.transform.localPosition;
             if (!debug)
@@ -157,17 +172,14 @@ public class CarController : MonoBehaviour
                     _playerPowerups.powerupIcon.gameObject.SetActive(false);
                 }
             }
-    
-    
+            
             if (debug)
             {
                  _wall = GameObject.Find("Danger Wall");
                 
                  GameObject checkpointObject = GameObject.Find("CheckpointSystem");
                 checkpointObject.GetComponent<CheckpointSystem>();
-                //_powerupIcon = GameObject.Find("Powerup Icon").gameObject.GetComponent<Image>();
-                
-                
+
                 if (checkpointObject != null)
                 {
                     checkpoints = checkpointObject.GetComponent<CheckpointSystem>();
@@ -185,7 +197,7 @@ public class CarController : MonoBehaviour
             }
     
             _mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-            _cameraShake = _mainCam.GetComponent<CameraShake>();
+            _mainCam.GetComponent<CameraShake>();
 
             GameObject canvas = GameObject.Find("Canvas");
 
@@ -193,8 +205,9 @@ public class CarController : MonoBehaviour
             _speedLinesEffect = _mainCam.transform.GetChild(2).gameObject.GetComponent<VisualEffect>();
             _speedCircleEffect = _mainCam.transform.GetChild(3).gameObject.GetComponent<VisualEffect>();
             _dangerWallEffect = _mainCam.transform.GetChild(4).gameObject.GetComponent<VisualEffect>();
+            _impactEffect = impactEffectObject.GetComponent<VisualEffect>();
             _speedCircleEffect.Stop();
-     
+
             if (SceneManager.GetActiveScene().name == "WaitingArea")
             {
                 _dangerWallEffect.SetVector2("Alpha Values", new Vector2(0,0));
@@ -219,18 +232,14 @@ public class CarController : MonoBehaviour
                 foreach (var checkpoint in checkpoints.checkpointObjects)
                 {
                     _passedCheckpoints.Add(checkpoint, false);
-                    //Debug.Log(_passedCheckpoints[checkpoint] + " : " + checkpoint);
                 }
             }
             else
             {
                 Debug.Log("Error: no CheckpointSystem object in scene");
             }
-            //_mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-            //_cameraShake = _mainCam.GetComponent<CameraShake>();
-            
             _mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-            _cameraShake = _mainCam.GetComponent<CameraShake>();
+            _mainCam.GetComponent<CameraShake>();
 
             GameObject canvas = GameObject.Find("Canvas");
 
@@ -247,25 +256,10 @@ public class CarController : MonoBehaviour
                 _dangerWallEffect.SetVector2("Alpha Values", new Vector2(0,0));
             }
         }
-    
-        /*private void LoadCCInLevel(Scene scene, LoadSceneMode loadSceneMode)
-        {
-            checkpoints = GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>();
-            if (checkpoints != null)
-            {
-                foreach (var checkpoint in checkpoints.checkpointObjects)
-                {
-                    _passedCheckpoints.Add(checkpoint, false);
-                    Debug.Log(_passedCheckpoints[checkpoint] + " : " + checkpoint);
-                }
-            }
-            else
-            {
-                Debug.Log("Error: no CheckpointSystem object in scene");
-            }
-        }*/
-        
-    #endregion
+
+        #endregion
+
+    #region Main-Physics
 
     public void FixedUpdate()
     {
@@ -380,25 +374,25 @@ public class CarController : MonoBehaviour
         }
         
         
-        if (_Hit.transform != null)
+        if (_hit.transform != null)
         {
-            if (_Hit.transform.CompareTag("JumpPad") && _padDelay <= 0)
+            if (_hit.transform.CompareTag("JumpPad") && _padDelay <= 0)
             {
                 _padDelay = padCooldown;
                 _rigidbody.AddForce(transform.up * (jumpPadForce * 700.0f * 1.5f), ForceMode.Force);
             }
 
-            if (_Hit.transform.CompareTag("BoostPad") && _padDelay <= 0)
+            if (_hit.transform.CompareTag("BoostPad") && _padDelay <= 0)
             {
                 StartCoroutine(ActivateBoostEffect());
                 _padDelay = padCooldown;
                 if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
                 {
-                    _rigidbody.velocity = -_Hit.transform.forward * boostPadForce;
+                    _rigidbody.velocity = -_hit.transform.forward * boostPadForce;
                 }
                 else
                 {
-                    _rigidbody.AddForce(-_Hit.transform.forward * boostPadForce, ForceMode.VelocityChange);
+                    _rigidbody.AddForce(-_hit.transform.forward * boostPadForce, ForceMode.VelocityChange);
                 }
             }
         }
@@ -558,7 +552,11 @@ public class CarController : MonoBehaviour
             //if (_moveRight) _rigidbody.AddForce((transform.right + (transform.forward/4)) * (accelerationForce/20), ForceMode.VelocityChange);
         }
 
-    }
+    }    
+
+    #endregion
+
+    #region VFX-Activation
 
     public void PlayCircleEffect()
     {
@@ -567,8 +565,8 @@ public class CarController : MonoBehaviour
             _speedCircleEffect.Play();
         }
     }
-    
-    public IEnumerator ActivateBoostEffect()
+
+    private IEnumerator ActivateBoostEffect()
     {
         foreach (var effect in boostEffects)
         {
@@ -587,11 +585,15 @@ public class CarController : MonoBehaviour
         }
     }
 
+    #endregion
+    
+    #region Getters
+
     public float GetBoostDelay()
     {
         return _boostDelay;
     }
-    
+
     public bool GetGrounded()
     {
         return _grounded;
@@ -601,6 +603,8 @@ public class CarController : MonoBehaviour
     {
         return _activatePowerup;
     }
+
+    #endregion
     
     private void Update()
     {
@@ -612,11 +616,11 @@ public class CarController : MonoBehaviour
         Debug.DrawRay(currentWheel.transform.position, Vector3.up * currentRpm / 100, Color.green);
         Debug.DrawRay(currentWheel.transform.position, -currentWheel.transform.parent.forward * currentBrake / 100, Color.red);
         
-        _HitDetect = Physics.BoxCast(transform.position + transform.up, transform.localScale, -transform.up, out _Hit, transform.rotation, 1);
-        _grounded = _HitDetect;
+        _hitDetect = Physics.BoxCast(transform.position + transform.up, transform.localScale, -transform.up, out _hit, transform.rotation, 1);
+        _grounded = _hitDetect;
         
-        if (_Hit.transform != null)
-            _onOil = _Hit.transform.CompareTag("OilSlip");
+        if (_hit.transform != null)
+            _onOil = _hit.transform.CompareTag("OilSlip");
 
         if (_onOil != _onOilPreviousFrame)
         {
@@ -658,13 +662,13 @@ public class CarController : MonoBehaviour
     void OnDrawGizmos()
     {
         //Check if there has been a hit yet
-        if (_HitDetect)
+        if (_hitDetect)
         {
             Gizmos.color = Color.green;
             //Draw a Ray forward from GameObject toward the hit
-            Gizmos.DrawRay(transform.position, -transform.up * _Hit.distance);
+            Gizmos.DrawRay(transform.position, -transform.up * _hit.distance);
             //Draw a cube that extends to where the hit exists
-            Gizmos.DrawWireCube(transform.position - transform.up * _Hit.distance, transform.localScale);
+            Gizmos.DrawWireCube(transform.position - transform.up * _hit.distance, transform.localScale);
         }
         //If there hasn't been a hit yet, draw the ray at the maximum distance
         else
@@ -679,6 +683,8 @@ public class CarController : MonoBehaviour
         Gizmos.color = Color.cyan;
     }
 
+    #region Collisions
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.transform.CompareTag("Player"))
@@ -692,12 +698,29 @@ public class CarController : MonoBehaviour
             Vector3 direction = collision.contacts[0].point - transform.position;
             _rigidbody.velocity = -(direction.normalized * 30);
         }
-       
+
+        // Method 1: Layers
+        // if (collision.contacts[0].point.y > transform.position.y - 3.0f && collision.gameObject.layer != 9)
+        // {
+        //     impactEffectObject.transform.position = collision.contacts[0].point;
+        //     _impactEffect.Play();
+        //     Vector3 direction = collision.contacts[0].point - transform.position;
+        //     _rigidbody.velocity = -(direction.normalized * (bounciness/3));
+        // }
+        
+        // Method 2: Y difference
+        if (collision.contacts[0].point.y > transform.position.y - 4.0f)
+        {
+            impactEffectObject.transform.position = collision.contacts[0].point;
+            _impactEffect.Play();
+            Vector3 direction = collision.contacts[0].point - transform.position;
+            _rigidbody.velocity = -(direction.normalized * (bounciness/3));
+        }
     }
 
-    private void OnTriggerEnter(Collider collider)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collider.transform.CompareTag("FinishLine") && !_passedFinishLine)
+        if (other.transform.CompareTag("FinishLine") && !_passedFinishLine)
         {
             // Passed finish line
             Debug.Log("Passed finish line!");
@@ -705,41 +728,35 @@ public class CarController : MonoBehaviour
             _playerManager.CompleteStage();
         }
         
-        if (collider.transform.CompareTag("Checkpoint") && _passedCheckpoints.ContainsKey(collider.gameObject) && !_passedCheckpoints[collider.gameObject])
+        if (other.transform.CompareTag("Checkpoint") && _passedCheckpoints.ContainsKey(other.gameObject) && !_passedCheckpoints[other.gameObject])
         {
-            _passedCheckpoints[collider.gameObject] = true;
-            _currentRespawnPoint = collider.gameObject.transform;
-            //GameObject newSpawnLocation = GameObject.Find(_currentRespawnPoint.name + _playerManager.GetPlayerNumber());
-
-
-                int playerNo = !bot ? _playerManager.GetPlayerNumber() : _botCarController.GetBotNumber();
-
-                GameObject newSpawnLocation = collider.gameObject.transform.GetChild(playerNo).gameObject;
-
-                Debug.Log("Checkpoint passed: " + collider.gameObject.name + " , " + newSpawnLocation + " , " +
-                          _currentRespawnPoint.name + " , " +
-                          (!bot ? _playerManager.GetPlayerNumber() : _botCarController.GetBotNumber()));
-                if (!bot) _playerManager.ChangeSpawnLocation(newSpawnLocation.transform);
-                else _botCarController.setSpawn(newSpawnLocation.transform);
-            
+            _passedCheckpoints[other.gameObject] = true;
+            _currentRespawnPoint = other.gameObject.transform;
+            int playerNo = !bot ? _playerManager.GetPlayerNumber() : _botCarController.GetBotNumber();
+            GameObject newSpawnLocation = other.gameObject.transform.GetChild(playerNo).gameObject;
+            Debug.Log("Checkpoint passed: " + other.gameObject.name + " , " + newSpawnLocation + " , " + _currentRespawnPoint.name + " , " + (!bot ? _playerManager.GetPlayerNumber() : _botCarController.GetBotNumber()));
+            if (!bot) _playerManager.ChangeSpawnLocation(newSpawnLocation.transform);
+            else _botCarController.setSpawn(newSpawnLocation.transform);
         }
         
-        if (collider.transform.CompareTag("EliminationZone") && !_hitEliminationZone)
+        if (other.transform.CompareTag("EliminationZone") && !_hitEliminationZone)
         {
-            // Passed finish line
+            // Hit elimination wall
             Debug.Log("Hit the Elimination Wall");
             _hitEliminationZone = true; 
             if (!bot) _playerManager.EliminateCurrentPlayer();
 
         }
 
-        if (collider.transform.CompareTag("ResetZone"))
+        if (other.transform.CompareTag("ResetZone"))
         {
             ResetPlayer();
         }
-      
-        
     }
+
+    #endregion
+
+    #region Input-Detection
 
     // Input Actions
     // W
@@ -833,7 +850,10 @@ public class CarController : MonoBehaviour
         _activatePowerup = value > 0;
         //Debug.Log("Activate Powerup detected");
     }
+
+    #endregion
     
+    #region AI-Input
     
     //AIONLY
     public void BotForward()
@@ -905,13 +925,6 @@ public class CarController : MonoBehaviour
         _boost = false;
         //Debug.Log("Boost detected");
     }
-
-    [Serializable]
-    public class Axle
-    {
-        public WheelCollider leftWheel;
-        public WheelCollider rightWheel;
-        public bool motor;
-        public bool steering;
-    }
+    
+    #endregion
 }
