@@ -494,7 +494,7 @@ public class CarController : MonoBehaviour
             if (_airTime > 0.5f)
             {
                 //_vfxHandler.PlayVFXAtPosition("GroundImpact", transform.position);
-                _vfxHandler.SpawnVFXAtPosition("GroundImpact", transform.position - (transform.forward/5) - (transform.up * 4));
+                _vfxHandler.SpawnVFXAtPosition("GroundImpact", transform.position - (transform.forward/5) - (transform.up/1.5f));
                 _airTime = 0;
             }
         }
