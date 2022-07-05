@@ -4,16 +4,36 @@ using UnityEngine;
 
 public class BoxingGloveObstacle : MonoBehaviour
 {
-    public float outSpeed = 100f, inSpeed = 10f, distance = 50f, waitTime = 5f;
+    public float outSpeed = 100f, inSpeed = 10f, distance = 50f, outTime = 5f, inTime = 3f;
+    public enum Axis
+    {
+        x,
+        y,
+        z
+    }
+    public Axis currentAxis;
+    private float currentWaitTime;
     private bool doPunch;
-    //public GameObject BoxingGloveEnd;
     private Vector3 startPosition, endPosition;
 
     // Start is called before the first frame update
     void Start()
     {
-        startPosition = transform.position;
-        endPosition = new Vector3(transform.position.x, transform.position.y , transform.position.z + +distance);
+        currentWaitTime = inTime;
+        startPosition = transform.localPosition;
+        if (currentAxis == Axis.x)
+        {
+            endPosition = new Vector3(transform.localPosition.x + distance, transform.localPosition.y , transform.localPosition.z);
+        }
+        else if (currentAxis == Axis.y)
+        {
+            endPosition = new Vector3(transform.localPosition.x, transform.localPosition.y + distance, transform.localPosition.z);
+        }
+        else
+        {
+            endPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z + distance);
+        }
+           
         StartCoroutine(GateUp());
     }
 
@@ -30,7 +50,8 @@ public class BoxingGloveObstacle : MonoBehaviour
 
         while (true)
         {
-            yield return new WaitForSeconds(waitTime);
+            currentWaitTime = doPunch?  outTime :  inTime;
+            yield return new WaitForSeconds(currentWaitTime);
 
             doPunch = !doPunch;
         }
@@ -40,9 +61,9 @@ public class BoxingGloveObstacle : MonoBehaviour
     void MovePunch()
     {
         if(doPunch)
-            transform.position = Vector3.MoveTowards(transform.position, endPosition, outSpeed * Time.deltaTime);
+            transform.localPosition = Vector3.MoveTowards(transform.localPosition, endPosition, outSpeed * Time.deltaTime);
         else
-            transform.position = Vector3.MoveTowards(transform.position, startPosition, inSpeed * Time.deltaTime);
+            transform.localPosition = Vector3.MoveTowards(transform.localPosition, startPosition, inSpeed * Time.deltaTime);
     }
 
     //private void OnCollisionEnter(Collision collision)
