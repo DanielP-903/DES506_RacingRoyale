@@ -24,8 +24,9 @@ public class PlayerManager : MonoBehaviour
     private GameObject mainCam;
     private GameObject startBlocker;
     private CheckpointSystem _cs;
+    private TextMeshProUGUI _messageText;
     public TextMeshProUGUI startDelayText;
-    
+
     private int playerNumber = 0;
     private bool completedStage = false;
     private bool eliminated = false;
@@ -228,6 +229,8 @@ public class PlayerManager : MonoBehaviour
         //Debug.Log("PlayerManger Loading Level");
         if (_photonView != null)
         {
+            _messageText = GameObject.Find("Message").GetComponent<TextMeshProUGUI>();
+            _messageText.color = Color.clear;
             SetReadyPlayers(0, _gm.GetStageNum());
             startBlocker = GameObject.Find("StartBlocker");
             _cs = GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>();
@@ -293,25 +296,31 @@ public class PlayerManager : MonoBehaviour
         return playerNumber;
     }
 
-    public void GoToSpawn()
+    public void GoToSpawn(bool pressedButton = false)
     {
-        if (!_spawnLocation.name.Contains("SpawnLocation") && _cs.GetCheckpointElimination(_spawnLocation.parent.gameObject))
+        if (pressedButton && !_spawnLocation.name.Contains("SpawnLocation") && _cs.GetCheckpointElimination(_spawnLocation.parent.gameObject))
+        {
+            _messageText.color = Color.white;
+            StartCoroutine(fadeMessage());
+        }
+        else if (!_spawnLocation.name.Contains("SpawnLocation") && _cs.GetCheckpointElimination(_spawnLocation.parent.gameObject))
         {
             EliminateCurrentPlayer();
         }
-        
-        _rb.velocity = Vector3.zero;
-        _rb.angularVelocity = Vector3.zero;
+        else
+        {
+            _rb.velocity = Vector3.zero;
+            _rb.angularVelocity = Vector3.zero;
 
-        Transform spawn = _spawnLocation;
-        Transform thisTransform = transform;
-        var rotation = spawn.rotation;
-        var position = spawn.position;
-        thisTransform.rotation = rotation;
-        thisTransform.position = position;
-        mainCam.transform.rotation = rotation;
-        mainCam.transform.position = position+new Vector3(0,6,-10);
-        
+            Transform spawn = _spawnLocation;
+            Transform thisTransform = transform;
+            var rotation = spawn.rotation;
+            var position = spawn.position;
+            thisTransform.rotation = rotation;
+            thisTransform.position = position;
+            mainCam.transform.rotation = rotation;
+            mainCam.transform.position = position + new Vector3(0, 6, -10);
+        }
     }
 
     public Transform GetSpawnLocation()
@@ -339,9 +348,10 @@ public class PlayerManager : MonoBehaviour
                 if (elimPosition < 5)
                 {
                     //Debug.Log("Finished at:" +elimPosition);
-                    GameManager.SetTop3Players(_photonView.Owner.NickName, elimPosition);
-                    string t3;
-                    GameManager.TryGetTop3Players(out t3, elimPosition);
+                    //GameManager.SetTop3Players(_photonView.Owner.NickName, elimPosition);
+                    GameManager.SetTopPlayers(_photonView.Owner, elimPosition);
+                    //string t3;
+                    //GameManager.TryGetTop3Players(out t3, elimPosition);
                     //Debug.Log(t3);
                 }
             }
@@ -368,9 +378,10 @@ public class PlayerManager : MonoBehaviour
             if (elimPosition < 5)
             {
                 //Debug.Log("Finished at:" +elimPosition);
-                GameManager.SetTop3Players(_photonView.Owner.NickName, elimPosition);
-                string t3;
-                GameManager.TryGetTop3Players(out t3, elimPosition);
+                //GameManager.SetTop3Players(_photonView.Owner.NickName, elimPosition);
+                GameManager.SetTopPlayers(_photonView.Owner, elimPosition);
+                //string t3;
+                //GameManager.TryGetTop3Players(out t3, elimPosition);
                 //Debug.Log(t3);
             }
             
@@ -412,5 +423,20 @@ public class PlayerManager : MonoBehaviour
         }
         
     }
+    #endregion
+
+    #region TimedScripts
+
+    IEnumerator fadeMessage()
+    {
+        while (_messageText.color.a < 0)
+        {
+            _messageText.color = new Color(1,1,1,_messageText.color.a - 0.02f);
+            yield return new WaitForFixedUpdate();
+        }
+
+        _messageText.color = Color.clear;
+    }
+
     #endregion
 }

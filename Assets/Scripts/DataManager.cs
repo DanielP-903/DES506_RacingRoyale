@@ -8,11 +8,21 @@ public class DataManager : MonoBehaviour
     private Mesh[] meshArray;
     [SerializeField]
     private Material[] matArray;
+
+    private static GameObject instance;
     
     // Start is called before the first frame update
     void Start()
     {
-        DontDestroyOnLoad(this.gameObject);
+        if (!instance)
+        {
+            instance = this.gameObject;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     public Mesh[] GetMesh()

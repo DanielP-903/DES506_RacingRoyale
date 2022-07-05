@@ -263,6 +263,33 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         //Debug.Log("Set Custom Props for Top 3 Players: "+ props.ToStringFull() + " wasSet: "+wasSet+" NewValue: "+top3Players);
     }
+
+    public static bool TryGetTopPlayers(out Player player, int posNum)
+    {
+        object topPlayersFromProps;
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("TopPlayer" + posNum, out topPlayersFromProps))
+        {
+            player = (Player)topPlayersFromProps;
+            return true;
+        }
+        player = null;
+        return false;
+    }
+
+    public static void SetTopPlayers(Player player, int posNum)
+    {
+        Player topPlayer;
+        bool wasSet = TryGetTopPlayers(out topPlayer, posNum);
+
+        ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
+        {
+            {"TopPlayer"+posNum, (Player)player}
+        };
+        PhotonNetwork.CurrentRoom.SetCustomProperties(props);
+        bool wasSet2 = TryGetTopPlayers(out topPlayer, posNum);
+
+        //Debug.Log("Set Custom Props for Top 3 Players: "+ props.ToStringFull() + " wasSet: "+wasSet+" NewValue: "+top3Players);
+    }
     
     public static bool TryGetFinishedPlayers(out int finishedPlayers, int stageNum)
     {
@@ -427,7 +454,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (scene.name != "EndStage")
         {
             _placeCounter = GameObject.Find("PlaceCounter").GetComponent<TextMeshProUGUI>();
-            _timer = GameObject.Find("Timer").GetComponent<TextMeshProUGUI>();
+            //_timer = GameObject.Find("Timer").GetComponent<TextMeshProUGUI>();
             if (PhotonNetwork.LocalPlayer.IsMasterClient)
             {
                 int playersInScene = 0;
@@ -465,18 +492,27 @@ public class GameManager : MonoBehaviourPunCallbacks
             {
                 //Top3PlayerData t3;
                 //TryGetTop3Players(out t3, i);
-                string t3;
-                TryGetTop3Players(out t3, i);
-                if (t3 != "")
+                Player p;
+                TryGetTopPlayers(out p, i);
+                if (p != null)
                 {
-                    string winnerName = t3;
-                    GameObject.Find("TopCar" + i).GetComponent<SetWinnerName>().SetName(winnerName);
+                    string winnerName = p.NickName;
+                    int mesh = (int)p.CustomProperties["Skin"];
+                    GameObject.Find("TopCar" + i).GetComponent<SetWinnerName>().SetWinner(winnerName, mesh);
                 }
                 else
                 {
                     GameObject.Find("TopCar" + i).SetActive(false);
                     GameObject.Find("Podium"+i).SetActive(false);
                 }
+                /*string t3;
+                TryGetTop3Players(out t3, i);
+                if (t3 != "")
+                {
+                    string winnerName = t3;
+                    GameObject.Find("TopCar" + i).GetComponent<SetWinnerName>().SetName(winnerName);
+                }*/
+                
             }
 
             GameObject mainCam = GameObject.Find("Main Camera");
@@ -568,6 +604,24 @@ public class GameManager : MonoBehaviourPunCallbacks
             case "Stage2":
                 //_timer.gameObject.SetActive(false);
                 TryGetFinishedPlayers(out playersCompleted, _stage);
+                TryGetElimPlayers(out elimPlayers);
+                _placeCounter.text = Mathf.Ceil(_totalPlayers - elimPlayers) + " players left!";
+                
+                //Debug.Log("Name: "+SceneManager.GetActiveScene().name + " Stage: " + _stage + " Players Finished: "+(_totalPlayers - elimPlayers)+" Goal: 0");
+                
+                if (_stage == 4 && playersCompleted >= (float)_totalPlayers/16)
+                {
+                    _stage++;
+                    if (PhotonNetwork.IsMasterClient)
+                    {
+                        LoadArena("EndStage");
+                    }
+                }
+                
+                break;
+            /*case "Stage2":
+                //_timer.gameObject.SetActive(false);
+                TryGetFinishedPlayers(out playersCompleted, _stage);
                 if (Mathf.Ceil((float)_totalPlayers / 4) - playersCompleted == 1)
                 {
                     _placeCounter.text = "1 place left!";
@@ -631,7 +685,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                     }
                 }
                 
-                break;
+                break;*/
             case "EndStage":
                 break;
         }

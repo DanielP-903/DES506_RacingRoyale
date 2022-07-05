@@ -59,6 +59,7 @@ public class PlayerPowerups : MonoBehaviour
     private float _punchTimer = 0.0f;
     private Image _powerupIconMask;
     private CarController _carController;
+    private CarVFXHandler _vfxHandler;
     private Rigidbody _rigidbody;
     private SphereCollider _blastObjectCollider;
     private RaycastHit _nearestHit;
@@ -69,6 +70,7 @@ public class PlayerPowerups : MonoBehaviour
     void Start()
     {
         _carController = GetComponent<CarController>();
+        _vfxHandler = GetComponent<CarVFXHandler>();
         _rigidbody = GetComponent<Rigidbody>();
         wallObject = transform.GetChild(0).gameObject;
         blastObject = transform.GetChild(1).gameObject;
@@ -87,6 +89,7 @@ public class PlayerPowerups : MonoBehaviour
     void OnLevelWasLoaded()
     {
         _carController = GetComponent<CarController>();
+        _vfxHandler = GetComponent<CarVFXHandler>();
         _rigidbody = GetComponent<Rigidbody>();
         wallObject = transform.GetChild(0).gameObject;
         blastObject = transform.GetChild(1).gameObject;
@@ -105,24 +108,11 @@ public class PlayerPowerups : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!_carController.bot)
-        {
-            PhysUpdatePowerups();
-        }
+        if (_carController.bot) return;
+        
+        PhysUpdatePowerups();
     }
-
-    private void OnDrawGizmos()
-    {
-        // if (_nearestHit.Equals(null))
-        // {
-        //     Gizmos.color = Color.black;
-        //     if (_nearestHit.transform.CompareTag("Player"))
-        //     {
-        //         Gizmos.DrawLine(transform.position, _nearestHit.transform.position);
-        //     }
-        // }
-    }
-
+    
     private void PhysUpdatePowerups()
     {
         _wallShieldTimer = _wallShieldTimer <= 0 ? 0 : _wallShieldTimer - Time.fixedDeltaTime;
@@ -267,11 +257,8 @@ public class PlayerPowerups : MonoBehaviour
      {
          StartCoroutine(DelayRemoveIcon());
          currentPowerupType = PowerupType.None;
-         foreach (var effect in _carController.boostEffects)
-         {
-             effect.Play();
-         }
-         _carController.PlayCircleEffect();
+         _vfxHandler.PlayBoostEffectAlt();
+         _vfxHandler.PlayVFX("BoostEffect");
          if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
          {                
              _rigidbody.velocity = transform.forward * superBoostForce;
@@ -460,10 +447,8 @@ public class PlayerPowerups : MonoBehaviour
          _boosting = true;
          yield return new WaitForSeconds(1);
          powerupIcon.gameObject.SetActive(false);
-         foreach (var effect in _carController.boostEffects)
-         {
-             effect.Stop();
-         }
+         
+         _vfxHandler.StopBoostEffect();
          
          _powerupIconMask.fillAmount = 0;
 
