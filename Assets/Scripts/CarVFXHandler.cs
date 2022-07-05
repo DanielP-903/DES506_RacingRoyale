@@ -186,6 +186,15 @@ public class CarVFXHandler : MonoBehaviour
         newAlphaWall.x = Mathf.Lerp(0,0.5f, ((maxWallDistanceAlert-30.0f) - distanceToWall) / (maxWallDistanceAlert-30.0f));
         newAlphaWall.y = Mathf.Lerp(0,1,  ((maxWallDistanceAlert-30.0f) - distanceToWall) / (maxWallDistanceAlert-30.0f));
         _dangerWallEffect.SetVector2("Alpha Values", newAlphaWall);
+
+        if (SceneManager.GetActiveScene().name == "EndStage")
+        {
+            _speedLinesEffect.Stop();
+        }
+        else
+        {
+            _speedLinesEffect.Play();
+        }
     }
 
     private void FixedUpdate()

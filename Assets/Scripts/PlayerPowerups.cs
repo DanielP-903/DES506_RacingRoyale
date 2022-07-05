@@ -466,6 +466,7 @@ public class PlayerPowerups : MonoBehaviour
              _powerupIconMask.sprite = currentPowerup.powerupUIImage;
              powerupIcon.gameObject.SetActive(true);
              _powerupIconMask.fillAmount = 0;
+             _vfxHandler.PlayVFXAtPosition("ItemBoxImpact", transform.position);
          }
          
          if (collider.transform.CompareTag("WallShield"))
@@ -493,6 +494,7 @@ public class PlayerPowerups : MonoBehaviour
              //_rigidbody.AddForce(-(direction.normalized * punchingForce)); 
              Debug.Log("Ouch!! Hit with velocity: " + _rigidbody.velocity);
              collider.transform.parent.GetComponent<PlayerPowerups>().DetectPunch();
+             _vfxHandler.PlayVFXAtPosition("PunchImpact", transform.position);
          }
          
            
