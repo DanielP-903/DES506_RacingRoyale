@@ -148,6 +148,8 @@ public class PlayerManager : MonoBehaviour
             {
                 _cc = GetComponent<CarController>();
                 _rb = GetComponent<Rigidbody>();
+                _rb.velocity = Vector3.zero;
+                _rb.angularVelocity = Vector3.zero;
                 if (!_cc.debug)
                 {
                     _gm = GameObject.Find("GameManager").GetComponent<GameManager>();

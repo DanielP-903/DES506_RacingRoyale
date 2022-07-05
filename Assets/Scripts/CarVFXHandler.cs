@@ -12,6 +12,7 @@ public class CarVFXHandler : MonoBehaviour
     public List<ParticleSystem> boostEffects = new List<ParticleSystem>();
     public List<VisualEffectAsset> impactEffectAssets = new List<VisualEffectAsset>();
     public GameObject impactEffectObject;
+    public GameObject impactEffectPrefab;
     private VisualEffect _currentEffect;
     [Header("Other")] public float maxWallDistanceAlert = 30.0f;
 
@@ -112,6 +113,14 @@ public class CarVFXHandler : MonoBehaviour
     {
         impactEffectObject.transform.position = pos;
         PlayVFX(vfxName);
+    }
+
+    public void SpawnVFXAtPosition(string vfxName, Vector3 pos)
+    {
+        GameObject newSpawn = Instantiate(impactEffectPrefab, pos, Quaternion.identity);
+        newSpawn.GetComponent<TemporaryEffect>().doNotDelete = false;
+        newSpawn.GetComponent<VisualEffect>().visualEffectAsset = impactEffectAssets[2];
+        //newSpawn.GetComponent<VisualEffect>().Play();
     }
     
     #endregion
