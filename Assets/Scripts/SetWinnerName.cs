@@ -12,9 +12,10 @@ public class SetWinnerName : MonoBehaviour
     private TextMeshProUGUI playerNameText;
     [SerializeField]
     private TextMeshProUGUI playerLicenseText;
-
-    public MeshRenderer _mRend;
-    public MeshFilter _mFilt;
+    [SerializeField]
+    private MeshRenderer _mRend;
+    [SerializeField]
+    private MeshFilter _mFilt;
     #endregion
 
     private void Start()
@@ -30,8 +31,7 @@ public class SetWinnerName : MonoBehaviour
         playerLicenseText.text = inputName;
         Debug.Log(this.gameObject.name);
         Debug.Log("MeshSet: "+mesh+":"+GameObject.Find("DataManager").GetComponent<DataManager>());
-        Debug.Log(GameObject.Find("DataManager").GetComponent<DataManager>().GetMats().Length);
-        Debug.Log(GameObject.Find("DataManager").GetComponent<DataManager>().GetMats()[mesh]);
+        Debug.Log(_mRend.material);
         _mRend.material = GameObject.Find("DataManager").GetComponent<DataManager>().GetMats()[mesh];
         _mFilt.mesh = GameObject.Find("DataManager").GetComponent<DataManager>().GetMesh()[mesh];
     }
