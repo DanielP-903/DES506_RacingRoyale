@@ -482,23 +482,22 @@ public class CarController : MonoBehaviour
         if (!_grounded)
         {
             _airTime += Time.deltaTime;
+            Debug.Log("Air time: " + _airTime);
+            _delayAirTime = true;
         }
         else
         {
-            if (!_delayAirTime)
+            // if (_delayAirTime && _airTime > 0.5f) 
+            // {
+            //     StartCoroutine(DelayAirTime());
+            // }
+            if (_airTime > 0.5f)
             {
-                StartCoroutine(DelayAirTime());
+                //_vfxHandler.PlayVFXAtPosition("GroundImpact", transform.position);
+                _vfxHandler.SpawnVFXAtPosition("GroundImpact", transform.position - (transform.forward/5) - (transform.up * 4));
+                _airTime = 0;
             }
         }
-    }
-
-    private IEnumerator DelayAirTime()
-    {
-        _delayAirTime = true;
-        yield return new WaitForSeconds(1);
-        _delayAirTime = false;
-        
-        _vfxHandler.PlayVFXAtPosition("GroundImpact", transform.position);
     }
     
     public void ResetPlayer(bool pressedButton = false)
@@ -562,13 +561,10 @@ public class CarController : MonoBehaviour
         {
             Vector3 direction = collision.contacts[0].point - transform.position;
             _rigidbody.velocity = -(direction.normalized * (bounciness/3));
-            _vfxHandler.PlayVFXAtPosition("Impact", collision.contacts[0].point);
+            _vfxHandler.PlayVFXAtPosition("SoftImpact", collision.contacts[0].point);
         }
 
-        if (collision.contacts[0].point.y < transform.position.y && _rigidbody.velocity.magnitude * 2.2369362912f > 30)
-        {
-            _vfxHandler.PlayVFXAtPosition("GroundImpact", collision.contacts[0].point);
-        }
+       
     }
 
     private void OnTriggerEnter(Collider other)
@@ -598,7 +594,6 @@ public class CarController : MonoBehaviour
             Debug.Log("Hit the Elimination Wall");
             _hitEliminationZone = true; 
             if (!bot) _playerManager.EliminateCurrentPlayer();
-
         }
 
         if (other.transform.CompareTag("ResetZone"))

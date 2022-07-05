@@ -5884,6 +5884,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614526, guid: 98d2075eda426024e999b6db783a749e, type: 3}
   - {fileID: 8926484042661614526, guid: 51f4dc0fbb4b5974baf088bfb477a046, type: 3}
   impactEffectObject: {fileID: 5228566535060769553}
+  impactEffectPrefab: {fileID: 4090457144769879042, guid: c5b742ea29c92d341bd95b10a3a57b47, type: 3}
   maxWallDistanceAlert: 30
   boostPlaying: 0
 --- !u!1 &1118674506502527236
@@ -24052,6 +24053,7 @@ GameObject:
   - component: {fileID: 5687054898340263597}
   - component: {fileID: 3362144513249777756}
   - component: {fileID: 4655727628620737994}
+  - component: {fileID: 375726554036422140}
   m_Layer: 7
   m_Name: Impact Effect Object
   m_TagString: Untagged
@@ -24149,6 +24151,19 @@ VFXRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &375726554036422140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5228566535060769553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89fbd532a3460154093ad16eee94055c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  doNotDelete: 0
 --- !u!1 &5464176999129565758
 GameObject:
   m_ObjectHideFlags: 0
