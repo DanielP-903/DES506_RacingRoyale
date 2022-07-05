@@ -60399,19 +60399,8 @@ MonoBehaviour:
   boostCooldown: 2
   resetCooldown: 1
   padCooldown: 0.5
-  maxWallDistanceAlert: 30
   minimapArrow: {fileID: 0}
-  boostEffects:
-  - {fileID: 3376449771568803013}
-  - {fileID: 7431063423235803923}
-  - {fileID: 5220807047657365478}
-  - {fileID: 7952212850360504586}
-  - {fileID: 1375363924678143873}
-  - {fileID: 2423800641056964508}
-  - {fileID: 7872812317900233720}
-  - {fileID: 4746814919039886856}
   checkpoints: {fileID: 1604882999}
-  impactEffectObject: {fileID: 0}
   debug: 1
   bot: 0
 --- !u!65 &1796848205321011928
@@ -65954,15 +65943,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2774631455131860148, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.1795419
+      value: 0.17954192
       objectReference: {fileID: 0}
     - target: {fileID: 2774631455131860148, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.00000000846339
+      value: -0.000000008463393
       objectReference: {fileID: 0}
     - target: {fileID: 2774631455131860148, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0000000015446329
+      value: 0.0000000015446334
       objectReference: {fileID: 0}
     - target: {fileID: 2774631455131860148, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -104843,6 +104832,18 @@ PrefabInstance:
     - target: {fileID: 4753270344536567159, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
       propertyPath: powerupIcon
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5687054898340263597, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5687054898340263597, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5687054898340263597, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5932402802484150180, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
       propertyPath: m_Materials.Array.data[0]
