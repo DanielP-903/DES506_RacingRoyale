@@ -27,7 +27,7 @@ public class BotCarController : MonoBehaviour
         if (PhotonNetwork.LocalPlayer.IsMasterClient)
         {
             _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
-            _botNum = _gm.GetTotalPlayers() + _gm.GetBotNum();
+            _botNum = _gm.GetTotalPlayers() + _gm.GetBotNum()+1;
             _pv = GetComponent<PhotonView>();
             _cc = GetComponent<CarController>();
             _rb = GetComponent<Rigidbody>();
