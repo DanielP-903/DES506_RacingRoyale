@@ -348,9 +348,10 @@ public class PlayerManager : MonoBehaviour
                 if (elimPosition < 5)
                 {
                     //Debug.Log("Finished at:" +elimPosition);
-                    GameManager.SetTop3Players(_photonView.Owner.NickName, elimPosition);
-                    string t3;
-                    GameManager.TryGetTop3Players(out t3, elimPosition);
+                    //GameManager.SetTop3Players(_photonView.Owner.NickName, elimPosition);
+                    GameManager.SetTopPlayers(_photonView.Owner, elimPosition);
+                    //string t3;
+                    //GameManager.TryGetTop3Players(out t3, elimPosition);
                     //Debug.Log(t3);
                 }
             }

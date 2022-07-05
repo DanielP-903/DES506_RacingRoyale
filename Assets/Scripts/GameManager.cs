@@ -263,6 +263,33 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         //Debug.Log("Set Custom Props for Top 3 Players: "+ props.ToStringFull() + " wasSet: "+wasSet+" NewValue: "+top3Players);
     }
+
+    public static bool TryGetTopPlayers(out Player player, int posNum)
+    {
+        object topPlayersFromProps;
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("TopPlayer" + posNum, out topPlayersFromProps))
+        {
+            player = (Player)topPlayersFromProps;
+            return true;
+        }
+        player = null;
+        return false;
+    }
+
+    public static void SetTopPlayers(Player player, int posNum)
+    {
+        Player topPlayer;
+        bool wasSet = TryGetTopPlayers(out topPlayer, posNum);
+
+        ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
+        {
+            {"TopPlayer"+posNum, (Player)player}
+        };
+        PhotonNetwork.CurrentRoom.SetCustomProperties(props);
+        bool wasSet2 = TryGetTopPlayers(out topPlayer, posNum);
+
+        //Debug.Log("Set Custom Props for Top 3 Players: "+ props.ToStringFull() + " wasSet: "+wasSet+" NewValue: "+top3Players);
+    }
     
     public static bool TryGetFinishedPlayers(out int finishedPlayers, int stageNum)
     {
