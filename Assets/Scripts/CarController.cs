@@ -474,7 +474,7 @@ public class CarController : MonoBehaviour
         if (_reset && _resetDelay <= 0)
         {
             _resetDelay = resetCooldown;
-            ResetPlayer();
+            ResetPlayer(true);
         }
 
         _onOilPreviousFrame = _onOil;
@@ -501,9 +501,10 @@ public class CarController : MonoBehaviour
         _vfxHandler.PlayVFXAtPosition("GroundImpact", transform.position);
     }
     
-    public void ResetPlayer()
+    public void ResetPlayer(bool pressedButton = false)
     {
-        if (!bot) _playerManager.GoToSpawn();
+        if (!bot && pressedButton) _playerManager.GoToSpawn(true);
+        else if (!bot) _playerManager.GoToSpawn();
         else _botCarController.goToSpawn();
     }
     
