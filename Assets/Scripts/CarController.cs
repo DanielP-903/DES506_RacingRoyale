@@ -96,6 +96,7 @@ public class CarController : MonoBehaviour
     private float _boostDelay = 2.0f;
     private float _resetDelay = 2.0f;
     private float _padDelay = 2.0f;
+    private float _airTime = 0.0f;
     private Vector3 _savedOilVelocity;
     
     #endregion
@@ -116,7 +117,8 @@ public class CarController : MonoBehaviour
     private Transform _currentRespawnPoint;
     private Camera _mainCam;
     private CarVFXHandler _vfxHandler;
-    
+    private bool _delayAirTime;
+
     #endregion
    
     #region Initialisation
@@ -477,9 +479,28 @@ public class CarController : MonoBehaviour
 
         _onOilPreviousFrame = _onOil;
 
-        
+        if (!_grounded)
+        {
+            _airTime += Time.deltaTime;
+        }
+        else
+        {
+            if (!_delayAirTime)
+            {
+                StartCoroutine(DelayAirTime());
+            }
+        }
     }
 
+    private IEnumerator DelayAirTime()
+    {
+        _delayAirTime = true;
+        yield return new WaitForSeconds(1);
+        _delayAirTime = false;
+        
+        _vfxHandler.PlayVFXAtPosition("GroundImpact", transform.position);
+    }
+    
     public void ResetPlayer()
     {
         if (!bot) _playerManager.GoToSpawn();
@@ -541,6 +562,11 @@ public class CarController : MonoBehaviour
             Vector3 direction = collision.contacts[0].point - transform.position;
             _rigidbody.velocity = -(direction.normalized * (bounciness/3));
             _vfxHandler.PlayVFXAtPosition("Impact", collision.contacts[0].point);
+        }
+
+        if (collision.contacts[0].point.y < transform.position.y && _rigidbody.velocity.magnitude * 2.2369362912f > 30)
+        {
+            _vfxHandler.PlayVFXAtPosition("GroundImpact", collision.contacts[0].point);
         }
     }
 
