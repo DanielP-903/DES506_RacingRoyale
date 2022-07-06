@@ -5589,12 +5589,12 @@ GameObject:
   - component: {fileID: 1118674505751619604}
   - component: {fileID: 1978116585297259193}
   - component: {fileID: 7770678307179569261}
-  - component: {fileID: 3894772900694721693}
+  - component: {fileID: 3936345832946547057}
   - component: {fileID: 4753270344536567152}
   - component: {fileID: 4753270344536567159}
   - component: {fileID: 924256329762550492}
-  - component: {fileID: 3936345832946547057}
   - component: {fileID: 9136986456273771787}
+  - component: {fileID: 7146928805486338320}
   m_Layer: 7
   m_Name: Player Car
   m_TagString: Player
@@ -5670,7 +5670,7 @@ MonoBehaviour:
   centreOfMass: {fileID: 829313175}
   motorForce: 2500
   brakeTorque: 4000
-  maxSteeringAngle: 40
+  maxSteeringAngle: 50
   terminalVelocity: 120
   axles:
   - leftWheel: {fileID: 4938869738104327283}
@@ -5763,28 +5763,28 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 3894772900694721693}
-  - {fileID: 924256329762550492}
   - {fileID: 3936345832946547057}
+  - {fileID: 924256329762550492}
+  - {fileID: 7146928805486338320}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &3894772900694721693
+--- !u!114 &3936345832946547057
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1118674505751619608}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 1
+  m_TeleportEnabled: 0
+  m_TeleportIfDistanceGreaterThan: 20
 --- !u!114 &4753270344536567152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5839,22 +5839,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b901cb8041881874e8fa118d11fe330c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3936345832946547057
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1118674505751619608}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 1
-  m_TeleportEnabled: 1
-  m_TeleportIfDistanceGreaterThan: 20
 --- !u!114 &9136986456273771787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5887,6 +5871,24 @@ MonoBehaviour:
   impactEffectPrefab: {fileID: 4090457144769879042, guid: c5b742ea29c92d341bd95b10a3a57b47, type: 3}
   maxWallDistanceAlert: 30
   boostPlaying: 0
+--- !u!114 &7146928805486338320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1118674505751619608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6294503f6e3a8234899e6bd9487c9866, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_DistanceMod: 1
+  m_RotMod: 1
+  m_UseLocal: 0
 --- !u!1 &1118674506502527236
 GameObject:
   m_ObjectHideFlags: 0
@@ -24054,6 +24056,7 @@ GameObject:
   - component: {fileID: 3362144513249777756}
   - component: {fileID: 4655727628620737994}
   - component: {fileID: 375726554036422140}
+  - component: {fileID: 3497326939475980460}
   m_Layer: 7
   m_Name: Impact Effect Object
   m_TagString: Untagged
@@ -24070,7 +24073,7 @@ Transform:
   m_GameObject: {fileID: 5228566535060769553}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 1118674505751619610}
   m_RootOrder: 22
@@ -24164,6 +24167,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   doNotDelete: 1
+  isBillboard: 0
+--- !u!114 &3497326939475980460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5228566535060769553}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff041c2f2992a194da21b4e12caec7bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5464176999129565758
 GameObject:
   m_ObjectHideFlags: 0
@@ -51600,7 +51616,7 @@ LineRenderer:
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
-    textureMode: 0
+    textureMode: 1
     shadowBias: 0.5
     generateLightingData: 0
   m_UseWorldSpace: 1
@@ -51857,6 +51873,7 @@ GameObject:
   - component: {fileID: 8467595389158752888}
   - component: {fileID: 8467595389158752885}
   - component: {fileID: 8467595389158752886}
+  - component: {fileID: 3552991483113168092}
   m_Layer: 7
   m_Name: Punching Glove
   m_TagString: PunchingGlove
@@ -51889,7 +51906,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.007
+  m_Radius: 0.008
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &8467595389158752885
 MeshRenderer:
@@ -51940,6 +51957,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9037506200437154598}
   m_Mesh: {fileID: 5302568919011541938, guid: 2813b11f9767d40458fb3422cd129725, type: 3}
+--- !u!114 &3552991483113168092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9037506200437154598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af481200c0b47ab45bd58ca5559689f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9045963524812172808
 GameObject:
   m_ObjectHideFlags: 0

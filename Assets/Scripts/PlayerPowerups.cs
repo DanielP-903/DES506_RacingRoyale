@@ -407,7 +407,7 @@ public class PlayerPowerups : MonoBehaviour
             
          _punchLine.SetPositions(positions);
          punchGlove.transform.position = positions[1];
-         // Apply a constant acceleration force towards the player for a limited time
+
          _punching = true;
          yield return new WaitForSeconds(3.0f);
          if (_punching)
@@ -426,6 +426,23 @@ public class PlayerPowerups : MonoBehaviour
              powerupIcon.gameObject.SetActive(false);
          }
      }
+
+     public void ResetPunch()
+     {
+         // Reset line between them
+         Vector3[] positions2 = new Vector3[2];
+         positions2[0] = transform.position + transform.forward;;
+         positions2[1] = transform.position + transform.forward;
+            
+         currentPowerupType = PowerupType.None;
+         _punchLine.SetPositions(positions2);
+         punchGlove.transform.position = positions2[1];
+         _punching = false;
+         punchObject.SetActive(false);
+         punchGlove.SetActive(false);
+         powerupIcon.gameObject.SetActive(false);
+     }
+     
      private void AirBlast()
      {
          blastObject.SetActive(true);
@@ -494,7 +511,7 @@ public class PlayerPowerups : MonoBehaviour
              //_rigidbody.AddForce(-(direction.normalized * punchingForce)); 
              Debug.Log("Ouch!! Hit with velocity: " + _rigidbody.velocity);
              collider.transform.parent.GetComponent<PlayerPowerups>().DetectPunch();
-             _vfxHandler.PlayVFXAtPosition("PunchImpact", transform.position);
+             _vfxHandler.SpawnVFXAtPosition("PunchImpact", transform.position, 1,true);
          }
          
            

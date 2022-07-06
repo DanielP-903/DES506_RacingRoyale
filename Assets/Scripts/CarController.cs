@@ -39,7 +39,8 @@ public class CarController : MonoBehaviour
     public float accelerationForce = 5.0f;
     public float boostForceAmount = 5.0f;
     public float driftForceAmount = 3000.0f;
-
+    public int maxBoostsInAir = 1;
+    
     [Header("Environmental Pads")] 
     public float jumpPadForce = 5.0f;
     public float boostPadForce = 5.0f;
@@ -118,7 +119,8 @@ public class CarController : MonoBehaviour
     private Camera _mainCam;
     private CarVFXHandler _vfxHandler;
     private bool _delayAirTime;
-
+    private int _boostsInAirLeft = 1;
+    
     #endregion
    
     #region Initialisation
@@ -260,7 +262,12 @@ public class CarController : MonoBehaviour
 
         // BOOST FUNCTIONALITY
         if (_boost && _boostDelay <= 0)
-        { 
+        {
+            if (!_grounded)
+            {
+                if ( _boostsInAirLeft <=0) return;
+                _boostsInAirLeft--;
+            }
             _vfxHandler.PlayVFX("BoostEffect");
             _vfxHandler.StartCoroutine(_vfxHandler.ActivateBoostEffect());
             _boostDelay = boostCooldown;
@@ -442,6 +449,11 @@ public class CarController : MonoBehaviour
         return _activatePowerup;
     }
 
+    public int GetNoOfBoostsLeft()
+    {
+        return _boostsInAirLeft;
+    }
+    
     #endregion
     
     private void Update()
@@ -487,6 +499,8 @@ public class CarController : MonoBehaviour
         }
         else
         {
+            _boostsInAirLeft = maxBoostsInAir;
+            
             // if (_delayAirTime && _airTime > 0.5f) 
             // {
             //     StartCoroutine(DelayAirTime());
@@ -494,7 +508,7 @@ public class CarController : MonoBehaviour
             if (_airTime > 0.5f)
             {
                 //_vfxHandler.PlayVFXAtPosition("GroundImpact", transform.position);
-                _vfxHandler.SpawnVFXAtPosition("GroundImpact", transform.position - (transform.forward/5) - (transform.up/1.5f));
+                _vfxHandler.SpawnVFXAtPosition("GroundImpact", transform.position + (transform.forward/2) - (transform.up/1.5f), 2,false);
                 _airTime = 0;
             }
         }
@@ -540,13 +554,14 @@ public class CarController : MonoBehaviour
             Vector3 direction = collision.contacts[0].point - transform.position;
             _rigidbody.velocity = -(direction.normalized * bounciness);
             Debug.Log("HIT ANOTHER PLAYER WITH RIGIDBODY VELOCITY: " + _rigidbody.velocity);
+            _vfxHandler.PlayVFXAtPosition("Impact", collision.contacts[0].point);
         }
-        if (collision.transform.CompareTag("SpinningTop"))
+        else if (collision.transform.CompareTag("SpinningTop"))
         {
             Vector3 direction = collision.contacts[0].point - transform.position;
             _rigidbody.velocity = -(direction.normalized * 30);
+            _vfxHandler.PlayVFXAtPosition("SoftImpact", collision.contacts[0].point);
         }
-
         // Method 1: Layers
         // if (collision.contacts[0].point.y > transform.position.y - 3.0f && collision.gameObject.layer != 9)
         // {
@@ -557,7 +572,7 @@ public class CarController : MonoBehaviour
         // }
         
         // Method 2: Y difference
-        if (collision.contacts[0].point.y > transform.position.y - 4.0f)
+        else if (collision.contacts[0].point.y > transform.position.y - 4.0f)
         {
             Vector3 direction = collision.contacts[0].point - transform.position;
             _rigidbody.velocity = -(direction.normalized * (bounciness/3));
