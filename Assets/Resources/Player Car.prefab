@@ -5670,7 +5670,7 @@ MonoBehaviour:
   centreOfMass: {fileID: 829313175}
   motorForce: 2500
   brakeTorque: 4000
-  maxSteeringAngle: 40
+  maxSteeringAngle: 50
   terminalVelocity: 120
   axles:
   - leftWheel: {fileID: 4938869738104327283}
@@ -5694,7 +5694,7 @@ MonoBehaviour:
   padCooldown: 0.5
   minimapArrow: {fileID: 5734101572443402741}
   checkpoints: {fileID: 0}
-  debug: 0
+  debug: 1
   bot: 0
 --- !u!95 &1118674505751619605
 Animator:
@@ -5743,7 +5743,7 @@ MonoBehaviour:
   startDelayText: {fileID: 0}
   playerNameText: {fileID: 2853518491372503579}
   playerLicenseText: {fileID: 8281448846385624710}
-  debugMode: 0
+  debugMode: 1
 --- !u!114 &7770678307179569261
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5766,7 +5766,7 @@ MonoBehaviour:
   - {fileID: 3894772900694721693}
   - {fileID: 924256329762550492}
   - {fileID: 3936345832946547057}
-  sceneViewId: 0
+  sceneViewId: 1
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &3894772900694721693
@@ -24054,6 +24054,7 @@ GameObject:
   - component: {fileID: 3362144513249777756}
   - component: {fileID: 4655727628620737994}
   - component: {fileID: 375726554036422140}
+  - component: {fileID: 3497326939475980460}
   m_Layer: 7
   m_Name: Impact Effect Object
   m_TagString: Untagged
@@ -24070,7 +24071,7 @@ Transform:
   m_GameObject: {fileID: 5228566535060769553}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 1118674505751619610}
   m_RootOrder: 22
@@ -24164,6 +24165,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   doNotDelete: 1
+  isBillboard: 0
+--- !u!114 &3497326939475980460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5228566535060769553}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff041c2f2992a194da21b4e12caec7bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5464176999129565758
 GameObject:
   m_ObjectHideFlags: 0
@@ -51600,7 +51614,7 @@ LineRenderer:
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
-    textureMode: 0
+    textureMode: 1
     shadowBias: 0.5
     generateLightingData: 0
   m_UseWorldSpace: 1
@@ -51857,6 +51871,7 @@ GameObject:
   - component: {fileID: 8467595389158752888}
   - component: {fileID: 8467595389158752885}
   - component: {fileID: 8467595389158752886}
+  - component: {fileID: 3552991483113168092}
   m_Layer: 7
   m_Name: Punching Glove
   m_TagString: PunchingGlove
@@ -51889,7 +51904,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.007
+  m_Radius: 0.008
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &8467595389158752885
 MeshRenderer:
@@ -51940,6 +51955,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9037506200437154598}
   m_Mesh: {fileID: 5302568919011541938, guid: 2813b11f9767d40458fb3422cd129725, type: 3}
+--- !u!114 &3552991483113168092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9037506200437154598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af481200c0b47ab45bd58ca5559689f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9045963524812172808
 GameObject:
   m_ObjectHideFlags: 0

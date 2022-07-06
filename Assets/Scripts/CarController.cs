@@ -494,7 +494,7 @@ public class CarController : MonoBehaviour
             if (_airTime > 0.5f)
             {
                 //_vfxHandler.PlayVFXAtPosition("GroundImpact", transform.position);
-                _vfxHandler.SpawnVFXAtPosition("GroundImpact", transform.position - (transform.forward/5) - (transform.up/1.5f));
+                _vfxHandler.SpawnVFXAtPosition("GroundImpact", transform.position + (transform.forward/2) - (transform.up/1.5f), 2,false);
                 _airTime = 0;
             }
         }
@@ -540,13 +540,14 @@ public class CarController : MonoBehaviour
             Vector3 direction = collision.contacts[0].point - transform.position;
             _rigidbody.velocity = -(direction.normalized * bounciness);
             Debug.Log("HIT ANOTHER PLAYER WITH RIGIDBODY VELOCITY: " + _rigidbody.velocity);
+            _vfxHandler.PlayVFXAtPosition("Impact", collision.contacts[0].point);
         }
-        if (collision.transform.CompareTag("SpinningTop"))
+        else if (collision.transform.CompareTag("SpinningTop"))
         {
             Vector3 direction = collision.contacts[0].point - transform.position;
             _rigidbody.velocity = -(direction.normalized * 30);
+            _vfxHandler.PlayVFXAtPosition("SoftImpact", collision.contacts[0].point);
         }
-
         // Method 1: Layers
         // if (collision.contacts[0].point.y > transform.position.y - 3.0f && collision.gameObject.layer != 9)
         // {
@@ -557,7 +558,7 @@ public class CarController : MonoBehaviour
         // }
         
         // Method 2: Y difference
-        if (collision.contacts[0].point.y > transform.position.y - 4.0f)
+        else if (collision.contacts[0].point.y > transform.position.y - 4.0f)
         {
             Vector3 direction = collision.contacts[0].point - transform.position;
             _rigidbody.velocity = -(direction.normalized * (bounciness/3));

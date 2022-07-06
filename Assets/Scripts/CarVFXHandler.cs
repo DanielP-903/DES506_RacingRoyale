@@ -108,6 +108,33 @@ public class CarVFXHandler : MonoBehaviour
                 throw new ArgumentOutOfRangeException();
         }
     }
+
+    public int GetVFXIndex(string vfxName)
+    {
+        switch (vfxName)
+        {
+            case "Impact":
+                return 0;
+            case "SoftImpact":
+                return 1;
+            case "GroundImpact":
+                return 2;
+            case "ItemBoxImpact":
+                return 3;
+            case "PowerImpact":
+                return 4;
+            case "PunchImpact":
+                return 5;
+            case "BoostEffect":
+                return -1;
+            case "DangerWallEffect":
+                return -1;
+            case "SpeedLinesEffect":
+                return -1;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
     
     public void PlayVFXAtPosition(string vfxName, Vector3 pos)
     {
@@ -115,11 +142,13 @@ public class CarVFXHandler : MonoBehaviour
         PlayVFX(vfxName);
     }
 
-    public void SpawnVFXAtPosition(string vfxName, Vector3 pos)
+    public void SpawnVFXAtPosition(string vfxName, Vector3 pos, int scaleFactor, bool isBillboard)
     {
         GameObject newSpawn = Instantiate(impactEffectPrefab, pos, Quaternion.identity);
+        newSpawn.transform.localScale = new Vector3(scaleFactor, scaleFactor, scaleFactor);
         newSpawn.GetComponent<TemporaryEffect>().doNotDelete = false;
-        newSpawn.GetComponent<VisualEffect>().visualEffectAsset = impactEffectAssets[2];
+        newSpawn.GetComponent<TemporaryEffect>().isBillboard = isBillboard;
+        newSpawn.GetComponent<VisualEffect>().visualEffectAsset = impactEffectAssets[GetVFXIndex(vfxName)]; //impactEffectAssets[2];
         //newSpawn.GetComponent<VisualEffect>().Play();
     }
     

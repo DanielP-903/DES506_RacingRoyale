@@ -5,6 +5,7 @@ using UnityEngine;
 public class TemporaryEffect : MonoBehaviour
 {
     public bool doNotDelete = false;
+    public bool isBillboard = false;
     
     // Start is called before the first frame update
     void Start()
@@ -12,6 +13,11 @@ public class TemporaryEffect : MonoBehaviour
         if (!doNotDelete)
         {
             StartCoroutine(DeleteOverTime());
+        }
+
+        if (!isBillboard)
+        {
+            GetComponent<BillBoarder>().enabled = false;
         }
     }
 
