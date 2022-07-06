@@ -5589,12 +5589,12 @@ GameObject:
   - component: {fileID: 1118674505751619604}
   - component: {fileID: 1978116585297259193}
   - component: {fileID: 7770678307179569261}
-  - component: {fileID: 3894772900694721693}
+  - component: {fileID: 3936345832946547057}
   - component: {fileID: 4753270344536567152}
   - component: {fileID: 4753270344536567159}
   - component: {fileID: 924256329762550492}
-  - component: {fileID: 3936345832946547057}
   - component: {fileID: 9136986456273771787}
+  - component: {fileID: 7146928805486338320}
   m_Layer: 7
   m_Name: Player Car
   m_TagString: Player
@@ -5694,7 +5694,7 @@ MonoBehaviour:
   padCooldown: 0.5
   minimapArrow: {fileID: 5734101572443402741}
   checkpoints: {fileID: 0}
-  debug: 1
+  debug: 0
   bot: 0
 --- !u!95 &1118674505751619605
 Animator:
@@ -5743,7 +5743,7 @@ MonoBehaviour:
   startDelayText: {fileID: 0}
   playerNameText: {fileID: 2853518491372503579}
   playerLicenseText: {fileID: 8281448846385624710}
-  debugMode: 1
+  debugMode: 0
 --- !u!114 &7770678307179569261
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5763,28 +5763,28 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 3894772900694721693}
-  - {fileID: 924256329762550492}
   - {fileID: 3936345832946547057}
-  sceneViewId: 1
+  - {fileID: 924256329762550492}
+  - {fileID: 7146928805486338320}
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &3894772900694721693
+--- !u!114 &3936345832946547057
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1118674505751619608}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 1
+  m_TeleportEnabled: 0
+  m_TeleportIfDistanceGreaterThan: 20
 --- !u!114 &4753270344536567152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5839,22 +5839,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b901cb8041881874e8fa118d11fe330c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3936345832946547057
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1118674505751619608}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 1
-  m_TeleportEnabled: 1
-  m_TeleportIfDistanceGreaterThan: 20
 --- !u!114 &9136986456273771787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5887,6 +5871,24 @@ MonoBehaviour:
   impactEffectPrefab: {fileID: 4090457144769879042, guid: c5b742ea29c92d341bd95b10a3a57b47, type: 3}
   maxWallDistanceAlert: 30
   boostPlaying: 0
+--- !u!114 &7146928805486338320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1118674505751619608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6294503f6e3a8234899e6bd9487c9866, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_DistanceMod: 1
+  m_RotMod: 1
+  m_UseLocal: 0
 --- !u!1 &1118674506502527236
 GameObject:
   m_ObjectHideFlags: 0

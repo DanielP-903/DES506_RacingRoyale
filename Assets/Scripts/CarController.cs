@@ -39,7 +39,8 @@ public class CarController : MonoBehaviour
     public float accelerationForce = 5.0f;
     public float boostForceAmount = 5.0f;
     public float driftForceAmount = 3000.0f;
-
+    public int maxBoostsInAir = 1;
+    
     [Header("Environmental Pads")] 
     public float jumpPadForce = 5.0f;
     public float boostPadForce = 5.0f;
@@ -118,7 +119,8 @@ public class CarController : MonoBehaviour
     private Camera _mainCam;
     private CarVFXHandler _vfxHandler;
     private bool _delayAirTime;
-
+    private int _boostsInAirLeft = 1;
+    
     #endregion
    
     #region Initialisation
@@ -260,7 +262,12 @@ public class CarController : MonoBehaviour
 
         // BOOST FUNCTIONALITY
         if (_boost && _boostDelay <= 0)
-        { 
+        {
+            if (!_grounded)
+            {
+                if ( _boostsInAirLeft <=0) return;
+                _boostsInAirLeft--;
+            }
             _vfxHandler.PlayVFX("BoostEffect");
             _vfxHandler.StartCoroutine(_vfxHandler.ActivateBoostEffect());
             _boostDelay = boostCooldown;
@@ -442,6 +449,11 @@ public class CarController : MonoBehaviour
         return _activatePowerup;
     }
 
+    public int GetNoOfBoostsLeft()
+    {
+        return _boostsInAirLeft;
+    }
+    
     #endregion
     
     private void Update()
@@ -487,6 +499,8 @@ public class CarController : MonoBehaviour
         }
         else
         {
+            _boostsInAirLeft = maxBoostsInAir;
+            
             // if (_delayAirTime && _airTime > 0.5f) 
             // {
             //     StartCoroutine(DelayAirTime());
