@@ -1,12 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
-using UnityEngine.VFX;
 
 public enum PowerupType
 {
@@ -98,6 +95,7 @@ public class CarController : MonoBehaviour
     private float _resetDelay = 2.0f;
     private float _padDelay = 2.0f;
     private float _airTime = 0.0f;
+    private float _animCamTime = 0.0f;
     private Vector3 _savedOilVelocity;
     
     #endregion
@@ -108,7 +106,9 @@ public class CarController : MonoBehaviour
     private Rigidbody _rigidbody;
     private PlayerPowerups _playerPowerups;
     private BotCarController _botCarController;
-
+    private Animator _animator;
+    private CinemachineVirtualCamera _virtualCamera;
+    private CinemachineTransposer _transposer;
     #endregion
 
     #region Misc
@@ -144,6 +144,7 @@ public class CarController : MonoBehaviour
             _playerManager = GetComponent<PlayerManager>();
             _playerPowerups = GetComponent<PlayerPowerups>();
             _vfxHandler = GetComponent<CarVFXHandler>();
+            _animator = GetComponent<Animator>();
             
             foreach (var axle in axles)
             {
@@ -185,6 +186,8 @@ public class CarController : MonoBehaviour
             }
     
             _mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+            _virtualCamera = _mainCam.GetComponent<CinemachineVirtualCamera>();
+            _transposer = _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
         }
     
         void OnLevelWasLoaded()
@@ -213,7 +216,7 @@ public class CarController : MonoBehaviour
             _mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         }
 
-        #endregion
+    #endregion
 
     #region Main-Physics
 
@@ -509,8 +512,20 @@ public class CarController : MonoBehaviour
             {
                 //_vfxHandler.PlayVFXAtPosition("GroundImpact", transform.position);
                 _vfxHandler.SpawnVFXAtPosition("GroundImpact", transform.position + (transform.forward/2) - (transform.up/1.5f), 2,false);
+                _animCamTime = 1.0f;
                 _airTime = 0;
             }
+        }
+        
+        UpdateCameraAnimation();
+    }
+
+    public void UpdateCameraAnimation()
+    {
+        if (_animCamTime > 0.0f)
+        {
+            _animCamTime = _animCamTime <= 0 ? 0 : _animCamTime - Time.deltaTime;
+            _transposer.m_FollowOffset = new Vector3(0, Mathf.SmoothStep(4, 5, (1 - _animCamTime) / 1), -8);
         }
     }
     
