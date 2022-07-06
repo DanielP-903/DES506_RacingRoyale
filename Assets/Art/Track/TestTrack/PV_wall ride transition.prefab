@@ -27,57 +27,11 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1653593134660180258}
+  - {fileID: 67855948676320061}
+  - {fileID: 3564742002914709018}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2141864720406250392
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1653593134660180258}
-  - component: {fileID: 1674753633862545409}
-  m_Layer: 0
-  m_Name: PV_wall ride transition
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1653593134660180258
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2141864720406250392}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 67855948676320061}
-  - {fileID: 3564742002914709018}
-  m_Father: {fileID: 66001824164477005}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!64 &1674753633862545409
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2141864720406250392}
-  m_Material: {fileID: 13400000, guid: 80c8a5ab313431649b5549ed61f234bd, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -6947442884232788021, guid: 9dc3f06f39c1a934c9b8e9000bea5d37, type: 3}
 --- !u!1 &2454153053947334307
 GameObject:
   m_ObjectHideFlags: 0
@@ -103,11 +57,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2454153053947334307}
-  m_LocalRotation: {x: -0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
   m_LocalPosition: {x: -0.024162598, y: -0.028704567, z: -0.019094238}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1653593134660180258}
+  m_Father: {fileID: 66001824164477005}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2232659852252840606
@@ -173,6 +127,7 @@ GameObject:
   - component: {fileID: 247487177999898807}
   - component: {fileID: 34475913811212101}
   - component: {fileID: 4878299228063365210}
+  - component: {fileID: 2777881595886058329}
   m_Layer: 0
   m_Name: scale10
   m_TagString: Untagged
@@ -187,11 +142,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3562988370854751605}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.028674716, y: 0.013843265, z: 0.0023809134}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1653593134660180258}
+  m_Father: {fileID: 66001824164477005}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1461206909132141332
@@ -271,6 +226,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73716483cd578374fb2c7ed9228faca4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dissolve: 0
+  isCheckpoint: 0
 --- !u!65 &4878299228063365210
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -284,3 +241,17 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 66.82023, y: 22.063818, z: 73.37962}
   m_Center: {x: -22.281988, y: 9.072558, z: 36.22841}
+--- !u!64 &2777881595886058329
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3562988370854751605}
+  m_Material: {fileID: 13400000, guid: 80c8a5ab313431649b5549ed61f234bd, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -6947442884232788021, guid: 9dc3f06f39c1a934c9b8e9000bea5d37, type: 3}
