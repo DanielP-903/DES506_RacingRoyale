@@ -28,9 +28,10 @@ public class Launcher : MonoBehaviourPunCallbacks
         [Tooltip("The Ui Panel to let the user enter name, connect and play")]
         [SerializeField]
         private GameObject controlPanel;
-        [Tooltip("The UI Label to inform the user that the connection is in progress")]
+        [Tooltip("The UI panel to inform the user that the connection is in progress")]
         [SerializeField]
-        private GameObject progressLabel;
+        private GameObject progressPanel;
+    
         [Tooltip("The Ui Panel for Options")]
         [SerializeField]
         private GameObject optionsPanel;
@@ -98,7 +99,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         // IF DISCONNECTED FROM SERVER : RESET
         public override void OnDisconnected(DisconnectCause cause)
         {
-            progressLabel.SetActive(false);
+            progressPanel.SetActive(false);
             controlPanel.SetActive(true);
             isConnecting = false;
             Debug.LogWarningFormat("PUN Basics Tutorial/Launcher: OnDisconnected() was called by PUN with reason {0}", cause);
@@ -149,7 +150,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         /// </summary>
         void Start()
         {
-            progressLabel.SetActive(false);
+            progressPanel.SetActive(false);
             optionsPanel.SetActive(false);
             controlsPanel.SetActive(false);
             creditsPanel.SetActive(false);
@@ -212,8 +213,11 @@ public class Launcher : MonoBehaviourPunCallbacks
         {
             // keep track of the will to join a room, because when we come back from the game we will get a callback that we are connected, so we need to know what to do then
             isConnecting = PhotonNetwork.ConnectUsingSettings();
-            progressLabel.SetActive(true);
+            progressPanel.SetActive(true);
             controlPanel.SetActive(false);
+            progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = 0;
+            StartCoroutine(LoadingBar());
+            
             // we check if we are connected or not, we join if we are , else we initiate the connection to the server.
             if (PhotonNetwork.IsConnected)
             {
@@ -236,7 +240,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         
         public void GoToOptions()
         {
-            progressLabel.SetActive(false);
+            progressPanel.SetActive(false);
             optionsPanel.SetActive(true);
             controlsPanel.SetActive(false);
             creditsPanel.SetActive(false);
@@ -246,7 +250,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 
         public void GoToControls()
         {
-            progressLabel.SetActive(false);
+            progressPanel.SetActive(false);
             optionsPanel.SetActive(false);
             controlsPanel.SetActive(true);
             creditsPanel.SetActive(false);
@@ -255,7 +259,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         }
         public void GoToCredits()
         {
-            progressLabel.SetActive(false);
+            progressPanel.SetActive(false);
             optionsPanel.SetActive(false);
             controlsPanel.SetActive(false);
             creditsPanel.SetActive(true);
@@ -265,7 +269,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 
         public void GoBackToMenu()
         {
-            progressLabel.SetActive(false);
+            progressPanel.SetActive(false);
             optionsPanel.SetActive(false);
             controlsPanel.SetActive(false);
             creditsPanel.SetActive(false);
@@ -332,5 +336,15 @@ public class Launcher : MonoBehaviourPunCallbacks
         }
 
         #endregion
-    
+        IEnumerator LoadingBar() 
+        {
+            while (PhotonNetwork.LevelLoadingProgress < 1.0f)
+            {
+                progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = PhotonNetwork.LevelLoadingProgress;
+                yield return null;
+            }
+            yield return new WaitForEndOfFrame();
+
+        }
+
 }

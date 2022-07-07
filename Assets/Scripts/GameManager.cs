@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [Tooltip("The prefab to use for representing the timer")]
     private TextMeshProUGUI _timer;
     private TextMeshProUGUI _placeCounter;
+    private GameObject progressPanel;
     private PhotonView _photonView;
     private int _stage = 1;
     private int _totalPlayers = 0;
@@ -575,6 +576,10 @@ public class GameManager : MonoBehaviourPunCallbacks
                 Destroy(this.gameObject);
                 break;
             case "WaitingArea":
+                if (!progressPanel)
+                {
+                    Debug.Log("Found progress panel");
+                }
                 //_placeCounter.gameObject.SetActive(false);
                 CountdownTimer.TryGetStartTime(out var hit);
                 if (PhotonNetwork.CurrentRoom.IsOpen &&
@@ -585,7 +590,10 @@ public class GameManager : MonoBehaviourPunCallbacks
                     if (PhotonNetwork.IsMasterClient)
                     {
                         PhotonNetwork.CurrentRoom.IsOpen = false;
+                        progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(9).gameObject;
+                        progressPanel.SetActive(true);
                         LoadArena("Stage1");
+                        StartCoroutine(LoadingBar());
                     }
                 }
                 else if (!PhotonNetwork.CurrentRoom.IsOpen)
@@ -744,7 +752,18 @@ public class GameManager : MonoBehaviourPunCallbacks
         
     }
 
+    IEnumerator LoadingBar() 
+    {
+        while (PhotonNetwork.LevelLoadingProgress < 1.0f)
+        {
+            progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = PhotonNetwork.LevelLoadingProgress;
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+    }
     #endregion
-    
+
 }
 

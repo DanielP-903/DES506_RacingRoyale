@@ -9,25 +9,33 @@ using UnityEngine.VFX;
 
 public class CarVFXHandler : MonoBehaviour
 {
+    [Header("Boost VFX")]
     public List<ParticleSystem> boostEffects = new List<ParticleSystem>();
+    
+    [Header("Impact VFX")]
     public List<VisualEffectAsset> impactEffectAssets = new List<VisualEffectAsset>();
     public GameObject impactEffectObject;
     public GameObject impactEffectPrefab;
-    private VisualEffect _currentEffect;
-    [Header("Other")] public float maxWallDistanceAlert = 30.0f;
-
+    
+    [Header("Other")] 
+    public float maxWallDistanceAlert = 30.0f;
+    
+    [HideInInspector] public bool boostPlaying;
+    
+    // Camera VFX
     private VisualEffect _speedLinesEffect;
     private VisualEffect _speedCircleEffect;
     private VisualEffect _dangerWallEffect;
-    private VisualEffect _impactEffect;
-    [HideInInspector] public bool boostPlaying;
+    private VisualEffect _portalEffect;
+    
     private CarController _carController;
     private Rigidbody _rigidbody;
     private Camera _mainCam;
     private GameObject _wall;
     private Image _dangerPressureImg;
     private Vector2 _newAlpha;
-    
+    private VisualEffect _currentEffect;
+
     #region VFX-Activation
 
     public IEnumerator ActivateBoostEffect()
@@ -104,6 +112,9 @@ public class CarVFXHandler : MonoBehaviour
             case "SpeedLinesEffect":
                 _speedLinesEffect.Play();
                 break;
+            case "PortalEffect":
+                _portalEffect.Play();
+                break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
@@ -130,6 +141,8 @@ public class CarVFXHandler : MonoBehaviour
             case "DangerWallEffect":
                 return -1;
             case "SpeedLinesEffect":
+                return -1;         
+            case "PortalEffect":
                 return -1;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -162,20 +175,24 @@ public class CarVFXHandler : MonoBehaviour
 
         _currentEffect = impactEffectObject.GetComponent<VisualEffect>();
         
-        GameObject canvas = GameObject.Find("Canvas");
 
         if (_carController.debug)
         {
             _wall = GameObject.FindGameObjectWithTag("EliminationZone");
         }
 
+        GameObject canvas = GameObject.Find("Canvas");
         _dangerPressureImg = canvas.transform.GetChild(0).GetComponent<Image>();
+
         _mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         _speedLinesEffect = _mainCam.transform.GetChild(2).gameObject.GetComponent<VisualEffect>();
         _speedCircleEffect = _mainCam.transform.GetChild(3).gameObject.GetComponent<VisualEffect>();
         _dangerWallEffect = _mainCam.transform.GetChild(4).gameObject.GetComponent<VisualEffect>();
-        _impactEffect = impactEffectObject.GetComponent<VisualEffect>();
+        _portalEffect = _mainCam.transform.GetChild(5).gameObject.GetComponent<VisualEffect>();
+        
+        impactEffectObject.GetComponent<VisualEffect>();
         _speedCircleEffect.Stop();
+        _portalEffect.Stop();
 
         if (SceneManager.GetActiveScene().name == "WaitingArea")
         {
@@ -194,7 +211,7 @@ public class CarVFXHandler : MonoBehaviour
         _speedLinesEffect = _mainCam.transform.GetChild(2).gameObject.GetComponent<VisualEffect>();
         _speedCircleEffect = _mainCam.transform.GetChild(3).gameObject.GetComponent<VisualEffect>();
         _dangerWallEffect = _mainCam.transform.GetChild(4).gameObject.GetComponent<VisualEffect>();
-        _impactEffect = impactEffectObject.GetComponent<VisualEffect>();
+        impactEffectObject.GetComponent<VisualEffect>();
         _speedCircleEffect.Stop();
 
         if (SceneManager.GetActiveScene().name == "WaitingArea")

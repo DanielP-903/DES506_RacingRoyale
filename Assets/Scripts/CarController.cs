@@ -499,7 +499,7 @@ public class CarController : MonoBehaviour
         if (!_grounded)
         {
             _airTime += Time.deltaTime;
-            Debug.Log("Air time: " + _airTime);
+            //Debug.Log("Air time: " + _airTime);
             _delayAirTime = true;
         }
         else
@@ -514,23 +514,26 @@ public class CarController : MonoBehaviour
             {
                 //_vfxHandler.PlayVFXAtPosition("GroundImpact", transform.position);
                 _vfxHandler.SpawnVFXAtPosition("GroundImpact", transform.position + (transform.forward/2) - (transform.up/1.5f), 2,false);
-                _impulseSource.GenerateImpulseAt(transform.position + Vector3.down, new Vector3(0, -_airTime,0));
+                if (!bot)
+                {
+                    _impulseSource.GenerateImpulseAt(transform.position + Vector3.down, new Vector3(0, -_airTime, 0));
+                }
                 _animCamTime = 1.0f;
                 _airTime = 0;
             }
         }
         
-        UpdateCameraAnimation();
+        //UpdateCameraAnimation();
     }
 
-    public void UpdateCameraAnimation()
-    {
-        if (_animCamTime > 0.0f)
-        {
-            _animCamTime = _animCamTime <= 0 ? 0 : _animCamTime - Time.deltaTime;
-            _transposer.m_FollowOffset = new Vector3(0, Mathf.SmoothStep(4, 5, (1 - _animCamTime) / 1), -8);
-        }
-    }
+    // public void UpdateCameraAnimation()
+    // {
+    //     if (_animCamTime > 0.0f)
+    //     {
+    //         _animCamTime = _animCamTime <= 0 ? 0 : _animCamTime - Time.deltaTime;
+    //         _transposer.m_FollowOffset = new Vector3(0, Mathf.SmoothStep(4, 5, (1 - _animCamTime) / 1), -8);
+    //     }
+    // }
     
     public void ResetPlayer(bool pressedButton = false)
     {

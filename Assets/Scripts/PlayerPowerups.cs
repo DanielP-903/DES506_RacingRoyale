@@ -517,6 +517,7 @@ public class PlayerPowerups : MonoBehaviour
            
          if (collider.transform.CompareTag("WarpPortal"))
          {
+             _vfxHandler.PlayVFX("PortalEffect");
              _carController.ResetPlayer();
          }
      }
