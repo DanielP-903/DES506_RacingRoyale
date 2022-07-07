@@ -3324,6 +3324,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -4550031124656453794, guid: a5c93b80e7af4f14e88261ff6dae0053, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: bbbed18a5049ed34eb79aac29795680c, type: 2}
     - target: {fileID: 919132149155446097, guid: a5c93b80e7af4f14e88261ff6dae0053, type: 3}
       propertyPath: m_Name
       value: PV_TStraightB_1
@@ -4812,11 +4816,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2774631455131860148, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000016970368
+      value: 0.00000001697037
       objectReference: {fileID: 0}
     - target: {fileID: 2774631455131860148, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0000000028400902
+      value: -0.0000000028400904
       objectReference: {fileID: 0}
     - target: {fileID: 2774631455131860148, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -5305,6 +5309,7 @@ MonoBehaviour:
   accelerationForce: 5
   boostForceAmount: 15
   driftForceAmount: 3000
+  maxBoostsInAir: 1
   jumpPadForce: 5
   boostPadForce: 5
   bounciness: 10
