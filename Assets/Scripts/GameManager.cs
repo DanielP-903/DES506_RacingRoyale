@@ -13,6 +13,8 @@ using Cinemachine;
 using Photon.Pun.Demo.Cockpit;
 using TMPro;
 using Unity.Mathematics;
+using UnityEngine.Audio;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
@@ -45,6 +47,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     private Transform spectateTarget;
     private GameObject spectateMenu;
     private TextMeshProUGUI spectateText;
+    private Image fadeScreen;
+    private AudioMixer mixer;
 
     #endregion
     
@@ -710,7 +714,37 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     #endregion
 
-    
+    #region IEnumerators
+
+    IEnumerator FadeIn()
+    {
+        float vol = -80;
+        float volStep = PlayerPrefs.GetFloat("MasterVol") / 25;
+        mixer.SetFloat("Master", vol);
+        while (fadeScreen.color.a > 0 && vol < PlayerPrefs.GetFloat("MasterVol"))
+        {
+            if (fadeScreen.color.a > 0)
+            {
+                fadeScreen.color = new Color(fadeScreen.color.r, fadeScreen.color.g, fadeScreen.color.b, fadeScreen.color.a - 0.04f);
+            }
+            else
+            {
+                fadeScreen.color = new Color(fadeScreen.color.r, fadeScreen.color.g, fadeScreen.color.b, 0);
+            }
+
+            if (vol < PlayerPrefs.GetFloat("MasterVol"))
+            {
+                mixer.GetFloat("Master", out vol);
+                mixer.SetFloat("Master", vol + volStep);
+                mixer.GetFloat("Master", out vol);
+            }
+
+            yield return new WaitForFixedUpdate();
+        }
+        
+    }
+
+    #endregion
     
 }
 
