@@ -109,6 +109,7 @@ public class CarController : MonoBehaviour
     private Animator _animator;
     private CinemachineVirtualCamera _virtualCamera;
     private CinemachineTransposer _transposer;
+    private CinemachineImpulseSource _impulseSource;
     #endregion
 
     #region Misc
@@ -145,6 +146,7 @@ public class CarController : MonoBehaviour
             _playerPowerups = GetComponent<PlayerPowerups>();
             _vfxHandler = GetComponent<CarVFXHandler>();
             _animator = GetComponent<Animator>();
+            _impulseSource = GetComponent<CinemachineImpulseSource>();
             
             foreach (var axle in axles)
             {
@@ -512,6 +514,7 @@ public class CarController : MonoBehaviour
             {
                 //_vfxHandler.PlayVFXAtPosition("GroundImpact", transform.position);
                 _vfxHandler.SpawnVFXAtPosition("GroundImpact", transform.position + (transform.forward/2) - (transform.up/1.5f), 2,false);
+                _impulseSource.GenerateImpulseAt(transform.position + Vector3.down, new Vector3(0, -_airTime,0));
                 _animCamTime = 1.0f;
                 _airTime = 0;
             }
