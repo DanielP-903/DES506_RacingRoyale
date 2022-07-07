@@ -20,7 +20,7 @@ public class RotationObstacle : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         Vector3 newRot = Vector3.zero;
         if (xRotate)

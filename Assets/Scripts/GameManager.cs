@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private int _totalBots = 0;
     private Transform spectateTarget;
     private GameObject spectateMenu;
+    private TextMeshProUGUI spectateText;
 
     #endregion
     
@@ -213,6 +214,14 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
         Debug.Log("Index: "+index);
         spectateTarget = (Transform)spectateTargets[index];
+        if (spectateTarget.CompareTag("EliminationZone"))
+        {
+            spectateText.text = "Spectating... The Wall";
+        }
+        else
+        {
+            spectateText.text = "Spectating... " +spectateTarget.GetComponent<PhotonView>().Owner.NickName;
+        }
         if (spectateTarget != null && cvc != null)
         {
             cvc.m_Follow = spectateTarget;
@@ -355,6 +364,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     void Spectate()
     {
+        spectateText.gameObject.SetActive(true);
         if (GameObject.Find("Speedometer"))
         {
             GameObject.Find("Speedometer").SetActive(false);
@@ -383,7 +393,12 @@ public class GameManager : MonoBehaviourPunCallbacks
             if (GameObject.Find("Danger Wall") != null)
             {
                 spectateTarget = GameObject.Find("Danger Wall").transform;
+                spectateText.text = "Spectating... The Wall";
             }
+        }
+        else
+        {
+            spectateText.text = "Spectating... " +spectateTarget.GetComponent<PhotonView>().Owner.NickName;
         }
 
         if (spectateTarget != null && cvc != null)
@@ -453,6 +468,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         // IF NOT PEDESTAL STAGE AND NOT ELIMINATED : CREATE PLAYER CAR AND SET PHOTON VIEW
         if (scene.name != "EndStage")
         {
+            spectateText = GameObject.Find("SpectatorText").GetComponent<TextMeshProUGUI>();
+            spectateText.gameObject.SetActive(false);
             _placeCounter = GameObject.Find("PlaceCounter").GetComponent<TextMeshProUGUI>();
             //_timer = GameObject.Find("Timer").GetComponent<TextMeshProUGUI>();
             if (PhotonNetwork.LocalPlayer.IsMasterClient)
