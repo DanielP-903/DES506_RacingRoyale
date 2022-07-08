@@ -35,7 +35,7 @@ public class MinimapController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (hasFoundPlayer)
+        if (hasFoundPlayer && _playerRef)
         {
             Vector3 newPos = new Vector3(_playerRef.transform.position.x, _playerRef.transform.position.y, _playerRef.transform.position.z)
                 {
