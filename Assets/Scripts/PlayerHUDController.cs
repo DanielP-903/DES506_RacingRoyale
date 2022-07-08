@@ -41,7 +41,7 @@ public class PlayerHUDController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (hasFoundPlayer)
+        if (hasFoundPlayer && _playerRef)
         {
             currentSpeed = (Mathf.Round(_rigidbodyRef.velocity.magnitude * 2.2369362912f));
             speedText.text = currentSpeed.ToString();

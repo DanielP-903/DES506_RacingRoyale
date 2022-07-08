@@ -45,6 +45,11 @@ public class BillBoarder : MonoBehaviour
         //rect.LookAt(mainCam.transform.position);
         if (!useStandardTransform)
         {
+            if (!mainCam)
+            {
+                mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+            }
+            
             rect.rotation = mainCam.transform.rotation;
         }
         else
