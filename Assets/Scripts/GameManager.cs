@@ -48,8 +48,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     private Transform spectateTarget;
     private GameObject spectateMenu;
     private TextMeshProUGUI spectateText;
-    private Image fadeScreen;
-    private AudioMixer mixer;
 
     #endregion
     
@@ -58,8 +56,10 @@ public class GameManager : MonoBehaviourPunCallbacks
     
     [Tooltip("The prefab to use for representing the player")]
     public GameObject playerPrefab;
-    [Tooltip("The prefab to use for representing the player")]
+    [Tooltip("The prefab to use for representing bots")]
     public GameObject botPrefab;
+    [Tooltip("The master mixer")]
+    public AudioMixer mixer;
     
     #endregion
 
@@ -467,6 +467,18 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void LoadPlayerInLevel(Scene scene, LoadSceneMode loadSceneMode)
     {
+        if (PlayerPrefs.HasKey("MasterVol"))
+        {
+            mixer.SetFloat("Master", PlayerPrefs.GetFloat("MasterVol"));
+        }
+        if (PlayerPrefs.HasKey("MusicVol"))
+        {
+            mixer.SetFloat("Music", PlayerPrefs.GetFloat("MusicVol"));
+        }
+        if (PlayerPrefs.HasKey("SoundVol"))
+        {
+            mixer.SetFloat("Sound", PlayerPrefs.GetFloat("SoundVol"));
+        }
         _totalBots = 0;
         //Debug.Log("GameManager Loading Level");
         if (scene.name == "Launcher")
@@ -489,6 +501,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             if (PhotonNetwork.LocalPlayer.IsMasterClient)
             {
                 int playersInScene = 0;
+                int maxBotsInScene = 0;
                 switch (scene.name)
                 {
                     case "Stage1":
@@ -496,18 +509,21 @@ public class GameManager : MonoBehaviourPunCallbacks
                         break;
                     case "Stage2":
                         playersInScene = PhotonNetwork.CurrentRoom.MaxPlayers/2;
+                        maxBotsInScene = maxBots / 2;
                         break;
                     case "Stage3":
                         playersInScene = PhotonNetwork.CurrentRoom.MaxPlayers/4;
+                        maxBotsInScene = maxBots / 4;
                         break;
                     case "Stage4":
                         playersInScene = PhotonNetwork.CurrentRoom.MaxPlayers/8;
+                        maxBotsInScene = maxBots / 8;
                         break;
                 }
                 
                 int elimPlayersTotal = 0;
                 TryGetElimPlayers(out elimPlayersTotal);
-                for (int i = _totalPlayers - elimPlayersTotal + 1; i < playersInScene && i < maxBots; i++)
+                for (int i = _totalPlayers - elimPlayersTotal + 1; i < playersInScene && i < maxBotsInScene; i++)
                 {
                     PhotonNetwork.Instantiate(this.botPrefab.name,
                         new Vector3(0, -100, 0),
@@ -741,34 +757,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     #endregion
 
     #region IEnumerators
-
-    IEnumerator FadeIn()
-    {
-        float vol = -80;
-        float volStep = PlayerPrefs.GetFloat("MasterVol") / 25;
-        mixer.SetFloat("Master", vol);
-        while (fadeScreen.color.a > 0 && vol < PlayerPrefs.GetFloat("MasterVol"))
-        {
-            if (fadeScreen.color.a > 0)
-            {
-                fadeScreen.color = new Color(fadeScreen.color.r, fadeScreen.color.g, fadeScreen.color.b, fadeScreen.color.a - 0.04f);
-            }
-            else
-            {
-                fadeScreen.color = new Color(fadeScreen.color.r, fadeScreen.color.g, fadeScreen.color.b, 0);
-            }
-
-            if (vol < PlayerPrefs.GetFloat("MasterVol"))
-            {
-                mixer.GetFloat("Master", out vol);
-                mixer.SetFloat("Master", vol + volStep);
-                mixer.GetFloat("Master", out vol);
-            }
-
-            yield return new WaitForFixedUpdate();
-        }
-        
-    }
 
     IEnumerator LoadingBar() 
     {
