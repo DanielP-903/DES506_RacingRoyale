@@ -17,7 +17,7 @@ public class UIElementRotator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_hasFoundPlayer)
+        if (_hasFoundPlayer && _playerRef)
         {
             transform.rotation = Quaternion.Euler(0.0f, _playerRef.transform.eulerAngles.y, 0.0f);
         }
