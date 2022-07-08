@@ -506,6 +506,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 {
                     case "Stage1":
                         playersInScene = PhotonNetwork.CurrentRoom.MaxPlayers;
+                        maxBotsInScene = maxBots;
                         break;
                     case "Stage2":
                         playersInScene = PhotonNetwork.CurrentRoom.MaxPlayers/2;
