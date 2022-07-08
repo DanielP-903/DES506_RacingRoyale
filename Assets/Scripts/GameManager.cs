@@ -369,7 +369,11 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     void Spectate()
     {
-        spectateText.gameObject.SetActive(true);
+        if (spectateText != null)
+        {
+            spectateText.gameObject.SetActive(true);
+        }
+
         if (GameObject.Find("Speedometer"))
         {
             GameObject.Find("Speedometer").SetActive(false);
@@ -471,10 +475,15 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
         //Debug.Log("Loaded Player- Elim?: "+_eliminated+" PlayerNum: "+_playerNumber);
         // IF NOT PEDESTAL STAGE AND NOT ELIMINATED : CREATE PLAYER CAR AND SET PHOTON VIEW
-        if (scene.name != "EndStage")
+        if (scene.name != "EndStage" && scene.name != "Launcher")
         {
-            spectateText = GameObject.Find("SpectatorText").GetComponent<TextMeshProUGUI>();
-            spectateText.gameObject.SetActive(false);
+            GameObject spectateObject = GameObject.Find("SpectatorText");
+            if (spectateObject)
+            {
+                spectateText = spectateObject.GetComponent<TextMeshProUGUI>();
+                spectateText.gameObject.SetActive(false);
+            }
+
             _placeCounter = GameObject.Find("PlaceCounter").GetComponent<TextMeshProUGUI>();
             //_timer = GameObject.Find("Timer").GetComponent<TextMeshProUGUI>();
             if (PhotonNetwork.LocalPlayer.IsMasterClient)
@@ -565,6 +574,9 @@ public class GameManager : MonoBehaviourPunCallbacks
             if (PhotonNetwork.IsMasterClient)
             {
                 PhotonNetwork.CurrentRoom.IsOpen = false;
+                progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(9).gameObject;
+                progressPanel.SetActive(true);
+                StartCoroutine(LoadingBar());
                 LoadArena("EndStage");
             }
         }
@@ -592,8 +604,8 @@ public class GameManager : MonoBehaviourPunCallbacks
                         PhotonNetwork.CurrentRoom.IsOpen = false;
                         progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(9).gameObject;
                         progressPanel.SetActive(true);
-                        LoadArena("Stage1");
                         StartCoroutine(LoadingBar());
+                        LoadArena("Stage1");
                     }
                 }
                 else if (!PhotonNetwork.CurrentRoom.IsOpen)
@@ -625,6 +637,9 @@ public class GameManager : MonoBehaviourPunCallbacks
                     SetFinishedPlayers(0, _stage);
                     if (PhotonNetwork.IsMasterClient)
                     {
+                        progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(9).gameObject;
+                        progressPanel.SetActive(true);
+                        StartCoroutine(LoadingBar());
                         LoadArena("Stage2");
                     }
                 }
@@ -643,6 +658,9 @@ public class GameManager : MonoBehaviourPunCallbacks
                     _stage++;
                     if (PhotonNetwork.IsMasterClient)
                     {
+                        progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(9).gameObject;
+                        progressPanel.SetActive(true);
+                        StartCoroutine(LoadingBar());
                         LoadArena("EndStage");
                     }
                 }
@@ -754,9 +772,20 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     IEnumerator LoadingBar() 
     {
-        while (PhotonNetwork.LevelLoadingProgress < 1.0f)
+        if (PhotonNetwork._AsyncLevelLoadingOperation != null)
         {
-            progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = PhotonNetwork.LevelLoadingProgress;
+            Debug.Log("Progress: " + PhotonNetwork._AsyncLevelLoadingOperation.progress);
+            while (!PhotonNetwork._AsyncLevelLoadingOperation.isDone)
+            {
+                progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value =
+                    PhotonNetwork._AsyncLevelLoadingOperation.progress;
+                
+                yield return null;
+            }
+            
+        }
+        else
+        {
             yield return null;
         }
 

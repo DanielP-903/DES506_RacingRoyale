@@ -6,17 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="873a249a-5863-4717-a004-718a85933296" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.DES506_RacingRoyale/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DES506_RacingRoyale/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Loading.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Loading.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MusicMixer.mixer" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MusicMixer.mixer" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Canvas.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Canvas.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/PunchingGlove.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/PunchingGlove.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/BotCar.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/BotCar.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Player Car.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Player Car.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Stage1.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Stage1.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TemporaryEffect.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TemporaryEffect.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Stage2.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Stage2.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -25,7 +15,9 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/Loading.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Photon/PhotonUnityNetworking/Code/Views/PhotonTransformViewCustom.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/PunchingGlove.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/DialRotator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/GameManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Launcher.cs" root0="FORCE_HIGHLIGHTING" />
@@ -71,7 +63,7 @@
       <method v="2" />
     </configuration>
     <configuration name="UnitTests (batch mode)" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\2020.3.0f1\Editor\Unity.exe" />
+      <option name="EXE_PATH" value="D:\Program Files (x86)\Unity\2020.3.0f1\Editor\Unity.exe" />
       <option name="PROGRAM_PARAMETERS" value="-runTests -batchmode -projectPath M:\GitHub\DES506_RacingRoyale -testResults Logs/results.xml -testPlatform EditMode -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="M:\GitHub\DES506_RacingRoyale" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -88,10 +80,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="10584">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="10584" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -172,7 +164,7 @@
       <workItem from="1657109212644" duration="1108000" />
       <workItem from="1657182080192" duration="927000" />
       <workItem from="1657198686072" duration="1102000" />
-      <workItem from="1657276860004" duration="973000" />
+      <workItem from="1657270217302" duration="5649000" />
     </task>
     <servers />
   </component>
@@ -204,12 +196,6 @@
           <line>532</line>
           <properties documentPath="D:\Users\Ping998\Documents\GitHub\DES506_RacingRoyale\Assets\Scripts\CarController.cs" initialLine="523" containingFunctionPresentation="method 'UpdateCameraAnimation'" />
           <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/GameManager.cs</url>
-          <line>756</line>
-          <properties documentPath="D:\Users\Ping998\Documents\GitHub\DES506_RacingRoyale\Assets\Scripts\GameManager.cs" initialLine="756" containingFunctionPresentation="method 'LoadingBar'" />
-          <option name="timeStamp" value="14" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
