@@ -4,18 +4,16 @@ using UnityEngine;
 
 public class WreckingBall : MonoBehaviour
 {
-    public float speed = 2.5f, distance = 10f;
-    public bool reverse;
-    private Quaternion currentRotation;
-    // Start is called before the first frame update
-    void Start()
-    {
-        currentRotation = transform.localRotation;
-    }
-
+    [SerializeField] private float speed = 2.5f;
+    [SerializeField] private float distance = 10f;
+    [SerializeField] private bool x = false;
+    [SerializeField] private bool y = true;
+    [SerializeField] private bool z = false;
+    
     // Update is called once per frame
     void Update()
     {
-        transform.localEulerAngles = new Vector3(reverse ? -Mathf.PingPong(Time.time * speed, distance) + currentRotation.x : Mathf.PingPong(Time.time * speed, distance) + currentRotation.x, transform.localRotation.y, transform.localRotation.z );
+        float angle = distance * Mathf.Sin( Time.time * speed);
+        transform.localRotation = Quaternion.Euler( x ? angle : 0, y ? angle : 0, z ? angle : 0);
     }
 }
