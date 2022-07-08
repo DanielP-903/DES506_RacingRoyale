@@ -510,15 +510,15 @@ public class GameManager : MonoBehaviourPunCallbacks
                         break;
                     case "Stage2":
                         playersInScene = PhotonNetwork.CurrentRoom.MaxPlayers/2;
-                        maxBotsInScene = maxBots / 2;
+                        maxBotsInScene = maxBots;
                         break;
                     case "Stage3":
                         playersInScene = PhotonNetwork.CurrentRoom.MaxPlayers/4;
-                        maxBotsInScene = maxBots / 4;
+                        maxBotsInScene = maxBots;
                         break;
                     case "Stage4":
                         playersInScene = PhotonNetwork.CurrentRoom.MaxPlayers/8;
-                        maxBotsInScene = maxBots / 8;
+                        maxBotsInScene = maxBots;
                         break;
                 }
                 
