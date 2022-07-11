@@ -15,6 +15,7 @@ using TMPro;
 using Unity.Mathematics;
 using UnityEngine.Audio;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
@@ -524,11 +525,20 @@ public class GameManager : MonoBehaviourPunCallbacks
                 
                 int elimPlayersTotal = 0;
                 TryGetElimPlayers(out elimPlayersTotal);
+                string s = Resources.Load<TextAsset>("Names").ToString();
+                string[] linesInFile = s.Split('\n');
+                foreach (string line in linesInFile)
+                {
+                    Debug.Log(line);
+                }
+                
                 for (int i = _totalPlayers - elimPlayersTotal + 1; i < playersInScene && i < maxBotsInScene; i++)
                 {
-                    PhotonNetwork.Instantiate(this.botPrefab.name,
+                    GameObject bot = PhotonNetwork.Instantiate(this.botPrefab.name,
                         new Vector3(0, -100, 0),
                         quaternion.identity, 0);
+                    bot.name = "Bot "+ linesInFile[Random.Range(0, linesInFile.Length - 1)];
+                    //bot.GetComponent<BotCarController>().setName(linesInFile[Random.Range(0, linesInFile.Length-1)]);
                 }
             }
         }

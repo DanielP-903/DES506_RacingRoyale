@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Photon.Chat.UtilityScripts;
 using Photon.Pun;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
@@ -19,6 +20,9 @@ public class BotCarController : MonoBehaviour
     private Transform _spawnLocation;
     private int _botNum = -1;
     private bool touchingReset = false;
+
+    private TextMeshProUGUI name;
+    private TextMeshProUGUI lis;
     
     
     // Start is called before the first frame update
@@ -29,6 +33,7 @@ public class BotCarController : MonoBehaviour
             _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
             _botNum = _gm.GetTotalPlayers() + _gm.GetBotNum()+1;
             _pv = GetComponent<PhotonView>();
+            _pv.name = this.gameObject.name;
             _cc = GetComponent<CarController>();
             _rb = GetComponent<Rigidbody>();
             _layerMask = LayerMask.GetMask("Player", "Checkpoint");
@@ -53,6 +58,9 @@ public class BotCarController : MonoBehaviour
             //Destroy(GetComponent<Rigidbody>());
             Destroy(this);
         }
+
+        name = transform.Find("Name").Find("Name").GetComponent<TextMeshProUGUI>();
+        lis = transform.Find("License").Find("Name").GetComponent<TextMeshProUGUI>();
     }
 
     // Update is called once per frame
@@ -60,6 +68,8 @@ public class BotCarController : MonoBehaviour
     {
         decideBehaviour();
         checkReset();
+        name.text = _pv.name;
+        lis.text = _pv.name;
     }
 
     public int GetBotNumber()
@@ -91,6 +101,11 @@ public class BotCarController : MonoBehaviour
         var position = spawn.position;
         thisTransform.rotation = rotation;
         thisTransform.position = position;
+    }
+
+    public void setName(string newName = "NotSetProperly")
+    {
+        _pv.name = newName;
     }
 
     void decideBehaviour()
