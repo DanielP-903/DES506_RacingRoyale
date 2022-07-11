@@ -3399,13 +3399,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: ad580b890d485f44890f7b23d551e8d9, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: c129ba08b74cb3542a0784853253a8e5, type: 2}
     - target: {fileID: 919132149155446097, guid: ad580b890d485f44890f7b23d551e8d9, type: 3}
       propertyPath: m_Name
       value: Rubic
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: ad580b890d485f44890f7b23d551e8d9, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ad580b890d485f44890f7b23d551e8d9, type: 3}
@@ -5124,11 +5128,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2774631455131860148, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000016970368
+      value: 0.00000001697037
       objectReference: {fileID: 0}
     - target: {fileID: 2774631455131860148, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0000000028400902
+      value: -0.0000000028400904
       objectReference: {fileID: 0}
     - target: {fileID: 2774631455131860148, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -6361,7 +6365,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8560178604151380780, guid: ea5a69be9cbbf0748b98012710ecba76, type: 3}
       propertyPath: m_Name
-      value: RubikDisappear
+      value: RubicDisappear
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea5a69be9cbbf0748b98012710ecba76, type: 3}

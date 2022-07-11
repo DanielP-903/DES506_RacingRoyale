@@ -15,6 +15,7 @@ using TMPro;
 using Unity.Mathematics;
 using UnityEngine.Audio;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
@@ -225,7 +226,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
         else
         {
-            spectateText.text = "Spectating... " +spectateTarget.GetComponent<PhotonView>().Owner.NickName;
+            spectateText.text = "Spectating... " +spectateTarget.GetComponent<PhotonView>().name;
         }
         if (spectateTarget != null && cvc != null)
         {
@@ -455,6 +456,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             //Debug.Log("Player Number: "+PhotonNetwork.LocalPlayer.GetPlayerNumber()); //GetPlayerNumber()
             GameObject player = PhotonNetwork.Instantiate(this.playerPrefab.name, GameObject.Find("SpawnLocation" + GetPlayerNumber()).transform.position, GameObject.Find("SpawnLocation" + GetPlayerNumber()).transform.rotation, 0);
             _photonView = player.GetComponent<PhotonView>();
+            player.name = _photonView.Owner.NickName;
         }
 
         if (PhotonNetwork.IsMasterClient)
@@ -524,11 +526,15 @@ public class GameManager : MonoBehaviourPunCallbacks
                 
                 int elimPlayersTotal = 0;
                 TryGetElimPlayers(out elimPlayersTotal);
+                string s = Resources.Load<TextAsset>("Names").ToString();
+                string[] linesInFile = s.Split('\n');
                 for (int i = _totalPlayers - elimPlayersTotal + 1; i < playersInScene && i < maxBotsInScene; i++)
                 {
-                    PhotonNetwork.Instantiate(this.botPrefab.name,
+                    GameObject bot = PhotonNetwork.Instantiate(this.botPrefab.name,
                         new Vector3(0, -100, 0),
                         quaternion.identity, 0);
+                    bot.name = "Bot "+ linesInFile[Random.Range(0, linesInFile.Length - 1)];
+                    //bot.GetComponent<BotCarController>().setName(linesInFile[Random.Range(0, linesInFile.Length-1)]);
                 }
             }
         }
@@ -669,8 +675,8 @@ public class GameManager : MonoBehaviourPunCallbacks
                 _placeCounter.text = Mathf.Ceil(_totalPlayers - elimPlayers) + " players left!";
                 
                 //Debug.Log("Name: "+SceneManager.GetActiveScene().name + " Stage: " + _stage + " Players Finished: "+(_totalPlayers - elimPlayers)+" Goal: 0");
-                
-                if (_stage == 4 && playersCompleted >= (float)_totalPlayers/16)
+                //_stage == 2 && playersCompleted >= (float)_totalPlayers/16
+                if (_stage == 2 && playersCompleted >= (int)4)
                 {
                     _stage++;
                     if (PhotonNetwork.IsMasterClient)
@@ -780,6 +786,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         //
         // yield return new WaitForEndOfFrame();
         progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = PhotonNetwork.LevelLoadingProgress;
+        progressPanel.transform.GetChild(1).Rotate(Vector3.forward, -Time.deltaTime*500.0f, Space.World);
         while (PhotonNetwork.LevelLoadingProgress < 1.0f)
         {
             progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = PhotonNetwork.LevelLoadingProgress;
