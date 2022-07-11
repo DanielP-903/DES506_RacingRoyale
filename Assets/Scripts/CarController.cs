@@ -51,8 +51,10 @@ public class CarController : MonoBehaviour
     public float resetCooldown = 2.0f;
     public float padCooldown = 2.0f;
 
+    [Header("Other")]
     public GameObject minimapArrow;
     public CheckpointSystem checkpoints;
+    public Camera flybyCam;
 
     [Header("DEBUG MODE")] 
     public bool debug;
@@ -121,7 +123,8 @@ public class CarController : MonoBehaviour
     private CarVFXHandler _vfxHandler;
     private bool _delayAirTime;
     private int _boostsInAirLeft = 1;
-    
+    private CameraFlyBy _cameraFlyBy;
+
     #endregion
    
     #region Initialisation
@@ -167,8 +170,7 @@ public class CarController : MonoBehaviour
             
             if (debug)
             {
-                
-                 GameObject checkpointObject = GameObject.Find("CheckpointSystem");
+                GameObject checkpointObject = GameObject.Find("CheckpointSystem");
                 checkpointObject.GetComponent<CheckpointSystem>();
 
                 if (checkpointObject != null)
@@ -185,11 +187,13 @@ public class CarController : MonoBehaviour
                 {
                     Debug.Log("Error: no CheckpointSystem object in scene");
                 }
+
             }
     
             _mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
             _virtualCamera = _mainCam.GetComponent<CinemachineVirtualCamera>();
             _transposer = _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
+
         }
     
         void OnLevelWasLoaded()
@@ -216,6 +220,26 @@ public class CarController : MonoBehaviour
                 Debug.Log("Error: no CheckpointSystem object in scene");
             }
             _mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+                            
+            GameObject flybyCamObject = GameObject.FindGameObjectWithTag("FlyBy");
+            
+            if (!flybyCamObject) return;
+            
+            flybyCamObject.GetComponent<Camera>();
+
+            if (checkpointObject != null)
+            {
+                flybyCam = flybyCamObject.GetComponent<Camera>();
+            }
+            else
+            {
+                Debug.Log("Error: no Flyby Camera object in scene");
+            }
+            _cameraFlyBy = flybyCam.GetComponent<CameraFlyBy>();
+
+            _mainCam.gameObject.SetActive(false);
+            flybyCam.gameObject.SetActive(true);
+            flybyCam.GetComponent<CameraFlyBy>().activateFlyBy = true;
         }
 
     #endregion
@@ -522,7 +546,16 @@ public class CarController : MonoBehaviour
                 _airTime = 0;
             }
         }
-        
+
+        if (_cameraFlyBy)
+        {
+            if (!_cameraFlyBy.activateFlyBy)
+            {
+                flybyCam.gameObject.SetActive(false);
+                _mainCam.gameObject.SetActive(true);
+            }
+        }
+
         //UpdateCameraAnimation();
     }
 
@@ -599,8 +632,6 @@ public class CarController : MonoBehaviour
             _rigidbody.velocity = -(direction.normalized * (bounciness/3));
             _vfxHandler.PlayVFXAtPosition("SoftImpact", collision.contacts[0].point);
         }
-
-       
     }
 
     private void OnTriggerEnter(Collider other)
