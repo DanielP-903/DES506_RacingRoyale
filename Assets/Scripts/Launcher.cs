@@ -352,6 +352,7 @@ public class Launcher : MonoBehaviourPunCallbacks
             while (PhotonNetwork.LevelLoadingProgress < 1.0f)
             {
                 progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = PhotonNetwork.LevelLoadingProgress;
+                progressPanel.transform.GetChild(1).Rotate(Vector3.forward, -Time.deltaTime*500.0f, Space.World);
                 yield return null;
             }
             yield return new WaitForEndOfFrame();
