@@ -607,7 +607,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             case "WaitingArea":
                 if (!progressPanel)
                 {
-                    Debug.Log("Found progress panel");
+                    //Debug.Log("Found progress panel");
                 }
                 //_placeCounter.gameObject.SetActive(false);
                 CountdownTimer.TryGetStartTime(out var hit);
@@ -761,25 +761,31 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     IEnumerator LoadingBar() 
     {
-        if (PhotonNetwork._AsyncLevelLoadingOperation != null)
+        Debug.Log("Progress: " + PhotonNetwork.LevelLoadingProgress);
+        // if (PhotonNetwork._AsyncLevelLoadingOperation != null)
+        // {
+        //     while (!PhotonNetwork._AsyncLevelLoadingOperation.isDone)
+        //     {
+        //         progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value =
+        //             PhotonNetwork._AsyncLevelLoadingOperation.progress;
+        //         
+        //         yield return null;
+        //     }
+        //     
+        // }
+        // else
+        // {
+        //     yield return null;
+        // }
+        //
+        // yield return new WaitForEndOfFrame();
+        progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = PhotonNetwork.LevelLoadingProgress;
+        while (PhotonNetwork.LevelLoadingProgress < 1.0f)
         {
-            Debug.Log("Progress: " + PhotonNetwork._AsyncLevelLoadingOperation.progress);
-            while (!PhotonNetwork._AsyncLevelLoadingOperation.isDone)
-            {
-                progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value =
-                    PhotonNetwork._AsyncLevelLoadingOperation.progress;
-                
-                yield return null;
-            }
-            
-        }
-        else
-        {
+            progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = PhotonNetwork.LevelLoadingProgress;
             yield return null;
         }
-
         yield return new WaitForEndOfFrame();
-
     }
     #endregion
 
