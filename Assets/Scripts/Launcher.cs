@@ -5,6 +5,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine.Audio;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class Launcher : MonoBehaviourPunCallbacks
@@ -73,7 +74,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         /// <summary>
         /// This client's version number. Users are separated from each other by gameVersion (which allows you to make breaking changes).
         /// </summary>
-        string gameVersion = "0.11.2";
+        string gameVersion = "0.19.0";
 
 
         #endregion
@@ -155,6 +156,8 @@ public class Launcher : MonoBehaviourPunCallbacks
             controlsPanel.SetActive(false);
             creditsPanel.SetActive(false);
             controlPanel.SetActive(true);
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(controlPanel.transform.GetChild(1).GetChild(2).gameObject);
 
             Destroy(GameObject.Find("PlayerCamera"));
             Destroy(GameObject.Find("GameManager"));
@@ -240,6 +243,8 @@ public class Launcher : MonoBehaviourPunCallbacks
         
         public void GoToOptions()
         {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(optionsPanel.transform.GetChild(0).gameObject);
             progressPanel.SetActive(false);
             optionsPanel.SetActive(true);
             controlsPanel.SetActive(false);
@@ -250,6 +255,8 @@ public class Launcher : MonoBehaviourPunCallbacks
 
         public void GoToControls()
         {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(controlsPanel.transform.GetChild(1).gameObject);
             progressPanel.SetActive(false);
             optionsPanel.SetActive(false);
             controlsPanel.SetActive(true);
@@ -259,6 +266,8 @@ public class Launcher : MonoBehaviourPunCallbacks
         }
         public void GoToCredits()
         {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(creditsPanel.transform.GetChild(1).gameObject);
             progressPanel.SetActive(false);
             optionsPanel.SetActive(false);
             controlsPanel.SetActive(false);
@@ -269,6 +278,8 @@ public class Launcher : MonoBehaviourPunCallbacks
 
         public void GoBackToMenu()
         {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(controlPanel.transform.GetChild(1).GetChild(1).gameObject);
             progressPanel.SetActive(false);
             optionsPanel.SetActive(false);
             controlsPanel.SetActive(false);
