@@ -226,7 +226,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
         else
         {
-            spectateText.text = "Spectating... " +spectateTarget.GetComponent<PhotonView>().Owner.NickName;
+            spectateText.text = "Spectating... " +spectateTarget.GetComponent<PhotonView>().name;
         }
         if (spectateTarget != null && cvc != null)
         {
@@ -456,6 +456,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             //Debug.Log("Player Number: "+PhotonNetwork.LocalPlayer.GetPlayerNumber()); //GetPlayerNumber()
             GameObject player = PhotonNetwork.Instantiate(this.playerPrefab.name, GameObject.Find("SpawnLocation" + GetPlayerNumber()).transform.position, GameObject.Find("SpawnLocation" + GetPlayerNumber()).transform.rotation, 0);
             _photonView = player.GetComponent<PhotonView>();
+            player.name = _photonView.Owner.NickName;
         }
 
         if (PhotonNetwork.IsMasterClient)
@@ -527,11 +528,6 @@ public class GameManager : MonoBehaviourPunCallbacks
                 TryGetElimPlayers(out elimPlayersTotal);
                 string s = Resources.Load<TextAsset>("Names").ToString();
                 string[] linesInFile = s.Split('\n');
-                foreach (string line in linesInFile)
-                {
-                    Debug.Log(line);
-                }
-                
                 for (int i = _totalPlayers - elimPlayersTotal + 1; i < playersInScene && i < maxBotsInScene; i++)
                 {
                     GameObject bot = PhotonNetwork.Instantiate(this.botPrefab.name,
@@ -679,8 +675,8 @@ public class GameManager : MonoBehaviourPunCallbacks
                 _placeCounter.text = Mathf.Ceil(_totalPlayers - elimPlayers) + " players left!";
                 
                 //Debug.Log("Name: "+SceneManager.GetActiveScene().name + " Stage: " + _stage + " Players Finished: "+(_totalPlayers - elimPlayers)+" Goal: 0");
-                
-                if (_stage == 4 && playersCompleted >= (float)_totalPlayers/16)
+                //_stage == 2 && playersCompleted >= (float)_totalPlayers/16
+                if (_stage == 2 && playersCompleted >= (int)4)
                 {
                     _stage++;
                     if (PhotonNetwork.IsMasterClient)
