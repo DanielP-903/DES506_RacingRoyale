@@ -157,7 +157,7 @@ public class Launcher : MonoBehaviourPunCallbacks
             creditsPanel.SetActive(false);
             controlPanel.SetActive(true);
             EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(controlPanel.transform.GetChild(1).GetChild(2).gameObject);
+            EventSystem.current.SetSelectedGameObject(controlPanel.transform.GetChild(1).GetChild(1).gameObject);
 
             Destroy(GameObject.Find("PlayerCamera"));
             Destroy(GameObject.Find("GameManager"));
@@ -243,49 +243,49 @@ public class Launcher : MonoBehaviourPunCallbacks
         
         public void GoToOptions()
         {
-            EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(optionsPanel.transform.GetChild(0).gameObject);
             progressPanel.SetActive(false);
             optionsPanel.SetActive(true);
             controlsPanel.SetActive(false);
             creditsPanel.SetActive(false);
             controlPanel.SetActive(false);
             selectorCar.SetActive(false);
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(optionsPanel.transform.GetChild(0).gameObject);
         }
 
         public void GoToControls()
         {
-            EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(controlsPanel.transform.GetChild(1).gameObject);
             progressPanel.SetActive(false);
             optionsPanel.SetActive(false);
             controlsPanel.SetActive(true);
             creditsPanel.SetActive(false);
             controlPanel.SetActive(false);
             selectorCar.SetActive(false);
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(controlsPanel.transform.GetChild(1).gameObject);
         }
         public void GoToCredits()
         {
-            EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(creditsPanel.transform.GetChild(1).gameObject);
             progressPanel.SetActive(false);
             optionsPanel.SetActive(false);
             controlsPanel.SetActive(false);
             creditsPanel.SetActive(true);
             controlPanel.SetActive(false);
             selectorCar.SetActive(false);
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(creditsPanel.transform.GetChild(1).gameObject);
         }
 
         public void GoBackToMenu()
         {
-            EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(controlPanel.transform.GetChild(1).GetChild(1).gameObject);
             progressPanel.SetActive(false);
             optionsPanel.SetActive(false);
             controlsPanel.SetActive(false);
             creditsPanel.SetActive(false);
             controlPanel.SetActive(true);
             selectorCar.SetActive(true);
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(controlPanel.transform.GetChild(1).GetChild(1).gameObject);
         }
 
         public void ApplyGraphics()
