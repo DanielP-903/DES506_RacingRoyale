@@ -232,7 +232,7 @@ public class PlayerPowerups : MonoBehaviour
         {
             switch (currentPowerupType)
             {
-                case PowerupType.None: Debug.Log("No powerup equipped!"); break;
+                case PowerupType.None: break; //Debug.Log("No powerup equipped!"); break;
                 case PowerupType.Superboost: SuperBoost(); break;
                 case PowerupType.BouncyWallShield: BouncyWallShield(); break;
                 case PowerupType.AirBlast: AirBlast(); break;

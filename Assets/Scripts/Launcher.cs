@@ -5,6 +5,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine.Audio;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class Launcher : MonoBehaviourPunCallbacks
@@ -73,7 +74,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         /// <summary>
         /// This client's version number. Users are separated from each other by gameVersion (which allows you to make breaking changes).
         /// </summary>
-        string gameVersion = "0.11.2";
+        string gameVersion = "0.19.0";
 
 
         #endregion
@@ -155,6 +156,8 @@ public class Launcher : MonoBehaviourPunCallbacks
             controlsPanel.SetActive(false);
             creditsPanel.SetActive(false);
             controlPanel.SetActive(true);
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(controlPanel.transform.GetChild(1).GetChild(1).gameObject);
 
             Destroy(GameObject.Find("PlayerCamera"));
             Destroy(GameObject.Find("GameManager"));
@@ -246,6 +249,8 @@ public class Launcher : MonoBehaviourPunCallbacks
             creditsPanel.SetActive(false);
             controlPanel.SetActive(false);
             selectorCar.SetActive(false);
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(optionsPanel.transform.GetChild(0).gameObject);
         }
 
         public void GoToControls()
@@ -256,6 +261,8 @@ public class Launcher : MonoBehaviourPunCallbacks
             creditsPanel.SetActive(false);
             controlPanel.SetActive(false);
             selectorCar.SetActive(false);
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(controlsPanel.transform.GetChild(1).gameObject);
         }
         public void GoToCredits()
         {
@@ -265,6 +272,8 @@ public class Launcher : MonoBehaviourPunCallbacks
             creditsPanel.SetActive(true);
             controlPanel.SetActive(false);
             selectorCar.SetActive(false);
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(creditsPanel.transform.GetChild(1).gameObject);
         }
 
         public void GoBackToMenu()
@@ -275,6 +284,8 @@ public class Launcher : MonoBehaviourPunCallbacks
             creditsPanel.SetActive(false);
             controlPanel.SetActive(true);
             selectorCar.SetActive(true);
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(controlPanel.transform.GetChild(1).GetChild(1).gameObject);
         }
 
         public void ApplyGraphics()
