@@ -99,6 +99,7 @@ public class PlayerManager : MonoBehaviour
 
         //SceneManager.sceneLoaded += LoadPMInLevel;
         _photonView = GetComponent<PhotonView>();
+        this.gameObject.name = _photonView.Owner.NickName;
         _mRend = transform.Find("CarMesh").GetComponent<MeshRenderer>();
         _mFilt = transform.Find("CarMesh").GetComponent<MeshFilter>();
         object skinNumFromProps;
