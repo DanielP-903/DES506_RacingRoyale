@@ -65,11 +65,13 @@ public class PlayerPowerups : MonoBehaviour
     private RaycastHit _nearestHit;
     private LineRenderer _grappleLine;
     private LineRenderer _punchLine; // haha
+    private AudioManager _audioManager;
     
     // Start is called before the first frame update
     void Start()
     {
         _carController = GetComponent<CarController>();
+        _audioManager = GetComponent<CarController>().audioManager;
         _vfxHandler = GetComponent<CarVFXHandler>();
         _rigidbody = GetComponent<Rigidbody>();
         wallObject = transform.GetChild(0).gameObject;
@@ -89,6 +91,7 @@ public class PlayerPowerups : MonoBehaviour
     void OnLevelWasLoaded()
     {
         _carController = GetComponent<CarController>();
+        _audioManager = GetComponent<CarController>().audioManager;
         _vfxHandler = GetComponent<CarVFXHandler>();
         _rigidbody = GetComponent<Rigidbody>();
         wallObject = transform.GetChild(0).gameObject;
@@ -152,14 +155,12 @@ public class PlayerPowerups : MonoBehaviour
             _grappleLine.SetPositions(positions);
             
             // Drag player towards grappled player
-            
             if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
             {
                 _rigidbody.velocity = (_nearestHit.transform.position - transform.position).normalized * grappleForce;
             }
             else
             {
-                //_rigidbody.velocity = (_nearestHit.transform.position - transform.position).normalized * grappleForce;
                 _rigidbody.AddForce((_nearestHit.transform.position - transform.position).normalized * grappleForce, ForceMode.VelocityChange);
             }
             
@@ -267,18 +268,21 @@ public class PlayerPowerups : MonoBehaviour
          {
              _rigidbody.AddForce(transform.forward * superBoostForce, ForceMode.VelocityChange);
          }
+         _audioManager.PlaySound("SuperBoostLoop");
      }
 
      private void BouncyWallShield()
      {
          _wallShieldTimer = wallShieldTime;
          currentPowerupType = PowerupType.None;
+         _audioManager.PlaySound("BouncyWallShield");
      }
      
      private void WarpPortal()
      {
          _warpPortalTimer = warpPortalTime;
          currentPowerupType = PowerupType.None;
+         _audioManager.PlaySound("WarpPortal");
      }
 
      private void DetectPunch()
@@ -297,6 +301,7 @@ public class PlayerPowerups : MonoBehaviour
          powerupIcon.gameObject.SetActive(false);
          _powerupIconMask.fillAmount = 0;
          currentPowerupType = PowerupType.None;
+         _audioManager.PlaySound("PunchingGlove");
      }
      
      private void PunchingGlove()
@@ -371,6 +376,8 @@ public class PlayerPowerups : MonoBehaviour
                  StartCoroutine(Grapple());
                  currentPowerupType = PowerupType.None;
                  Debug.Log("HIT!!!");
+                 _audioManager.PlaySound("GrapplingHook");
+
              }
              else
              {
@@ -454,6 +461,7 @@ public class PlayerPowerups : MonoBehaviour
          {
              effect.Play();
          }
+         _audioManager.PlaySound("AirBlast");
      }
      
      #endregion
@@ -484,6 +492,7 @@ public class PlayerPowerups : MonoBehaviour
              powerupIcon.gameObject.SetActive(true);
              _powerupIconMask.fillAmount = 0;
              _vfxHandler.PlayVFXAtPosition("ItemBoxImpact", transform.position);
+             _audioManager.PlaySound("PowerUpCollected");
          }
          
          if (collider.transform.CompareTag("WallShield"))
@@ -496,12 +505,14 @@ public class PlayerPowerups : MonoBehaviour
              {
                  _rigidbody.AddForce(-collider.transform.forward * wallShieldBounciness * 2, ForceMode.VelocityChange);
              }        
+             _audioManager.PlaySound("BouncyWallShield");
          }
          
          if (collider.transform.CompareTag("Blast") && collider.transform.parent.gameObject != transform.gameObject)
          {
              Vector3 direction = collider.transform.position - transform.position;
              _rigidbody.velocity = -(direction.normalized * airBlastForce);
+             _audioManager.PlaySound("AirBlast");
          }
          
          if (collider.transform.CompareTag("PunchingGlove") && collider.transform.parent.gameObject != transform.gameObject)
@@ -512,6 +523,7 @@ public class PlayerPowerups : MonoBehaviour
              Debug.Log("Ouch!! Hit with velocity: " + _rigidbody.velocity);
              collider.transform.parent.GetComponent<PlayerPowerups>().DetectPunch();
              _vfxHandler.SpawnVFXAtPosition("PunchImpact", transform.position, 1,true);
+             _audioManager.PlaySound("PunchingGlove");
          }
          
            
@@ -519,6 +531,7 @@ public class PlayerPowerups : MonoBehaviour
          {
              _vfxHandler.PlayVFX("PortalEffect");
              _carController.ResetPlayer();
+             _audioManager.PlaySound("WarpPortal");
          }
      }
 }

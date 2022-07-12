@@ -5,6 +5,7 @@ using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public enum PowerupType
 {
@@ -56,6 +57,7 @@ public class CarController : MonoBehaviour
     public GameObject minimapArrow;
     public CheckpointSystem checkpoints;
     public Camera flybyCam;
+    public AudioManager audioManager;
 
     [Header("DEBUG MODE")] 
     public bool debug;
@@ -109,9 +111,7 @@ public class CarController : MonoBehaviour
     private Rigidbody _rigidbody;
     private PlayerPowerups _playerPowerups;
     private BotCarController _botCarController;
-    private Animator _animator;
     private CinemachineVirtualCamera _virtualCamera;
-    private CinemachineTransposer _transposer;
     private CinemachineImpulseSource _impulseSource;
     private GameManager _gm;
     
@@ -151,7 +151,7 @@ public class CarController : MonoBehaviour
             _playerManager = GetComponent<PlayerManager>();
             _playerPowerups = GetComponent<PlayerPowerups>();
             _vfxHandler = GetComponent<CarVFXHandler>();
-            _animator = GetComponent<Animator>();
+            GetComponent<Animator>();
             _impulseSource = GetComponent<CinemachineImpulseSource>();
             
             foreach (var axle in axles)
@@ -195,7 +195,7 @@ public class CarController : MonoBehaviour
     
             _mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
             _virtualCamera = _mainCam.GetComponent<CinemachineVirtualCamera>();
-            _transposer = _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
+            _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
             _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
         }
     
@@ -513,11 +513,11 @@ public class CarController : MonoBehaviour
 
     private IEnumerator DelayFlyBy()
     {
+        _gm.halt = true;
         yield return new WaitForSeconds(0.01f);
         _mainCam.gameObject.SetActive(false);
         flybyCam.gameObject.SetActive(true);
         flybyCam.GetComponent<CameraFlyBy>().activateFlyBy = true;
-        _gm.halt = true;
     }
     
     private void Update()
@@ -662,12 +662,16 @@ public class CarController : MonoBehaviour
             _rigidbody.velocity = -(direction.normalized * bounciness);
             Debug.Log("HIT ANOTHER PLAYER WITH RIGIDBODY VELOCITY: " + _rigidbody.velocity);
             _vfxHandler.PlayVFXAtPosition("Impact", collision.contacts[0].point);
+            int rand = Random.Range(1, 5);
+            audioManager.PlaySound("CarHit0" + rand);
         }
         else if (collision.transform.CompareTag("SpinningTop"))
         {
             Vector3 direction = collision.contacts[0].point - transform.position;
             _rigidbody.velocity = -(direction.normalized * 30);
             _vfxHandler.PlayVFXAtPosition("SoftImpact", collision.contacts[0].point);
+            int rand = Random.Range(1, 5);
+            audioManager.PlaySound("CarHit0" + rand);
         }
         // Method 1: Layers
         // if (collision.contacts[0].point.y > transform.position.y - 3.0f && collision.gameObject.layer != 9)
@@ -677,13 +681,14 @@ public class CarController : MonoBehaviour
         //     _vfxHandler.SetImpactLocation(collision.contacts[0].point);
         //     _vfxHandler.PlayVFX("Impact");
         // }
-        
         // Method 2: Y difference
         else if (collision.contacts[0].point.y > transform.position.y - 4.0f)
         {
             Vector3 direction = collision.contacts[0].point - transform.position;
             _rigidbody.velocity = -(direction.normalized * (bounciness/3));
             _vfxHandler.PlayVFXAtPosition("SoftImpact", collision.contacts[0].point);
+            int rand = Random.Range(1, 5);
+            audioManager.PlaySound("CarHit0" + rand);
         }
     }
 
@@ -714,11 +719,13 @@ public class CarController : MonoBehaviour
             Debug.Log("Hit the Elimination Wall");
             _hitEliminationZone = true; 
             if (!bot) _playerManager.EliminateCurrentPlayer();
+            audioManager.PlaySound("CarEliminatedByWall");
         }
 
         if (other.transform.CompareTag("ResetZone"))
         {
             ResetPlayer();
+            audioManager.PlaySound("CarEliminatedOffTrack");
         }
     }
 

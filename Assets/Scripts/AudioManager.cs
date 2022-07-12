@@ -10,24 +10,48 @@ public class StringAudioDictionary : SerializableDictionary<string, AudioSource>
 
 public class AudioManager : MonoBehaviour
 {
+    private AudioSource _engineSounds;
+    private Rigidbody _rb;
+    
     [SerializeField]
-    public StringAudioDictionary audio;
-    StringAudioDictionary audioStringDictionary;
-    public IDictionary<string,AudioSource> StringAudioDictionary
+    private AudioClip engineClip;
+
+    [SerializeField]
+    public new StringAudioDictionary audio;
+
+    private StringAudioDictionary _audioStringDictionary;
+
+    private IDictionary<string,AudioSource> StringAudioDictionary
     {
-        get => audioStringDictionary;
-        set => audioStringDictionary.CopyFrom(value);
+        get => _audioStringDictionary;
+        set => _audioStringDictionary.CopyFrom(value);
     }
 
-    private void PlaySound(string soundName)
+    public void PlaySound(string soundName)
     {
-        if (StringAudioDictionary.ContainsKey(name))
+        if (audio.ContainsKey(name))
         {
+            audio[name].Play();
         }
         else
         {
             Debug.LogError("ERROR: Cannot find sound name '" + soundName + "' in dictionary");
         }
+    }
+    
+    void Start()
+    {
+        _engineSounds = GetComponent<AudioSource>();
+        _rb = GetComponentInParent<Rigidbody>();
+        _engineSounds.clip = engineClip;
+        _engineSounds.loop = true;
+        _engineSounds.Play();
+    }
 
+    void Update()
+    {
+        Vector2 horizontalSpeed = new Vector2(_rb.velocity.x, _rb.velocity.z);
+        _engineSounds.volume = Mathf.Min(horizontalSpeed.magnitude, 5f)/5;
+        _engineSounds.pitch = Mathf.Max(Mathf.Min(horizontalSpeed.magnitude, 50) / 50, 1);
     }
 }
