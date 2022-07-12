@@ -226,7 +226,7 @@ public class CarVFXHandler : MonoBehaviour
     void Update()
     {
         if (!_wall) return;
-        if (!_carController.bot) return;
+        if (_carController && _carController.bot) return;
 
 
         float distanceToWall = Vector3.Distance(transform.position, _wall.transform.position);
@@ -249,7 +249,7 @@ public class CarVFXHandler : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_carController.bot) return;
+        if (_carController && _carController.bot) return;
         
         float clampedVelocity = Mathf.Clamp((_rigidbody.velocity.magnitude * 2.2369362912f) - 60, 0, 100);
         _newAlpha.x = Mathf.Lerp(0.2f, 0, (100 - clampedVelocity) / 100);
