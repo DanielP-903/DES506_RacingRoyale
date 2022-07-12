@@ -216,7 +216,7 @@ public class PlayerManager : MonoBehaviour
            TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
            Debug.Log( (readyPlayers +":"+ _gm.GetTotalPlayers()));
            // && readyPlayers >= _gm.GetTotalPlayers()
-           if (_gm.GetStageNum() > 0 && _gm.GetStageNum() < 5)
+           if (_gm.GetStageNum() > 0 && _gm.GetStageNum() < 5 && _gm.halt == false)
            {
                //_photonView.RPC("startDelayTimer", RpcTarget.All);
                startDelayTimer();
