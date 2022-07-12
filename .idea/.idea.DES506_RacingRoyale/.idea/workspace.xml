@@ -11,8 +11,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Assets/CarSounds.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Photon/PhotonUnityNetworking/Code/Views/PhotonTransformViewCustom.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/42a5878ce129403083acccf18e43363f13a400/5b/bd1e880a/SetupCoroutine.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/DialRotator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/GameManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Launcher.cs" root0="FORCE_HIGHLIGHTING" />
@@ -75,10 +74,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="16936">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="16936" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -161,8 +160,7 @@
       <workItem from="1657198686072" duration="1102000" />
       <workItem from="1657270217302" duration="5649000" />
       <workItem from="1657528427360" duration="3721000" />
-      <workItem from="1657613562356" duration="398000" />
-      <workItem from="1657613991950" duration="2920000" />
+      <workItem from="1657615621945" duration="4976000" />
     </task>
     <servers />
   </component>
@@ -191,15 +189,29 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/Scripts/CarController.cs</url>
-          <line>774</line>
-          <properties documentPath="D:\Users\Ping998\Documents\GitHub\DES506_RacingRoyale\Assets\Scripts\CarController.cs" initialLine="523" containingFunctionPresentation="method 'UpdateCameraAnimation'" />
-          <option name="timeStamp" value="9" />
+          <line>245</line>
+          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\CarController.cs" initialLine="244" containingFunctionPresentation="method 'OnLevelWasLoaded'">
+            <startOffsets>
+              <option value="7758" />
+            </startOffsets>
+            <endOffsets>
+              <option value="7823" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="20" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/ChooseGate.cs</url>
-          <line>37</line>
-          <properties documentPath="D:\Users\Ping998\Documents\GitHub\DES506_RacingRoyale\Assets\Scripts\ChooseGate.cs" initialLine="35" containingFunctionPresentation="method 'Update'" />
-          <option name="timeStamp" value="16" />
+          <url>file://$PROJECT_DIR$/Assets/Scripts/CarController.cs</url>
+          <line>526</line>
+          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\CarController.cs" initialLine="492" containingFunctionPresentation="method 'Update'">
+            <startOffsets>
+              <option value="17403" />
+            </startOffsets>
+            <endOffsets>
+              <option value="17416" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="21" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
