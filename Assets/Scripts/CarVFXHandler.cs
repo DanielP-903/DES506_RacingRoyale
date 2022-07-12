@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
@@ -214,6 +215,7 @@ public class CarVFXHandler : MonoBehaviour
         impactEffectObject.GetComponent<VisualEffect>();
         _speedCircleEffect.Stop();
 
+        
         if (SceneManager.GetActiveScene().name == "WaitingArea")
         {
             _dangerWallEffect.SetVector2("Alpha Values", new Vector2(0,0));
@@ -224,7 +226,9 @@ public class CarVFXHandler : MonoBehaviour
     void Update()
     {
         if (!_wall) return;
-        
+        if (!_carController.bot) return;
+
+
         float distanceToWall = Vector3.Distance(transform.position, _wall.transform.position);
         distanceToWall = Mathf.Clamp(distanceToWall, 0, maxWallDistanceAlert);
         _dangerPressureImg.color = Color.Lerp(Color.clear, Color.magenta, (maxWallDistanceAlert - distanceToWall) / maxWallDistanceAlert);
