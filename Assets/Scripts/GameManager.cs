@@ -14,6 +14,7 @@ using Photon.Pun.Demo.Cockpit;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine.Audio;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -49,7 +50,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private Transform spectateTarget;
     private GameObject spectateMenu;
     private TextMeshProUGUI spectateText;
-
+    
     #endregion
     
     // PUBLIC GM VARIABLES (PLAYER PREFAB HERE)
@@ -61,6 +62,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     public GameObject botPrefab;
     [Tooltip("The master mixer")]
     public AudioMixer mixer;
+    
+    [HideInInspector] public bool halt = false;
     
     #endregion
 
@@ -110,6 +113,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void LeaveRoom()
     {
         PhotonNetwork.LeaveRoom();
+    }
+
+    public void SetDelayTimer()
+    {
+        startDelay = 3.0f;
     }
     
     public int GetPlayerNumber()

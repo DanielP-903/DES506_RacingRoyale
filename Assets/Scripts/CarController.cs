@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
@@ -112,6 +113,8 @@ public class CarController : MonoBehaviour
     private CinemachineVirtualCamera _virtualCamera;
     private CinemachineTransposer _transposer;
     private CinemachineImpulseSource _impulseSource;
+    private GameManager _gm;
+    
     #endregion
 
     #region Misc
@@ -193,7 +196,7 @@ public class CarController : MonoBehaviour
             _mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
             _virtualCamera = _mainCam.GetComponent<CinemachineVirtualCamera>();
             _transposer = _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
-
+            _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
         }
     
         void OnLevelWasLoaded()
@@ -227,7 +230,7 @@ public class CarController : MonoBehaviour
             
             flybyCamObject.GetComponent<Camera>();
 
-            if (checkpointObject != null)
+            if (flybyCamObject != null)
             {
                 flybyCam = flybyCamObject.GetComponent<Camera>();
             }
@@ -235,11 +238,13 @@ public class CarController : MonoBehaviour
             {
                 Debug.Log("Error: no Flyby Camera object in scene");
             }
+            
             _cameraFlyBy = flybyCam.GetComponent<CameraFlyBy>();
 
-            _mainCam.gameObject.SetActive(false);
-            flybyCam.gameObject.SetActive(true);
-            flybyCam.GetComponent<CameraFlyBy>().activateFlyBy = true;
+            StartCoroutine(DelayFlyBy());
+            
+            _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+            
         }
 
     #endregion
@@ -482,11 +487,49 @@ public class CarController : MonoBehaviour
     {
         return _boostsInAirLeft;
     }
+
+    public bool GetForward()
+    {
+        return _moveForward;
+    }
+    
+    public bool GetBackward()
+    {
+        return _moveBackward;
+    }   
+    
+    public bool GetLeft()
+    {
+        return _moveLeft;
+    }   
+    
+    public bool GetRight()
+    {
+        return _moveRight;
+    }
     
     #endregion
+
+
+    private IEnumerator DelayFlyBy()
+    {
+        yield return new WaitForSeconds(0.5f);
+        _mainCam.gameObject.SetActive(false);
+        flybyCam.gameObject.SetActive(true);
+        flybyCam.GetComponent<CameraFlyBy>().activateFlyBy = true;
+        _gm.halt = true;
+    }
     
     private void Update()
     {
+        if (_gm)
+        {
+            if (_gm.halt)
+            {
+                _rigidbody.velocity = new Vector3(0, 0, 0);
+            }
+        }
+
         WheelCollider currentWheel = axles[0].leftWheel;
         float currentTorque = currentWheel.motorTorque;
         float currentBrake = currentWheel.brakeTorque;
@@ -549,10 +592,19 @@ public class CarController : MonoBehaviour
 
         if (_cameraFlyBy)
         {
+            Debug.Log("Activate FlyBy: " + _cameraFlyBy.activateFlyBy);
             if (!_cameraFlyBy.activateFlyBy)
             {
                 flybyCam.gameObject.SetActive(false);
                 _mainCam.gameObject.SetActive(true);
+                _gm.halt = false;
+            }
+            else
+            {
+                flybyCam.gameObject.SetActive(true);
+                _mainCam.gameObject.SetActive(false);
+                _gm.SetDelayTimer();
+                //_gm.halt = true;
             }
         }
 
