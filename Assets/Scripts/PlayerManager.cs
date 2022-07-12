@@ -216,7 +216,7 @@ public class PlayerManager : MonoBehaviour
            TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
            Debug.Log( (readyPlayers +":"+ _gm.GetTotalPlayers()));
            // && readyPlayers >= _gm.GetTotalPlayers()
-           if (_gm.GetStageNum() > 0 && _gm.GetStageNum() < 5)
+           if (_gm.GetStageNum() > 0 && _gm.GetStageNum() < 5 && _gm.halt == false)
            {
                //_photonView.RPC("startDelayTimer", RpcTarget.All);
                startDelayTimer();
@@ -298,6 +298,11 @@ public class PlayerManager : MonoBehaviour
         return playerNumber;
     }
 
+    public bool GetCompleted()
+    {
+        return completedStage;
+    }
+
     public void GoToSpawn(bool pressedButton = false)
     {
         if (pressedButton && !_spawnLocation.name.Contains("SpawnLocation") && _cs.GetCheckpointElimination(_spawnLocation.parent.gameObject))
@@ -357,6 +362,7 @@ public class PlayerManager : MonoBehaviour
                     //Debug.Log(t3);
                 }
             }
+            _gm.CompletePlayer();
         }
     }
     
