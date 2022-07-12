@@ -594,7 +594,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 else
                 {
                     GameObject.Find("TopCar" + i).SetActive(false);
-                    GameObject.Find("Podium"+i).SetActive(false);
+                    //GameObject.Find("Podium"+i).SetActive(false);
                 }
                 /*string t3;
                 TryGetTop3Players(out t3, i);
