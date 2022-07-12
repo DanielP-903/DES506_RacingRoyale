@@ -527,6 +527,7 @@ public class CarController : MonoBehaviour
             if (_gm.halt)
             {
                 _rigidbody.velocity = new Vector3(0, 0, 0);
+                _gm.SetDelayTimer();
             }
         }
 
