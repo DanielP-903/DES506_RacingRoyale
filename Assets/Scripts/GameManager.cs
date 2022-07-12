@@ -163,6 +163,12 @@ public class GameManager : MonoBehaviourPunCallbacks
         Spectate();
     }
 
+    public void CompletePlayer()
+    {
+        Spectate();
+        _photonView.gameObject.transform.position = new Vector3(1000,1000,1000);
+    }
+
     public int GetTotalPlayers()
     {
         return _totalPlayers;
@@ -228,14 +234,25 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
         Debug.Log("Index: "+index);
         spectateTarget = (Transform)spectateTargets[index];
-        if (spectateTarget.CompareTag("EliminationZone"))
+        string part1 = "";
+        string part2 = "";
+        if (!_eliminated)
         {
-            spectateText.text = "Spectating... The Wall";
+            part1 = "<color=green>Completed!</color>";
         }
         else
         {
-            spectateText.text = "Spectating... " +spectateTarget.GetComponent<PhotonView>().name;
+            part1 = "<color=red>Eliminated!</color>";
         }
+        if (spectateTarget.CompareTag("EliminationZone"))
+        {
+            part2 = "Spectating... The Wall";
+        }
+        else
+        {
+            part2 = "Spectating... " +spectateTarget.GetComponent<PhotonView>().name;
+        }
+        spectateText.text = part1 + "\n" + part2;
         if (spectateTarget != null && cvc != null)
         {
             cvc.m_Follow = spectateTarget;
@@ -406,19 +423,31 @@ public class GameManager : MonoBehaviourPunCallbacks
             }
         }
 
+        string part1 = "";
+        string part2 = "";
+        if (!_eliminated)
+        {
+            part1 = "<color=green>Completed!</color>";
+        }
+        else
+        {
+            part1 = "<color=red>Eliminated!</color>";
+        }
         if (!foundView)
         {
             if (GameObject.Find("Danger Wall") != null)
             {
                 spectateTarget = GameObject.Find("Danger Wall").transform;
-                spectateText.text = "Spectating... The Wall";
+                part2 = "Spectating... The Wall";
             }
         }
         else
         {
-            spectateText.text = "Spectating... " +spectateTarget.GetComponent<PhotonView>().Owner.NickName;
+            part2 = "Spectating... " +spectateTarget.GetComponent<PhotonView>().name;
         }
 
+        spectateText.text = part1 + "\n" + part2;
+        
         if (spectateTarget != null && cvc != null)
         {
             cvc.m_Follow = spectateTarget;

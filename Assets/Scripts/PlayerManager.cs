@@ -298,6 +298,11 @@ public class PlayerManager : MonoBehaviour
         return playerNumber;
     }
 
+    public bool GetCompleted()
+    {
+        return completedStage;
+    }
+
     public void GoToSpawn(bool pressedButton = false)
     {
         if (pressedButton && !_spawnLocation.name.Contains("SpawnLocation") && _cs.GetCheckpointElimination(_spawnLocation.parent.gameObject))
@@ -357,6 +362,7 @@ public class PlayerManager : MonoBehaviour
                     //Debug.Log(t3);
                 }
             }
+            _gm.CompletePlayer();
         }
     }
     
