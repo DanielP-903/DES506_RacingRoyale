@@ -822,14 +822,25 @@ public class GameManager : MonoBehaviourPunCallbacks
         // }
         //
         // yield return new WaitForEndOfFrame();
-        progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = PhotonNetwork.LevelLoadingProgress;
-        progressPanel.transform.GetChild(1).Rotate(Vector3.forward, -Time.deltaTime*500.0f, Space.World);
-        while (PhotonNetwork.LevelLoadingProgress < 1.0f)
+
+        if (progressPanel && progressPanel.transform.childCount > 0)
         {
-            progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = PhotonNetwork.LevelLoadingProgress;
-            yield return null;
+            progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value =
+                PhotonNetwork.LevelLoadingProgress;
+            progressPanel.transform.GetChild(1).Rotate(Vector3.forward, -Time.deltaTime * 500.0f, Space.World);
+            while (PhotonNetwork.LevelLoadingProgress < 1.0f)
+            {
+                progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value =
+                    PhotonNetwork.LevelLoadingProgress;
+                yield return null;
+            }
+
+            yield return new WaitForEndOfFrame();
         }
-        yield return new WaitForEndOfFrame();
+        else
+        {
+            yield return new WaitForEndOfFrame();
+        }
     }
     #endregion
 

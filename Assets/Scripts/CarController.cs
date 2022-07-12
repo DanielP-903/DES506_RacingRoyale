@@ -513,7 +513,7 @@ public class CarController : MonoBehaviour
 
     private IEnumerator DelayFlyBy()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.01f);
         _mainCam.gameObject.SetActive(false);
         flybyCam.gameObject.SetActive(true);
         flybyCam.GetComponent<CameraFlyBy>().activateFlyBy = true;
