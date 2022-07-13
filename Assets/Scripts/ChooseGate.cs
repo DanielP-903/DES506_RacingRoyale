@@ -62,7 +62,7 @@ public class ChooseGate : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player") && Vector3.Distance(transform.localPosition, _startPosition) < 0.1f)
         {
             if (!counterpartGate.GetComponent<ChooseGate>()) return;
             ChooseGate choosegate = counterpartGate.GetComponent<ChooseGate>();
