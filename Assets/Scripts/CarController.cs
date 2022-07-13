@@ -302,6 +302,7 @@ public class CarController : MonoBehaviour
                 if ( _boostsInAirLeft <=0) return;
                 _boostsInAirLeft--;
             }
+            if (!bot) audioManager.PlaySound("SuperBoostLoop");
             _vfxHandler.PlayVFX("BoostEffect");
             _vfxHandler.StartCoroutine(_vfxHandler.ActivateBoostEffect());
             _boostDelay = boostCooldown;
@@ -347,6 +348,7 @@ public class CarController : MonoBehaviour
 
             if (_hit.transform.CompareTag("BoostPad") && _padDelay <= 0)
             {
+                if (!bot) audioManager.PlaySound("SuperBoostLoop");
                 _vfxHandler.StartCoroutine(_vfxHandler.ActivateBoostEffect());
                 _padDelay = padCooldown;
                 if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
@@ -663,7 +665,7 @@ public class CarController : MonoBehaviour
             Debug.Log("HIT ANOTHER PLAYER WITH RIGIDBODY VELOCITY: " + _rigidbody.velocity);
             _vfxHandler.PlayVFXAtPosition("Impact", collision.contacts[0].point);
             int rand = Random.Range(1, 5);
-            audioManager.PlaySound("CarHit0" + rand);
+            if (!bot) audioManager.PlaySound("CarHit0" + rand);
         }
         else if (collision.transform.CompareTag("SpinningTop"))
         {
@@ -671,7 +673,7 @@ public class CarController : MonoBehaviour
             _rigidbody.velocity = -(direction.normalized * 30);
             _vfxHandler.PlayVFXAtPosition("SoftImpact", collision.contacts[0].point);
             int rand = Random.Range(1, 5);
-            audioManager.PlaySound("CarHit0" + rand);
+            if (!bot) audioManager.PlaySound("CarHit0" + rand);
         }
         // Method 1: Layers
         // if (collision.contacts[0].point.y > transform.position.y - 3.0f && collision.gameObject.layer != 9)
@@ -688,7 +690,7 @@ public class CarController : MonoBehaviour
             _rigidbody.velocity = -(direction.normalized * (bounciness/3));
             _vfxHandler.PlayVFXAtPosition("SoftImpact", collision.contacts[0].point);
             int rand = Random.Range(1, 5);
-            audioManager.PlaySound("CarHit0" + rand);
+            if (!bot) audioManager.PlaySound("CarHit0" + rand);
         }
     }
 
@@ -719,13 +721,13 @@ public class CarController : MonoBehaviour
             Debug.Log("Hit the Elimination Wall");
             _hitEliminationZone = true; 
             if (!bot) _playerManager.EliminateCurrentPlayer();
-            audioManager.PlaySound("CarEliminatedByWall");
+            if (!bot) audioManager.PlaySound("CarEliminatedByWall");
         }
 
         if (other.transform.CompareTag("ResetZone"))
         {
             ResetPlayer();
-            audioManager.PlaySound("CarEliminatedOffTrack");
+            if (!bot) audioManager.PlaySound("CarEliminatedOffTrack");
         }
     }
 

@@ -29,9 +29,9 @@ public class AudioManager : MonoBehaviour
 
     public void PlaySound(string soundName)
     {
-        if (audio.ContainsKey(name))
+        if (audio.ContainsKey(soundName))
         {
-            audio[name].Play();
+            audio[soundName].Play();
         }
         else
         {
@@ -51,7 +51,7 @@ public class AudioManager : MonoBehaviour
     void Update()
     {
         Vector2 horizontalSpeed = new Vector2(_rb.velocity.x, _rb.velocity.z);
-        _engineSounds.volume = Mathf.Min(horizontalSpeed.magnitude, 5f)/5;
+        _engineSounds.volume = Mathf.Min(horizontalSpeed.magnitude, 5f)/9;
         _engineSounds.pitch = Mathf.Max(Mathf.Min(horizontalSpeed.magnitude, 50) / 50, 1);
     }
 }
