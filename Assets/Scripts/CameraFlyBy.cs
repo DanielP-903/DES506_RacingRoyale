@@ -6,6 +6,7 @@ using UnityEngine;
 public class CameraFlyBy : MonoBehaviour
 {
     public bool activateFlyBy = false;
+    [SerializeField] private float maxFlyByPathPosition = 16.95f;
 
     private Animator _animator;
     private CinemachineVirtualCamera _vc;
@@ -25,7 +26,7 @@ public class CameraFlyBy : MonoBehaviour
             _animator.Play("FlyBy");
         }
 
-        if (_vc.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition > 16.95f)
+        if (_vc.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition > maxFlyByPathPosition)
         {
             activateFlyBy = false;
         }
