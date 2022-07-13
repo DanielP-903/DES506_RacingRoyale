@@ -336,10 +336,18 @@ public class GameManager : MonoBehaviourPunCallbacks
         finishedPlayers = 0;
 
         object finishedPlayersFromProps;
-        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("FinishedPlayers"+stageNum, out finishedPlayersFromProps))
+
+        if (PhotonNetwork.CurrentRoom != null && PhotonNetwork.CurrentRoom.CustomProperties != null)
         {
-            finishedPlayers = (int)finishedPlayersFromProps;
-            return true;
+            if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("FinishedPlayers" + stageNum, out finishedPlayersFromProps))
+            {
+                finishedPlayers = (int)finishedPlayersFromProps;
+                return true;
+            }
+        }
+        else
+        {
+            Debug.Log("TryGetFinishedPlayers: CurrentRoom and/or CurrentRoom.CustomProperties is null!");
         }
 
         return false;
@@ -365,10 +373,18 @@ public class GameManager : MonoBehaviourPunCallbacks
         elimPlayers = 0;
 
         object elimPlayersFromProps;
-        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("ElimPlayers", out elimPlayersFromProps))
+
+        if (PhotonNetwork.CurrentRoom != null && PhotonNetwork.CurrentRoom.CustomProperties != null)
         {
-            elimPlayers = (int)elimPlayersFromProps;
-            return true;
+            if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("ElimPlayers", out elimPlayersFromProps))
+            {
+                elimPlayers = (int)elimPlayersFromProps;
+                return true;
+            }
+        }
+        else
+        {
+            Debug.Log("TryGetElimPlayers: CurrentRoom and/or CurrentRoom.CustomProperties is null!");
         }
 
         return false;
@@ -477,6 +493,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         //Debug.Log("Running!");
 
+        Cursor.visible = false;
         SceneManager.sceneLoaded += LoadPlayerInLevel;
         DontDestroyOnLoad(this.gameObject);
         _timer = GameObject.Find("Timer").GetComponent<TextMeshProUGUI>();

@@ -74,10 +74,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="8392">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="8392" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -165,7 +165,7 @@
       <workItem from="1657701911825" duration="579000" />
       <workItem from="1657702530567" duration="1985000" />
       <workItem from="1657720156484" duration="1438000" />
-      <workItem from="1657722314093" duration="643000" />
+      <workItem from="1657722314093" duration="3760000" />
     </task>
     <servers />
   </component>
@@ -195,7 +195,7 @@
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <condition expression="SceneManager.GetActiveScene().name == &quot;WaitingArea&quot;" language="C#" />
           <url>file://$PROJECT_DIR$/Assets/Scripts/GameManager.cs</url>
-          <line>827</line>
+          <line>844</line>
           <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\GameManager.cs" initialLine="827" containingFunctionPresentation="method 'LoadingBar'">
             <startOffsets>
               <option value="-1" />

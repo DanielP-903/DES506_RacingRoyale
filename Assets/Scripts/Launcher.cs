@@ -151,6 +151,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         /// </summary>
         void Start()
         {
+            Cursor.visible = true;
             progressPanel.SetActive(false);
             optionsPanel.SetActive(false);
             controlsPanel.SetActive(false);

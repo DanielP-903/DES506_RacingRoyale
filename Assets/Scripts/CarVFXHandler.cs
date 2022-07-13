@@ -220,6 +220,14 @@ public class CarVFXHandler : MonoBehaviour
         {
             _dangerWallEffect.SetVector2("Alpha Values", new Vector2(0,0));
         }
+
+        if (SceneManager.GetActiveScene().name == "EndStage")
+        {
+            _dangerWallEffect.SetVector2("Alpha Values", new Vector2(0,0));
+            _speedCircleEffect.Stop();
+            _speedLinesEffect.Stop();
+            _dangerWallEffect.Stop(); // Note this might stop it from working entirely
+        }
     }
 
     // Update is called once per frame
