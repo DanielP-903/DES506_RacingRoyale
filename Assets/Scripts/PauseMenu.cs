@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
@@ -30,6 +31,8 @@ public class PauseMenu : MonoBehaviour
     [Tooltip("Dropdown for Resolution")]
     [SerializeField]
     private TMP_Dropdown resolution;
+
+    private bool escapeKey;
     // Start is called before the first frame update
     void Start()
     {
@@ -75,7 +78,17 @@ public class PauseMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (escapeKey && pausePanel.activeSelf)
+        {
+            
+        }
+    }
+    
+    public void Drift(InputAction.CallbackContext context)
+    {
+        float value = context.ReadValue<float>();
+        escapeKey = value > 0;
+        //Debug.Log("Escape detected");
     }
     
     public void Resume()
