@@ -523,6 +523,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void LoadPlayerInLevel(Scene scene, LoadSceneMode loadSceneMode)
     {
+        Debug.Log("Loading GameMaster Settings");
         if (PlayerPrefs.HasKey("MasterVol"))
         {
             mixer.SetFloat("Master", PlayerPrefs.GetFloat("MasterVol"));
@@ -550,6 +551,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             {
                 spectateText = spectateObject.GetComponent<TextMeshProUGUI>();
                 spectateText.gameObject.SetActive(false);
+                Debug.Log("Disabled Spectator Text");
             }
 
             _placeCounter = GameObject.Find("PlaceCounter").GetComponent<TextMeshProUGUI>();
