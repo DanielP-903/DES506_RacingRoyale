@@ -113,29 +113,32 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void LeaveRoom()
     {
         //Debug.Log("Player: "+_photonView.Owner.NickName + " Eliminated.");
-         
-        ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
+        if (_photonView)
         {
-            {"Eliminated", true}
-        };
-        _photonView.Owner.SetCustomProperties(props);
-        
-        GameManager.TryGetElimPlayers(out int num);
-        int elimPosition = GetTotalPlayers() - num;
-            
-        if (elimPosition < 5)
-        {
-            //Debug.Log("Finished at:" +elimPosition);
-            //GameManager.SetTop3Players(_photonView.Owner.NickName, elimPosition);
-            GameManager.SetTopPlayers(_photonView.Owner, elimPosition);
-            //string t3;
-            //GameManager.TryGetTop3Players(out t3, elimPosition);
-            //Debug.Log(t3);
+            ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
+            {
+                { "Eliminated", true }
+            };
+            _photonView.Owner.SetCustomProperties(props);
+
+            GameManager.TryGetElimPlayers(out int num);
+            int elimPosition = GetTotalPlayers() - num;
+
+            if (elimPosition < 5)
+            {
+                //Debug.Log("Finished at:" +elimPosition);
+                //GameManager.SetTop3Players(_photonView.Owner.NickName, elimPosition);
+                GameManager.SetTopPlayers(_photonView.Owner, elimPosition);
+                //string t3;
+                //GameManager.TryGetTop3Players(out t3, elimPosition);
+                //Debug.Log(t3);
+            }
+
+            num = num + 1;
+            GameManager.SetElimPlayers(num);
+            //EliminatePlayer(elimPosition);
         }
-            
-        num = num + 1;
-        GameManager.SetElimPlayers(num);
-        EliminatePlayer(elimPosition);
+
         PhotonNetwork.LeaveRoom();
     }
 
@@ -575,11 +578,6 @@ public class GameManager : MonoBehaviourPunCallbacks
             _photonView = player.GetComponent<PhotonView>();
             player.name = _photonView.Owner.NickName;
         }*/
-        if (!_photonView.gameObject.activeSelf)
-        {
-            _photonView.gameObject.SetActive(true);
-            _photonView.gameObject.GetComponent<PlayerManager>().SetUp();
-        }
 
         Debug.Log("Loading GameMaster Settings");
         if (PlayerPrefs.HasKey("MasterVol"))
@@ -604,6 +602,12 @@ public class GameManager : MonoBehaviourPunCallbacks
         // IF NOT PEDESTAL STAGE AND NOT ELIMINATED : CREATE PLAYER CAR AND SET PHOTON VIEW
         if (scene.name != "EndStage" && scene.name != "Launcher")
         {
+            if (!_photonView.gameObject.activeSelf)
+            {
+                _photonView.gameObject.SetActive(true);
+                _photonView.gameObject.GetComponent<PlayerManager>().SetUp();
+            }
+            
             GameObject spectateObject = GameObject.Find("SpectatorText");
             if (spectateObject)
             {
@@ -655,6 +659,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         // UPON REACHING PEDESTAL STAGE
         else if (scene.name == "EndStage")
         {
+            //PhotonNetwork.Destroy( _photonView.gameObject);
             //spectateMenu.SetActive(false);
             for (int i = 1; i < 5; i++)
             {
@@ -699,6 +704,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void Update()
     {
+        //Debug.Log("TotalPlayers: "+PhotonNetwork.CurrentRoom.Players.Count);
         if (spectateTarget == null && _eliminated)
         {
             Spectate();
@@ -734,7 +740,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 if (PhotonNetwork.CurrentRoom.IsOpen &&
                     (PhotonNetwork.ServerTimestamp - hit) / 1000f > waitingTime)
                 {
-                    _totalPlayers = PhotonNetwork.CurrentRoom.PlayerCount;
+                    _totalPlayers = PhotonNetwork.CurrentRoom.Players.Count;
                     //Debug.Log("TotalPlayers: "+_totalPlayers);
                     if (PhotonNetwork.IsMasterClient)
                     {
@@ -881,7 +887,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     IEnumerator LoadingBar() 
     {
-        Debug.Log("Progress: " + PhotonNetwork.LevelLoadingProgress);
+        //Debug.Log("Progress: " + PhotonNetwork.LevelLoadingProgress);
         // if (PhotonNetwork._AsyncLevelLoadingOperation != null)
         // {
         //     while (!PhotonNetwork._AsyncLevelLoadingOperation.isDone)

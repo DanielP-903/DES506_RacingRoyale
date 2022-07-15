@@ -33,10 +33,14 @@ public class PauseMenu : MonoBehaviour
     private TMP_Dropdown resolution;
 
     private bool escapeKey;
+    private bool lastKey;
+
+    private GameManager _gm;
     // Start is called before the first frame update
     void Start()
     {
-        Cursor.visible = true;
+        _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+        Cursor.visible = false;
         pausePanel.SetActive(false);
         optionsPanel.SetActive(false);
         controlsPanel.SetActive(false);
@@ -78,21 +82,27 @@ public class PauseMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (escapeKey && pausePanel.activeSelf)
+
+        if (escapeKey && !pausePanel.activeSelf && escapeKey != lastKey)
         {
-            
+            GoToMainMenu();
         }
+        else if (escapeKey && pausePanel.activeSelf && escapeKey != lastKey)
+        {
+            Resume();
+        }
+        escapeKey = lastKey;
     }
     
-    public void Drift(InputAction.CallbackContext context)
+
+    public void SetEscape(bool input)
     {
-        float value = context.ReadValue<float>();
-        escapeKey = value > 0;
-        //Debug.Log("Escape detected");
+        escapeKey = input;
     }
     
     public void Resume()
     {
+        Cursor.visible = false;
         pausePanel.SetActive(false);
         optionsPanel.SetActive(false);
         controlsPanel.SetActive(false);
@@ -100,6 +110,7 @@ public class PauseMenu : MonoBehaviour
 
     public void GoToMainMenu()
     {
+        Cursor.visible = true;
         pausePanel.SetActive(true);
         optionsPanel.SetActive(false);
         controlsPanel.SetActive(false);
@@ -109,6 +120,7 @@ public class PauseMenu : MonoBehaviour
     
     public void GoToOptions()
     {
+        Cursor.visible = true;
         pausePanel.SetActive(false);
         optionsPanel.SetActive(true);
         controlsPanel.SetActive(false);
@@ -118,11 +130,18 @@ public class PauseMenu : MonoBehaviour
 
     public void GoToControls()
     {
+        Cursor.visible = true;
         pausePanel.SetActive(false);
         optionsPanel.SetActive(false);
         controlsPanel.SetActive(true);
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(controlsPanel.transform.GetChild(1).gameObject);
+    }
+    
+    // QUIT APPLICATION
+    public void QuitGame()
+    {
+        _gm.LeaveRoom();
     }
     
     public void ChangeMaster(float newVol)
