@@ -112,6 +112,30 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void LeaveRoom()
     {
+        //Debug.Log("Player: "+_photonView.Owner.NickName + " Eliminated.");
+         
+        ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
+        {
+            {"Eliminated", true}
+        };
+        _photonView.Owner.SetCustomProperties(props);
+        
+        GameManager.TryGetElimPlayers(out int num);
+        int elimPosition = GetTotalPlayers() - num;
+            
+        if (elimPosition < 5)
+        {
+            //Debug.Log("Finished at:" +elimPosition);
+            //GameManager.SetTop3Players(_photonView.Owner.NickName, elimPosition);
+            GameManager.SetTopPlayers(_photonView.Owner, elimPosition);
+            //string t3;
+            //GameManager.TryGetTop3Players(out t3, elimPosition);
+            //Debug.Log(t3);
+        }
+            
+        num = num + 1;
+        GameManager.SetElimPlayers(num);
+        EliminatePlayer(elimPosition);
         PhotonNetwork.LeaveRoom();
     }
 
@@ -500,6 +524,13 @@ public class GameManager : MonoBehaviourPunCallbacks
         DontDestroyOnLoad(this.gameObject);
         _timer = GameObject.Find("Timer").GetComponent<TextMeshProUGUI>();
         GameObject.Find("PlaceCounter").SetActive(false);
+        GameObject spectateObject = GameObject.Find("SpectatorText");
+        if (spectateObject)
+        {
+            spectateText = spectateObject.GetComponent<TextMeshProUGUI>();
+            spectateText.gameObject.SetActive(false);
+            Debug.Log("Disabled Spectator Text");
+        }
         if (playerPrefab == null)
         {
             Debug.LogError("<Color=Red><a>Missing</a></Color> playerPrefab Reference. Please set it up in GameObject 'Game Manager'",this);
@@ -759,7 +790,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 
                 //Debug.Log("Name: "+SceneManager.GetActiveScene().name + " Stage: " + _stage + " Players Finished: "+(_totalPlayers - elimPlayers)+" Goal: 0");
                 //_stage == 2 && playersCompleted >= (float)_totalPlayers/16
-                if (_stage == 2 && playersCompleted >= (int)4)
+                if (_stage == 2 && (playersCompleted >= (int)4 || elimPlayers+playersCompleted >= _totalPlayers))
                 {
                     _stage++;
                     if (PhotonNetwork.IsMasterClient)
