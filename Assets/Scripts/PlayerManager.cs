@@ -254,7 +254,7 @@ public class PlayerManager : MonoBehaviour
             _cc.SetUp();
             
             CinemachineVirtualCamera cvc = mainCam.GetComponent<CinemachineVirtualCamera>();
-            Debug.Log("LoadingPlayer: "+cvc);
+            //Debug.Log("LoadingPlayer: "+cvc);
             var transform1 = transform;
             cvc.m_Follow = transform1;
             cvc.m_LookAt = transform1;
