@@ -237,22 +237,6 @@ public class PlayerManager : MonoBehaviour
         //Debug.Log("PlayerManger Loading Level");
         if (_photonView != null)
         {
-            _messageText = GameObject.Find("Message").GetComponent<TextMeshProUGUI>();
-            _messageText.color = Color.clear;
-            SetReadyPlayers(0, _gm.GetStageNum());
-            startBlocker = GameObject.Find("StartBlocker");
-            _cs = GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>();
-            startDelayText = GameObject.Find("Start Delay").GetComponent<TextMeshProUGUI>();
-            int readyPlayers;
-            TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
-            readyPlayers += 1;
-            SetReadyPlayers(readyPlayers, _gm.GetStageNum());
-            ready = true;
-            
-            transform.gameObject.GetComponent<PlayerPowerups>().SetUp();
-            transform.gameObject.GetComponent<CarVFXHandler>().SetUp();
-            _cc.SetUp();
-            
             CinemachineVirtualCamera cvc = mainCam.GetComponent<CinemachineVirtualCamera>();
             //Debug.Log("LoadingPlayer: "+cvc);
             var transform1 = transform;
@@ -279,8 +263,7 @@ public class PlayerManager : MonoBehaviour
                     source.clip = Resources.Load<AudioClip>("Audio/Music/MenuMusic1");
                     source.Play();
                 }
-                
-                if (SceneManager.GetActiveScene().name == "Stage1")
+                if (SceneManager.GetActiveScene().name == "Stage1" || SceneManager.GetActiveScene().name == "Stage2")
                 {
                     playerNumber = _gm.setPlayerNumber();
                     AudioSource source = Camera.main.GetComponent<AudioSource>();
@@ -292,9 +275,25 @@ public class PlayerManager : MonoBehaviour
                 {
                     EliminateCurrentPlayer();
                 }
+                int readyPlayers;
+                TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
+                readyPlayers += 1;
+                SetReadyPlayers(readyPlayers, _gm.GetStageNum());
+
+                transform.gameObject.GetComponent<PlayerPowerups>().SetUp();
+                transform.gameObject.GetComponent<CarVFXHandler>().SetUp();
+                _cc.SetUp();
+                SetReadyPlayers(0, _gm.GetStageNum());
+                startBlocker = GameObject.Find("StartBlocker");
+                _cs = GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>();
+                startDelayText = GameObject.Find("Start Delay").GetComponent<TextMeshProUGUI>();
+                _messageText = GameObject.Find("Message").GetComponent<TextMeshProUGUI>();
+                _messageText.color = Color.clear;
+                ready = true;
                 completedStage = false;
                 _spawnLocation = GameObject.Find("SpawnLocation" + playerNumber).transform;
                 GoToSpawn();
+                
                 //Debug.Log(_spawnLocation + "- Player: " + playerNumber + " Name: " +_photonView.Owner.NickName);
 
             }
@@ -365,7 +364,7 @@ public class PlayerManager : MonoBehaviour
             GameManager.TryGetFinishedPlayers(out int num, _gm.GetStageNum());
             num = num + 1;
             GameManager.SetFinishedPlayers(num,_gm.GetStageNum());
-            if (_gm.GetStageNum() == 4)
+            if (_gm.GetStageNum() == 2)
             {
                 elimPosition = num;
                 if (elimPosition < 5)
@@ -373,9 +372,9 @@ public class PlayerManager : MonoBehaviour
                     //Debug.Log("Finished at:" +elimPosition);
                     //GameManager.SetTop3Players(_photonView.Owner.NickName, elimPosition);
                     GameManager.SetTopPlayers(_photonView.Owner, elimPosition);
-                    //string t3;
-                    //GameManager.TryGetTop3Players(out t3, elimPosition);
-                    //Debug.Log(t3);
+                    /*Player t3;
+                    GameManager.TryGetTopPlayers(out t3, elimPosition);
+                    Debug.Log(t3.NickName);*/
                 }
             }
             _gm.CompletePlayer();
