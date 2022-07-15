@@ -20,6 +20,7 @@ public class SetWinnerName : MonoBehaviour
 
     private void Start()
     {
+        Cursor.visible = true;
         _mRend = transform.Find("CarMesh").GetComponent<MeshRenderer>();
         _mFilt = transform.Find("CarMesh").GetComponent<MeshFilter>();
     }

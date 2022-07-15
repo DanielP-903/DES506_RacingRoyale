@@ -263,7 +263,7 @@ public class PlayerManager : MonoBehaviour
                     source.clip = Resources.Load<AudioClip>("Audio/Music/MenuMusic1");
                     source.Play();
                 }
-                if (SceneManager.GetActiveScene().name == "Stage1" || SceneManager.GetActiveScene().name == "Stage2")
+                if (SceneManager.GetActiveScene().name == "Stage1")
                 {
                     playerNumber = _gm.setPlayerNumber();
                     AudioSource source = Camera.main.GetComponent<AudioSource>();
