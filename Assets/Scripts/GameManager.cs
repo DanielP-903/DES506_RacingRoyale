@@ -166,7 +166,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void CompletePlayer()
     {
         Spectate();
-        _photonView.gameObject.transform.position = new Vector3(1000,1000,1000);
+        //PhotonNetwork.Destroy(_photonView.gameObject);
+        _photonView.gameObject.SetActive(false);
+        //_photonView.gameObject.transform.position = new Vector3(1000,1000,1000);
     }
 
     public int GetTotalPlayers()
@@ -523,6 +525,31 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void LoadPlayerInLevel(Scene scene, LoadSceneMode loadSceneMode)
     {
+        /*if (playerPrefab == null)
+        {
+            Debug.LogError("<Color=Red><a>Missing</a></Color> playerPrefab Reference. Please set it up in GameObject 'Game Manager'",this);
+        }
+        else if (_eliminated)
+        {
+            Debug.Log("PlayerEliminated");
+            Spectate();
+        }
+        else 
+        {
+            //Debug.LogFormat("We are Instantiating LocalPlayer from {0}", Application.loadedLevelName);
+            // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
+            //PhotonNetwork.Instantiate(this.playerPrefab.name, GameObject.Find("SpawnLocation"+PhotonNetwork.CurrentRoom.PlayerCount).transform.position, Quaternion.identity, 0);
+            //Debug.Log("Player Number: "+PhotonNetwork.LocalPlayer.GetPlayerNumber()); //GetPlayerNumber()
+            GameObject player = PhotonNetwork.Instantiate(this.playerPrefab.name, GameObject.Find("SpawnLocation" + GetPlayerNumber()).transform.position, GameObject.Find("SpawnLocation" + GetPlayerNumber()).transform.rotation, 0);
+            _photonView = player.GetComponent<PhotonView>();
+            player.name = _photonView.Owner.NickName;
+        }*/
+        if (!_photonView.gameObject.activeSelf)
+        {
+            _photonView.gameObject.SetActive(true);
+            _photonView.gameObject.GetComponent<PlayerManager>().SetUp();
+        }
+
         Debug.Log("Loading GameMaster Settings");
         if (PlayerPrefs.HasKey("MasterVol"))
         {
@@ -712,7 +739,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 
                 if (_stage == 1 && playersCompleted >= (float)_totalPlayers/2)
                 {
-                    _stage++;
+                    _stage = 2;
                     SetFinishedPlayers(0, _stage);
                     if (PhotonNetwork.IsMasterClient)
                     {

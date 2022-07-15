@@ -201,6 +201,11 @@ public class CarController : MonoBehaviour
     
         void OnLevelWasLoaded()
         {
+            //SetUp();
+        }
+
+        public void SetUp()
+        {
             if (debug)
             {
                 Debug.Log("DEBUG MODE IS ACTIVE! (CarController)");
@@ -244,7 +249,7 @@ public class CarController : MonoBehaviour
             StartCoroutine(DelayFlyBy());
             
             _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
-            
+
         }
 
     #endregion
@@ -696,7 +701,7 @@ public class CarController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.transform.CompareTag("FinishLine") && !_passedFinishLine)
+        if (other.transform.CompareTag("FinishLine") && !_passedFinishLine && !bot)
         {
             // Passed finish line
             Debug.Log("Passed finish line!");

@@ -203,6 +203,11 @@ public class CarVFXHandler : MonoBehaviour
 
     void OnLevelWasLoaded()
     {
+        SetUp();
+    }
+
+    public void SetUp()
+    {
         GameObject canvas = GameObject.Find("Canvas");
 
         _wall = GameObject.FindGameObjectWithTag("EliminationZone");

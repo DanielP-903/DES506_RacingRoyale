@@ -90,6 +90,11 @@ public class PlayerPowerups : MonoBehaviour
 
     void OnLevelWasLoaded()
     {
+        SetUp();
+    }
+
+    public void SetUp()
+    {
         _carController = GetComponent<CarController>();
         _audioManager = GetComponent<CarController>().audioManager;
         _vfxHandler = GetComponent<CarVFXHandler>();
