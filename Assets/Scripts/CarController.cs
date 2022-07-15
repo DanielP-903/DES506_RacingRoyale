@@ -127,6 +127,7 @@ public class CarController : MonoBehaviour
     private bool _delayAirTime;
     private int _boostsInAirLeft = 1;
     private CameraFlyBy _cameraFlyBy;
+    private PauseMenu _pm;
 
     #endregion
    
@@ -215,6 +216,7 @@ public class CarController : MonoBehaviour
             GameObject checkpointObject = GameObject.Find("CheckpointSystem");
             _playerPowerups.powerupIcon = GameObject.FindGameObjectWithTag("PowerupIcon").gameObject.GetComponent<Image>();
             _playerPowerups.powerupIcon.gameObject.SetActive(false);
+            _pm = GameObject.Find("PauseMenu").GetComponent<PauseMenu>();
             if (checkpointObject != null)
             {
                 checkpoints = checkpointObject.GetComponent<CheckpointSystem>();
@@ -831,6 +833,13 @@ public class CarController : MonoBehaviour
         float value = context.ReadValue<float>();
         _activatePowerup = value > 0;
         //Debug.Log("Activate Powerup detected");
+    }
+    // Escape
+    public void Escape(InputAction.CallbackContext context)
+    {
+        float value = context.ReadValue<float>();
+        _pm.SetEscape(value > 0);
+        //Debug.Log("Escape detected");
     }
 
     #endregion
