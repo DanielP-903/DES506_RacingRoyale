@@ -578,11 +578,6 @@ public class GameManager : MonoBehaviourPunCallbacks
             _photonView = player.GetComponent<PhotonView>();
             player.name = _photonView.Owner.NickName;
         }*/
-        if (!_photonView.gameObject.activeSelf)
-        {
-            _photonView.gameObject.SetActive(true);
-            _photonView.gameObject.GetComponent<PlayerManager>().SetUp();
-        }
 
         Debug.Log("Loading GameMaster Settings");
         if (PlayerPrefs.HasKey("MasterVol"))
@@ -607,6 +602,12 @@ public class GameManager : MonoBehaviourPunCallbacks
         // IF NOT PEDESTAL STAGE AND NOT ELIMINATED : CREATE PLAYER CAR AND SET PHOTON VIEW
         if (scene.name != "EndStage" && scene.name != "Launcher")
         {
+            if (!_photonView.gameObject.activeSelf)
+            {
+                _photonView.gameObject.SetActive(true);
+                _photonView.gameObject.GetComponent<PlayerManager>().SetUp();
+            }
+            
             GameObject spectateObject = GameObject.Find("SpectatorText");
             if (spectateObject)
             {
