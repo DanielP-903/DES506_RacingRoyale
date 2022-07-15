@@ -111,7 +111,7 @@ public class PlayerPowerups : MonoBehaviour
         _punchLine = grappleLineObject.GetComponent<LineRenderer>();
         warpObject = transform.GetChild(4).gameObject;
         blastObject.SetActive(false);
-        Debug.Log("Blast object is active? " + blastObject.activeInHierarchy);
+        //Debug.Log("Blast object is active? " + blastObject.activeInHierarchy);
     }
 
     void FixedUpdate()
