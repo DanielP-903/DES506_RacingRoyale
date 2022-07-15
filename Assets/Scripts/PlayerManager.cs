@@ -229,6 +229,11 @@ public class PlayerManager : MonoBehaviour
 
     void OnLevelWasLoaded()
     {
+        SetUp();
+    }
+
+    public void SetUp()
+    {
         //Debug.Log("PlayerManger Loading Level");
         if (_photonView != null)
         {
@@ -243,6 +248,16 @@ public class PlayerManager : MonoBehaviour
             readyPlayers += 1;
             SetReadyPlayers(readyPlayers, _gm.GetStageNum());
             ready = true;
+            
+            transform.gameObject.GetComponent<PlayerPowerups>().SetUp();
+            transform.gameObject.GetComponent<CarVFXHandler>().SetUp();
+            _cc.SetUp();
+            
+            CinemachineVirtualCamera cvc = mainCam.GetComponent<CinemachineVirtualCamera>();
+            //Debug.Log("LoadingPlayer: "+cvc);
+            var transform1 = transform;
+            cvc.m_Follow = transform1;
+            cvc.m_LookAt = transform1;
             
             if ((SceneManager.GetActiveScene().name == "Launcher" || SceneManager.GetActiveScene().name == "EndStage"))
             {
