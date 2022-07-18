@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class BeachBall : MonoBehaviour
 {
+    [SerializeField] private float startForce = 35;
     private Vector3 startPos;
     private Rigidbody rb;
     
@@ -19,7 +20,7 @@ public class BeachBall : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (transform.position.y < 35)
+        if (transform.position.y < 20)
         {
             GoToSpawn();
         }
@@ -38,6 +39,6 @@ public class BeachBall : MonoBehaviour
         transform.position = startPos;
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-        rb.AddForce(Vector3.right, ForceMode.Impulse);
+        rb.AddForce(Vector3.forward * startForce, ForceMode.Impulse);
     }
 }
