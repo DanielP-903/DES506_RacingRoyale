@@ -33,23 +33,44 @@ public class MeshManager : MonoBehaviour
 
     public void nextSkin()
     {
-        meshMatNum++;
+        meshMatNum+=4;
         if (meshMatNum > meshArray.Length-1)
         {
-            meshMatNum = 0;
+            meshMatNum-=8;
         }
         setSkin(meshMatNum);
     }
 
     public void previousSkin()
     {
-        meshMatNum--;
+        meshMatNum-=4;
         if (meshMatNum < 0)
         {
-            meshMatNum = meshArray.Length-1;
+            meshMatNum+=8;
         }
         setSkin(meshMatNum);
     }
+    
+    public void nextColor()
+    {
+        meshMatNum++;
+        if (meshMatNum % 4 == 0)
+        {
+            meshMatNum -= 4;
+        }
+        setSkin(meshMatNum);
+    }
+
+    public void previousColor()
+    {
+        meshMatNum--;
+        if ((meshMatNum+1)%4 == 0)
+        {
+            meshMatNum += 4;
+        }
+        setSkin(meshMatNum);
+    }
+
 
     void setSkin(int value)
     {

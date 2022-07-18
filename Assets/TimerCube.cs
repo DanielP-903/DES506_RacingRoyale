@@ -7,7 +7,7 @@ public class TimerCube : MonoBehaviour
 {
     [SerializeField] private List<Material> materials = new List<Material>();
 
-    private Material _currentMaterial;
+    private MeshRenderer _meshRenderer;
 
     private PlayerManager _playerRef;
     private bool _hasFoundPlayer;
@@ -17,7 +17,7 @@ public class TimerCube : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _currentMaterial = GetComponent<MeshRenderer>().materials[1];
+        _meshRenderer = GetComponent<MeshRenderer>();
         StartCoroutine(WaitForPlayer());
         
     }
@@ -29,21 +29,31 @@ public class TimerCube : MonoBehaviour
         {
             if (_playerRef.startDelayText.text != "Go!")
                 _currentTimerValue = _playerRef.timer;
-
+            
             if (_currentTimerValue <= 3 && _currentTimerValue > 2)
             {
-                _currentMaterial = materials[0];
+                var meshMats = _meshRenderer.materials;
+                meshMats[1] = materials[0];
+                _meshRenderer.materials = meshMats; 
                 Debug.Log("Changed to material 1");
             }
             else if (_currentTimerValue <= 2 && _currentTimerValue > 1)
             {
-                _currentMaterial = materials[1];
+                var meshMats = _meshRenderer.materials;
+                meshMats[1] = materials[1];
+                _meshRenderer.materials = meshMats; 
                 Debug.Log("Changed to material 2");
             }
-            else
+            else if (_currentTimerValue <= 1 && _currentTimerValue > 0.05f)
             {              
-                _currentMaterial = materials[2];
+                var meshMats = _meshRenderer.materials;
+                meshMats[1] = materials[2];
+                _meshRenderer.materials = meshMats; 
                 Debug.Log("Changed to material 3");
+            }
+            else
+            {
+                Destroy(gameObject);
             }
             
         }
