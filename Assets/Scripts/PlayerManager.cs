@@ -130,6 +130,10 @@ public class PlayerManager : MonoBehaviour
                 skinNum = (int)skinNumFromProps;
                 Debug.Log("FoundSkinNum");
             }*/
+            if (skinNum > 3)
+            {
+                
+            }
             _mRend.material = GameObject.Find("DataManager").GetComponent<DataManager>().GetMats()[skinNum];
             _mFilt.mesh = GameObject.Find("DataManager").GetComponent<DataManager>().GetMesh()[skinNum];
         }
