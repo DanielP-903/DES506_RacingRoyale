@@ -27,6 +27,8 @@ public class PlayerManager : MonoBehaviour
     private TextMeshProUGUI _messageText;
     public TextMeshProUGUI startDelayText;
 
+    [HideInInspector] public float timer = 3;
+    
     private int playerNumber = 0;
     private bool completedStage = false;
     private bool eliminated = false;
@@ -436,6 +438,7 @@ public class PlayerManager : MonoBehaviour
         {
             startDelayText.text = timeLeft.ToString("F2");
             timeLeft -= 0.01f;
+            timer = timeLeft;
             yield return new WaitForSeconds(0.01f);
         }
         //Start Code Here
