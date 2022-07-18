@@ -16,6 +16,7 @@ public class MeshManager : MonoBehaviour
 
     private MeshRenderer carMeshRend;
     private MeshFilter carMeshFilt;
+    private GameObject flaps;
     private int meshMatNum = 0;
     
     // Start is called before the first frame update
@@ -26,9 +27,11 @@ public class MeshManager : MonoBehaviour
         matArray = dm.GetMats();
         carMeshRend = GameObject.Find("Selector Car").transform.Find("CarMesh").GetComponent<MeshRenderer>();
         carMeshFilt = GameObject.Find("Selector Car").transform.Find("CarMesh").GetComponent<MeshFilter>();
+        flaps = GameObject.Find("Selector Car").transform.Find("Flaps").gameObject;
         meshMatNum = PlayerPrefs.HasKey(playerMeshPrefKey) ? PlayerPrefs.GetInt(playerMeshPrefKey) : 0;
         playerCustomProperties = new ExitGames.Client.Photon.Hashtable();
         setSkin(meshMatNum);
+        flaps.SetActive(meshMatNum < 3);
     }
 
     public void nextSkin()
@@ -38,6 +41,8 @@ public class MeshManager : MonoBehaviour
         {
             meshMatNum-=8;
         }
+
+        flaps.SetActive(meshMatNum < 3);
         setSkin(meshMatNum);
     }
 
@@ -48,6 +53,8 @@ public class MeshManager : MonoBehaviour
         {
             meshMatNum+=8;
         }
+
+        flaps.SetActive(meshMatNum < 3);
         setSkin(meshMatNum);
     }
     
