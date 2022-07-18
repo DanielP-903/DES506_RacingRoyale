@@ -219,8 +219,8 @@ public class CarVFXHandler : MonoBehaviour
         _dangerWallEffect = _mainCam.transform.GetChild(4).gameObject.GetComponent<VisualEffect>();
         impactEffectObject.GetComponent<VisualEffect>();
         _speedCircleEffect.Stop();
+        _portalEffect.Stop();
 
-        
         if (SceneManager.GetActiveScene().name == "WaitingArea")
         {
             _dangerWallEffect.SetVector2("Alpha Values", new Vector2(0,0));
