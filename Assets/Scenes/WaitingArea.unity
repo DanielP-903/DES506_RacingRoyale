@@ -39079,13 +39079,21 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5256434471327534369, guid: 40daae4553a2ac34482c2c6405137304, type: 3}
+      propertyPath: m_Value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5256434471327534369, guid: 40daae4553a2ac34482c2c6405137304, type: 3}
+      propertyPath: m_FillRect
+      value: 
+      objectReference: {fileID: 3993519485043753849}
     - target: {fileID: 5256434471863928045, guid: 40daae4553a2ac34482c2c6405137304, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5256434471863928045, guid: 40daae4553a2ac34482c2c6405137304, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5608751721039562756, guid: 40daae4553a2ac34482c2c6405137304, type: 3}
       propertyPath: m_SizeDelta.x
@@ -39096,6 +39104,11 @@ PrefabInstance:
 --- !u!224 &3993519485043753848 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3993519484873524395, guid: 40daae4553a2ac34482c2c6405137304, type: 3}
+  m_PrefabInstance: {fileID: 3993519485043753847}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &3993519485043753849 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 488200628701611683, guid: 40daae4553a2ac34482c2c6405137304, type: 3}
   m_PrefabInstance: {fileID: 3993519485043753847}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5466885174710912811
