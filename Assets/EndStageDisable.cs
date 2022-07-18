@@ -16,10 +16,10 @@ public class EndStageDisable : MonoBehaviour
     void OnLevelWasLoaded()
     {
         _mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-        _speedLinesEffect = _mainCam.transform.GetChild(1).gameObject.GetComponent<VisualEffect>();
-        _speedCircleEffect = _mainCam.transform.GetChild(2).gameObject.GetComponent<VisualEffect>();
-        _dangerWallEffect = _mainCam.transform.GetChild(3).gameObject.GetComponent<VisualEffect>();
-        _portalEffect = _mainCam.transform.GetChild(4).gameObject.GetComponent<VisualEffect>();
+        _speedLinesEffect = _mainCam.transform.GetChild(2).gameObject.GetComponent<VisualEffect>();
+        _speedCircleEffect = _mainCam.transform.GetChild(3).gameObject.GetComponent<VisualEffect>();
+        _dangerWallEffect = _mainCam.transform.GetChild(4).gameObject.GetComponent<VisualEffect>();
+        _portalEffect = _mainCam.transform.GetChild(5).gameObject.GetComponent<VisualEffect>();
         _portalEffect.Stop();
 
         if (SceneManager.GetActiveScene().name == "EndStage")
