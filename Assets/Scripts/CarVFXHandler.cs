@@ -185,7 +185,11 @@ public class CarVFXHandler : MonoBehaviour
         GameObject canvas = GameObject.Find("Canvas");
         _dangerPressureImg = canvas.transform.GetChild(0).GetComponent<Image>();
 
-        _mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        var mainCamObject = GameObject.FindGameObjectWithTag("MainCamera");
+        
+        if (!mainCamObject) return;
+        
+        _mainCam = mainCamObject.GetComponent<Camera>();
         _speedLinesEffect = _mainCam.transform.GetChild(2).gameObject.GetComponent<VisualEffect>();
         _speedCircleEffect = _mainCam.transform.GetChild(3).gameObject.GetComponent<VisualEffect>();
         _dangerWallEffect = _mainCam.transform.GetChild(4).gameObject.GetComponent<VisualEffect>();
@@ -267,6 +271,9 @@ public class CarVFXHandler : MonoBehaviour
         float clampedVelocity = Mathf.Clamp((_rigidbody.velocity.magnitude * 2.2369362912f) - 60, 0, 100);
         _newAlpha.x = Mathf.Lerp(0.2f, 0, (100 - clampedVelocity) / 100);
         _newAlpha.y = Mathf.Lerp(0.5f, 0, (100 - clampedVelocity) / 100);
+
+        if (!_speedLinesEffect) return;
+        
         _speedLinesEffect.SetVector2("Alpha Values", _newAlpha);
     }
 }
