@@ -194,6 +194,7 @@ public class CarController : MonoBehaviour
 
             }
     
+            _pm = GameObject.Find("PauseMenu").GetComponent<PauseMenu>();
             _mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
             _virtualCamera = _mainCam.GetComponent<CinemachineVirtualCamera>();
             _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
