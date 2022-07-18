@@ -17,6 +17,7 @@ public class PlayerManager : MonoBehaviour
     private CarController _cc;
     private MeshRenderer _mRend;
     private MeshFilter _mFilt;
+    private GameObject _flaps;
     private Rigidbody _rb;
     private PlayerManager target;
     private GameManager _gm;
@@ -104,6 +105,7 @@ public class PlayerManager : MonoBehaviour
         this.gameObject.name = _photonView.Owner.NickName;
         _mRend = transform.Find("CarMesh").GetComponent<MeshRenderer>();
         _mFilt = transform.Find("CarMesh").GetComponent<MeshFilter>();
+        _flaps = transform.Find("Flaps").gameObject;
         object skinNumFromProps;
         /*if (_photonView.IsMine && !_photonView.Owner.CustomProperties.TryGetValue("Skin", out skinNumFromProps))
         {
@@ -130,8 +132,10 @@ public class PlayerManager : MonoBehaviour
                 skinNum = (int)skinNumFromProps;
                 Debug.Log("FoundSkinNum");
             }*/
+            
             _mRend.material = GameObject.Find("DataManager").GetComponent<DataManager>().GetMats()[skinNum];
             _mFilt.mesh = GameObject.Find("DataManager").GetComponent<DataManager>().GetMesh()[skinNum];
+            _flaps.SetActive(skinNum < 3);
         }
 
         if (_photonView.Owner == null)

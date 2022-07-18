@@ -908,13 +908,11 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (progressPanel && progressPanel.transform.childCount > 0)
         {
-            progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value =
-                PhotonNetwork.LevelLoadingProgress;
+            progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = PhotonNetwork.LevelLoadingProgress;
             progressPanel.transform.GetChild(1).Rotate(Vector3.forward, -Time.deltaTime * 500.0f, Space.World);
             while (PhotonNetwork.LevelLoadingProgress < 1.0f)
             {
-                progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value =
-                    PhotonNetwork.LevelLoadingProgress;
+                progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = PhotonNetwork.LevelLoadingProgress;
                 yield return null;
             }
 
