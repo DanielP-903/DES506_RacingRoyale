@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -195,9 +196,14 @@ public class CarController : MonoBehaviour
             }
     
             _pm = GameObject.Find("PauseMenu").GetComponent<PauseMenu>();
-            _mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-            _virtualCamera = _mainCam.GetComponent<CinemachineVirtualCamera>();
-            _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
+            var mainCameraObject = GameObject.FindGameObjectWithTag("MainCamera");
+            if (mainCameraObject)
+            {
+                _mainCam = mainCameraObject.GetComponent<Camera>();
+                _virtualCamera = _mainCam.GetComponent<CinemachineVirtualCamera>();
+                _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
+            }
+
             _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
         }
     
@@ -215,6 +221,7 @@ public class CarController : MonoBehaviour
 
             _passedFinishLine = false;
             GameObject checkpointObject = GameObject.Find("CheckpointSystem");
+            if (SceneManager.GetActiveScene().name == "Stage1" || SceneManager.GetActiveScene().name == "Stage2")
             _playerPowerups.powerupIcon = GameObject.FindGameObjectWithTag("PowerupIcon").gameObject.GetComponent<Image>();
             _playerPowerups.powerupIcon.gameObject.SetActive(false);
             _pm = GameObject.Find("PauseMenu").GetComponent<PauseMenu>();

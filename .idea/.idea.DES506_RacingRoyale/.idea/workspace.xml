@@ -11,14 +11,17 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Assets/BeachBall.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/42a5878ce129403083acccf18e43363f13a400/5b/bd1e880a/SetupCoroutine.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/42a5878ce129403083acccf18e43363f13a400/ed/a22ba502/MonoBehaviour.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/EndStageDisable.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/DialRotator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/GameManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Launcher.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/PlayerHUDController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/PlayerManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/PlayerNameInputField.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.0.2/InputSystem/Utilities/DelegateHelpers.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/TimerCube.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.universal@10.3.2/Runtime/ShadowUtils.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -75,10 +78,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="3612">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="3612" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -169,8 +172,11 @@
       <workItem from="1657722314093" duration="3760000" />
       <workItem from="1657804372082" duration="3253000" />
       <workItem from="1657873731781" duration="13264000" />
-      <workItem from="1658133006836" duration="4066000" />
-      <workItem from="1658140706211" duration="3001000" />
+      <workItem from="1658132647701" duration="626000" />
+      <workItem from="1658133727952" duration="479000" />
+      <workItem from="1658134311920" duration="1863000" />
+      <workItem from="1658136429448" duration="3153000" />
+      <workItem from="1658140233056" duration="5307000" />
     </task>
     <servers />
   </component>
@@ -193,5 +199,50 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/CarVFXHandler.cs</url>
+          <line>254</line>
+          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\CarVFXHandler.cs" initialLine="254" containingFunctionPresentation="method 'Update'">
+            <startOffsets>
+              <option value="8583" />
+            </startOffsets>
+            <endOffsets>
+              <option value="8608" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/GameManager.cs</url>
+          <line>910</line>
+          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\GameManager.cs" initialLine="910" containingFunctionPresentation="method 'LoadingBar'">
+            <startOffsets>
+              <option value="32365" />
+            </startOffsets>
+            <endOffsets>
+              <option value="32479" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/GameManager.cs</url>
+          <line>908</line>
+          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\GameManager.cs" initialLine="908" containingFunctionPresentation="method 'LoadingBar'">
+            <startOffsets>
+              <option value="32282" />
+            </startOffsets>
+            <endOffsets>
+              <option value="32299" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
