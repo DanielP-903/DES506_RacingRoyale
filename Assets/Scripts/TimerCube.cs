@@ -53,7 +53,7 @@ public class TimerCube : MonoBehaviour
             }
             else
             {
-                Destroy(gameObject);
+                Destroy(this.gameObject);
             }
             
         }

@@ -436,7 +436,7 @@ public class PlayerManager : MonoBehaviour
         yield return new WaitForSeconds(1);
         CameraFlyBy cfb = GameObject.FindGameObjectWithTag("FlyBy").GetComponent<CameraFlyBy>();
         yield return new WaitUntil(()=>!cfb.activateFlyBy);
-        startDelayText.color = Color.white;
+        startDelayText.color = Color.clear; // Changed to clear as rubics are in
         float timeLeft = _gm.GetStartDelay();
         while (timeLeft > 0)
         {
