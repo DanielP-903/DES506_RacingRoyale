@@ -427,6 +427,9 @@ public class PlayerManager : MonoBehaviour
 
     IEnumerator countdownTimer()
     {
+        yield return new WaitForSeconds(1);
+        CameraFlyBy cfb = GameObject.FindGameObjectWithTag("FlyBy").GetComponent<CameraFlyBy>();
+        yield return new WaitUntil(()=>!cfb.activateFlyBy);
         startDelayText.color = Color.white;
         float timeLeft = _gm.GetStartDelay();
         while (timeLeft > 0)
