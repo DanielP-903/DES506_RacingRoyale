@@ -885,44 +885,57 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     #region IEnumerators
 
+    // IEnumerator LoadingBar() 
+    // {
+    //     //Debug.Log("Progress: " + PhotonNetwork.LevelLoadingProgress);
+    //     // if (PhotonNetwork._AsyncLevelLoadingOperation != null)
+    //     // {
+    //     //     while (!PhotonNetwork._AsyncLevelLoadingOperation.isDone)
+    //     //     {
+    //     //         progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value =
+    //     //             PhotonNetwork._AsyncLevelLoadingOperation.progress;
+    //     //         
+    //     //         yield return null;
+    //     //     }
+    //     //     
+    //     // }
+    //     // else
+    //     // {
+    //     //     yield return null;
+    //     // }
+    //     //
+    //     // yield return new WaitForEndOfFrame();
+    //
+    //     if (progressPanel && progressPanel.transform.childCount > 0)
+    //     {
+    //         progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = PhotonNetwork.LevelLoadingProgress;
+    //         progressPanel.transform.GetChild(1).Rotate(Vector3.forward, -Time.deltaTime * 500.0f, Space.World);
+    //         while (PhotonNetwork.LevelLoadingProgress < 1.0f)
+    //         {
+    //             progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = PhotonNetwork.LevelLoadingProgress;
+    //             yield return null;
+    //         }
+    //
+    //         yield return new WaitForEndOfFrame();
+    //     }
+    //     else
+    //     {
+    //         yield return new WaitForEndOfFrame();
+    //     }
+    // }
+    
     IEnumerator LoadingBar() 
     {
-        //Debug.Log("Progress: " + PhotonNetwork.LevelLoadingProgress);
-        // if (PhotonNetwork._AsyncLevelLoadingOperation != null)
-        // {
-        //     while (!PhotonNetwork._AsyncLevelLoadingOperation.isDone)
-        //     {
-        //         progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value =
-        //             PhotonNetwork._AsyncLevelLoadingOperation.progress;
-        //         
-        //         yield return null;
-        //     }
-        //     
-        // }
-        // else
-        // {
-        //     yield return null;
-        // }
-        //
-        // yield return new WaitForEndOfFrame();
-
-        if (progressPanel && progressPanel.transform.childCount > 0)
+        while (PhotonNetwork.LevelLoadingProgress < 1.0f)
         {
             progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = PhotonNetwork.LevelLoadingProgress;
-            progressPanel.transform.GetChild(1).Rotate(Vector3.forward, -Time.deltaTime * 500.0f, Space.World);
-            while (PhotonNetwork.LevelLoadingProgress < 1.0f)
-            {
-                progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = PhotonNetwork.LevelLoadingProgress;
-                yield return null;
-            }
+            progressPanel.transform.GetChild(1).Rotate(Vector3.forward, -Time.deltaTime*500.0f, Space.World);
+            yield return null;
+        }
+        yield return new WaitForEndOfFrame();
 
-            yield return new WaitForEndOfFrame();
-        }
-        else
-        {
-            yield return new WaitForEndOfFrame();
-        }
     }
+    
     #endregion
 
 }

@@ -19,9 +19,8 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/PlayerHUDController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/PlayerManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/PlayerNameInputField.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/TimerCube.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/TimerCube.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.universal@10.3.2/Runtime/ShadowUtils.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Wave-Fun-ction/Assets/Scripts/Pathfinding.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -78,10 +77,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="3612">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="3612" />
+      <option name="pid" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -177,6 +176,8 @@
       <workItem from="1658134311920" duration="1863000" />
       <workItem from="1658136429448" duration="3153000" />
       <workItem from="1658140233056" duration="8187000" />
+      <workItem from="1658219315375" duration="994000" />
+      <workItem from="1658221135823" duration="3353000" />
     </task>
     <servers />
   </component>
@@ -204,19 +205,6 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/CarVFXHandler.cs</url>
-          <line>258</line>
-          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\CarVFXHandler.cs" initialLine="254" containingFunctionPresentation="method 'Update'">
-            <startOffsets>
-              <option value="8680" />
-            </startOffsets>
-            <endOffsets>
-              <option value="8705" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/Scripts/GameManager.cs</url>
           <line>910</line>
           <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\GameManager.cs" initialLine="910" containingFunctionPresentation="method 'LoadingBar'">
@@ -241,6 +229,19 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/PlayerPowerups.cs</url>
+          <line>235</line>
+          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\PlayerPowerups.cs" initialLine="179" containingFunctionPresentation="method 'PhysUpdatePowerups'">
+            <startOffsets>
+              <option value="9251" />
+            </startOffsets>
+            <endOffsets>
+              <option value="9265" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="9" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
