@@ -25,7 +25,7 @@ public class PlayerManager : MonoBehaviour
     private GameObject mainCam;
     private GameObject startBlocker;
     private CheckpointSystem _cs;
-    private MessageBox _ms;
+    private MessageBox _mb;
     private TextMeshProUGUI _messageText;
     public TextMeshProUGUI startDelayText;
 
@@ -293,7 +293,7 @@ public class PlayerManager : MonoBehaviour
                 SetReadyPlayers(0, _gm.GetStageNum());
                 startBlocker = GameObject.Find("StartBlocker");
                 _cs = GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>();
-                _ms = GameObject.Find("MessageBox").GetComponent<MessageBox>();
+                _mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
                 startDelayText = GameObject.Find("Start Delay").GetComponent<TextMeshProUGUI>();
                 _messageText = GameObject.Find("Message").GetComponent<TextMeshProUGUI>();
                 _messageText.color = Color.clear;
@@ -439,7 +439,8 @@ public class PlayerManager : MonoBehaviour
     [PunRPC]
     void sendMessage(string text)
     {
-        _ms.sendMessage(text);
+        Debug.Log("MessageBox: "+_mb+":"+text);
+        _mb.sendMessage(text);
     }
 
     IEnumerator countdownTimer()

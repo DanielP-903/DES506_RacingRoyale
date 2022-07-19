@@ -527,6 +527,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         DontDestroyOnLoad(this.gameObject);
         _timer = GameObject.Find("Timer").GetComponent<TextMeshProUGUI>();
         GameObject.Find("PlaceCounter").SetActive(false);
+        GameObject.Find("Message").SetActive(false);
         GameObject spectateObject = GameObject.Find("SpectatorText");
         if (spectateObject)
         {
