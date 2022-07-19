@@ -29,6 +29,8 @@ public class CarVFXHandler : MonoBehaviour
     private VisualEffect _dangerWallEffect;
     private VisualEffect _portalEffect;
     
+    private GameObject _outlineObject;
+    
     private CarController _carController;
     private Rigidbody _rigidbody;
     private Camera _mainCam;
@@ -195,6 +197,9 @@ public class CarVFXHandler : MonoBehaviour
         _dangerWallEffect = _mainCam.transform.GetChild(4).gameObject.GetComponent<VisualEffect>();
         _portalEffect = _mainCam.transform.GetChild(5).gameObject.GetComponent<VisualEffect>();
         
+        _outlineObject = transform.GetChild(6).gameObject;
+        _outlineObject.SetActive(false);
+        
         impactEffectObject.GetComponent<VisualEffect>();
         _speedCircleEffect.Stop();
         _portalEffect.Stop();
@@ -275,5 +280,10 @@ public class CarVFXHandler : MonoBehaviour
         if (!_speedLinesEffect) return;
         
         _speedLinesEffect.SetVector2("Alpha Values", _newAlpha);
+    }
+    
+    public void SetOutlineActive(bool active)
+    {
+        _outlineObject.SetActive(active);
     }
 }
