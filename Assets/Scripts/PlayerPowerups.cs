@@ -31,6 +31,7 @@ public class PlayerPowerups : MonoBehaviour
     public float punchTime = 2.0f;
     public float punchingForce = 10.0f;
     public float achievablePunchRange = 30.0f;
+    public float detectionRadius = 5.0f;
     
     [Header("Warp Portal")] 
     public float warpPortalTime = 15.0f;
@@ -66,6 +67,7 @@ public class PlayerPowerups : MonoBehaviour
     private LineRenderer _grappleLine;
     private LineRenderer _punchLine; // haha
     private AudioManager _audioManager;
+    private GameObject _currentTarget;
     
     // Start is called before the first frame update
     void Start()
@@ -143,6 +145,60 @@ public class PlayerPowerups : MonoBehaviour
             
             _punchLine.SetPositions(positions);
             punchGlove.transform.position = positions[1];
+        }
+
+        if (currentPowerupType == PowerupType.PunchingGlove)
+        {
+            // Detect opponent to grapple to
+            RaycastHit[] hits;
+            hits = Physics.SphereCastAll(transform.position, detectionRadius, transform.forward,  achievablePunchRange);
+            if (hits.Length > 0)
+            {
+                float distance = 1000000.0f;
+                _nearestHit = hits[0];
+                foreach (var hit in hits)
+                {
+                    if (hit.distance < distance && hit.transform.CompareTag("Player") && hit.transform.gameObject != transform.gameObject)
+                    {
+                        distance = hit.distance;
+                        _nearestHit = hit;
+                    }
+                }
+
+                if (_nearestHit.transform.CompareTag("Player") && _nearestHit.transform.gameObject != transform.gameObject)
+                {
+                    _nearestHit.transform.gameObject.GetComponent<CarVFXHandler>().SetOutlineActive(true);
+                    _currentTarget = _nearestHit.transform.gameObject;
+                    Debug.Log("HIT!!!");
+                }
+                else
+                {
+                    if (_currentTarget)
+                    {
+                        _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(false);
+                        _currentTarget = null;
+                    }
+
+                    Debug.Log("No hit!");
+                }
+            }
+            else
+            {
+                if (_currentTarget)
+                {
+                    _nearestHit.transform.gameObject.GetComponent<CarVFXHandler>().SetOutlineActive(false);
+                    _currentTarget = null;
+                }
+                Debug.Log("No hit!");
+            }
+        }
+        else
+        {
+            if (_currentTarget)
+            {
+                _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(false);
+                _currentTarget = null;
+            }
         }
 
         if (_grappling && _nearestHit.transform != null)
@@ -313,7 +369,7 @@ public class PlayerPowerups : MonoBehaviour
      {
          // Detect opponent to grapple to
          RaycastHit[] hits;
-         hits = Physics.SphereCastAll(transform.position, 5, transform.forward,  achievablePunchRange);
+         hits = Physics.SphereCastAll(transform.position, detectionRadius, transform.forward,  achievablePunchRange);
          if (hits.Length > 0)
          {
              float distance = 1000000.0f;
