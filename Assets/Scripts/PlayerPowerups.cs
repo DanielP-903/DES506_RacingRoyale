@@ -38,7 +38,8 @@ public class PlayerPowerups : MonoBehaviour
 
     [Header("Other")]
     public Image powerupIcon;
-    
+    public List<SO_Powerup> powerups = new List<SO_Powerup>();
+  
     private GameObject grappleLineObject;
     private GameObject punchObject;
     private GameObject punchGlove;
@@ -79,7 +80,7 @@ public class PlayerPowerups : MonoBehaviour
         wallObject = transform.GetChild(0).gameObject;
         blastObject = transform.GetChild(1).gameObject;
         _blastObjectCollider = blastObject.GetComponent<SphereCollider>();
-        powerupIcon = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(4).GetComponent<Image>();
+        powerupIcon = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(3).GetComponent<Image>();
         _powerupIconMask = powerupIcon.transform.GetChild(0).GetComponent<Image>();
         grappleLineObject = transform.GetChild(2).gameObject;
         _grappleLine = grappleLineObject.GetComponent<LineRenderer>();
@@ -147,11 +148,15 @@ public class PlayerPowerups : MonoBehaviour
             punchGlove.transform.position = positions[1];
         }
 
-        if (currentPowerupType == PowerupType.PunchingGlove)
+        if (currentPowerupType == PowerupType.PunchingGlove || currentPowerupType == PowerupType.GrapplingHook)
         {
             // Detect opponent to grapple to
             RaycastHit[] hits;
-            hits = Physics.SphereCastAll(transform.position, detectionRadius, transform.forward,  achievablePunchRange);
+            if (currentPowerupType == PowerupType.PunchingGlove)
+                hits = Physics.SphereCastAll(transform.position, detectionRadius, transform.forward,  achievablePunchRange);
+            else
+                hits = Physics.SphereCastAll(transform.position, detectionRadius, transform.forward,  achievableDistance);
+            
             if (hits.Length > 0)
             {
                 float distance = 1000000.0f;
@@ -167,15 +172,22 @@ public class PlayerPowerups : MonoBehaviour
 
                 if (_nearestHit.transform.CompareTag("Player") && _nearestHit.transform.gameObject != transform.gameObject)
                 {
-                    _nearestHit.transform.gameObject.GetComponent<CarVFXHandler>().SetOutlineActive(true);
                     _currentTarget = _nearestHit.transform.gameObject;
+                    if (currentPowerupType == PowerupType.PunchingGlove)
+                        _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(true);
+                    else
+                        _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(true);
                     Debug.Log("HIT!!!");
                 }
                 else
                 {
                     if (_currentTarget)
                     {
-                        _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(false);
+                        if (currentPowerupType == PowerupType.PunchingGlove)
+                            _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(false);
+                        else
+                            _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(false);
+
                         _currentTarget = null;
                     }
 
@@ -186,7 +198,10 @@ public class PlayerPowerups : MonoBehaviour
             {
                 if (_currentTarget)
                 {
-                    _nearestHit.transform.gameObject.GetComponent<CarVFXHandler>().SetOutlineActive(false);
+                    if (currentPowerupType == PowerupType.PunchingGlove)
+                        _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(false);
+                    else
+                        _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(false);
                     _currentTarget = null;
                 }
                 Debug.Log("No hit!");
@@ -196,7 +211,10 @@ public class PlayerPowerups : MonoBehaviour
         {
             if (_currentTarget)
             {
-                _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(false);
+                if (currentPowerupType == PowerupType.PunchingGlove)
+                    _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(false);
+                else
+                    _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(false);
                 _currentTarget = null;
             }
         }
@@ -541,6 +559,42 @@ public class PlayerPowerups : MonoBehaviour
          _boosting = false;
      }
 
+     public void DebugSetCurrentPowerup(PowerupType powerupType)
+     {
+         switch (powerupType)
+         {
+             case PowerupType.None:
+                 break;
+             case PowerupType.Superboost:
+                 currentPowerup = powerups[0];
+                 break;
+             case PowerupType.BouncyWallShield:
+                 currentPowerup = powerups[1];
+                 break;
+             case PowerupType.AirBlast:
+                 currentPowerup = powerups[2];
+                 break;
+             case PowerupType.GrapplingHook:
+                 currentPowerup = powerups[3];
+                 break;
+             case PowerupType.PunchingGlove:
+                 currentPowerup = powerups[4];
+                 break;
+             case PowerupType.WarpPortal:
+                 currentPowerup = powerups[5];
+                 break;
+             default:
+                 throw new ArgumentOutOfRangeException(nameof(powerupType), powerupType, null);
+         }
+         currentPowerupType = currentPowerup.powerupType;
+         powerupIcon.sprite = currentPowerup.powerupUIImage;
+         _powerupIconMask.sprite = currentPowerup.powerupUIImage;
+         powerupIcon.gameObject.SetActive(true);
+         _powerupIconMask.fillAmount = 0;
+         _vfxHandler.PlayVFXAtPosition("ItemBoxImpact", transform.position);
+         _audioManager.PlaySound("PowerUpCollected");
+     }
+     
      private void OnTriggerEnter(Collider collider)
      {
          if (collider.transform.CompareTag("Powerup") && _warpPortalTimer <= 0 && _wallShieldTimer <= 0 && !_boosting && !_grappling && !_punching && !_airBlasting && !_carController.bot)

@@ -30,7 +30,8 @@ public class CarVFXHandler : MonoBehaviour
     private VisualEffect _portalEffect;
     
     private GameObject _outlineObject;
-    
+    private GameObject _outlineObjectGrapple;
+ 
     private CarController _carController;
     private Rigidbody _rigidbody;
     private Camera _mainCam;
@@ -183,10 +184,10 @@ public class CarVFXHandler : MonoBehaviour
         {
             _wall = GameObject.FindGameObjectWithTag("EliminationZone");
         }
-
+        
         GameObject canvas = GameObject.Find("Canvas");
         _dangerPressureImg = canvas.transform.GetChild(0).GetComponent<Image>();
-
+        
         var mainCamObject = GameObject.FindGameObjectWithTag("MainCamera");
         
         if (!mainCamObject) return;
@@ -198,12 +199,14 @@ public class CarVFXHandler : MonoBehaviour
         _portalEffect = _mainCam.transform.GetChild(5).gameObject.GetComponent<VisualEffect>();
         
         _outlineObject = transform.GetChild(6).gameObject;
-        _outlineObject.SetActive(false);
+        _outlineObject.SetActive(false);        
+        _outlineObjectGrapple = transform.GetChild(7).gameObject;
+        _outlineObjectGrapple.SetActive(false);
         
         impactEffectObject.GetComponent<VisualEffect>();
         _speedCircleEffect.Stop();
         _portalEffect.Stop();
-
+        
         if (SceneManager.GetActiveScene().name == "WaitingArea")
         {
             _dangerWallEffect.SetVector2("Alpha Values", new Vector2(0,0));
@@ -285,5 +288,9 @@ public class CarVFXHandler : MonoBehaviour
     public void SetOutlineActive(bool active)
     {
         _outlineObject.SetActive(active);
+    }
+    public void SetGrappleOutlineActive(bool active)
+    {
+        _outlineObjectGrapple.SetActive(active);
     }
 }

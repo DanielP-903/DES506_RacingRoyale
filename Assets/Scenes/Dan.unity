@@ -32869,7 +32869,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-685236
+  m_Name: pb_Mesh-633360
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -33264,7 +33264,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh305678
+  m_Name: pb_Mesh288094
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -33560,7 +33560,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh305840
+  m_Name: pb_Mesh288256
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -34667,7 +34667,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh305464
+  m_Name: pb_Mesh287884
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -35606,7 +35606,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh305854
+  m_Name: pb_Mesh288270
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -36054,7 +36054,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh305570
+  m_Name: pb_Mesh287986
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -53028,7 +53028,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh305806
+  m_Name: pb_Mesh288222
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -54786,6 +54786,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3993519484535375949}
     m_Modifications:
+    - target: {fileID: 1230374126748676273, guid: 6a291ba819d5b8845868aa2154145ad0, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1230374126748676273, guid: 6a291ba819d5b8845868aa2154145ad0, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1394177388191395593, guid: 6a291ba819d5b8845868aa2154145ad0, type: 3}
       propertyPath: m_Pivot.x
       value: 1
@@ -54796,7 +54804,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1394177388191395593, guid: 6a291ba819d5b8845868aa2154145ad0, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1394177388191395593, guid: 6a291ba819d5b8845868aa2154145ad0, type: 3}
       propertyPath: m_AnchorMax.x
@@ -55164,11 +55172,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2774631455131860148, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000016970368
+      value: 0.00000001697037
       objectReference: {fileID: 0}
     - target: {fileID: 2774631455131860148, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0000000028400902
+      value: -0.0000000028400904
       objectReference: {fileID: 0}
     - target: {fileID: 2774631455131860148, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -55823,8 +55831,8 @@ RectTransform:
   - {fileID: 5677954472520773872}
   - {fileID: 7009481067540547200}
   - {fileID: 256253426128666133}
-  - {fileID: 891510425}
   - {fileID: 5928116243559991777}
+  - {fileID: 891510425}
   - {fileID: 3254667991747515786}
   - {fileID: 7815848819160882351}
   - {fileID: 4556684575125456382}
@@ -56367,7 +56375,7 @@ RectTransform:
   - {fileID: 6891804747833413178}
   - {fileID: 5352271336300377712}
   m_Father: {fileID: 3993519484535375949}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -57766,7 +57774,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Checkpoint Eliminated by Wall!
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -57793,7 +57801,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 53.9
+  m_fontSize: 36
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
