@@ -557,6 +557,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
+    
+    
     private void LoadPlayerInLevel(Scene scene, LoadSceneMode loadSceneMode)
     {
         /*if (playerPrefab == null)
@@ -593,6 +595,9 @@ public class GameManager : MonoBehaviourPunCallbacks
             mixer.SetFloat("Sound", PlayerPrefs.GetFloat("SoundVol"));
         }
         _totalBots = 0;
+        
+        // progressPanel = GameObject.FindGameObjectWithTag("LoadingBar");
+        // progressPanel.SetActive(false);
         //Debug.Log("GameManager Loading Level");
         if (scene.name == "Launcher")
         {
@@ -717,7 +722,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             if (PhotonNetwork.IsMasterClient)
             {
                 PhotonNetwork.CurrentRoom.IsOpen = false;
-                progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(9).gameObject;
+                progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(11).gameObject;
                 progressPanel.SetActive(true);
                 StartCoroutine(LoadingBar());
                 LoadArena("EndStage");
@@ -733,7 +738,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             case "WaitingArea":
                 if (!progressPanel)
                 {
-                    //Debug.Log("Found progress panel");
+                    Debug.LogWarning("Progress panel does not exist");
                 }
                 //_placeCounter.gameObject.SetActive(false);
                 CountdownTimer.TryGetStartTime(out var hit);
@@ -742,12 +747,13 @@ public class GameManager : MonoBehaviourPunCallbacks
                 {
                     _totalPlayers = PhotonNetwork.CurrentRoom.Players.Count;
                     //Debug.Log("TotalPlayers: "+_totalPlayers);
+                    
+                    progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(11).gameObject;
+                    progressPanel.SetActive(true);
+                    StartCoroutine(LoadingBar());
                     if (PhotonNetwork.IsMasterClient)
                     {
                         PhotonNetwork.CurrentRoom.IsOpen = false;
-                        progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(9).gameObject;
-                        progressPanel.SetActive(true);
-                        StartCoroutine(LoadingBar());
                         LoadArena("Stage1");
                     }
                 }
@@ -780,7 +786,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                     SetFinishedPlayers(0, _stage);
                     if (PhotonNetwork.IsMasterClient)
                     {
-                        progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(9).gameObject;
+                        progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(11).gameObject;
                         progressPanel.SetActive(true);
                         StartCoroutine(LoadingBar());
                         LoadArena("Stage2");
@@ -801,7 +807,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                     _stage++;
                     if (PhotonNetwork.IsMasterClient)
                     {
-                        progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(9).gameObject;
+                        progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(11).gameObject;
                         progressPanel.SetActive(true);
                         StartCoroutine(LoadingBar());
                         LoadArena("EndStage");

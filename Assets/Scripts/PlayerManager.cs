@@ -25,6 +25,7 @@ public class PlayerManager : MonoBehaviour
     private GameObject mainCam;
     private GameObject startBlocker;
     private CheckpointSystem _cs;
+    private MessageBox _ms;
     private TextMeshProUGUI _messageText;
     public TextMeshProUGUI startDelayText;
 
@@ -292,6 +293,7 @@ public class PlayerManager : MonoBehaviour
                 SetReadyPlayers(0, _gm.GetStageNum());
                 startBlocker = GameObject.Find("StartBlocker");
                 _cs = GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>();
+                _ms = GameObject.Find("MessageBox").GetComponent<MessageBox>();
                 startDelayText = GameObject.Find("Start Delay").GetComponent<TextMeshProUGUI>();
                 _messageText = GameObject.Find("Message").GetComponent<TextMeshProUGUI>();
                 _messageText.color = Color.clear;
@@ -417,6 +419,8 @@ public class PlayerManager : MonoBehaviour
             num = num + 1;
             GameManager.SetElimPlayers(num);
             _gm.EliminatePlayer(elimPosition);
+            string messageToBeSent = _photonView.name + " has been <color=red>Eliminated</color>";
+            _photonView.RPC("sendMessage", RpcTarget.All, messageToBeSent);
             //Debug.Log("Player: "+_photonView.Owner.NickName + " Eliminated with Position "+elimPosition + "/"+_gm.GetTotalPlayers());
             PhotonNetwork.Destroy(this.gameObject);
         }
@@ -429,6 +433,12 @@ public class PlayerManager : MonoBehaviour
     void startDelayTimer()
     {
         StartCoroutine(countdownTimer());
+    }
+
+    [PunRPC]
+    void sendMessage(string text)
+    {
+        _ms.sendMessage(text);
     }
 
     IEnumerator countdownTimer()
