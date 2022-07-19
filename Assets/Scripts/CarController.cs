@@ -613,7 +613,7 @@ public class CarController : MonoBehaviour
 
         if (_cameraFlyBy)
         {
-            Debug.Log("Activate FlyBy: " + _cameraFlyBy.activateFlyBy);
+            //Debug.Log("Activate FlyBy: " + _cameraFlyBy.activateFlyBy);
             if (!_cameraFlyBy.activateFlyBy)
             {
                 flybyCam.gameObject.SetActive(false);

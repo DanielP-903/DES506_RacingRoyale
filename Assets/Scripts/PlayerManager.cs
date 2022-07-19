@@ -126,7 +126,7 @@ public class PlayerManager : MonoBehaviour
                 skinNum = (int)_photonView.Owner.CustomProperties["Skin"];
             }
 
-            Debug.Log("FoundSkinNum: " + (int)_photonView.Owner.CustomProperties["Skin"]);
+            //Debug.Log("FoundSkinNum: " + (int)_photonView.Owner.CustomProperties["Skin"]);
             /*object skinNumFromProps;
             if (_photonView.Owner.CustomProperties.TryGetValue("Skin", out skinNumFromProps))
             {
@@ -219,10 +219,10 @@ public class PlayerManager : MonoBehaviour
 
        if (ready)
        {
-           Debug.Log("Ready!");
+           //Debug.Log("Ready!");
            int readyPlayers;
            TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
-           Debug.Log( (readyPlayers +":"+ _gm.GetTotalPlayers()));
+           //Debug.Log( (readyPlayers +":"+ _gm.GetTotalPlayers()));
            // && readyPlayers >= _gm.GetTotalPlayers()
            if (_gm.GetStageNum() > 0 && _gm.GetStageNum() < 5 && _gm.halt == false)
            {
@@ -301,6 +301,7 @@ public class PlayerManager : MonoBehaviour
                 completedStage = false;
                 _spawnLocation = GameObject.Find("SpawnLocation" + playerNumber).transform;
                 GoToSpawn();
+                _photonView.RPC("sendMessage", RpcTarget.All, _photonView.name + " has loaded.");
                 
                 //Debug.Log(_spawnLocation + "- Player: " + playerNumber + " Name: " +_photonView.Owner.NickName);
 
@@ -443,28 +444,35 @@ public class PlayerManager : MonoBehaviour
 
     IEnumerator countdownTimer()
     {
-        yield return new WaitForSeconds(1);
-        CameraFlyBy cfb = GameObject.FindGameObjectWithTag("FlyBy").GetComponent<CameraFlyBy>();
-        yield return new WaitUntil(()=>!cfb.activateFlyBy);
-        startDelayText.color = Color.clear; // Changed to clear as rubics are in
-        float timeLeft = _gm.GetStartDelay();
-        while (timeLeft > 0)
+        if (SceneManager.GetActiveScene().name != "WaitingArea")
         {
-            startDelayText.text = timeLeft.ToString("F2");
-            timeLeft -= 0.01f;
-            timer = timeLeft;
-            yield return new WaitForSeconds(0.01f);
+            yield return new WaitForSeconds(1);
+            CameraFlyBy cfb = GameObject.FindGameObjectWithTag("FlyBy").GetComponent<CameraFlyBy>();
+            yield return new WaitUntil(() => !cfb.activateFlyBy);
+
+
+            startDelayText.color = Color.clear; // Changed to clear as rubics are in
+            float timeLeft = _gm.GetStartDelay();
+            while (timeLeft > 0)
+            {
+                startDelayText.text = timeLeft.ToString("F2");
+                timeLeft -= 0.01f;
+                timer = timeLeft;
+                yield return new WaitForSeconds(0.01f);
+            }
+
+            //Start Code Here
+            startBlocker.SetActive(false);
+            startDelayText.text = "Go!";
+            //Debug.Log("StartedRACE!");
+            while (startDelayText.color.a > 0)
+            {
+                startDelayText.color = new Color(startDelayText.color.r, startDelayText.color.g, startDelayText.color.b,
+                    startDelayText.color.a - 0.01f);
+                yield return new WaitForSeconds(0.01f);
+            }
         }
-        //Start Code Here
-        startBlocker.SetActive(false);
-        startDelayText.text = "Go!";
-        Debug.Log("StartedRACE!");
-        while (startDelayText.color.a > 0)
-        {
-            startDelayText.color = new Color(startDelayText.color.r, startDelayText.color.g, startDelayText.color.b, startDelayText.color.a - 0.01f);
-            yield return new WaitForSeconds(0.01f);
-        }
-        
+
     }
     #endregion
 

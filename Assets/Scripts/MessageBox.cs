@@ -11,6 +11,8 @@ public class MessageBox : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        messages = new Queue<string>(5);
+        Debug.Log("Messages: "+messages);
         messageBoxes = transform.GetChild(0).GetChild(0).GetComponentsInChildren<TextMeshProUGUI>();
         foreach (TextMeshProUGUI tmp in messageBoxes)
         {

@@ -33,7 +33,7 @@ public class fadeScreen : MonoBehaviour
     IEnumerator FadeIn()
     {
         fadeScreenUI.color = new Color(fadeScreenUI.color.r, fadeScreenUI.color.g, fadeScreenUI.color.b, 1);
-        Debug.Log("Fading In");
+        //Debug.Log("Fading In");
         fadedOut = false;
         float vol = -80;
         float volStep = PlayerPrefs.GetFloat("MasterVol") / 25;

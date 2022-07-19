@@ -35,21 +35,21 @@ public class TimerCube : MonoBehaviour
                 var meshMats = _meshRenderer.materials;
                 meshMats[1] = materials[0];
                 _meshRenderer.materials = meshMats; 
-                Debug.Log("Changed to material 1");
+                //Debug.Log("Changed to material 1");
             }
             else if (_currentTimerValue <= 2 && _currentTimerValue > 1)
             {
                 var meshMats = _meshRenderer.materials;
                 meshMats[1] = materials[1];
                 _meshRenderer.materials = meshMats; 
-                Debug.Log("Changed to material 2");
+                //Debug.Log("Changed to material 2");
             }
             else if (_currentTimerValue <= 1 && _currentTimerValue > 0.05f)
             {              
                 var meshMats = _meshRenderer.materials;
                 meshMats[1] = materials[2];
                 _meshRenderer.materials = meshMats; 
-                Debug.Log("Changed to material 3");
+                //Debug.Log("Changed to material 3");
             }
             else
             {

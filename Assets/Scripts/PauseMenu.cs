@@ -184,7 +184,7 @@ public class PauseMenu : MonoBehaviour
         {
             PlayerPrefs.SetInt("FullScreen", 0);
         }
-        Debug.Log(resolution.value);
+        //Debug.Log(resolution.value);
         switch (resolution.value)
         {
             case 0:

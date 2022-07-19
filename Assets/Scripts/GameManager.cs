@@ -532,7 +532,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             spectateText = spectateObject.GetComponent<TextMeshProUGUI>();
             spectateText.gameObject.SetActive(false);
-            Debug.Log("Disabled Spectator Text");
+            //Debug.Log("Disabled Spectator Text");
         }
         if (playerPrefab == null)
         {
@@ -581,7 +581,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             player.name = _photonView.Owner.NickName;
         }*/
 
-        Debug.Log("Loading GameMaster Settings");
+        //Debug.Log("Loading GameMaster Settings");
         if (PlayerPrefs.HasKey("MasterVol"))
         {
             mixer.SetFloat("Master", PlayerPrefs.GetFloat("MasterVol"));
@@ -618,7 +618,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             {
                 spectateText = spectateObject.GetComponent<TextMeshProUGUI>();
                 spectateText.gameObject.SetActive(false);
-                Debug.Log("Disabled Spectator Text");
+                //Debug.Log("Disabled Spectator Text");
             }
 
             _placeCounter = GameObject.Find("PlaceCounter").GetComponent<TextMeshProUGUI>();

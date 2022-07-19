@@ -57,7 +57,7 @@ public class WallFollow : MonoBehaviour
         startPos = _bezierCurveGenerator.controlPoints[0].transform.position;
 
         _tValueMax = Mathf.Floor(_bezierCurveGenerator.controlPoints.Count / 3);
-        Debug.Log("_tValueMax = " + _tValueMax);
+        //Debug.Log("_tValueMax = " + _tValueMax);
     }
 
     public float GetStartDelayTimer()
