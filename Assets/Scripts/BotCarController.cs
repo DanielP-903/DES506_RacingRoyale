@@ -17,6 +17,7 @@ public class BotCarController : MonoBehaviour
     private Transform _carBody;
     private PhotonView _pv;
     private GameManager _gm;
+    private CheckpointSystem _cs;
     private Transform _spawnLocation;
     private int _botNum = -1;
     private bool touchingReset = false;
@@ -35,6 +36,7 @@ public class BotCarController : MonoBehaviour
             _pv = GetComponent<PhotonView>();
             _pv.name = this.gameObject.name;
             _cc = GetComponent<CarController>();
+            _cs = GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>();
             _rb = GetComponent<Rigidbody>();
             _layerMask = LayerMask.GetMask("Player", "Checkpoint");
             _layerMask = ~_layerMask;
@@ -46,6 +48,7 @@ public class BotCarController : MonoBehaviour
             _botNum = 1;
             _pv = GetComponent<PhotonView>();
             _cc = GetComponent<CarController>();
+            _cs = GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>();
             _rb = GetComponent<Rigidbody>();
             _layerMask = LayerMask.GetMask("Player", "Checkpoint");
             _layerMask = ~_layerMask;
@@ -91,16 +94,23 @@ public class BotCarController : MonoBehaviour
     }
     public void goToSpawn()
     {
-        touchingReset = false;
-        _rb.velocity = Vector3.zero;
-        _rb.angularVelocity = Vector3.zero;
+        if (!_spawnLocation.name.Contains("SpawnLocation") && _cs.GetCheckpointElimination(_spawnLocation.parent.gameObject))
+        {
+            PhotonNetwork.Destroy(this.gameObject);
+        }
+        else
+        {
+            touchingReset = false;
+            _rb.velocity = Vector3.zero;
+            _rb.angularVelocity = Vector3.zero;
 
-        Transform spawn = _spawnLocation;
-        Transform thisTransform = transform;
-        var rotation = spawn.rotation;
-        var position = spawn.position;
-        thisTransform.rotation = rotation;
-        thisTransform.position = position;
+            Transform spawn = _spawnLocation;
+            Transform thisTransform = transform;
+            var rotation = spawn.rotation;
+            var position = spawn.position;
+            thisTransform.rotation = rotation;
+            thisTransform.position = position;
+        }
     }
 
     public void setName(string newName = "NotSetProperly")
@@ -206,6 +216,7 @@ public class BotCarController : MonoBehaviour
             return false;
         }
     }
+    
     bool detectTooClose()
     {
         RaycastHit hit;
@@ -325,7 +336,7 @@ public class BotCarController : MonoBehaviour
         }
         else if (other.tag == "EliminationZone")
         {
-            Destroy(this.gameObject);
+            PhotonNetwork.Destroy(this.gameObject);
         }
     }
 }
