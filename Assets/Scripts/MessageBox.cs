@@ -18,15 +18,19 @@ public class MessageBox : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    void UpdateMessages()
     {
-        
+        int counter = 0;
+        foreach (string str in messages)
+        {
+            messageBoxes[counter].text = str;
+            counter++;
+        }
     }
-
-    [PunRPC]
-    void sendMessage(string text)
+    
+    public void sendMessage(string text)
     {
-        
+        messages.Enqueue(text);
+        UpdateMessages();
     }
 }
