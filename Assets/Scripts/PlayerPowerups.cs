@@ -80,7 +80,7 @@ public class PlayerPowerups : MonoBehaviour
         wallObject = transform.GetChild(0).gameObject;
         blastObject = transform.GetChild(1).gameObject;
         _blastObjectCollider = blastObject.GetComponent<SphereCollider>();
-        powerupIcon = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(3).GetComponent<Image>();
+        powerupIcon = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(4).GetComponent<Image>();
         _powerupIconMask = powerupIcon.transform.GetChild(0).GetComponent<Image>();
         grappleLineObject = transform.GetChild(2).gameObject;
         _grappleLine = grappleLineObject.GetComponent<LineRenderer>();
