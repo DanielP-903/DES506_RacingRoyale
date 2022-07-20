@@ -15,6 +15,8 @@ public class CarVFXHandler : MonoBehaviour
     
     [Header("Impact VFX")]
     public List<VisualEffectAsset> impactEffectAssets = new List<VisualEffectAsset>();
+    public List<VisualEffect> driftSmokeEffects = new List<VisualEffect>();
+    public ParticleSystem confettiParticleSystem;
     public GameObject impactEffectObject;
     public GameObject impactEffectPrefab;
     
@@ -28,6 +30,7 @@ public class CarVFXHandler : MonoBehaviour
     private VisualEffect _speedCircleEffect;
     private VisualEffect _dangerWallEffect;
     private VisualEffect _portalEffect;
+    
     
     private GameObject _outlineObject;
     private GameObject _outlineObjectGrapple;
@@ -119,37 +122,45 @@ public class CarVFXHandler : MonoBehaviour
             case "PortalEffect":
                 _portalEffect.Play();
                 break;
+            case "Confetti":
+                confettiParticleSystem.Play();
+                break;
+            case "DriftSmoke":
+                foreach (var effect in driftSmokeEffects)
+                {
+                    effect.Play();
+                }
+                break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
     }
 
-    public int GetVFXIndex(string vfxName)
+    private int GetVFXIndex(string vfxName)
     {
-        switch (vfxName)
+        return vfxName switch
         {
-            case "Impact":
-                return 0;
-            case "SoftImpact":
-                return 1;
-            case "GroundImpact":
-                return 2;
-            case "ItemBoxImpact":
-                return 3;
-            case "PowerImpact":
-                return 4;
-            case "PunchImpact":
-                return 5;
-            case "BoostEffect":
-                return -1;
-            case "DangerWallEffect":
-                return -1;
-            case "SpeedLinesEffect":
-                return -1;         
-            case "PortalEffect":
-                return -1;
-            default:
-                throw new ArgumentOutOfRangeException();
+            "Impact" => 0,
+            "SoftImpact" => 1,
+            "GroundImpact" => 2,
+            "ItemBoxImpact" => 3,
+            "PowerImpact" => 4,
+            "PunchImpact" => 5,
+            "BoostEffect" => -1,
+            "DangerWallEffect" => -1,
+            "SpeedLinesEffect" => -1,
+            "PortalEffect" => -1,
+            "Confetti" => -1,
+            "DriftSmoke" => -1,
+            _ => throw new ArgumentOutOfRangeException()
+        };
+    }
+
+    public void StopDriftEffects()
+    {
+        foreach (var effect in driftSmokeEffects)
+        {
+            effect.Stop();
         }
     }
     
@@ -211,6 +222,8 @@ public class CarVFXHandler : MonoBehaviour
         {
             _dangerWallEffect.SetVector2("Alpha Values", new Vector2(0,0));
         }
+        
+        StopDriftEffects();
     }
 
     void OnLevelWasLoaded()
