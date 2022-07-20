@@ -32,6 +32,8 @@ public class CarEffectManager : MonoBehaviourPunCallbacks, IPunObservable
             this.airblasting = (bool)stream.ReceiveNext();
             this.backWalling = (bool)stream.ReceiveNext();
         }
+        
+        
     }
     #endregion
     

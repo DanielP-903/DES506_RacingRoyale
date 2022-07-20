@@ -172,6 +172,14 @@ public class PlayerPowerups : MonoBehaviour
 
                 if (_nearestHit.transform.CompareTag("Player") && _nearestHit.transform.gameObject != transform.gameObject)
                 {
+                    if (_currentTarget)
+                    {
+                        if (currentPowerupType == PowerupType.PunchingGlove)
+                            _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(false);
+                        else
+                            _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(false);
+                    }
+
                     _currentTarget = _nearestHit.transform.gameObject;
                     if (currentPowerupType == PowerupType.PunchingGlove)
                         _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(true);
