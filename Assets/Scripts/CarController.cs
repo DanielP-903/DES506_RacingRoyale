@@ -477,19 +477,25 @@ public class CarController : MonoBehaviour
         
         if (_moveLeft) _rigidbody.AddForce(transform.right * (accelerationForce / 4), ForceMode.Acceleration);
         if (_moveRight) _rigidbody.AddForce(-transform.right * (accelerationForce / 4), ForceMode.Acceleration);
-
-        if (_moveLeft || _moveRight)
+  
+        if (_grounded)
         {
-            if (_rigidbody.velocity.magnitude * 2.2369362912f > 20)
+            if (_moveLeft || _moveRight)
+            {
+                if (_rigidbody.velocity.magnitude * 2.2369362912f > 20)
+                {
+                    _vfxHandler.PlayVFX("DriftSmoke");
+                }
+            }
+            else if (_drift)
             {
                 _vfxHandler.PlayVFX("DriftSmoke");
             }
+            else
+            {
+                _vfxHandler.StopDriftEffects();
+            }
         }
-        else if (_drift && _rigidbody.velocity.magnitude * 2.2369362912f > 10)
-        {
-            _vfxHandler.PlayVFX("DriftSmoke");
-
-        }       
         else
         {
             _vfxHandler.StopDriftEffects();
@@ -750,9 +756,9 @@ public class CarController : MonoBehaviour
         {
             // Hit elimination wall
             Debug.Log("Hit the Elimination Wall");
-            _hitEliminationZone = true; 
-            if (!bot) _playerManager.EliminateCurrentPlayer();
-            if (!bot) audioManager.PlaySound("CarEliminatedByWall");
+            //_hitEliminationZone = true; 
+            //if (!bot) _playerManager.EliminateCurrentPlayer();
+            //if (!bot) audioManager.PlaySound("CarEliminatedByWall");
         }
 
         if (other.transform.CompareTag("ResetZone"))
