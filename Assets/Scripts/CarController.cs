@@ -485,11 +485,15 @@ public class CarController : MonoBehaviour
                 _vfxHandler.PlayVFX("DriftSmoke");
             }
         }
+        else if (_drift && _rigidbody.velocity.magnitude * 2.2369362912f > 10)
+        {
+            _vfxHandler.PlayVFX("DriftSmoke");
+
+        }       
         else
         {
             _vfxHandler.StopDriftEffects();
         }
-        
     }    
 
     #endregion
