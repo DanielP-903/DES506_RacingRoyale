@@ -222,7 +222,7 @@ public class PlayerManager : MonoBehaviour
            //Debug.Log("Ready!");
            int readyPlayers;
            TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
-           //Debug.Log( (readyPlayers +":"+ _gm.GetTotalPlayers()));
+           Debug.Log( "Ready Players: "+readyPlayers +":"+ _gm.GetTotalPlayers());
            // && readyPlayers >= _gm.GetTotalPlayers()
            if (_gm.GetStageNum() > 0 && _gm.GetStageNum() < 5 && _gm.halt == false)
            {
@@ -257,7 +257,7 @@ public class PlayerManager : MonoBehaviour
                     Debug.Log("MainCamDestroyed");
                     Destroy(mainCam.gameObject);
                 }
-                Debug.Log("PlayerManagerDestroyed");
+                Debug.Log("PlayerDestroyed");
                 PhotonNetwork.Destroy(this.gameObject);
             }
             else
@@ -284,7 +284,7 @@ public class PlayerManager : MonoBehaviour
                 }
                 int readyPlayers;
                 TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
-                readyPlayers += 1;
+                readyPlayers = readyPlayers + 1;
                 SetReadyPlayers(readyPlayers, _gm.GetStageNum());
 
                 transform.gameObject.GetComponent<PlayerPowerups>().SetUp();
@@ -301,7 +301,7 @@ public class PlayerManager : MonoBehaviour
                 completedStage = false;
                 _spawnLocation = GameObject.Find("SpawnLocation" + playerNumber).transform;
                 GoToSpawn();
-                _photonView.RPC("sendMessage", RpcTarget.All, "<color=cyan>" + _photonView.name + "</color> has loaded.");
+                _photonView.RPC("sendMessage", RpcTarget.All, "<color=blue>" + _photonView.name + "</color> has loaded.");
                 
                 //Debug.Log(_spawnLocation + "- Player: " + playerNumber + " Name: " +_photonView.Owner.NickName);
 
@@ -423,6 +423,7 @@ public class PlayerManager : MonoBehaviour
             string messageToBeSent = _photonView.name + " has been <color=red>Eliminated</color>";
             _photonView.RPC("sendMessage", RpcTarget.All, messageToBeSent);
             //Debug.Log("Player: "+_photonView.Owner.NickName + " Eliminated with Position "+elimPosition + "/"+_gm.GetTotalPlayers());
+            Debug.Log("PlayerDestroyed");
             PhotonNetwork.Destroy(this.gameObject);
         }
     }
