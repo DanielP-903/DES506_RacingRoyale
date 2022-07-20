@@ -552,7 +552,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             GameObject player = PhotonNetwork.Instantiate(this.playerPrefab.name, GameObject.Find("SpawnLocation" + GetPlayerNumber()).transform.position, GameObject.Find("SpawnLocation" + GetPlayerNumber()).transform.rotation, 0);
             _photonView = player.GetComponent<PhotonView>();
             player.name = _photonView.Owner.NickName;
-            Debug.Log("GotPlayerView: "+_photonView);
+            //Debug.Log("GotPlayerView: "+_photonView);
         }
 
         if (PhotonNetwork.IsMasterClient)
