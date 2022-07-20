@@ -301,7 +301,7 @@ public class PlayerManager : MonoBehaviour
                 completedStage = false;
                 _spawnLocation = GameObject.Find("SpawnLocation" + playerNumber).transform;
                 GoToSpawn();
-                _photonView.RPC("sendMessage", RpcTarget.All, _photonView.name + " has loaded.");
+                _photonView.RPC("sendMessage", RpcTarget.All, "<color=cyan>" + _photonView.name + "</color> has loaded.");
                 
                 //Debug.Log(_spawnLocation + "- Player: " + playerNumber + " Name: " +_photonView.Owner.NickName);
 
