@@ -288,6 +288,7 @@ public class PlayerManager : MonoBehaviour
 
                 transform.gameObject.GetComponent<PlayerPowerups>().SetUp();
                 transform.gameObject.GetComponent<CarVFXHandler>().SetUp();
+                transform.gameObject.GetComponent<ServerSyncScript>().SetUp();
                 _cc.SetUp();
                 //SetReadyPlayers(0, _gm.GetStageNum());
                 startBlocker = GameObject.Find("StartBlocker");
