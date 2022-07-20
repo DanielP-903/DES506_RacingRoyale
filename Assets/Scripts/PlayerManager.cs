@@ -25,7 +25,6 @@ public class PlayerManager : MonoBehaviour
     private GameObject mainCam;
     private GameObject startBlocker;
     private CheckpointSystem _cs;
-    private MessageBox _mb;
     private TextMeshProUGUI _messageText;
     public TextMeshProUGUI startDelayText;
 
@@ -289,11 +288,11 @@ public class PlayerManager : MonoBehaviour
 
                 transform.gameObject.GetComponent<PlayerPowerups>().SetUp();
                 transform.gameObject.GetComponent<CarVFXHandler>().SetUp();
+                transform.gameObject.GetComponent<ServerSyncScript>().SetUp();
                 _cc.SetUp();
-                SetReadyPlayers(0, _gm.GetStageNum());
+                //SetReadyPlayers(0, _gm.GetStageNum());
                 startBlocker = GameObject.Find("StartBlocker");
                 _cs = GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>();
-                _mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
                 startDelayText = GameObject.Find("Start Delay").GetComponent<TextMeshProUGUI>();
                 _messageText = GameObject.Find("Message").GetComponent<TextMeshProUGUI>();
                 _messageText.color = Color.clear;
@@ -435,13 +434,6 @@ public class PlayerManager : MonoBehaviour
     void startDelayTimer()
     {
         StartCoroutine(countdownTimer());
-    }
-
-    [PunRPC]
-    void sendMessage(string text)
-    {
-        Debug.Log("MessageBox: "+_mb+":"+text);
-        _mb.sendMessage(text);
     }
 
     IEnumerator countdownTimer()

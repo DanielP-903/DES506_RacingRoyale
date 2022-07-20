@@ -45,7 +45,7 @@ public class MessageBox : MonoBehaviour
         int counter = 0;
         foreach (MessageStruct ms in messages)
         {
-            //Debug.Log("MessageCount: " + counter);
+            Debug.Log("MessageCount: " + counter);
             messageBoxes[counter].text = ms.messageText;
             Debug.Log("MSG BOX: "+messageBoxes[counter].text+" MSG: "+ms.messageText);
             counter++;
