@@ -31,39 +31,54 @@ public class DebugMenu : MonoBehaviour
     {
         // Draw any Controls inside the window here
         GUI.Label (new Rect (25, 25, 100, 30), "Powerups");
-
+        
+        
         if (GUI.Button (new Rect (25, 50, 200, 30), "Give Superboost")) 
         {
+            CheckForScript();
             // This code is executed when the Button is clicked
             playerPowerups.DebugSetCurrentPowerup(PowerupType.Superboost);
         }
         if (GUI.Button (new Rect (25, 80, 200, 30), "Give Bouncy Wall Shield")) 
         {
+            CheckForScript();
             // This code is executed when the Button is clicked
             playerPowerups.DebugSetCurrentPowerup(PowerupType.BouncyWallShield);
         }
         if (GUI.Button (new Rect (25, 110, 200, 30), "Give Air Blast")) 
         {
+            CheckForScript();
             // This code is executed when the Button is clicked
             playerPowerups.DebugSetCurrentPowerup(PowerupType.AirBlast);
         }
         if (GUI.Button (new Rect (25, 140, 200, 30), "Give Grappling Hook")) 
         {
+            CheckForScript();
             // This code is executed when the Button is clicked
             playerPowerups.DebugSetCurrentPowerup(PowerupType.GrapplingHook);
         }
         if (GUI.Button (new Rect (25, 170, 200, 30), "Give Punching Glove"))
         {
+            CheckForScript();
             // This code is executed when the Button is clicked
             playerPowerups.DebugSetCurrentPowerup(PowerupType.PunchingGlove);
         }
-        if (GUI.Button (new Rect (25, 200, 200, 30), "Give Warp Portal")) 
+        if (GUI.Button (new Rect (25, 200, 200, 30), "Give Warp Portal"))
         {
+            CheckForScript();
             // This code is executed when the Button is clicked
             playerPowerups.DebugSetCurrentPowerup(PowerupType.WarpPortal);
         }
         
         // Make the windows be draggable.
         GUI.DragWindow(new Rect(0, 0, 10000, 10000));
+    }
+
+    private void CheckForScript()
+    {
+        if (!playerPowerups)
+        {
+            playerPowerups = GetComponent<PlayerPowerups>();
+        }
     }
 }
