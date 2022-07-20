@@ -478,11 +478,22 @@ public class CarController : MonoBehaviour
         if (_moveLeft) _rigidbody.AddForce(transform.right * (accelerationForce / 4), ForceMode.Acceleration);
         if (_moveRight) _rigidbody.AddForce(-transform.right * (accelerationForce / 4), ForceMode.Acceleration);
 
+        if (_moveLeft || _moveRight)
+        {
+            if (_rigidbody.velocity.magnitude * 2.2369362912f > 20)
+            {
+                _vfxHandler.PlayVFX("DriftSmoke");
+            }
+        }
+        else
+        {
+            _vfxHandler.StopDriftEffects();
+        }
+        
     }    
 
     #endregion
 
-    
     #region Getters
 
     public float GetBoostDelay()
@@ -527,10 +538,6 @@ public class CarController : MonoBehaviour
     
     #endregion
 
-
-
-
-    
     private IEnumerator DelayFlyBy()
     {
         _gm.halt = true;
@@ -716,6 +723,7 @@ public class CarController : MonoBehaviour
     {
         if (other.transform.CompareTag("FinishLine") && !_passedFinishLine && !bot)
         {
+            _vfxHandler.PlayVFX("Confetti");
             // Passed finish line
             Debug.Log("Passed finish line!");
             _passedFinishLine = true;
@@ -724,7 +732,7 @@ public class CarController : MonoBehaviour
         
         if (other.transform.CompareTag("Checkpoint") && _passedCheckpoints.ContainsKey(other.gameObject) && !_passedCheckpoints[other.gameObject])
         {
-            other.GetComponent<Confetti>().ActivateConfetti();
+            _vfxHandler.PlayVFX("Confetti");
             _passedCheckpoints[other.gameObject] = true;
             _currentRespawnPoint = other.gameObject.transform;
             int playerNo = !bot ? _playerManager.GetPlayerNumber() : _botCarController.GetBotNumber();
