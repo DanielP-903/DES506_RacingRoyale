@@ -52,11 +52,11 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
+  <component name="RunManager" selected="Attach to Unity Editor.Unnamed">
     <configuration name="Standalone Player" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="$USER_HOME$/Downloads\RacingRoyale.exe" />
+      <option name="EXE_PATH" value="$USER_HOME$/Downloads/RacingRoyale.exe" />
       <option name="PROGRAM_PARAMETERS" value="" />
-      <option name="WORKING_DIRECTORY" value="C:\Users\2101721\Downloads" />
+      <option name="WORKING_DIRECTORY" value="C:/Users/2101721/Downloads" />
       <option name="PASS_PARENT_ENVS" value="1" />
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
       <method v="2" />
@@ -89,6 +89,23 @@
       </option>
       <method v="2" />
     </configuration>
+    <configuration name="Unnamed" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" nameIsGenerated="true" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="11676">
+      <option name="allowRunningInParallel" value="false" />
+      <option name="listenPortForConnections" value="false" />
+      <option name="pid" value="11676" />
+      <option name="projectPathOnTarget" />
+      <option name="selectedOptions">
+        <list />
+      </option>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Attach to Unity Editor.Unnamed" />
+      <item itemvalue="Attach to Unity Editor.Attach to Unity Editor" />
+      <item itemvalue="Attach to Unity Editor.Attach to Unity Editor &amp; Play" />
+      <item itemvalue="Standalone Player.Standalone Player" />
+      <item itemvalue="Standalone Player.UnitTests (batch mode)" />
+    </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -183,7 +200,7 @@
       <workItem from="1658234243754" duration="6020000" />
       <workItem from="1658305141504" duration="564000" />
       <workItem from="1658307167522" duration="13506000" />
-      <workItem from="1658391814525" duration="8930000" />
+      <workItem from="1658391814525" duration="12000000" />
     </task>
     <servers />
   </component>
@@ -222,19 +239,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="19" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/PlayerPowerups.cs</url>
-          <line>577</line>
-          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\PlayerPowerups.cs" initialLine="575" containingFunctionPresentation="method 'AirBlast'">
-            <startOffsets>
-              <option value="23100" />
-            </startOffsets>
-            <endOffsets>
-              <option value="23184" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="23" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

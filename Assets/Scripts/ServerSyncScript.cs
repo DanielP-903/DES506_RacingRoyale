@@ -53,6 +53,8 @@ public class ServerSyncScript : MonoBehaviour
                 break;
             case PowerupType.PunchingGlove:
                 obj = PhotonView.Find(id).transform.GetChild(3).gameObject;
+                obj = PhotonView.Find(id).transform.GetChild(2).gameObject;
+                
                 // if (subobj != null)
                 //     subobj.SetActive(true);
                 // else
@@ -79,15 +81,16 @@ public class ServerSyncScript : MonoBehaviour
     }
     
     [PunRPC]
-    void UpdateGrappleHook(LineRenderer line, Vector3[] positions)
+    void UpdateGrappleHook(int id, Vector3[] positions)
     {
-        line.SetPositions(positions);
+        PhotonView.Find(id).transform.GetChild(2).GetComponent<LineRenderer>().SetPositions(positions);
     }
 
     [PunRPC]
-    void UpdatePunchingGlove(LineRenderer line, Vector3[] positions)
+    void UpdatePunchingGlove(int id, Vector3[] positions)
     {
-        line.SetPositions(positions);
+        PhotonView.Find(id).transform.GetChild(2).GetComponent<LineRenderer>().SetPositions(positions);
+
     }
     
     // [PunRPC]
