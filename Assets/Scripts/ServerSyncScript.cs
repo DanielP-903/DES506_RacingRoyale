@@ -10,6 +10,7 @@ public class ServerSyncScript : MonoBehaviour
     private fadeScreen _fs;
     private GameManager _gm;
     private MessageBox _mb;
+    private fadeScreen _fs;
     private bool _mbFound = false;
     // Start is called before the first frame update
     /*void Start()
@@ -21,6 +22,7 @@ public class ServerSyncScript : MonoBehaviour
     {
         _fs = GameObject.Find("FadeScreen").GetComponent<fadeScreen>();
         _mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
+        _fs = GameObject.Find("FadeScreen").GetComponent<fadeScreen>();
         Debug.Log("MessageBase: "+ _mb);
         _mbFound = true;
     }
@@ -38,6 +40,13 @@ public class ServerSyncScript : MonoBehaviour
         //_mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
         Debug.Log("MessageBox: " + _mb + ":" + text);
         _mb.sendMessage(text);
+    }
+    
+    [PunRPC]
+    void fadeOut()
+    {
+        Debug.Log("FadeScreen: " + _fs);
+        _fs.fadeOut();
     }
 
     [PunRPC]
