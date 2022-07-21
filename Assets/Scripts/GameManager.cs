@@ -15,8 +15,10 @@ using TMPro;
 using Unity.Mathematics;
 using UnityEngine.Audio;
 using UnityEngine.Serialization;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
+using Cursor = UnityEngine.Cursor;
 using Random = UnityEngine.Random;
+using Slider = UnityEngine.UI.Slider;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
@@ -47,6 +49,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private int _elimPositon = 0;
     private int _playerNumber = 0 ;
     private int _totalBots = 0;
+    private GameObject[] botsStored;
     private Transform spectateTarget;
     private GameObject spectateMenu;
     private TextMeshProUGUI spectateText;
@@ -87,6 +90,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient)
         {
+            _photonView.RPC("sendMessage", RpcTarget.All, other.NickName + " has joined. "+PhotonNetwork.CurrentRoom.PlayerCount+"/"+PhotonNetwork.CurrentRoom.MaxPlayers);
+            PhotonNetwork.Destroy(botsStored[PhotonNetwork.CurrentRoom.PlayerCount - 1]);
             //Debug.LogFormat("OnPlayerEnteredRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
 
 
@@ -99,10 +104,12 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient)
         {
+            
             //Debug.LogFormat("OnPlayerLeftRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
 
 
             //LoadArena();
+            
         }
     }
 
@@ -558,6 +565,19 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient)
         {
+            Debug.Log("Max Bots: "+maxBots);
+            string s = Resources.Load<TextAsset>("Names").ToString();
+            string[] linesInFile = s.Split('\n');
+            botsStored = new GameObject[maxBots];
+            for (int i = 0; i < maxBots; i++)
+            {
+                GameObject bot = PhotonNetwork.Instantiate(this.botPrefab.name,
+                    GameObject.Find("SpawnLocation" + (i+2)).transform.position,
+                    GameObject.Find("SpawnLocation" + GetPlayerNumber()).transform.rotation, 0);
+                bot.name = "Bot " + linesInFile[Random.Range(0, linesInFile.Length - 1)];
+                botsStored[i] = bot;
+                //bot.GetComponent<BotCarController>().setName(linesInFile[Random.Range(0, linesInFile.Length-1)]);
+            }
             SetFinishedPlayers(0, _stage);
             SetElimPlayers(0);
             CountdownTimer.SetStartTime();
