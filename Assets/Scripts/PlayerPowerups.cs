@@ -152,7 +152,7 @@ public class PlayerPowerups : MonoBehaviour
             _punchLine.SetPositions(positions);
             punchGlove.transform.position = positions[1];
 
-            _photonView.RPC("UpdatePunchingGlove", RpcTarget.All, _punchLine, positions);
+            _photonView.RPC("UpdatePunchingGlove", RpcTarget.All, _photonView.ViewID, positions);
         }
 
         if (currentPowerupType == PowerupType.PunchingGlove || currentPowerupType == PowerupType.GrapplingHook)
@@ -247,7 +247,7 @@ public class PlayerPowerups : MonoBehaviour
             positions[1] = _nearestHit.transform.position;
                  
             _grappleLine.SetPositions(positions);
-            _photonView.RPC("UpdateGrappleHook", RpcTarget.All, _grappleLine, positions);
+            _photonView.RPC("UpdateGrappleHook", RpcTarget.All, _photonView.ViewID, positions);
 
             // Drag player towards grappled player
             if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
@@ -280,7 +280,6 @@ public class PlayerPowerups : MonoBehaviour
             if (!wallObject.activeInHierarchy)
             {
                 wallObject.SetActive(true);
-               //_photonView.RPC("TriggerPowerup", RpcTarget.All, wallObject, PowerupType.BouncyWallShield);
                 _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.BouncyWallShield, true);
             }
         }
@@ -319,7 +318,7 @@ public class PlayerPowerups : MonoBehaviour
         {
             _powerupIconMask.fillAmount = (airBlastTime - _airBlastTimer) / airBlastTime;
             _blastObjectCollider.radius = Mathf.Lerp(_blastObjectCollider.radius, airBlastRadius, Time.deltaTime);
-            _photonView.RPC("UpdateAirBlast", RpcTarget.All, _blastObjectCollider,  airBlastRadius);
+            //_photonView.RPC("UpdateAirBlast", RpcTarget.All, _blastObjectCollider,  airBlastRadius);
             if (_airBlastTimer <= 0)
             {
                 _powerupIconMask.fillAmount = 0;
@@ -397,12 +396,12 @@ public class PlayerPowerups : MonoBehaviour
             
          _punchLine.SetPositions(positions);
          punchGlove.transform.position = positions[1];
-         _photonView.RPC("UpdatePunchingGlove", RpcTarget.All, _punchLine, positions);
+         _photonView.RPC("UpdatePunchingGlove", RpcTarget.All, _photonView.ViewID, positions);
 
          _punching = false;
          punchObject.SetActive(false);
          punchGlove.SetActive(false);
-         _photonView.RPC("DisablePowerup", RpcTarget.All, punchObject, PowerupType.PunchingGlove, punchGlove);
+         _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.PunchingGlove, true);
 
          powerupIcon.gameObject.SetActive(false);
          _powerupIconMask.fillAmount = 0;
@@ -486,21 +485,21 @@ public class PlayerPowerups : MonoBehaviour
                  currentPowerupType = PowerupType.None;
                  Debug.Log("HIT!!!");
                  _audioManager.PlaySound("GrapplingHook");
-                 _photonView.RPC("TriggerPowerup", RpcTarget.All, grappleLineObject, PowerupType.GrapplingHook);
+                 _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.GrapplingHook, true);
 
              }
              else
              {
                  Debug.Log("No hit!");
                  grappleLineObject.SetActive(false);
-                 _photonView.RPC("DisablePowerup", RpcTarget.All, grappleLineObject, PowerupType.GrapplingHook);
+                 _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.GrapplingHook, false);
              }
          }
          else
          {
              Debug.Log("No hit!");
              grappleLineObject.SetActive(false);
-             _photonView.RPC("DisablePowerup", RpcTarget.All, grappleLineObject, PowerupType.GrapplingHook);
+             _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.GrapplingHook, false);
          }
      }
 
@@ -514,7 +513,7 @@ public class PlayerPowerups : MonoBehaviour
             _grappling = false;
             grappleLineObject.SetActive(false);
             powerupIcon.gameObject.SetActive(false);
-            _photonView.RPC("DisablePowerup", RpcTarget.All, grappleLineObject, PowerupType.GrapplingHook);
+            _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.GrapplingHook, false);
          }
      }
      private IEnumerator Punch()
@@ -526,7 +525,7 @@ public class PlayerPowerups : MonoBehaviour
             
          _punchLine.SetPositions(positions);
          punchGlove.transform.position = positions[1];
-         _photonView.RPC("UpdatePunchingGlove", RpcTarget.All, _punchLine, positions);
+         _photonView.RPC("UpdatePunchingGlove", RpcTarget.All, _photonView.ViewID, positions);
 
          _punching = true;
          yield return new WaitForSeconds(3.0f);
@@ -536,17 +535,18 @@ public class PlayerPowerups : MonoBehaviour
              Vector3[] positions2 = new Vector3[2];
              positions2[0] = transform.position + transform.forward;;
              positions2[1] = transform.position + transform.forward;
-             _photonView.RPC("UpdatePunchingGlove", RpcTarget.All, _punchLine, positions2);
     
              currentPowerupType = PowerupType.None;
              _punchLine.SetPositions(positions2);
+             _photonView.RPC("UpdatePunchingGlove", RpcTarget.All, _photonView.ViewID, positions2);
+             
              punchGlove.transform.position = positions2[1];
-             _photonView.RPC("ResetPunchingGlove", RpcTarget.All, punchGlove, positions2[1]);
+             //_photonView.RPC("ResetPunchingGlove", RpcTarget.All, punchGlove, positions2[1]);
 
              _punching = false;
              punchObject.SetActive(false);
              punchGlove.SetActive(false);
-             _photonView.RPC("DisablePowerup", RpcTarget.All, punchObject, PowerupType.PunchingGlove, punchGlove);
+             _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.PunchingGlove, false);
              powerupIcon.gameObject.SetActive(false);
          }
      }
@@ -557,17 +557,18 @@ public class PlayerPowerups : MonoBehaviour
          Vector3[] positions2 = new Vector3[2];
          positions2[0] = transform.position + transform.forward;;
          positions2[1] = transform.position + transform.forward;
-         _photonView.RPC("UpdatePunchingGlove", RpcTarget.All, _punchLine, positions2);
  
          currentPowerupType = PowerupType.None;
          _punchLine.SetPositions(positions2);
+         _photonView.RPC("UpdatePunchingGlove", RpcTarget.All, _photonView.ViewID, positions2);
+         
          punchGlove.transform.position = positions2[1];
-         _photonView.RPC("ResetPunchingGlove", RpcTarget.All, punchGlove, positions2[1]);
+         //_photonView.RPC("ResetPunchingGlove", RpcTarget.All, punchGlove, positions2[1]);
 
          _punching = false;
          punchObject.SetActive(false);
          punchGlove.SetActive(false);
-         _photonView.RPC("DisablePowerup", RpcTarget.All, punchObject, PowerupType.PunchingGlove, punchGlove);
+         _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.PunchingGlove, false);
          powerupIcon.gameObject.SetActive(false);
      }
      
@@ -575,7 +576,7 @@ public class PlayerPowerups : MonoBehaviour
      {
          blastObject.SetActive(true);
          _blastObjectCollider.radius = 2;
-         _photonView.RPC("TriggerPowerup", RpcTarget.All, blastObject, PowerupType.AirBlast);
+         _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.AirBlast, true);
          _airBlasting = true;
          _airBlastTimer = airBlastTime;
          currentPowerupType = PowerupType.None;
