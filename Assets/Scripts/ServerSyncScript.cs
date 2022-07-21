@@ -32,8 +32,9 @@ public class ServerSyncScript : MonoBehaviour
     }
 
     [PunRPC]
-    void TriggerPowerup(GameObject obj, PowerupType type, GameObject subobj = null)
+    void Powerup(int id, PowerupType type, bool active)//GameObject subobj = null) 
     {
+        GameObject obj = null;// = PhotonView.Find(id).transform.get;
         switch (type)
         {
             case PowerupType.None:
@@ -41,28 +42,34 @@ public class ServerSyncScript : MonoBehaviour
             case PowerupType.Superboost:
                 break;
             case PowerupType.BouncyWallShield:
-                obj.SetActive(true);
+                obj = PhotonView.Find(id).transform.GetChild(0).gameObject;
                 break;
             case PowerupType.AirBlast:
-                obj.SetActive(true);
+                obj = PhotonView.Find(id).transform.GetChild(1).gameObject;
                 obj.GetComponent<SphereCollider>().radius = 2;
                 break;
             case PowerupType.GrapplingHook:
-                obj.SetActive(true);
+                obj = PhotonView.Find(id).transform.GetChild(2).gameObject;
                 break;
             case PowerupType.PunchingGlove:
-                obj.SetActive(true);
-                if (subobj != null)
-                    subobj.SetActive(true);
-                else
-                    Debug.LogError("subobj in PunRPC function 'TriggerPowerup' is missing!");
+                obj = PhotonView.Find(id).transform.GetChild(3).gameObject;
+                // if (subobj != null)
+                //     subobj.SetActive(true);
+                // else
+                //     Debug.LogError("subobj in PunRPC function 'TriggerPowerup' is missing!");
                 break;
             case PowerupType.WarpPortal:
-                obj.SetActive(true);
+                obj = PhotonView.Find(id).transform.GetChild(4).gameObject;
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }
+        
+        if (obj)
+            obj.SetActive(active);
+        else
+            Debug.LogError("obj is null in 'TriggerPowerup'!");
+
     }
 
     [PunRPC]
@@ -83,44 +90,44 @@ public class ServerSyncScript : MonoBehaviour
         line.SetPositions(positions);
     }
     
-    [PunRPC]
-    void ResetPunchingGlove(GameObject obj, Vector3 pos)
-    {
-        obj.transform.position = pos;
-    }
+    // [PunRPC]
+    // void ResetPunchingGlove(GameObject obj, Vector3 pos)
+    // {
+    //     obj.transform.position = pos;
+    // }
 
-    [PunRPC]
-    void DisablePowerup(GameObject obj, PowerupType type, GameObject subobj = null)
-    {
-        switch (type)
-        {
-            case PowerupType.None:
-                break;
-            case PowerupType.Superboost:
-                break;
-            case PowerupType.BouncyWallShield:
-                obj.SetActive(false);
-                break;
-            case PowerupType.AirBlast:
-                obj.SetActive(false);
-                obj.GetComponent<SphereCollider>().radius = 2;
-                break;
-            case PowerupType.GrapplingHook:
-                obj.SetActive(false);
-                break;
-            case PowerupType.PunchingGlove:
-                obj.SetActive(false);
-                if (subobj != null)
-                    subobj.SetActive(false);
-                else
-                    Debug.LogError("subobj in PunRPC function 'DisablePowerup' is missing!");
-                break;
-            case PowerupType.WarpPortal:
-                obj.SetActive(false);
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(type), type, null);
-        }
-    }
+    // [PunRPC]
+    // void DisablePowerup(GameObject obj, PowerupType type, GameObject subobj = null)
+    // {
+    //     switch (type)
+    //     {
+    //         case PowerupType.None:
+    //             break;
+    //         case PowerupType.Superboost:
+    //             break;
+    //         case PowerupType.BouncyWallShield:
+    //             obj.SetActive(false);
+    //             break;
+    //         case PowerupType.AirBlast:
+    //             obj.SetActive(false);
+    //             obj.GetComponent<SphereCollider>().radius = 2;
+    //             break;
+    //         case PowerupType.GrapplingHook:
+    //             obj.SetActive(false);
+    //             break;
+    //         case PowerupType.PunchingGlove:
+    //             obj.SetActive(false);
+    //             if (subobj != null)
+    //                 subobj.SetActive(false);
+    //             else
+    //                 Debug.LogError("subobj in PunRPC function 'DisablePowerup' is missing!");
+    //             break;
+    //         case PowerupType.WarpPortal:
+    //             obj.SetActive(false);
+    //             break;
+    //         default:
+    //             throw new ArgumentOutOfRangeException(nameof(type), type, null);
+    //     }
+    // }
 
 }
