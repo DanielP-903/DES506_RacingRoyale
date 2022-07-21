@@ -12,6 +12,13 @@ public class DebugMenu : MonoBehaviour
     private Rect windowToggle = new Rect (20, 20, 250, 40);
     private bool showWindow = false;
 
+    
+    void OnLevelWasLoaded()
+    {
+        playerPowerups = GetComponent<PlayerPowerups>();
+    }
+
+    
     void OnGUI ()
     {
         windowToggle = GUI.Window (0, windowToggle, DebugToggleWindow, "");
@@ -48,6 +55,10 @@ public class DebugMenu : MonoBehaviour
         if (GUI.Button (new Rect (25, 110, 200, 30), "Give Air Blast")) 
         {
             CheckForScript();
+            if (!playerPowerups)
+            {
+                Debug.Log("OH NO THERES NO PLAYER POWERUPS AHHH");
+            }
             // This code is executed when the Button is clicked
             playerPowerups.DebugSetCurrentPowerup(PowerupType.AirBlast);
         }

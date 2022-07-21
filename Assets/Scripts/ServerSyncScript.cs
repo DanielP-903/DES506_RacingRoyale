@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class ServerSyncScript : MonoBehaviour
 {
+    private fadeScreen _fs;
     private GameManager _gm;
     private MessageBox _mb;
     private bool _mbFound = false;
@@ -18,11 +19,19 @@ public class ServerSyncScript : MonoBehaviour
 
     public void SetUp()
     {
+        _fs = GameObject.Find("FadeScreen").GetComponent<fadeScreen>();
         _mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
         Debug.Log("MessageBase: "+ _mb);
         _mbFound = true;
     }
-
+    
+    [PunRPC]
+    void fadeOut()
+    {
+        Debug.Log("FadeScreen: " + _fs);
+        _fs.fadeOut();
+    }
+    
     [PunRPC]
     void sendMessage(string text)
     {
