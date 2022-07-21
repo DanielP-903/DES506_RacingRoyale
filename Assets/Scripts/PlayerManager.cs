@@ -281,11 +281,7 @@ public class PlayerManager : MonoBehaviour
                 {
                     EliminateCurrentPlayer();
                 }
-                int readyPlayers;
-                TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
-                readyPlayers = readyPlayers + 1;
-                SetReadyPlayers(readyPlayers, _gm.GetStageNum());
-
+                
                 transform.gameObject.GetComponent<PlayerPowerups>().SetUp();
                 transform.gameObject.GetComponent<CarVFXHandler>().SetUp();
                 transform.gameObject.GetComponent<ServerSyncScript>().SetUp();
@@ -296,11 +292,17 @@ public class PlayerManager : MonoBehaviour
                 startDelayText = GameObject.Find("Start Delay").GetComponent<TextMeshProUGUI>();
                 _messageText = GameObject.Find("Message").GetComponent<TextMeshProUGUI>();
                 _messageText.color = Color.clear;
-                ready = true;
                 completedStage = false;
                 _spawnLocation = GameObject.Find("SpawnLocation" + playerNumber).transform;
                 GoToSpawn();
                 _photonView.RPC("sendMessage", RpcTarget.All, "<color=blue>" + _photonView.name + "</color> has loaded.");
+                
+                /*int readyPlayers;
+                TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
+                readyPlayers = readyPlayers + 1;
+                SetReadyPlayers(readyPlayers, _gm.GetStageNum());*/
+
+                ready = true;
                 
                 //Debug.Log(_spawnLocation + "- Player: " + playerNumber + " Name: " +_photonView.Owner.NickName);
 
@@ -442,9 +444,18 @@ public class PlayerManager : MonoBehaviour
         {
             yield return new WaitForSeconds(1);
             CameraFlyBy cfb = GameObject.FindGameObjectWithTag("FlyBy").GetComponent<CameraFlyBy>();
+            Debug.Log("CountDown Started");
             yield return new WaitUntil(() => !cfb.activateFlyBy);
+            Debug.Log("FlyBy Completed");
+            
+            int readyPlayers;
+            TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
+            readyPlayers = readyPlayers + 1;
+            SetReadyPlayers(readyPlayers, _gm.GetStageNum());
 
-
+            _photonView.RPC("sendMessage", RpcTarget.All, "<color=blue>" + _photonView.name + "</color> is ready. "+readyPlayers+"/"+_gm.GetTotalPlayers());
+            
+            yield return new WaitUntil(() => readyPlayers >= _gm.GetTotalPlayers());
             startDelayText.color = Color.clear; // Changed to clear as rubics are in
             float timeLeft = _gm.GetStartDelay();
             while (timeLeft > 0)
