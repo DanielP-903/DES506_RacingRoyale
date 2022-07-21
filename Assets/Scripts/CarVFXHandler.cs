@@ -42,7 +42,13 @@ public class CarVFXHandler : MonoBehaviour
     private Image _dangerPressureImg;
     private Vector2 _newAlpha;
     private VisualEffect _currentEffect;
-
+    private PhotonView _photonView;
+    private DataManager _dm;
+    private Mesh[] meshArray;
+    private Material[] matArray;
+    
+    
+    
     #region VFX-Activation
 
     public IEnumerator ActivateBoostEffect()
@@ -185,12 +191,17 @@ public class CarVFXHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _photonView = GetComponent<PhotonView>();
+    
+        _dm = GameObject.Find("DataManager").GetComponent<DataManager>();
+        meshArray = _dm.GetMesh();
+        matArray = _dm.GetMats();
+        
         _carController = GetComponent<CarController>();
         _rigidbody = GetComponent<Rigidbody>();
 
         _currentEffect = impactEffectObject.GetComponent<VisualEffect>();
         
-
         if (_carController.debug)
         {
             _wall = GameObject.FindGameObjectWithTag("EliminationZone");
@@ -222,7 +233,13 @@ public class CarVFXHandler : MonoBehaviour
         {
             _dangerWallEffect.SetVector2("Alpha Values", new Vector2(0,0));
         }
+
+
+        _outlineObject.GetComponent<MeshFilter>().sharedMesh = meshArray[(int)PhotonNetwork.LocalPlayer.CustomProperties["Skin"]]; 
+        _outlineObjectGrapple.GetComponent<MeshFilter>().sharedMesh = meshArray[(int)PhotonNetwork.LocalPlayer.CustomProperties["Skin"]];
         
+        _photonView.RPC("UpdateOutlineMeshes", RpcTarget.All, _photonView.ViewID, (int)PhotonNetwork.LocalPlayer.CustomProperties["Skin"]);
+
         StopDriftEffects();
     }
 
