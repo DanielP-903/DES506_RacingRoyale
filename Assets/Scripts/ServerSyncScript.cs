@@ -28,4 +28,8 @@ public class ServerSyncScript : MonoBehaviour
         Debug.Log("MessageBox: " + _mb + ":" + text);
         _mb.sendMessage(text);
     }
+
+    [PunRPC]
+    void Trigger
+    
 }
