@@ -300,10 +300,10 @@ public class PlayerManager : MonoBehaviour
                 /*int readyPlayers;
                 TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
                 readyPlayers = readyPlayers + 1;
-                SetReadyPlayers(readyPlayers, _gm.GetStageNum());
+                SetReadyPlayers(readyPlayers, _gm.GetStageNum());*/
 
                 ready = true;
-                */
+                
                 //Debug.Log(_spawnLocation + "- Player: " + playerNumber + " Name: " +_photonView.Owner.NickName);
 
             }
@@ -444,15 +444,15 @@ public class PlayerManager : MonoBehaviour
         {
             yield return new WaitForSeconds(1);
             CameraFlyBy cfb = GameObject.FindGameObjectWithTag("FlyBy").GetComponent<CameraFlyBy>();
+            Debug.Log("CountDown Started");
             yield return new WaitUntil(() => !cfb.activateFlyBy);
+            Debug.Log("FlyBy Completed");
             
             int readyPlayers;
             TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
             readyPlayers = readyPlayers + 1;
             SetReadyPlayers(readyPlayers, _gm.GetStageNum());
 
-            ready = true;
-            
             _photonView.RPC("sendMessage", RpcTarget.All, "<color=blue>" + _photonView.name + "</color> is ready. "+readyPlayers+"/"+_gm.GetTotalPlayers());
             
             yield return new WaitUntil(() => readyPlayers >= _gm.GetTotalPlayers());
