@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +13,12 @@ public class DebugMenu : MonoBehaviour
     private Rect windowToggle = new Rect (20, 20, 250, 40);
     private bool showWindow = false;
 
-    
+    private void Start()
+    {
+        playerPowerups = GetComponent<PlayerPowerups>();
+    }
+
+
     void OnLevelWasLoaded()
     {
         playerPowerups = GetComponent<PlayerPowerups>();

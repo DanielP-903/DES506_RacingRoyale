@@ -70,6 +70,10 @@ public class MessageBox : MonoBehaviour
 
     IEnumerator fadeMessage(MessageStruct trackedMessage)
     {
+        if (messageBoxes.Length < 1)
+        {
+            messageBoxes = transform.GetChild(0).GetChild(0).GetComponentsInChildren<TextMeshProUGUI>();
+        }
         int counter = 0;
         TextMeshProUGUI trackedTMP = null;
         foreach (MessageStruct ms in messages)
