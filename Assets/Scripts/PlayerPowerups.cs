@@ -682,7 +682,7 @@ public class PlayerPowerups : MonoBehaviour
          if (collider.transform.CompareTag("PunchingGlove") && collider.transform.parent.gameObject != transform.gameObject)
          {
              Vector3 direction = collider.transform.position - transform.position;
-              _rigidbody.velocity = -(direction.normalized * punchingForce); //Time.fixedDeltaTime * 50;
+             _rigidbody.velocity = -(direction.normalized * punchingForce); //Time.fixedDeltaTime * 50;
              //_rigidbody.AddForce(-(direction.normalized * punchingForce)); 
              Debug.Log("Ouch!! Hit with velocity: " + _rigidbody.velocity);
              collider.transform.parent.GetComponent<PlayerPowerups>().DetectPunch();

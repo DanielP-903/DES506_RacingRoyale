@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -115,7 +116,8 @@ public class CarController : MonoBehaviour
     private CinemachineVirtualCamera _virtualCamera;
     private CinemachineImpulseSource _impulseSource;
     private GameManager _gm;
-    
+    private PhotonView _photonView;
+
     #endregion
 
     #region Misc
@@ -205,6 +207,8 @@ public class CarController : MonoBehaviour
             }
 
             _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+            _photonView = GetComponent<PhotonView>();
+
         }
     
         void OnLevelWasLoaded()
@@ -707,6 +711,8 @@ public class CarController : MonoBehaviour
             _vfxHandler.PlayVFXAtPosition("Impact", collision.contacts[0].point);
             int rand = Random.Range(1, 5);
             if (!bot) audioManager.PlaySound("CarHit0" + rand);
+            collision.gameObject.GetComponent<Rigidbody>().velocity = (direction.normalized * bounciness);
+            //_photonView.RPC("PlayerHit", RpcTarget.All, _photonView.ViewID, direction, collision.contacts[0].point);
         }
         else if (collision.transform.CompareTag("SpinningTop"))
         {

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Photon.Pun;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class ServerSyncScript : MonoBehaviour
 {
@@ -11,10 +12,15 @@ public class ServerSyncScript : MonoBehaviour
     private MessageBox _mb;
     private fadeScreen _fs;
     private bool _mbFound = false;
+    private DataManager _dm;
+    private Mesh[] meshArray;
+
     // Start is called before the first frame update
     private void Start()
     {
         _fs = GameObject.Find("FadeScreen").GetComponent<fadeScreen>();
+        _dm = GameObject.Find("DataManager").GetComponent<DataManager>();
+        meshArray = _dm.GetMesh();
     }
 
     public void SetUp()
@@ -102,7 +108,28 @@ public class ServerSyncScript : MonoBehaviour
     void UpdatePunchingGlove(int id, Vector3[] positions)
     {
         PhotonView.Find(id).transform.GetChild(2).GetComponent<LineRenderer>().SetPositions(positions);
-
+    }
+    
+    [PunRPC]
+    void PlayerHit(int id, Vector3 direction, Vector3 contactPoint)
+    {
+        GameObject target = PhotonView.Find(id).gameObject;;
+        Rigidbody rb = target.GetComponent<Rigidbody>();
+        rb.velocity = -(direction.normalized * target.GetComponent<CarController>().bounciness);
+        Debug.Log("HIT ANOTHER PLAYER WITH RIGIDBODY VELOCITY: " + rb.velocity);
+        target.GetComponent<CarVFXHandler>().PlayVFXAtPosition("Impact", contactPoint);
+        int rand = Random.Range(1, 5);
+        if (!target.GetComponent<CarController>().bot) target.GetComponent<AudioManager>().PlaySound("CarHit0" + rand);;
+    }
+    
+    [PunRPC]
+    void UpdateOutlineMeshes(int id, int meshIndex)
+    {
+        GameObject target = PhotonView.Find(id).gameObject;
+        GameObject _outlineObject = target.transform.GetChild(6).gameObject;
+        GameObject _outlineObjectGrapple = target.transform.GetChild(7).gameObject;
+        _outlineObject.GetComponent<MeshFilter>().sharedMesh = meshArray[(int)PhotonNetwork.LocalPlayer.CustomProperties["Skin"]]; 
+        _outlineObjectGrapple.GetComponent<MeshFilter>().sharedMesh = meshArray[(int)PhotonNetwork.LocalPlayer.CustomProperties["Skin"]];
     }
     
     // [PunRPC]
