@@ -330,6 +330,11 @@ public class PlayerPowerups : MonoBehaviour
                 _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.AirBlast, false);
             }
         }
+
+        if (!_punching && punchGlove.activeInHierarchy)
+        {
+            punchGlove.SetActive(false);
+        }
         
         if (_carController.GetActivate())
         {
