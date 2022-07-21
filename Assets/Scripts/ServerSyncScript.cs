@@ -9,20 +9,29 @@ public class ServerSyncScript : MonoBehaviour
 {
     private GameManager _gm;
     private MessageBox _mb;
+    private fadeScreen _fs;
     private bool _mbFound = false;
     // Start is called before the first frame update
-    /*void Start()
+    private void Start()
     {
-        _mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
-    }*/
+        _fs = GameObject.Find("FadeScreen").GetComponent<fadeScreen>();
+    }
 
     public void SetUp()
     {
         _mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
+        _fs = GameObject.Find("FadeScreen").GetComponent<fadeScreen>();
         Debug.Log("MessageBase: "+ _mb);
         _mbFound = true;
     }
-
+    
+    [PunRPC]
+    void fadeOut()
+    {
+        Debug.Log("FadeScreen: " + _fs);
+        _fs.fadeOut();
+    }
+    
     [PunRPC]
     void sendMessage(string text)
     {
@@ -30,11 +39,12 @@ public class ServerSyncScript : MonoBehaviour
         Debug.Log("MessageBox: " + _mb + ":" + text);
         _mb.sendMessage(text);
     }
-
+    
     [PunRPC]
     void Powerup(int id, PowerupType type, bool active)//GameObject subobj = null) 
     {
         GameObject obj = null;// = PhotonView.Find(id).transform.get;
+        GameObject subobj = null;// = PhotonView.Find(id).transform.get;
         switch (type)
         {
             case PowerupType.None:
@@ -53,7 +63,7 @@ public class ServerSyncScript : MonoBehaviour
                 break;
             case PowerupType.PunchingGlove:
                 obj = PhotonView.Find(id).transform.GetChild(3).gameObject;
-                obj = PhotonView.Find(id).transform.GetChild(2).gameObject;
+                subobj = PhotonView.Find(id).transform.GetChild(2).gameObject;
                 
                 // if (subobj != null)
                 //     subobj.SetActive(true);
@@ -71,7 +81,9 @@ public class ServerSyncScript : MonoBehaviour
             obj.SetActive(active);
         else
             Debug.LogError("obj is null in 'TriggerPowerup'!");
-
+        
+        if (subobj)
+            subobj.SetActive(active);
     }
 
     [PunRPC]
