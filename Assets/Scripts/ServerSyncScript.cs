@@ -14,7 +14,7 @@ public class ServerSyncScript : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        //SetUp();
+        _fs = GameObject.Find("FadeScreen").GetComponent<fadeScreen>();
     }
 
     public void SetUp()
@@ -44,6 +44,7 @@ public class ServerSyncScript : MonoBehaviour
     void Powerup(int id, PowerupType type, bool active)//GameObject subobj = null) 
     {
         GameObject obj = null;// = PhotonView.Find(id).transform.get;
+        GameObject subobj = null;// = PhotonView.Find(id).transform.get;
         switch (type)
         {
             case PowerupType.None:
@@ -62,7 +63,7 @@ public class ServerSyncScript : MonoBehaviour
                 break;
             case PowerupType.PunchingGlove:
                 obj = PhotonView.Find(id).transform.GetChild(3).gameObject;
-                obj = PhotonView.Find(id).transform.GetChild(2).gameObject;
+                subobj = PhotonView.Find(id).transform.GetChild(2).gameObject;
                 
                 // if (subobj != null)
                 //     subobj.SetActive(true);
@@ -80,7 +81,9 @@ public class ServerSyncScript : MonoBehaviour
             obj.SetActive(active);
         else
             Debug.LogError("obj is null in 'TriggerPowerup'!");
-
+        
+        if (subobj)
+            subobj.SetActive(active);
     }
 
     [PunRPC]
