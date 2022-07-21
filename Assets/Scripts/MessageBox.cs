@@ -71,7 +71,7 @@ public class MessageBox : MonoBehaviour
     IEnumerator fadeMessage(MessageStruct trackedMessage)
     {
         int counter = 0;
-        TextMeshProUGUI trackedTMP = new TextMeshProUGUI();
+        TextMeshProUGUI trackedTMP = null;
         foreach (MessageStruct ms in messages)
         {
             if (ms == trackedMessage)
@@ -82,19 +82,28 @@ public class MessageBox : MonoBehaviour
             counter++;
         }
 
-        while (messages.Contains(trackedMessage) && trackedTMP.alpha > 0)
+        if (trackedTMP != null)
         {
-            trackedTMP.alpha = trackedTMP.alpha - 0.01f;
-            foreach (MessageStruct ms in messages)
+            while (messages.Contains(trackedMessage) && trackedTMP.alpha > 0)
             {
-                if (ms == trackedMessage)
+                trackedTMP.alpha = trackedTMP.alpha - 0.01f;
+                foreach (MessageStruct ms in messages)
                 {
-                    trackedTMP = messageBoxes[counter];
-                    break;
+                    if (ms == trackedMessage)
+                    {
+                        trackedTMP = messageBoxes[counter];
+                        break;
+                    }
+
+                    counter++;
                 }
-                counter++;
+
+                yield return new WaitForFixedUpdate();
             }
-            yield return new WaitForFixedUpdate();
+        }
+        else
+        {
+            Debug.LogError("Tracked TMP Not Found");
         }
     }
 }

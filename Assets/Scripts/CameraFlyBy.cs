@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CameraFlyBy : MonoBehaviour
 {
@@ -26,9 +27,10 @@ public class CameraFlyBy : MonoBehaviour
             _animator.Play("FlyBy");
         }
 
-        if (_vc.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition > maxFlyByPathPosition)
+        if (_vc.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition > maxFlyByPathPosition || Keyboard.current.anyKey.isPressed)
         {
             activateFlyBy = false;
+            _animator.StopPlayback();
         }
     }
 }
