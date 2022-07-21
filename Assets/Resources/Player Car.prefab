@@ -53029,6 +53029,7 @@ GameObject:
   - component: {fileID: 8467595389158752885}
   - component: {fileID: 8467595389158752886}
   - component: {fileID: 3552991483113168092}
+  - component: {fileID: 3636215852468938975}
   m_Layer: 7
   m_Name: Punching Glove
   m_TagString: PunchingGlove
@@ -53124,6 +53125,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af481200c0b47ab45bd58ca5559689f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3636215852468938975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9037506200437154598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6294503f6e3a8234899e6bd9487c9866, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_DistanceMod: 2
+  m_RotMod: 2
+  m_UseLocal: 1
 --- !u!1 &9045963524812172808
 GameObject:
   m_ObjectHideFlags: 0
