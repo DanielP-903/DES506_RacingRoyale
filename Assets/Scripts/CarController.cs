@@ -506,6 +506,11 @@ public class CarController : MonoBehaviour
 
     #region Getters
 
+    public GameManager GetGM()
+    {
+        return _gm;
+    }
+    
     public float GetBoostDelay()
     {
         return _boostDelay;
@@ -591,6 +596,7 @@ public class CarController : MonoBehaviour
                 _savedOilVelocity = new Vector3(30 / 2.2369362912f , 0, 30 / 2.2369362912f );
             }
         }
+        
 
         _resetDelay = _resetDelay <= 0 ? 0 : _resetDelay - Time.deltaTime;
         if (_reset && _resetDelay <= 0)
