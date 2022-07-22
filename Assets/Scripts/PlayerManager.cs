@@ -227,7 +227,7 @@ public class PlayerManager : MonoBehaviour
            //Debug.Log("Ready!");
            int readyPlayers;
            TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
-           Debug.Log( "Ready Players: "+readyPlayers +":"+ _gm.GetTotalPlayers());
+           //Debug.Log( "Ready Players: "+readyPlayers +":"+ _gm.GetTotalPlayers());
            // && readyPlayers >= _gm.GetTotalPlayers()
            if (_gm.GetStageNum() > 0 && _gm.GetStageNum() < 5 && _gm.halt == false)
            {
@@ -451,9 +451,9 @@ public class PlayerManager : MonoBehaviour
         {
             yield return new WaitForSeconds(1);
             CameraFlyBy cfb = GameObject.FindGameObjectWithTag("FlyBy").GetComponent<CameraFlyBy>();
-            Debug.Log("CountDown Started");
+            //Debug.Log("CountDown Started");
             yield return new WaitUntil(() => !cfb.activateFlyBy);
-            Debug.Log("FlyBy Completed");
+            //Debug.Log("FlyBy Completed");
             
             int readyPlayers;
             TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());

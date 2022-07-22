@@ -32,7 +32,7 @@ public class ServerSyncScript : MonoBehaviour
     {
         _mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
         _fs = GameObject.Find("FadeScreen").GetComponent<fadeScreen>();
-        Debug.Log("MessageBase: "+ _mb);
+        //Debug.Log("MessageBase: "+ _mb);
         _mbFound = true;
     }
     
