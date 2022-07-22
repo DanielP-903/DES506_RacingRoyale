@@ -707,10 +707,12 @@ public class CarController : MonoBehaviour
         {
             Vector3 direction = collision.contacts[0].point - transform.position;
             if (!bot)
+            {
                 _rigidbody.velocity = -(direction.normalized * bounciness);
+                Debug.Log("HIT ANOTHER PLAYER WITH RIGIDBODY VELOCITY: " + _rigidbody.velocity);
+            }
             else
                 GetComponent<Rigidbody>().velocity = -(direction.normalized * bounciness);
-            Debug.Log("HIT ANOTHER PLAYER WITH RIGIDBODY VELOCITY: " + _rigidbody.velocity);
             _vfxHandler.PlayVFXAtPosition("Impact", collision.contacts[0].point);
             int rand = Random.Range(1, 5);
             if (!bot) audioManager.PlaySound("CarHit0" + rand);
