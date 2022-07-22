@@ -114,6 +114,7 @@ public class CarController : MonoBehaviour
     private PlayerPowerups _playerPowerups;
     private BotCarController _botCarController;
     private CinemachineVirtualCamera _virtualCamera;
+    private CinemachineTransposer _transposer;
     private CinemachineImpulseSource _impulseSource;
     private GameManager _gm;
     private PhotonView _photonView;
@@ -203,7 +204,7 @@ public class CarController : MonoBehaviour
             {
                 _mainCam = mainCameraObject.GetComponent<Camera>();
                 _virtualCamera = _mainCam.GetComponent<CinemachineVirtualCamera>();
-                _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
+                _transposer = _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
             }
 
             _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
@@ -878,6 +879,31 @@ public class CarController : MonoBehaviour
         float value = context.ReadValue<float>();
         _pm.SetEscape(value > 0);
         //Debug.Log("Escape detected");
+    }
+    // Rearview
+    public void Rearview(InputAction.CallbackContext context)
+    {
+        float value = context.ReadValue<float>();
+        RearviewCamera(value > 0);
+        //Debug.Log("Escape detected");
+    }
+
+    public void RearviewCamera(bool lookBehind)
+    {
+        if (_virtualCamera != null)
+        {
+            if (lookBehind)
+            {
+                Debug.Log("Behind");
+                _transposer.m_FollowOffset = new Vector3(0, 5, 8);
+            }
+            else
+            {
+                Debug.Log("Forward");
+                _transposer.m_FollowOffset = new Vector3(0, 5, -8);
+            }
+
+        }
     }
 
     #endregion
