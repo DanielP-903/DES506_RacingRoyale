@@ -109,6 +109,7 @@ public class PlayerManager : MonoBehaviour
         _mRend = transform.Find("CarMesh").GetComponent<MeshRenderer>();
         _mFilt = transform.Find("CarMesh").GetComponent<MeshFilter>();
         _flaps = transform.Find("Flaps").gameObject;
+        _vfx = GetComponent<CarVFXHandler>();
         object skinNumFromProps;
         /*if (_photonView.IsMine && !_photonView.Owner.CustomProperties.TryGetValue("Skin", out skinNumFromProps))
         {
@@ -226,7 +227,7 @@ public class PlayerManager : MonoBehaviour
            //Debug.Log("Ready!");
            int readyPlayers;
            TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
-           Debug.Log( "Ready Players: "+readyPlayers +":"+ _gm.GetTotalPlayers());
+           //Debug.Log( "Ready Players: "+readyPlayers +":"+ _gm.GetTotalPlayers());
            // && readyPlayers >= _gm.GetTotalPlayers()
            if (_gm.GetStageNum() > 0 && _gm.GetStageNum() < 5 && _gm.halt == false)
            {
@@ -430,7 +431,7 @@ public class PlayerManager : MonoBehaviour
             _photonView.RPC("sendMessage", RpcTarget.All, messageToBeSent);
             //Debug.Log("Player: "+_photonView.Owner.NickName + " Eliminated with Position "+elimPosition + "/"+_gm.GetTotalPlayers());
             Debug.Log("PlayerDestroyed");
-            //_vfx.
+            _vfx.PlayVFXAtPosition("Elimination", transform.position);
             PhotonNetwork.Destroy(this.gameObject);
         }
     }
@@ -450,9 +451,9 @@ public class PlayerManager : MonoBehaviour
         {
             yield return new WaitForSeconds(1);
             CameraFlyBy cfb = GameObject.FindGameObjectWithTag("FlyBy").GetComponent<CameraFlyBy>();
-            Debug.Log("CountDown Started");
+            //Debug.Log("CountDown Started");
             yield return new WaitUntil(() => !cfb.activateFlyBy);
-            Debug.Log("FlyBy Completed");
+            //Debug.Log("FlyBy Completed");
             
             int readyPlayers;
             TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());

@@ -706,13 +706,17 @@ public class CarController : MonoBehaviour
         if (collision.transform.CompareTag("Player"))
         {
             Vector3 direction = collision.contacts[0].point - transform.position;
-            _rigidbody.velocity = -(direction.normalized * bounciness);
+            if (!bot)
+                _rigidbody.velocity = -(direction.normalized * bounciness);
+            else
+                GetComponent<Rigidbody>().velocity = -(direction.normalized * bounciness);
             Debug.Log("HIT ANOTHER PLAYER WITH RIGIDBODY VELOCITY: " + _rigidbody.velocity);
             _vfxHandler.PlayVFXAtPosition("Impact", collision.contacts[0].point);
             int rand = Random.Range(1, 5);
             if (!bot) audioManager.PlaySound("CarHit0" + rand);
-            collision.gameObject.GetComponent<Rigidbody>().velocity = (direction.normalized * bounciness);
-            //_photonView.RPC("PlayerHit", RpcTarget.All, _photonView.ViewID, direction, collision.contacts[0].point);
+            //collision.gameObject.GetComponent<Rigidbody>().velocity = (direction.normalized * bounciness);
+            if (!bot)
+                _photonView.RPC("PlayerHit", RpcTarget.All, collision.transform.GetComponent<PhotonView>().ViewID, direction, collision.contacts[0].point, bounciness);
         }
         else if (collision.transform.CompareTag("SpinningTop"))
         {
@@ -722,15 +726,6 @@ public class CarController : MonoBehaviour
             int rand = Random.Range(1, 5);
             if (!bot) audioManager.PlaySound("CarHit0" + rand);
         }
-        // Method 1: Layers
-        // if (collision.contacts[0].point.y > transform.position.y - 3.0f && collision.gameObject.layer != 9)
-        // {
-        //     Vector3 direction = collision.contacts[0].point - transform.position;
-        //     _rigidbody.velocity = -(direction.normalized * (bounciness/3));
-        //     _vfxHandler.SetImpactLocation(collision.contacts[0].point);
-        //     _vfxHandler.PlayVFX("Impact");
-        // }
-        // Method 2: Y difference
         else if (collision.contacts[0].point.y > transform.position.y - 4.0f)
         {
             Vector3 direction = collision.contacts[0].point - transform.position;

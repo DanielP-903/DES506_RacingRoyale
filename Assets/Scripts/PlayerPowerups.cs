@@ -318,7 +318,7 @@ public class PlayerPowerups : MonoBehaviour
         {
             _powerupIconMask.fillAmount = (airBlastTime - _airBlastTimer) / airBlastTime;
             _blastObjectCollider.radius = Mathf.Lerp(_blastObjectCollider.radius, airBlastRadius, Time.deltaTime);
-            //_photonView.RPC("UpdateAirBlast", RpcTarget.All, _blastObjectCollider,  airBlastRadius);
+            _photonView.RPC("UpdateAirBlast", RpcTarget.All, _photonView.ViewID,  airBlastRadius);
             if (_airBlastTimer <= 0)
             {
                 _powerupIconMask.fillAmount = 0;

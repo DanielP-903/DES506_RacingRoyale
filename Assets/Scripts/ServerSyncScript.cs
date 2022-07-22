@@ -25,14 +25,14 @@ public class ServerSyncScript : MonoBehaviour
     private void Start()
     {
         _fs = GameObject.Find("FadeScreen").GetComponent<fadeScreen>();
-
+        _mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
     }
 
     public void SetUp()
     {
         _mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
         _fs = GameObject.Find("FadeScreen").GetComponent<fadeScreen>();
-        Debug.Log("MessageBase: "+ _mb);
+        //Debug.Log("MessageBase: "+ _mb);
         _mbFound = true;
     }
     
@@ -98,8 +98,9 @@ public class ServerSyncScript : MonoBehaviour
     }
 
     [PunRPC]
-    void UpdateAirBlast(SphereCollider col, float radius)
+    void UpdateAirBlast(int id, float radius)
     {
+        SphereCollider col = PhotonView.Find(id).transform.GetChild(2).GetComponent<SphereCollider>();
         col.radius =  Mathf.Lerp(col.radius, radius, Time.deltaTime);;
     }
     
@@ -116,15 +117,26 @@ public class ServerSyncScript : MonoBehaviour
     }
     
     [PunRPC]
-    void PlayerHit(int id, Vector3 direction, Vector3 contactPoint)
+    void PlayerHit(int id, Vector3 direction, Vector3 contactPoint, float bounciness)
     {
-        GameObject target = PhotonView.Find(id).gameObject;;
+        GameObject target = PhotonView.Find(id).gameObject;
+
+        if (!target)
+        {
+            Debug.Log("Target not found via id! ID: " + id);    
+        }
+
         Rigidbody rb = target.GetComponent<Rigidbody>();
-        rb.velocity = -(direction.normalized * target.GetComponent<CarController>().bounciness);
+        if (!rb)
+        {
+            Debug.Log("Rigidbody not found! ID: " + id);    
+        }
+        
+        rb.velocity = -(direction.normalized * (bounciness/10));
         Debug.Log("HIT ANOTHER PLAYER WITH RIGIDBODY VELOCITY: " + rb.velocity);
         target.GetComponent<CarVFXHandler>().PlayVFXAtPosition("Impact", contactPoint);
         int rand = Random.Range(1, 5);
-        if (!target.GetComponent<CarController>().bot) target.GetComponent<AudioManager>().PlaySound("CarHit0" + rand);;
+        //if (!target.GetComponent<CarController>().bot) target.GetComponent<AudioManager>().PlaySound("CarHit0" + rand);;
     }
     
     [PunRPC]
