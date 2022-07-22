@@ -100,7 +100,7 @@ public class ServerSyncScript : MonoBehaviour
     [PunRPC]
     void UpdateAirBlast(int id, float radius)
     {
-        SphereCollider col = PhotonView.Find(id).transform.GetChild(2).GetComponent<SphereCollider>();
+        SphereCollider col = PhotonView.Find(id).transform.GetChild(1).GetComponent<SphereCollider>();
         col.radius =  Mathf.Lerp(col.radius, radius, Time.deltaTime);;
     }
     
