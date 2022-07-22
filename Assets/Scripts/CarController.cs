@@ -716,7 +716,7 @@ public class CarController : MonoBehaviour
             if (!bot) audioManager.PlaySound("CarHit0" + rand);
             //collision.gameObject.GetComponent<Rigidbody>().velocity = (direction.normalized * bounciness);
             if (!bot)
-                _photonView.RPC("PlayerHit", RpcTarget.All, collision.transform.GetComponent<PhotonView>().ViewID, direction, collision.contacts[0].point);
+                _photonView.RPC("PlayerHit", RpcTarget.All, collision.transform.GetComponent<PhotonView>().ViewID, direction, collision.contacts[0].point, bounciness);
         }
         else if (collision.transform.CompareTag("SpinningTop"))
         {

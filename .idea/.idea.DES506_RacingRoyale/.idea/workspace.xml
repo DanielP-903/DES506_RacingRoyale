@@ -80,10 +80,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="8992">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="8992" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -186,7 +186,7 @@
       <workItem from="1658307167522" duration="13506000" />
       <workItem from="1658391814525" duration="5181000" />
       <workItem from="1658400674140" duration="7381000" />
-      <workItem from="1658478133236" duration="4981000" />
+      <workItem from="1658477902974" duration="8419000" />
     </task>
     <servers />
   </component>
@@ -214,14 +214,8 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/CarController.cs</url>
-          <line>581</line>
-          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\CarController.cs" initialLine="500" containingFunctionPresentation="method 'PhysUpdateDriving'" />
-          <option name="timeStamp" value="19" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/Scripts/PlayerPowerups.cs</url>
-          <line>583</line>
+          <line>624</line>
           <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\PlayerPowerups.cs" initialLine="575" containingFunctionPresentation="method 'AirBlast'" />
           <option name="timeStamp" value="23" />
         </line-breakpoint>
