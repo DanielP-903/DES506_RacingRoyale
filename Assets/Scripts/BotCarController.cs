@@ -36,7 +36,7 @@ public class BotCarController : MonoBehaviour
             _pv = GetComponent<PhotonView>();
             _pv.name = this.gameObject.name;
             _cc = GetComponent<CarController>();
-            _cs = GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>() ? GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>() : null;
+            _cs = GameObject.Find("CheckpointSystem") ? GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>() : null;
             _rb = GetComponent<Rigidbody>();
             _layerMask = LayerMask.GetMask("Player", "Checkpoint");
             _layerMask = ~_layerMask;
