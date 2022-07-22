@@ -430,7 +430,7 @@ public class PlayerManager : MonoBehaviour
             _photonView.RPC("sendMessage", RpcTarget.All, messageToBeSent);
             //Debug.Log("Player: "+_photonView.Owner.NickName + " Eliminated with Position "+elimPosition + "/"+_gm.GetTotalPlayers());
             Debug.Log("PlayerDestroyed");
-            _vfx.
+            //_vfx.
             PhotonNetwork.Destroy(this.gameObject);
         }
     }
