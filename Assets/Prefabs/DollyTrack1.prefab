@@ -30,7 +30,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4635692134644970973}
   m_LocalRotation: {x: 0.023674775, y: -0.05175449, z: 0.0012272659, w: 0.99837846}
-  m_LocalPosition: {x: -13.312835, y: -25.830933, z: 1.634283}
+  m_LocalPosition: {x: -13.312835, y: -25.830933, z: 1.6342773}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1870317735688517319}
@@ -97,13 +97,13 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 5000
-  field of view: 60.000004
+  field of view: 60
   orthographic: 0
   orthographic size: 5
-  m_Depth: 0
+  m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 759
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -194,6 +194,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activateFlyBy: 0
+  maxFlyByPathPosition: 16.95
 --- !u!95 &2812239974766302072
 Animator:
   serializedVersion: 3

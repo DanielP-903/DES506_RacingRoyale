@@ -17,6 +17,7 @@ public class CarVFXHandler : MonoBehaviour
     public List<VisualEffectAsset> impactEffectAssets = new List<VisualEffectAsset>();
     public List<VisualEffect> driftSmokeEffects = new List<VisualEffect>();
     public ParticleSystem confettiParticleSystem;
+    public VisualEffect elimEffect;
     public GameObject impactEffectObject;
     public GameObject impactEffectPrefab;
     
@@ -131,6 +132,9 @@ public class CarVFXHandler : MonoBehaviour
             case "Confetti":
                 confettiParticleSystem.Play();
                 break;
+            case "Elimination":
+                elimEffect.Play();
+                break;
             case "DriftSmoke":
                 foreach (var effect in driftSmokeEffects)
                 {
@@ -187,7 +191,12 @@ public class CarVFXHandler : MonoBehaviour
     }
     
     #endregion
-    
+
+    private void Awake()
+    {
+        _carController = GetComponent<CarController>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -197,7 +206,6 @@ public class CarVFXHandler : MonoBehaviour
         meshArray = _dm.GetMesh();
         matArray = _dm.GetMats();
         
-        _carController = GetComponent<CarController>();
         _rigidbody = GetComponent<Rigidbody>();
 
         _currentEffect = impactEffectObject.GetComponent<VisualEffect>();
@@ -234,10 +242,14 @@ public class CarVFXHandler : MonoBehaviour
             _dangerWallEffect.SetVector2("Alpha Values", new Vector2(0,0));
         }
 
+        if (!_carController.bot)
+        {
+            _outlineObject.GetComponent<MeshFilter>().sharedMesh =
+                meshArray[(int)PhotonNetwork.LocalPlayer.CustomProperties["Skin"]];
+            _outlineObjectGrapple.GetComponent<MeshFilter>().sharedMesh =
+                meshArray[(int)PhotonNetwork.LocalPlayer.CustomProperties["Skin"]];
+        }
 
-        _outlineObject.GetComponent<MeshFilter>().sharedMesh = meshArray[(int)PhotonNetwork.LocalPlayer.CustomProperties["Skin"]]; 
-        _outlineObjectGrapple.GetComponent<MeshFilter>().sharedMesh = meshArray[(int)PhotonNetwork.LocalPlayer.CustomProperties["Skin"]];
-        
         _photonView.RPC("UpdateOutlineMeshes", RpcTarget.All, _photonView.ViewID, (int)PhotonNetwork.LocalPlayer.CustomProperties["Skin"]);
 
         StopDriftEffects();
