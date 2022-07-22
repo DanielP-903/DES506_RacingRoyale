@@ -21,9 +21,10 @@ public class BotCarController : MonoBehaviour
     private Transform _spawnLocation;
     private int _botNum = -1;
     private bool touchingReset = false;
-
+    
     private TextMeshProUGUI name;
     private TextMeshProUGUI lis;
+    private TextMeshProUGUI flis;
     
     
     // Start is called before the first frame update
@@ -64,6 +65,7 @@ public class BotCarController : MonoBehaviour
 
         name = transform.Find("Name").Find("Name").GetComponent<TextMeshProUGUI>();
         lis = transform.Find("License").Find("Name").GetComponent<TextMeshProUGUI>();
+        flis = transform.Find("FLicense").Find("Name").GetComponent<TextMeshProUGUI>();
     }
 
     // Update is called once per frame
@@ -73,6 +75,7 @@ public class BotCarController : MonoBehaviour
         checkReset();
         name.text = _pv.name;
         lis.text = _pv.name;
+        flis.text = _pv.name;
     }
 
     public int GetBotNumber()

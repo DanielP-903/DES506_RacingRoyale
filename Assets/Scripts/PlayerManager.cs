@@ -26,6 +26,7 @@ public class PlayerManager : MonoBehaviour
     private GameObject startBlocker;
     private CheckpointSystem _cs;
     private TextMeshProUGUI _messageText;
+    private CarVFXHandler _vfx;
     public TextMeshProUGUI startDelayText;
 
     [HideInInspector] public float timer = 3;
@@ -43,6 +44,8 @@ public class PlayerManager : MonoBehaviour
     private TextMeshProUGUI playerNameText;
     [SerializeField]
     private TextMeshProUGUI playerLicenseText;
+    [SerializeField] 
+    private TextMeshProUGUI playerFrontLicenseText;
 
     [SerializeField] private bool debugMode;
     
@@ -142,11 +145,13 @@ public class PlayerManager : MonoBehaviour
         {
             playerNameText.text = "Guest";
             playerLicenseText.text = "Guest";
+            playerFrontLicenseText.text = "Guest";
         }
         else
         {
             playerNameText.text = _photonView.Owner.NickName;
             playerLicenseText.text = _photonView.Owner.NickName;
+            playerFrontLicenseText.text = _photonView.Owner.NickName;
         }
         if (_photonView != null)
         {
@@ -425,6 +430,7 @@ public class PlayerManager : MonoBehaviour
             _photonView.RPC("sendMessage", RpcTarget.All, messageToBeSent);
             //Debug.Log("Player: "+_photonView.Owner.NickName + " Eliminated with Position "+elimPosition + "/"+_gm.GetTotalPlayers());
             Debug.Log("PlayerDestroyed");
+            //_vfx.
             PhotonNetwork.Destroy(this.gameObject);
         }
     }
