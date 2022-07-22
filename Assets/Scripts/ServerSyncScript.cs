@@ -15,12 +15,17 @@ public class ServerSyncScript : MonoBehaviour
     private DataManager _dm;
     private Mesh[] meshArray;
 
+    private void Awake()
+    {
+        _dm = GameObject.Find("DataManager").GetComponent<DataManager>();
+        meshArray = _dm.GetMesh();
+    }
+
     // Start is called before the first frame update
     private void Start()
     {
         _fs = GameObject.Find("FadeScreen").GetComponent<fadeScreen>();
-        _dm = GameObject.Find("DataManager").GetComponent<DataManager>();
-        meshArray = _dm.GetMesh();
+
     }
 
     public void SetUp()
