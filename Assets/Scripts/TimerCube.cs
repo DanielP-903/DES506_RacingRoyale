@@ -61,6 +61,7 @@ public class TimerCube : MonoBehaviour
                 _effect.Play();
                 Destroy(GetComponent<MeshFilter>());
                 Destroy(_meshRenderer);
+                Destroy(this);
             }
         }
     }
