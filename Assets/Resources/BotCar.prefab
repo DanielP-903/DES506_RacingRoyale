@@ -29572,6 +29572,7 @@ GameObject:
   - component: {fileID: 4696580256823738161}
   - component: {fileID: 4015634369664041884}
   - component: {fileID: 3278325128343381181}
+  - component: {fileID: 6747427724573058940}
   m_Layer: 7
   m_Name: BotCar
   m_TagString: Player
@@ -29844,6 +29845,18 @@ MonoBehaviour:
   impactEffectPrefab: {fileID: 4090457144769879042, guid: c5b742ea29c92d341bd95b10a3a57b47, type: 3}
   maxWallDistanceAlert: 30
   boostPlaying: 0
+--- !u!114 &6747427724573058940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4892388860096004575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbfd85ce9b96705439c65d95f6d707a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4892388860486838944
 GameObject:
   m_ObjectHideFlags: 0
