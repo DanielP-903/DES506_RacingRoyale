@@ -17,6 +17,7 @@ public class CarVFXHandler : MonoBehaviour
     public List<VisualEffectAsset> impactEffectAssets = new List<VisualEffectAsset>();
     public List<VisualEffect> driftSmokeEffects = new List<VisualEffect>();
     public ParticleSystem confettiParticleSystem;
+    public VisualEffect elimEffect;
     public GameObject impactEffectObject;
     public GameObject impactEffectPrefab;
     
@@ -130,6 +131,9 @@ public class CarVFXHandler : MonoBehaviour
                 break;
             case "Confetti":
                 confettiParticleSystem.Play();
+                break;
+            case "Elimination":
+                elimEffect.Play();
                 break;
             case "DriftSmoke":
                 foreach (var effect in driftSmokeEffects)

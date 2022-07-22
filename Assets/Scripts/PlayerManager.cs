@@ -109,6 +109,7 @@ public class PlayerManager : MonoBehaviour
         _mRend = transform.Find("CarMesh").GetComponent<MeshRenderer>();
         _mFilt = transform.Find("CarMesh").GetComponent<MeshFilter>();
         _flaps = transform.Find("Flaps").gameObject;
+        _vfx = GetComponent<CarVFXHandler>();
         object skinNumFromProps;
         /*if (_photonView.IsMine && !_photonView.Owner.CustomProperties.TryGetValue("Skin", out skinNumFromProps))
         {
@@ -430,7 +431,7 @@ public class PlayerManager : MonoBehaviour
             _photonView.RPC("sendMessage", RpcTarget.All, messageToBeSent);
             //Debug.Log("Player: "+_photonView.Owner.NickName + " Eliminated with Position "+elimPosition + "/"+_gm.GetTotalPlayers());
             Debug.Log("PlayerDestroyed");
-            //_vfx.
+            _vfx.PlayVFXAtPosition("Elimination", transform.position);
             PhotonNetwork.Destroy(this.gameObject);
         }
     }
