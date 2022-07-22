@@ -36,7 +36,7 @@ public class BotCarController : MonoBehaviour
             _pv = GetComponent<PhotonView>();
             _pv.name = this.gameObject.name;
             _cc = GetComponent<CarController>();
-            _cs = GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>();
+            _cs = GameObject.Find("CheckpointSystem") ? GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>() : null;
             _rb = GetComponent<Rigidbody>();
             _layerMask = LayerMask.GetMask("Player", "Checkpoint");
             _layerMask = ~_layerMask;
@@ -94,7 +94,7 @@ public class BotCarController : MonoBehaviour
     }
     public void goToSpawn()
     {
-        if (!_spawnLocation.name.Contains("SpawnLocation") && _cs.GetCheckpointElimination(_spawnLocation.parent.gameObject))
+        if (!_spawnLocation.name.Contains("SpawnLocation") && _cs != null && _cs.GetCheckpointElimination(_spawnLocation.parent.gameObject))
         {
             PhotonNetwork.Destroy(this.gameObject);
         }
