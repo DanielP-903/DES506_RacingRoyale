@@ -98,8 +98,9 @@ public class ServerSyncScript : MonoBehaviour
     }
 
     [PunRPC]
-    void UpdateAirBlast(SphereCollider col, float radius)
+    void UpdateAirBlast(int id, float radius)
     {
+        SphereCollider col = PhotonView.Find(id).transform.GetChild(2).GetComponent<SphereCollider>();
         col.radius =  Mathf.Lerp(col.radius, radius, Time.deltaTime);;
     }
     
@@ -120,7 +121,7 @@ public class ServerSyncScript : MonoBehaviour
     {
         GameObject target = PhotonView.Find(id).gameObject;;
         Rigidbody rb = target.GetComponent<Rigidbody>();
-        rb.velocity = -(direction.normalized * target.GetComponent<CarController>().bounciness);
+        rb.velocity = -(direction.normalized * (target.GetComponent<CarController>().bounciness/10));
         Debug.Log("HIT ANOTHER PLAYER WITH RIGIDBODY VELOCITY: " + rb.velocity);
         target.GetComponent<CarVFXHandler>().PlayVFXAtPosition("Impact", contactPoint);
         int rand = Random.Range(1, 5);
