@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class TimerCube : MonoBehaviour
 {
@@ -13,11 +14,14 @@ public class TimerCube : MonoBehaviour
     private bool _hasFoundPlayer;
 
     private float _currentTimerValue;
+
+    private VisualEffect _effect;
     
     // Start is called before the first frame update
     void Start()
     {
         _meshRenderer = GetComponent<MeshRenderer>();
+        _effect = transform.GetChild(0).GetComponent<VisualEffect>();
         StartCoroutine(WaitForPlayer());
         
     }
@@ -53,9 +57,11 @@ public class TimerCube : MonoBehaviour
             }
             else
             {
-                Destroy(this.gameObject);
+                //Destroy(this.gameObject);
+                _effect.Play();
+                Destroy(GetComponent<MeshFilter>());
+                Destroy(_meshRenderer);
             }
-            
         }
     }
     
