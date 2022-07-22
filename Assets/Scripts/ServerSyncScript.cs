@@ -19,13 +19,13 @@ public class ServerSyncScript : MonoBehaviour
     {
         _dm = GameObject.Find("DataManager").GetComponent<DataManager>();
         meshArray = _dm.GetMesh();
+        _mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
     }
 
     // Start is called before the first frame update
     private void Start()
     {
         _fs = GameObject.Find("FadeScreen").GetComponent<fadeScreen>();
-        _mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
     }
 
     public void SetUp()
