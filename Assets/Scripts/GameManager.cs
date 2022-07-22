@@ -516,7 +516,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     IEnumerator loadingArena(string arenaName)
     {
         _photonView.RPC("fadeOut", RpcTarget.All);
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
         if (!PhotonNetwork.IsMasterClient)
         {
             //Debug.LogError("PhotonNetwork : Trying to Load a level but we are not the master Client");
