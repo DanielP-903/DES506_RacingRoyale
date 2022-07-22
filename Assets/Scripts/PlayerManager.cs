@@ -43,6 +43,8 @@ public class PlayerManager : MonoBehaviour
     private TextMeshProUGUI playerNameText;
     [SerializeField]
     private TextMeshProUGUI playerLicenseText;
+    [SerializeField] 
+    private TextMeshProUGUI playerFrontLicenseText;
 
     [SerializeField] private bool debugMode;
     
@@ -142,11 +144,13 @@ public class PlayerManager : MonoBehaviour
         {
             playerNameText.text = "Guest";
             playerLicenseText.text = "Guest";
+            playerFrontLicenseText.text = "Guest";
         }
         else
         {
             playerNameText.text = _photonView.Owner.NickName;
             playerLicenseText.text = _photonView.Owner.NickName;
+            playerFrontLicenseText.text = _photonView.Owner.NickName;
         }
         if (_photonView != null)
         {
