@@ -90,6 +90,7 @@ public class CarController : MonoBehaviour
     private bool _passedFinishLine;
     private bool _hitEliminationZone;
     private bool _hitDetect;
+    private bool _lookBehind;
 
     #endregion
 
@@ -657,6 +658,8 @@ public class CarController : MonoBehaviour
             }
         }
 
+        RearviewCamera();
+
         //UpdateCameraAnimation();
     }
 
@@ -884,25 +887,24 @@ public class CarController : MonoBehaviour
     public void Rearview(InputAction.CallbackContext context)
     {
         float value = context.ReadValue<float>();
-        RearviewCamera(value > 0);
+        _lookBehind = value > 0;
+         //RearviewCamera(value > 0);
         //Debug.Log("Escape detected");
     }
 
-    public void RearviewCamera(bool lookBehind)
+    private void RearviewCamera()
     {
-        if (_virtualCamera != null)
+        if (_virtualCamera == null) return;
+        
+        if (_lookBehind)
         {
-            if (lookBehind)
-            {
-                Debug.Log("Behind");
-                _transposer.m_FollowOffset = new Vector3(0, 5, 8);
-            }
-            else
-            {
-                Debug.Log("Forward");
-                _transposer.m_FollowOffset = new Vector3(0, 5, -8);
-            }
-
+            Debug.Log("Behind");
+            _transposer.m_FollowOffset = new Vector3(0, 5, 8);
+        }
+        else
+        {
+            Debug.Log("Forward");
+            _transposer.m_FollowOffset = new Vector3(0, 5, -8);
         }
     }
 
