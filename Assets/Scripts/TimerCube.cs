@@ -54,6 +54,8 @@ public class TimerCube : MonoBehaviour
             // }
             if (_currentTimerValue <= 3 && _currentTimerValue > 2)
             {
+                if (!_meshRenderer.enabled)
+                    _meshRenderer.enabled = true;
                 var meshMats = _meshRenderer.materials;
                 meshMats[1] = materials[0];
                 _meshRenderer.materials = meshMats; 
@@ -61,6 +63,8 @@ public class TimerCube : MonoBehaviour
             }
             else if (_currentTimerValue <= 2 && _currentTimerValue > 1)
             {
+                if (!_meshRenderer.enabled)
+                    _meshRenderer.enabled = true;
                 var meshMats = _meshRenderer.materials;
                 meshMats[1] = materials[1];
                 _meshRenderer.materials = meshMats; 
@@ -68,6 +72,8 @@ public class TimerCube : MonoBehaviour
             }
             else if (_currentTimerValue <= 1 && _currentTimerValue > 0.05f)
             {              
+                if (!_meshRenderer.enabled)
+                    _meshRenderer.enabled = true;
                 var meshMats = _meshRenderer.materials;
                 meshMats[1] = materials[2];
                 _meshRenderer.materials = meshMats; 
@@ -76,11 +82,11 @@ public class TimerCube : MonoBehaviour
             else
             {
                 //Destroy(this.gameObject);
-                _effect.Play();
-                _meshRenderer.enabled = false;
-                //Destroy(GetComponent<MeshFilter>());
-                //Destroy(_meshRenderer);
-                //Destroy(this);
+                if (_meshRenderer.enabled)
+                {
+                    _effect.Play();
+                    _meshRenderer.enabled = false;
+                }
             }
         }
     }

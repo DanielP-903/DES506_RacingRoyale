@@ -120,9 +120,7 @@ public class WallFollow : MonoBehaviour
             Vector3 difference = newPosition - oldPosition;
 
             float rotationAngle = Mathf.Atan2(difference.x, difference.z) * Mathf.Rad2Deg;
-
-            transform.rotation = Quaternion.Euler(90, rotationAngle, 0);
-
+            
             if (_tValue > 1)
             {
                 //Debug.Log("_tValue is > 1");
