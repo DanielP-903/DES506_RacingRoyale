@@ -21,9 +21,20 @@ public class TimerCube : MonoBehaviour
     void Start()
     {
         _meshRenderer = GetComponent<MeshRenderer>();
+        _meshRenderer.enabled = true;
         _effect = transform.GetChild(0).GetComponent<VisualEffect>();
         StartCoroutine(WaitForPlayer());
-        
+     
+    }
+
+    void OnLevelWasLoaded()
+    {
+        _meshRenderer = GetComponent<MeshRenderer>();
+        _meshRenderer.enabled = true;
+        _effect = transform.GetChild(0).GetComponent<VisualEffect>();
+        _effect.Stop();
+        StartCoroutine(WaitForPlayer());
+        _currentTimerValue = 3;
     }
 
     // Update is called once per frame
@@ -31,9 +42,16 @@ public class TimerCube : MonoBehaviour
     {
         if (_hasFoundPlayer && _playerRef)
         {
-            if (_playerRef.startDelayText.text != "Go!")
-                _currentTimerValue = _playerRef.timer;
-            
+            _currentTimerValue = _playerRef.timer;
+            // if (_playerRef.startDelayText.text != "Go!")
+            // {
+            //     _currentTimerValue = _playerRef.timer;
+            // }
+            // else
+            // {
+            //     _currentTimerValue = 0;
+            //     
+            // }
             if (_currentTimerValue <= 3 && _currentTimerValue > 2)
             {
                 var meshMats = _meshRenderer.materials;
@@ -59,9 +77,10 @@ public class TimerCube : MonoBehaviour
             {
                 //Destroy(this.gameObject);
                 _effect.Play();
-                Destroy(GetComponent<MeshFilter>());
-                Destroy(_meshRenderer);
-                Destroy(this);
+                _meshRenderer.enabled = false;
+                //Destroy(GetComponent<MeshFilter>());
+                //Destroy(_meshRenderer);
+                //Destroy(this);
             }
         }
     }
@@ -85,6 +104,12 @@ public class TimerCube : MonoBehaviour
                 //Debug.Log("Player Found");
                 _hasFoundPlayer = true;
             }
+        }
+
+        if (_playerRef.startDelayText.text == "Go!")
+        {
+            _playerRef.startDelayText.text = "3";
+            _playerRef.timer = 3;
         }
     }
 }
