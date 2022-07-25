@@ -200,7 +200,7 @@ public class CarController : MonoBehaviour
             }
     
             _pm = GameObject.Find("PauseMenu").GetComponent<PauseMenu>();
-            var mainCameraObject = GameObject.FindGameObjectWithTag("MainCamera");
+            var mainCameraObject = GameObject.Find("PlayerCamera");
             if (mainCameraObject)
             {
                 _mainCam = mainCameraObject.GetComponent<Camera>();
@@ -658,7 +658,7 @@ public class CarController : MonoBehaviour
             }
         }
 
-        RearviewCamera();
+        //RearviewCamera();
 
         //UpdateCameraAnimation();
     }
@@ -887,15 +887,16 @@ public class CarController : MonoBehaviour
     public void Rearview(InputAction.CallbackContext context)
     {
         float value = context.ReadValue<float>();
-        _lookBehind = value > 0;
-         //RearviewCamera(value > 0);
+        //_lookBehind = value > 0;
+        RearviewCamera(value > 0);
         //Debug.Log("Escape detected");
     }
 
-    private void RearviewCamera()
+    private void RearviewCamera(bool backCam)
     {
         if (_virtualCamera == null) return;
-        
+
+        _lookBehind = backCam;
         if (_lookBehind)
         {
             Debug.Log("Behind");
@@ -906,6 +907,8 @@ public class CarController : MonoBehaviour
             Debug.Log("Forward");
             _transposer.m_FollowOffset = new Vector3(0, 5, -8);
         }
+
+        Debug.Log("CamPos: " +_transposer.m_FollowOffset+ " - Transposer:"+_transposer.gameObject);
     }
 
     #endregion
