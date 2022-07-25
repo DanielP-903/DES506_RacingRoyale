@@ -11,6 +11,8 @@ public class WallFollow : MonoBehaviour
 {
     public GameObject path;
 
+    public float playerBarStartPos;
+    public float playerBarOffset;
     public float startDelay = 3.0f;
     public float chaseSpeed = 1.0f;
     public TextMeshProUGUI startDelayText;
@@ -50,7 +52,7 @@ public class WallFollow : MonoBehaviour
         _startDelayTimer = startDelay;
         _begin = false;
         
-        _wallOMeter = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(14).gameObject;
+        _wallOMeter = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(12).gameObject;
         _wallOMeterSlider = _wallOMeter.GetComponent<Slider>();
         _wallOMeterPlayer = _wallOMeter.transform.GetChild(2).gameObject;
 
@@ -69,14 +71,20 @@ public class WallFollow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        // _wallOMeterSlider.value = Vector3.Lerp(_wallOMeterPlayer.transform.position, endPos, (transform.position-startPos).magnitude).magnitude;
-        // _wallOMeterSlider.value = (transform.position - startPos).magnitude /(endPos - transform.position).magnitude;
-        //
-        // _wallOMeterSlider.value = Mathf.Lerp(_tValueMax, 0, (_tValueMax - _tValuePersistant)/_tValueMax);
+        if (hasFoundPlayer && _playerRef)
+        {
+            float distanceToStart = Vector3.Distance(_playerRef.transform.position, startPos) - 5.0f;
+            float distanceToEnd = Vector3.Distance(_playerRef.transform.position, endPos) - 5.0f;
+            float distance = Vector3.Distance(startPos, endPos) - 5.0f;
 
-      
-        
+            Vector3 newValues = _wallOMeterPlayer.transform.localPosition;
+            var t = (distance- distanceToStart)/distance;
+            t = Mathf.Clamp(t, 0, 1);
+            newValues.y = Mathf.Lerp(playerBarStartPos + playerBarOffset, playerBarStartPos, t);
+            
+            _wallOMeterPlayer.transform.localPosition = newValues;
+        }
+
         if (_begin)
         {
             _tValue += Time.deltaTime * chaseSpeed;
@@ -90,20 +98,21 @@ public class WallFollow : MonoBehaviour
             
             if (hasFoundPlayer && _playerRef)
             {
-                
-                float distanceToStart = Vector3.Distance(_playerRef.transform.position, startPos) - 5.0f;
-                float distanceToEnd = Vector3.Distance(_playerRef.transform.position, endPos) - 5.0f;
-
-                float maxDistance = 100.0f;
-                Vector3 newValues = _wallOMeterPlayer.transform.position;
-                newValues.y = Mathf.Lerp(-100, 100,  (distanceToEnd- distanceToStart)/distanceToEnd);
-                Debug.Log("newValues.y = " + newValues.y);
-                Debug.Log("distanceToEnd = " + distanceToEnd);
-                Debug.Log("distanceToStart = " + distanceToStart);
-                _wallOMeterPlayer.transform.position = newValues;
+                // float distanceToStart = Vector3.Distance(_playerRef.transform.position, startPos) - 5.0f;
+                // float distanceToEnd = Vector3.Distance(_playerRef.transform.position, endPos) - 5.0f;
+                // float distance = Vector3.Distance(startPos, endPos) - 5.0f;
+                //
+                // Vector3 newValues = _wallOMeterPlayer.transform.localPosition;
+                // var t = (distance- distanceToStart)/distance;
+                // t = Mathf.Clamp(t, 0, 1);
+                // newValues.y = Mathf.Lerp(playerBarStartPos + playerBarOffset, playerBarStartPos, t);
+                // // Debug.Log("newValues.y = " + newValues.y);
+                // // Debug.Log("distanceToEnd = " + distanceToEnd);
+                // // Debug.Log("distanceToStart = " + distanceToStart);
+                // //Debug.Log("t = " + t);
+                // _wallOMeterPlayer.transform.localPosition = newValues;
                 
                 _wallOMeterSlider.value = Mathf.Lerp(_tValueMax, 0, (_tValueMax - _tValuePersistant)/_tValueMax);
-            
             }
             
             transform.position = newPosition;
@@ -159,7 +168,7 @@ public class WallFollow : MonoBehaviour
                 continue;
             }
             
-            if (player.GetComponent<PhotonView>().IsMine)
+            if (player.GetComponent<PhotonView>().IsMine && !player.GetComponent<CarController>().bot)
             {
                 _playerRef = player;
                 //Debug.Log("Player Found");
