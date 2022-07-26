@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient)
         {
-            _photonView.RPC("sendMessage", RpcTarget.All, other.NickName + " has joined. "+PhotonNetwork.CurrentRoom.PlayerCount+"/"+PhotonNetwork.CurrentRoom.MaxPlayers);
+            _photonView.RPC("sendMessage", RpcTarget.AllViaServer , other.NickName + " has joined. "+PhotonNetwork.CurrentRoom.PlayerCount+"/"+PhotonNetwork.CurrentRoom.MaxPlayers);
             PhotonNetwork.Destroy(botsStored[PhotonNetwork.CurrentRoom.PlayerCount - 1]);
             //Debug.LogFormat("OnPlayerEnteredRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
 
@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviourPunCallbacks
  
         if (PhotonNetwork.IsMasterClient)
         {
-            _photonView.RPC("sendMessage", RpcTarget.All, other.NickName + " has left. "+PhotonNetwork.CurrentRoom.PlayerCount+"/"+PhotonNetwork.CurrentRoom.MaxPlayers);
+            _photonView.RPC("sendMessage", RpcTarget.AllViaServer , other.NickName + " has left. "+PhotonNetwork.CurrentRoom.PlayerCount+"/"+PhotonNetwork.CurrentRoom.MaxPlayers);
             //Debug.LogFormat("OnPlayerLeftRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
 
 
@@ -515,7 +515,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     IEnumerator loadingArena(string arenaName)
     {
-        _photonView.RPC("fadeOut", RpcTarget.All);
+        _photonView.RPC("fadeOut", RpcTarget.AllViaServer );
         yield return new WaitForSeconds(2f);
         if (!PhotonNetwork.IsMasterClient)
         {

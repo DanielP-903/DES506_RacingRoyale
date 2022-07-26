@@ -55,6 +55,7 @@ public class ServerSyncScript : MonoBehaviour
     void sendMessage(string text)
     {
         //_mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
+        Debug.Log("MessageToDisplay: " + text);
         //Debug.Log("MessageBox: " + _mb + ":" + text);
         _mb.sendMessage(text);
     }

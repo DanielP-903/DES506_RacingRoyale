@@ -285,7 +285,7 @@ public class PlayerManager : MonoBehaviour
            // && readyPlayers >= _gm.GetTotalPlayers()
            if (_gm.GetStageNum() > 0 && _gm.GetStageNum() < 5 && _gm.halt == false)
            {
-               //_photonView.RPC("startDelayTimer", RpcTarget.All);
+               //_photonView.RPC("startDelayTimer", RpcTarget.AllViaServer);
                startDelayTimer();
            }
 
@@ -355,7 +355,7 @@ public class PlayerManager : MonoBehaviour
                 completedStage = false;
                 _spawnLocation = GameObject.Find("SpawnLocation" + playerNumber).transform;
                 GoToSpawn();
-                _photonView.RPC("sendMessage", RpcTarget.All, "<color=blue>" + _photonView.name + "</color> has loaded.");
+                _photonView.RPC("sendMessage", RpcTarget.AllViaServer, "<color=blue>" + _photonView.name + "</color> has loaded.");
                 
                 /*int readyPlayers;
                 TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
@@ -482,7 +482,7 @@ public class PlayerManager : MonoBehaviour
             GameManager.SetElimPlayers(num);
             _gm.EliminatePlayer(elimPosition);
             string messageToBeSent = _photonView.name + " has been <color=red>Eliminated</color>";
-            _photonView.RPC("sendMessage", RpcTarget.All, messageToBeSent);
+            _photonView.RPC("sendMessage", RpcTarget.AllViaServer, messageToBeSent);
             //Debug.Log("Player: "+_photonView.Owner.NickName + " Eliminated with Position "+elimPosition + "/"+_gm.GetTotalPlayers());
             Debug.Log("PlayerDestroyed");
             _vfx.PlayVFXAtPosition("Elimination", transform.position);
@@ -518,7 +518,7 @@ public class PlayerManager : MonoBehaviour
             //SetReadyPlayers(readyPlayers, _gm.GetStageNum());
             SetReadyPlayer(true, _gm.GetStageNum());
             bool allPlayersReady = true;
-            int counter = 0;
+            int counter = 1;
             bool playerReady = false;
             foreach (Player player in PhotonNetwork.PlayerList)
             {
@@ -535,7 +535,7 @@ public class PlayerManager : MonoBehaviour
                 }
             }
             
-            _photonView.RPC("sendMessage", RpcTarget.All, "<color=blue>" + _photonView.name + "</color> is ready. "+counter+"/"+PhotonNetwork.CurrentRoom.PlayerCount);
+            _photonView.RPC("sendMessage", RpcTarget.AllViaServer, "<color=blue>" + _photonView.name + "</color> is ready. "+counter+"/"+PhotonNetwork.CurrentRoom.PlayerCount);
             counter = 0;
             //&& counter < 100000
             while (!allPlayersReady && counter < 100)
@@ -605,7 +605,7 @@ public class PlayerManager : MonoBehaviour
     {
         for (int i = 1; i < 10; i++)
         {
-            _photonView.RPC("sendMessage", RpcTarget.All,  "MessageBox Setup: " +i);
+            _photonView.RPC("sendMessage", RpcTarget.AllViaServer,  "MessageBox Setup: " +i);
             yield return new WaitForSeconds(1f);
         }
     }
