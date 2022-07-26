@@ -81,6 +81,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!135 &6189193762323440220
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7483258613447221282}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 13.450385
+  m_Center: {x: 0.49267027, y: -2.1103578, z: 1.7031007}
 --- !u!1 &8536064125770804519
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,7 +105,6 @@ GameObject:
   - component: {fileID: 8536064125770804538}
   - component: {fileID: 8536064125770804539}
   - component: {fileID: 8536064125770804536}
-  - component: {fileID: 8536064125770804537}
   - component: {fileID: 8536064125770804518}
   - component: {fileID: 5706813918500196423}
   m_Layer: 0
@@ -167,19 +179,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &8536064125770804537
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8536064125770804519}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 0.0368497, y: 0.0007625693, z: 0.01985577}
-  m_Center: {x: -0.000058341473, y: 0.0000052395662, z: 0.000030799358}
 --- !u!114 &8536064125770804518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198,6 +197,9 @@ MonoBehaviour:
   startDelay: 31
   chaseSpeed: 0.02
   startDelayText: {fileID: 0}
+  timeUntilDissolve: 10
+  dissolveTime: 3
+  colliderDissolveThreshold: 0.5
 --- !u!135 &5706813918500196423
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -278,8 +280,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: monster
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 62f42d4c4e40a6d40a95564e3debdee5, type: 3}
+      propertyPath: m_TagString
+      value: ResetZone
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62f42d4c4e40a6d40a95564e3debdee5, type: 3}
+--- !u!1 &7483258613447221282 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 62f42d4c4e40a6d40a95564e3debdee5, type: 3}
+  m_PrefabInstance: {fileID: 7717069550170824051}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7823368979373046424 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 62f42d4c4e40a6d40a95564e3debdee5, type: 3}
