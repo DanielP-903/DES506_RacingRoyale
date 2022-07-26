@@ -28,31 +28,49 @@ public class CarController : MonoBehaviour
     #region Editable-Vars
     
     [Header("Car Driving Physics")] 
+    [Tooltip("Object to represent transform of centre of mass")]
     public GameObject centreOfMass;
+    [Tooltip("Amount of force applied to the motor wheels")]
     public float motorForce;
-    [HideInInspector] public float brakeTorque = 1000;
+    [Tooltip("Braking force")]
+    public float brakeTorque = 1000;
+    [Tooltip("Maximum angle for steering")]
     public float maxSteeringAngle;
+    [Tooltip("Maximum velocity for accelerating")]
     public float terminalVelocity = 120;
+    [Tooltip("List of axles - DO NOT DELETE")]
     public List<Axle> axles;
 
     [Header("Forces")] 
+    [Tooltip("Jumping force")]
     public float pushForceAmount = 5.0f;
+    [Tooltip("Main forward speed force")]
     public float accelerationForce = 5.0f;
+    [Tooltip("Boost force")]
     public float boostForceAmount = 5.0f;
+    [Tooltip("Drifting force (might not be in use currently)")]
     public float driftForceAmount = 3000.0f;
+    [Tooltip("Max number of boosts allowed in the air")]
     public int maxBoostsInAir = 1;
     
     [Header("Environmental Pads")] 
+    [Tooltip("Jumping pad force")]
     public float jumpPadForce = 5.0f;
+    [Tooltip("Boost pad force")]
     public float boostPadForce = 5.0f;
 
     [Header("Collisions")] 
+    [Tooltip("Collision force applied when bouncing off of players and objects")]
     public float bounciness = 100.0f;
 
     [Header("Cooldowns (in seconds)")] 
+    [Tooltip("Jumping cooldown time")]
     public float jumpCooldown = 2.0f;
+    [Tooltip("Boosting cooldown time")]
     public float boostCooldown = 2.0f;
+    [Tooltip("Reset cooldown time")]
     public float resetCooldown = 2.0f;
+    [Tooltip("Jump pad cooldown time")]
     public float padCooldown = 2.0f;
 
     [Header("Other")]

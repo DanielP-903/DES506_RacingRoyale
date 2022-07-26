@@ -12,11 +12,14 @@ public class Dissolve : MonoBehaviour
     private float dissolveTimer;
     private bool _canDetect = true;
 
+    
     //private GameObject _checkpoints;
     private CheckpointSystem _cs;
     
     public bool dissolve = false;
     public bool isCheckpoint = false;
+
+    private WallFollow _wallFollow;
     
     // Start is called before the first frame update
     void Start()
@@ -37,6 +40,17 @@ public class Dissolve : MonoBehaviour
             _canDetect = true;
             dissolve = false;
         }
+
+        GameObject wall = GameObject.FindGameObjectWithTag("EliminationZone");
+        if (wall)
+            _wallFollow = wall.GetComponent<WallFollow>();
+    }
+
+    void OnLevelWasLoaded()
+    {
+        GameObject wall = GameObject.FindGameObjectWithTag("EliminationZone");
+        if (wall)
+            _wallFollow = wall.GetComponent<WallFollow>();
     }
 
     // Update is called once per frame
@@ -45,8 +59,8 @@ public class Dissolve : MonoBehaviour
         if (dissolve)
         {
             dissolveTimer += Time.deltaTime;
-            dissolveTimer = Mathf.Clamp(dissolveTimer, 0, 3);
-            float dissolveFloat = Mathf.Lerp(1, 0, (3 - dissolveTimer) / 3);
+            dissolveTimer = Mathf.Clamp(dissolveTimer, 0, _wallFollow.dissolveTime);
+            float dissolveFloat = Mathf.Lerp(1, 0, (_wallFollow.dissolveTime - dissolveTimer) / _wallFollow.dissolveTime);
             foreach (var material in _meshRenderer.materials)
             {
                 material.SetFloat(FadeOutSlider, dissolveFloat);
@@ -55,7 +69,7 @@ public class Dissolve : MonoBehaviour
             {
                 _meshRendererClip.materials[0].SetFloat(FadeOutSlider, dissolveFloat);
             }
-            if (dissolveFloat >= 0.5f)
+            if (dissolveFloat >= _wallFollow.colliderDissolveThreshold)
             {
                 _meshCollider.enabled = false;
             }
@@ -81,7 +95,7 @@ public class Dissolve : MonoBehaviour
     private IEnumerator DelayDissolve()
     {
         _canDetect = false;
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(_wallFollow.timeUntilDissolve);
         dissolve = true;
         dissolveTimer = 0.0f;
     }

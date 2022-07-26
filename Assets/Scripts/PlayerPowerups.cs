@@ -9,36 +9,50 @@ using UnityEngine.UI;
 
 public class PlayerPowerups : MonoBehaviour
 {
-    [Header("Super Boost")] 
+    [Header("Super Boost")]
+    [Tooltip("Amount of force given to the player when activating Super Boost")]
     public float superBoostForce = 50.0f;
-    
-    [Header("Bouncy Wall Shield")]
-    public float wallShieldTime = 15.0f;
-    public float wallShieldBounciness = 10.0f;
 
     [Header("Air Blast")] 
+    [Tooltip("Radius area of effect for the Air Blast")]
     public float airBlastRadius = 10.0f;
+    [Tooltip("Force applied to players who collide with the blast")]
     public float airBlastForce = 10.0f;
+    [Tooltip("Time given for the Air Blast area of effect to expand")]
     public float airBlastTime = 2.0f;
+    [Tooltip("Air Blast VFX")]
     public List<ParticleSystem> airBlastEffects;
 
     [Header("Grapple Hook")] 
+    [Tooltip("Max time allowed before grapple disconnects")]
     public float grappleTime = 2.0f;
+    [Tooltip("Force applied to the player when grappling towards the target")]
     public float grappleForce = 10.0f;
+    [Tooltip("Maximum distance to look for targets")]
     public float achievableDistance = 30.0f;
+    [Tooltip("Minimum distance hook is effective")]
     public float grappleThreshold = 1.0f;
     
     [Header("Punching Glove")] 
+    [Tooltip("Max time allowed before punching glove disconnects")]
     public float punchTime = 2.0f;
+    [Tooltip("Force applied to the target when they are hit with the glove")]
     public float punchingForce = 10.0f;
+    [Tooltip("Maximum distance to look for targets")]
     public float achievablePunchRange = 30.0f;
+    [Tooltip("Radius area of effect for targets")]
     public float detectionRadius = 5.0f;
     
-    [Header("Warp Portal")] 
+    
+    [Header("OBSELETE POWERUPS")]
+    public float wallShieldTime = 15.0f;
+    public float wallShieldBounciness = 10.0f;
     public float warpPortalTime = 15.0f;
 
     [Header("Other")]
+    [Tooltip("UI icon for powerups")]
     public Image powerupIcon;
+    [Tooltip("Powerup scriptable objects")]
     public List<SO_Powerup> powerups = new List<SO_Powerup>();
   
     private GameObject grappleLineObject;
