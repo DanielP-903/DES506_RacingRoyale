@@ -30104,8 +30104,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   superBoostForce: 50
-  wallShieldTime: 15
-  wallShieldBounciness: 10
   airBlastRadius: 20
   airBlastForce: 30000
   airBlastTime: 1
@@ -30119,6 +30117,8 @@ MonoBehaviour:
   punchingForce: 20
   achievablePunchRange: 30
   detectionRadius: 5
+  wallShieldTime: 15
+  wallShieldBounciness: 10
   warpPortalTime: 5
   powerupIcon: {fileID: 0}
   powerups: []
@@ -30169,6 +30169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbfd85ce9b96705439c65d95f6d707a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debugMode: 0
 --- !u!1 &4892388860486838944
 GameObject:
   m_ObjectHideFlags: 0
