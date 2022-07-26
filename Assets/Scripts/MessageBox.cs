@@ -28,15 +28,31 @@ public class MessageBox : MonoBehaviour
 
     private void Update()
     {
+        int counter = 0;
         if (messages != null && messages.Count > 0)
         {
+            int messagesToDequeue = 0;
             foreach (MessageStruct ms in messages)
             {
-                if (ms.timeSet + timeBeforeDecay < Time.time)
+                if (ms.timeSet + timeBeforeDecay < Time.time && ms.timeSet + timeBeforeDecay + 1 > Time.time)
                 {
-                    StartCoroutine(fadeMessage(ms));
+                    messageBoxes[counter].alpha = 1 - ((Time.time - (ms.timeSet + 10)) );
                 }
+                else if (ms.timeSet + timeBeforeDecay + 1 < Time.time)
+                {
+                    messageBoxes[counter].alpha = 0;
+                    messagesToDequeue++;
+                }
+
+                counter++;
             }
+
+            while (messagesToDequeue > 0)
+            {
+                messages.Dequeue();
+                messagesToDequeue--;
+            }
+            UpdateMessages();
         }
     }
 
@@ -47,7 +63,14 @@ public class MessageBox : MonoBehaviour
         {
             //Debug.Log("MessageCount: " + counter);
             messageBoxes[counter].text = ms.messageText;
-            Debug.Log("MSG BOX: "+messageBoxes[counter].text+" MSG: "+ms.messageText);
+            //Debug.Log("MSG BOX: "+messageBoxes[counter].text+" MSG: "+ms.messageText);
+            counter++;
+            
+        }
+
+        while (counter < 5)
+        {
+            messageBoxes[counter].text = "";
             counter++;
         }
     }
@@ -63,12 +86,17 @@ public class MessageBox : MonoBehaviour
                 tmp.text = "";
             }
         }
+
+        if (messages.Count == 5)
+        {
+            messages.Dequeue();
+        }
         //Debug.Log("Message to Queue: "+text);
         messages.Enqueue(new MessageStruct(text, Time.time));
         UpdateMessages();
     }
 
-    IEnumerator fadeMessage(MessageStruct trackedMessage)
+    /*IEnumerator fadeMessage(MessageStruct trackedMessage)
     {
         if (messageBoxes.Length < 1)
         {
@@ -109,7 +137,7 @@ public class MessageBox : MonoBehaviour
         {
             Debug.LogError("Tracked TMP Not Found");
         }
-    }
+    }*/
 }
 
 public class MessageStruct

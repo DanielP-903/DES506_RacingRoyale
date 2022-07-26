@@ -38,6 +38,7 @@ public class fadeScreen : MonoBehaviour
         float vol = -80;
         float volStep = PlayerPrefs.GetFloat("MasterVol") / 25;
         mixer.SetFloat("Master", vol);
+        yield return new WaitForSeconds(1);
         while (fadeScreenUI.color.a > 0 || vol < PlayerPrefs.GetFloat("MasterVol"))
         {
             if (fadeScreenUI.color.a > 0)

@@ -50,7 +50,7 @@ public class PauseMenu : MonoBehaviour
         optionsPanel.SetActive(false);
         controlsPanel.SetActive(false);
 
-        if (PlayerPrefs.HasKey("MasterVol"))
+        /*if (PlayerPrefs.HasKey("MasterVol"))
         {
             mixer.SetFloat("Master", PlayerPrefs.GetFloat("MasterVol"));
         }
@@ -61,7 +61,7 @@ public class PauseMenu : MonoBehaviour
         if (PlayerPrefs.HasKey("SoundVol"))
         {
             mixer.SetFloat("Sound", PlayerPrefs.GetFloat("SoundVol"));
-        }
+        }*/
 
         if (PlayerPrefs.HasKey("FullScreen"))
         {
