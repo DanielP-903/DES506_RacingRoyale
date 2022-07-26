@@ -40,9 +40,20 @@ public class WallFollow : MonoBehaviour
     
     private bool hasFoundPlayer = false;
     private CheckpointSystem _checkpointSystem;
+    
+    [Header("Platform Dissolving Functionality")]
+    [Tooltip("How much time it takes before a platform starts dissolving (in seconds)")]
+    public float timeUntilDissolve = 10;
+    [Tooltip("How much time it takes for a platform to fully dissolve (in seconds)")]
+    public float dissolveTime = 3;    
+    [Tooltip("Value of dissolveTime which destroys the collider")]
+    [Range(0.0f, 1.0f)]
+    public float colliderDissolveThreshold = 0.5f;
+    
     // Start is called before the first frame update
     void Start()
     {
+
         hasFoundPlayer = false;
         StartCoroutine(waitTime());
         _bezierCurveGenerator = path.GetComponent<BezierCurveGenerator>();

@@ -5669,11 +5669,11 @@ WheelCollider:
     m_AsymptoteValue: 0.5
     m_Stiffness: 1.2
   m_SidewaysFriction:
-    m_ExtremumSlip: 0.8
-    m_ExtremumValue: 5
+    m_ExtremumSlip: 0.5
+    m_ExtremumValue: 2
     m_AsymptoteSlip: 0.8
     m_AsymptoteValue: 5
-    m_Stiffness: 1
+    m_Stiffness: 5
   m_Enabled: 1
 --- !u!1 &1118674505751619608
 GameObject:
@@ -5930,8 +5930,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   superBoostForce: 50
-  wallShieldTime: 15
-  wallShieldBounciness: 10
   airBlastRadius: 20
   airBlastForce: 30000
   airBlastTime: 1
@@ -5945,6 +5943,8 @@ MonoBehaviour:
   punchingForce: 20
   achievablePunchRange: 30
   detectionRadius: 5
+  wallShieldTime: 15
+  wallShieldBounciness: 10
   warpPortalTime: 5
   powerupIcon: {fileID: 0}
   powerups:
@@ -6089,6 +6089,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbfd85ce9b96705439c65d95f6d707a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debugMode: 0
 --- !u!1 &1118674506502527236
 GameObject:
   m_ObjectHideFlags: 0
@@ -6165,11 +6166,11 @@ WheelCollider:
     m_AsymptoteValue: 0.5
     m_Stiffness: 1.2
   m_SidewaysFriction:
-    m_ExtremumSlip: 0.8
-    m_ExtremumValue: 5
+    m_ExtremumSlip: 0.5
+    m_ExtremumValue: 2
     m_AsymptoteSlip: 0.8
     m_AsymptoteValue: 5
-    m_Stiffness: 1
+    m_Stiffness: 5
   m_Enabled: 1
 --- !u!1 &1118674506767621016
 GameObject:
@@ -6247,11 +6248,11 @@ WheelCollider:
     m_AsymptoteValue: 0.5
     m_Stiffness: 1.2
   m_SidewaysFriction:
-    m_ExtremumSlip: 0.8
-    m_ExtremumValue: 5
+    m_ExtremumSlip: 0.5
+    m_ExtremumValue: 2
     m_AsymptoteSlip: 0.8
     m_AsymptoteValue: 5
-    m_Stiffness: 1
+    m_Stiffness: 5
   m_Enabled: 1
 --- !u!1 &1170954730697120631
 GameObject:
@@ -24036,11 +24037,11 @@ WheelCollider:
     m_AsymptoteValue: 0.5
     m_Stiffness: 1.2
   m_SidewaysFriction:
-    m_ExtremumSlip: 0.8
-    m_ExtremumValue: 5
+    m_ExtremumSlip: 0.5
+    m_ExtremumValue: 2
     m_AsymptoteSlip: 0.8
     m_AsymptoteValue: 5
-    m_Stiffness: 1
+    m_Stiffness: 5
   m_Enabled: 1
 --- !u!1 &4981825420879955686
 GameObject:
