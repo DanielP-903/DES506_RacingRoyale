@@ -37,30 +37,30 @@ public class PowerupSpawner : MonoBehaviour
     private void SpawnPowerup()
     {
         float randomChance = Random.Range(0, 100);
-        if (randomChance < 16)
+        if (randomChance < 25)
         {
             currentPowerup = powerups[0];
         }
-        else if (randomChance >= 16 && randomChance < 33)
+        else if (randomChance >= 25 && randomChance < 50)
         {
             currentPowerup = powerups[1];
         }
-        else if (randomChance >= 33 && randomChance < 50)
+        else if (randomChance >= 50 && randomChance < 75)
         {
             currentPowerup = powerups[2];
         }
-        else if (randomChance >= 50 && randomChance < 66)
+        else if (randomChance >= 75)
         {
             currentPowerup = powerups[3];
         }
-        else if (randomChance >= 66 && randomChance < 83)
-        {
-            currentPowerup = powerups[4];
-        }
-        else if (randomChance >= 83)
-        {
-            currentPowerup = powerups[5];
-        }
+        //else if (randomChance >= 66 && randomChance < 83)
+        //{
+        //    currentPowerup = powerups[4];
+        //}
+        //else if (randomChance >= 83)
+        //{
+        //    currentPowerup = powerups[5];
+        //}
         
         // MANUAL ASSIGNATION OF POWERUP
         //currentPowerup = powerups[4];

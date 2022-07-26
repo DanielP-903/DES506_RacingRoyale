@@ -60,7 +60,6 @@ public class WallFollow : MonoBehaviour
         startPos = _bezierCurveGenerator.controlPoints[0].transform.position;
 
         _tValueMax = Mathf.Floor(_bezierCurveGenerator.controlPoints.Count / 3);
-        //Debug.Log("_tValueMax = " + _tValueMax);
     }
 
     public float GetStartDelayTimer()
@@ -98,20 +97,6 @@ public class WallFollow : MonoBehaviour
             
             if (hasFoundPlayer && _playerRef)
             {
-                // float distanceToStart = Vector3.Distance(_playerRef.transform.position, startPos) - 5.0f;
-                // float distanceToEnd = Vector3.Distance(_playerRef.transform.position, endPos) - 5.0f;
-                // float distance = Vector3.Distance(startPos, endPos) - 5.0f;
-                //
-                // Vector3 newValues = _wallOMeterPlayer.transform.localPosition;
-                // var t = (distance- distanceToStart)/distance;
-                // t = Mathf.Clamp(t, 0, 1);
-                // newValues.y = Mathf.Lerp(playerBarStartPos + playerBarOffset, playerBarStartPos, t);
-                // // Debug.Log("newValues.y = " + newValues.y);
-                // // Debug.Log("distanceToEnd = " + distanceToEnd);
-                // // Debug.Log("distanceToStart = " + distanceToStart);
-                // //Debug.Log("t = " + t);
-                // _wallOMeterPlayer.transform.localPosition = newValues;
-                
                 _wallOMeterSlider.value = Mathf.Lerp(_tValueMax, 0, (_tValueMax - _tValuePersistant)/_tValueMax);
             }
             
@@ -125,7 +110,6 @@ public class WallFollow : MonoBehaviour
 
             if (_tValue > 1)
             {
-                //Debug.Log("_tValue is > 1");
                 _tValue = 0.0f;
                 routeNumber += 3;
                 if (routeNumber >= _bezierCurveGenerator.controlPoints.Count - 1)
@@ -138,7 +122,6 @@ public class WallFollow : MonoBehaviour
         else
         {
             _startDelayTimer = _startDelayTimer <= 0 ? 0 : _startDelayTimer - Time.deltaTime;
-            //startDelayText.text = ((int)_startDelayTimer).ToString();
             if (_startDelayTimer < 1)
             {
                 StartCoroutine(RemoveDelayText());
@@ -155,6 +138,7 @@ public class WallFollow : MonoBehaviour
         yield return new WaitForSeconds(2);
         //startDelayText.text = "";
     }
+    
     IEnumerator waitTime()
     {
         yield return new WaitForSeconds(1);
