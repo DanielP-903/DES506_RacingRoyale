@@ -97,8 +97,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
-  m_LightingSettings: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: c6a923d1fba420149b5c45d360aca274, type: 2}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 8a628b0153bbb5d4d92e71983c7f62c1, type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -780,7 +780,6 @@ GameObject:
   m_Component:
   - component: {fileID: 86284478}
   - component: {fileID: 86284477}
-  - component: {fileID: 86284476}
   - component: {fileID: 86284475}
   m_Layer: 0
   m_Name: CameraCar
@@ -821,14 +820,6 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
---- !u!81 &86284476
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 86284474}
-  m_Enabled: 1
 --- !u!20 &86284477
 Camera:
   m_ObjectHideFlags: 0

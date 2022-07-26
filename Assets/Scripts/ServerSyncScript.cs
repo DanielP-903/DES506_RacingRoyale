@@ -8,6 +8,7 @@ using Random = UnityEngine.Random;
 
 public class ServerSyncScript : MonoBehaviour
 {
+    [SerializeField] private bool debugMode;
     private GameManager _gm;
     private MessageBox _mb;
     private fadeScreen _fs;
@@ -17,15 +18,21 @@ public class ServerSyncScript : MonoBehaviour
 
     private void Awake()
     {
-        _dm = GameObject.Find("DataManager").GetComponent<DataManager>();
-        meshArray = _dm.GetMesh();
-        _mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
+        if (!debugMode)
+        {
+            _dm = GameObject.Find("DataManager").GetComponent<DataManager>();
+            meshArray = _dm.GetMesh();
+            _mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
+        }
     }
 
     // Start is called before the first frame update
     private void Start()
     {
-        _fs = GameObject.Find("FadeScreen").GetComponent<fadeScreen>();
+        if (!debugMode)
+        {
+            _fs = GameObject.Find("FadeScreen").GetComponent<fadeScreen>();
+        }
     }
 
     public void SetUp()

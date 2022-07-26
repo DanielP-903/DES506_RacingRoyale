@@ -31,6 +31,7 @@ public class PauseMenu : MonoBehaviour
     [Tooltip("Dropdown for Resolution")]
     [SerializeField]
     private TMP_Dropdown resolution;
+    [SerializeField] private bool debugMode;
 
     private bool escapeKey;
     private bool lastKey;
@@ -39,13 +40,17 @@ public class PauseMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+        if (!debugMode)
+        {
+            _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+        }
+
         Cursor.visible = false;
         pausePanel.SetActive(false);
         optionsPanel.SetActive(false);
         controlsPanel.SetActive(false);
 
-        if (PlayerPrefs.HasKey("MasterVol"))
+        /*if (PlayerPrefs.HasKey("MasterVol"))
         {
             mixer.SetFloat("Master", PlayerPrefs.GetFloat("MasterVol"));
         }
@@ -56,7 +61,7 @@ public class PauseMenu : MonoBehaviour
         if (PlayerPrefs.HasKey("SoundVol"))
         {
             mixer.SetFloat("Sound", PlayerPrefs.GetFloat("SoundVol"));
-        }
+        }*/
 
         if (PlayerPrefs.HasKey("FullScreen"))
         {

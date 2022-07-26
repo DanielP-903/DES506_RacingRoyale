@@ -101,10 +101,10 @@ public class GameManager : MonoBehaviourPunCallbacks
     public override void OnPlayerLeftRoom(Player other)
     {
         //Debug.LogFormat("OnPlayerLeftRoom() {0}", other.NickName); // seen when other disconnects
-
+ 
         if (PhotonNetwork.IsMasterClient)
         {
-            
+            _photonView.RPC("sendMessage", RpcTarget.All, other.NickName + " has left. "+PhotonNetwork.CurrentRoom.PlayerCount+"/"+PhotonNetwork.CurrentRoom.MaxPlayers);
             //Debug.LogFormat("OnPlayerLeftRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
 
 
@@ -530,7 +530,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void Start()
     {
         //Debug.Log("Running!");
-
         Cursor.visible = false;
         //SceneManager.sceneLoaded -= LoadPlayerInLevel;
         DontDestroyOnLoad(this.gameObject);
@@ -718,6 +717,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     void SetUp()
     {
+        /*foreach (AudioListener al in FindObjectsOfType<AudioListener>())
+        {
+            Debug.Log("AL: "+al.gameObject);
+        }*/
         Debug.Log("SetUp was called");
         if (this.gameObject != null)
         {
@@ -743,7 +746,8 @@ public class GameManager : MonoBehaviourPunCallbacks
             }*/
 
             //Debug.Log("Loading GameMaster Settings");
-            if (PlayerPrefs.HasKey("MasterVol"))
+            
+            /*if (PlayerPrefs.HasKey("MasterVol"))
             {
                 mixer.SetFloat("Master", PlayerPrefs.GetFloat("MasterVol"));
             }
@@ -756,7 +760,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             if (PlayerPrefs.HasKey("SoundVol"))
             {
                 mixer.SetFloat("Sound", PlayerPrefs.GetFloat("SoundVol"));
-            }
+            }*/
 
             _totalBots = 0;
 

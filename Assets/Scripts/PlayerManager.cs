@@ -91,20 +91,60 @@ public class PlayerManager : MonoBehaviour
             PhotonNetwork.CurrentRoom.CustomProperties["ReadyPlayers" + stageNum] = num;
         }
     }
+    
+    public static bool TryGetReadyPlayer(out bool readyPlayer, int stageNum, Player player)
+    {
+        readyPlayer = false;
+
+        object readyPlayerFromProps;
+
+        if (player.CustomProperties.TryGetValue("ReadyPlayer" + stageNum, out readyPlayerFromProps))
+        {
+            readyPlayer = (bool)readyPlayerFromProps;
+            return true;
+        }
+        
+        
+        return false;
+    }
+    public static void SetReadyPlayer(bool setReady, int stageNum, Player player)
+    {
+        bool readyPlayer;
+        bool wasSet = TryGetReadyPlayer(out readyPlayer, stageNum, player);
+
+        if (!wasSet)
+        {
+            ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
+            {
+                { "ReadyPlayer" + stageNum, (bool)setReady }
+            };
+            player.SetCustomProperties(props);
+
+            bool wasSet2 = TryGetReadyPlayer(out readyPlayer, stageNum, player);
+
+            Debug.Log("Set Custom Props for Finished Players: " + props.ToStringFull() + " wasSet: " + wasSet +
+                      " NewValue: " + readyPlayer + " , wasSet2: " + wasSet2);
+        }
+        else
+        {
+            PhotonNetwork.CurrentRoom.CustomProperties["ReadyPlayer" + stageNum] = setReady;
+        }
+    }
+    
     void Start()
     {
         if (debugMode)
         {
             Debug.Log("DEBUG MODE IS ACTIVE! (PlayerManager)");
         }
-
-        if (!debugMode)
-        {
-            SetReadyPlayers(0, 1);
-        }
-
+        
         //SceneManager.sceneLoaded += LoadPMInLevel;
         _photonView = GetComponent<PhotonView>();
+        if (!debugMode)
+        {
+            //SetReadyPlayers(0, 1);
+            SetReadyPlayer(false, 1, _photonView.Owner);
+        }
         this.gameObject.name = _photonView.Owner.NickName;
         _mRend = transform.Find("CarMesh").GetComponent<MeshRenderer>();
         _mFilt = transform.Find("CarMesh").GetComponent<MeshFilter>();
@@ -210,7 +250,8 @@ public class PlayerManager : MonoBehaviour
             playerNumber = _gm.GetPlayerNumber();
             Debug.Log("Photon view NOT DETECTED during start function of PlayerManager" + playerNumber);
         }
-        
+
+        //StartCoroutine(TestScript());
         //playerNumber = _gm.GetPlayerNumber();
     }
     
@@ -458,14 +499,49 @@ public class PlayerManager : MonoBehaviour
             }
             //Debug.Log("FlyBy Completed");
             
-            int readyPlayers;
-            TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
-            readyPlayers = readyPlayers + 1;
-            SetReadyPlayers(readyPlayers, _gm.GetStageNum());
-
-            _photonView.RPC("sendMessage", RpcTarget.All, "<color=blue>" + _photonView.name + "</color> is ready. "+readyPlayers+"/"+_gm.GetTotalPlayers());
+            //int readyPlayers;
+            //TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
+            //readyPlayers = readyPlayers + 1;
+            //SetReadyPlayers(readyPlayers, _gm.GetStageNum());
+            SetReadyPlayer(true, _gm.GetStageNum(), _photonView.Owner);
+            bool allPlayersReady = true;
+            int counter = 0;
+            bool playerReady = false;
+            foreach (Player player in PhotonNetwork.PlayerList)
+            {
+                playerReady = false;
+                TryGetReadyPlayer(out playerReady, _gm.GetStageNum(), player);
+                Debug.Log("Player: "+player + " Ready: "+playerReady);
+                if (playerReady)
+                {
+                    counter++;
+                }
+                else
+                {
+                    allPlayersReady = false;
+                }
+            }
             
-            yield return new WaitUntil(() => readyPlayers >= _gm.GetTotalPlayers());
+            _photonView.RPC("sendMessage", RpcTarget.All, "<color=blue>" + _photonView.name + "</color> is ready. "+counter+"/"+PhotonNetwork.CurrentRoom.PlayerCount);
+            counter = 0;
+            while (!allPlayersReady  && counter < 100000)
+            {
+                playerReady = false;
+                foreach (Player player in PhotonNetwork.PlayerList)
+                {
+                    TryGetReadyPlayer(out playerReady, _gm.GetStageNum(), player);
+                    if (playerReady)
+                    {
+                        counter++;
+                    }
+                    else
+                    {
+                        allPlayersReady = false;
+                    }
+                }
+                counter++;
+            }
+            //yield return new WaitUntil(() => allPlayersReady);
             startDelayText.color = Color.clear; // Changed to clear as rubics are in
             float timeLeft = _gm.GetStartDelay();
             while (timeLeft > 0)
@@ -502,6 +578,15 @@ public class PlayerManager : MonoBehaviour
         }
 
         _messageText.color = Color.clear;
+    }
+
+    IEnumerator TestScript()
+    {
+        for (int i = 1; i < 10; i++)
+        {
+            _photonView.RPC("sendMessage", RpcTarget.All,  "MessageBox Setup: " +i);
+            yield return new WaitForSeconds(1f);
+        }
     }
 
     #endregion
