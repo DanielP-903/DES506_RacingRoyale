@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: AlphaFadeTrial
+  m_Shader: {fileID: -6465566751694194690, guid: ede3f23e77591884e883e828927f2100, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - TextColour:
+        m_Texture: {fileID: 2800000, guid: 7a039563c505c184caa93fbb75e8e405, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_3459b35241b34eccb8e29b7d02c0bea5:
+        m_Texture: {fileID: 2800000, guid: 063b96ce6e3e8e04a8b82589fb7f8b51, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_5d74c37081694c2fbe094c3e0302b230:
+        m_Texture: {fileID: 2800000, guid: 6f7c22a3723d17c42b58bab3b1ecfd2d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - AlphaClipThreshold: 0.5
+    - FadeOutSlider: -1.02
+    - NoiseScale: 200
+    - OuterGlowAmount: 0.07
+    m_Colors:
+    - NoiseTileAmount: {r: 1, g: 1, b: 0, a: 0}
+    - OuterGlowColour: {r: 1, g: 0, b: 0, a: 1}
+  m_BuildTextureStacks: []

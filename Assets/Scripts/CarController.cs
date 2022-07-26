@@ -90,6 +90,7 @@ public class CarController : MonoBehaviour
     private bool _passedFinishLine;
     private bool _hitEliminationZone;
     private bool _hitDetect;
+    private bool _lookBehind;
 
     #endregion
 
@@ -199,7 +200,7 @@ public class CarController : MonoBehaviour
             }
     
             _pm = GameObject.Find("PauseMenu").GetComponent<PauseMenu>();
-            var mainCameraObject = GameObject.FindGameObjectWithTag("MainCamera");
+            var mainCameraObject = GameObject.Find("PlayerCamera");
             if (mainCameraObject)
             {
                 _mainCam = mainCameraObject.GetComponent<Camera>();
@@ -657,6 +658,8 @@ public class CarController : MonoBehaviour
             }
         }
 
+        //RearviewCamera();
+
         //UpdateCameraAnimation();
     }
 
@@ -884,26 +887,28 @@ public class CarController : MonoBehaviour
     public void Rearview(InputAction.CallbackContext context)
     {
         float value = context.ReadValue<float>();
+        //_lookBehind = value > 0;
         RearviewCamera(value > 0);
         //Debug.Log("Escape detected");
     }
 
-    public void RearviewCamera(bool lookBehind)
+    private void RearviewCamera(bool backCam)
     {
-        if (_virtualCamera != null)
-        {
-            if (lookBehind)
-            {
-                Debug.Log("Behind");
-                _transposer.m_FollowOffset = new Vector3(0, 5, 8);
-            }
-            else
-            {
-                Debug.Log("Forward");
-                _transposer.m_FollowOffset = new Vector3(0, 5, -8);
-            }
+        if (_virtualCamera == null) return;
 
+        _lookBehind = backCam;
+        if (_lookBehind)
+        {
+            Debug.Log("Behind");
+            _transposer.m_FollowOffset = new Vector3(0, 5, 8);
         }
+        else
+        {
+            Debug.Log("Forward");
+            _transposer.m_FollowOffset = new Vector3(0, 5, -8);
+        }
+
+        Debug.Log("CamPos: " +_transposer.m_FollowOffset+ " - Transposer:"+_transposer.gameObject);
     }
 
     #endregion

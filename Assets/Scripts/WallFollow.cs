@@ -11,14 +11,16 @@ public class WallFollow : MonoBehaviour
 {
     public GameObject path;
 
+    public float playerBarStartPos;
+    public float playerBarOffset;
     public float startDelay = 3.0f;
     public float chaseSpeed = 1.0f;
     public TextMeshProUGUI startDelayText;
-    //public GameObject wallOMeter;
+    private GameObject _wallOMeter;
     private BezierCurveGenerator _bezierCurveGenerator;
 
-    //private Slider _wallOMeterSlider;
-    //private GameObject _wallOMeterPlayer;
+    private Slider _wallOMeterSlider;
+    private GameObject _wallOMeterPlayer;
 
     private float _startDelayTimer = 0.0f;
     
@@ -36,12 +38,12 @@ public class WallFollow : MonoBehaviour
     private CarController _carController;
     private Rigidbody _rigidbodyRef;
     
-    //private bool hasFoundPlayer = false;
+    private bool hasFoundPlayer = false;
     private CheckpointSystem _checkpointSystem;
     // Start is called before the first frame update
     void Start()
     {
-        //hasFoundPlayer = false;
+        hasFoundPlayer = false;
         StartCoroutine(waitTime());
         _bezierCurveGenerator = path.GetComponent<BezierCurveGenerator>();
         _checkpointSystem = GameObject.FindGameObjectWithTag("CheckpointSystem").GetComponent<CheckpointSystem>();
@@ -49,9 +51,10 @@ public class WallFollow : MonoBehaviour
         _tValue = 0.0f;
         _startDelayTimer = startDelay;
         _begin = false;
-
-        //_wallOMeterSlider = wallOMeter.GetComponent<Slider>();
-        //_wallOMeterPlayer = wallOMeter.transform.GetChild(2).gameObject;
+        
+        _wallOMeter = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(12).gameObject;
+        _wallOMeterSlider = _wallOMeter.GetComponent<Slider>();
+        _wallOMeterPlayer = _wallOMeter.transform.GetChild(2).gameObject;
 
         endPos = _bezierCurveGenerator.controlPoints[_bezierCurveGenerator.controlPoints.Count - 1].transform.position;
         startPos = _bezierCurveGenerator.controlPoints[0].transform.position;
@@ -68,13 +71,20 @@ public class WallFollow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // _wallOMeterSlider.value = Vector3.Lerp(_wallOMeterPlayer.transform.position, endPos, (transform.position-startPos).magnitude).magnitude;
-        //_wallOMeterSlider.value = (transform.position - startPos).magnitude /(endPos - transform.position).magnitude;
-        
-        //_wallOMeterSlider.value = Mathf.Lerp(_tValueMax, 0, (_tValueMax - _tValuePersistant)/_tValueMax);
+        if (hasFoundPlayer && _playerRef)
+        {
+            float distanceToStart = Vector3.Distance(_playerRef.transform.position, startPos) - 5.0f;
+            float distanceToEnd = Vector3.Distance(_playerRef.transform.position, endPos) - 5.0f;
+            float distance = Vector3.Distance(startPos, endPos) - 5.0f;
 
-      
-        
+            Vector3 newValues = _wallOMeterPlayer.transform.localPosition;
+            var t = (distance- distanceToStart)/distance;
+            t = Mathf.Clamp(t, 0, 1);
+            newValues.y = Mathf.Lerp(playerBarStartPos + playerBarOffset, playerBarStartPos, t);
+            
+            _wallOMeterPlayer.transform.localPosition = newValues;
+        }
+
         if (_begin)
         {
             _tValue += Time.deltaTime * chaseSpeed;
@@ -86,34 +96,31 @@ public class WallFollow : MonoBehaviour
                               3 * (1 - _tValue) * Mathf.Pow(_tValue, 2) * _bezierCurveGenerator.controlPoints[routeNumber + 2].position +
                               Mathf.Pow(_tValue, 3) * _bezierCurveGenerator.controlPoints[routeNumber + 3].position;
             
-            // if (hasFoundPlayer)
-            // {
-            //     
-            //     float distanceToStart = Vector3.Distance(_playerRef.transform.position, startPos) - 5.0f;
-            //     float distanceToEnd = Vector3.Distance(_playerRef.transform.position, endPos) - 5.0f;
-            //     float distanceToLastCheckpoint = Vector3.Distance(_playerRef.transform.position, _playerRef.GetComponent<PlayerManager>().GetSpawnLocation().position);
-            //     float distanceToNextCheckpoint = Vector3.Distance(_playerRef.transform.position, (_checkpointSystem.));
-            //     
-            //     float maxDistance = 100.0f;
-            //     Vector3 newValues = _wallOMeterPlayer.transform.position;
-            //     newValues.y = Mathf.Lerp(180, 670,  (distanceToNextCheckpoint- distanceToLastCheckpoint)/distanceToLastCheckpoint);
-            //     Debug.Log("newValues.y = " + newValues.y);
-            //     Debug.Log("distanceToEnd = " + distanceToEnd);
-            //     Debug.Log("distanceToStart = " + distanceToStart);
-            //     _wallOMeterPlayer.transform.position = newValues;
-            //     
-            //     //_wallOMeterSlider.value = Mathf.Lerp(_tValueMax, 0, (_tValueMax - _tValuePersistant)/_tValueMax);
-            //
-            // }
+            if (hasFoundPlayer && _playerRef)
+            {
+                // float distanceToStart = Vector3.Distance(_playerRef.transform.position, startPos) - 5.0f;
+                // float distanceToEnd = Vector3.Distance(_playerRef.transform.position, endPos) - 5.0f;
+                // float distance = Vector3.Distance(startPos, endPos) - 5.0f;
+                //
+                // Vector3 newValues = _wallOMeterPlayer.transform.localPosition;
+                // var t = (distance- distanceToStart)/distance;
+                // t = Mathf.Clamp(t, 0, 1);
+                // newValues.y = Mathf.Lerp(playerBarStartPos + playerBarOffset, playerBarStartPos, t);
+                // // Debug.Log("newValues.y = " + newValues.y);
+                // // Debug.Log("distanceToEnd = " + distanceToEnd);
+                // // Debug.Log("distanceToStart = " + distanceToStart);
+                // //Debug.Log("t = " + t);
+                // _wallOMeterPlayer.transform.localPosition = newValues;
+                
+                _wallOMeterSlider.value = Mathf.Lerp(_tValueMax, 0, (_tValueMax - _tValuePersistant)/_tValueMax);
+            }
             
             transform.position = newPosition;
 
             Vector3 difference = newPosition - oldPosition;
 
             float rotationAngle = Mathf.Atan2(difference.x, difference.z) * Mathf.Rad2Deg;
-
-            transform.rotation = Quaternion.Euler(90, rotationAngle, 0);
-
+            
             if (_tValue > 1)
             {
                 //Debug.Log("_tValue is > 1");
@@ -159,11 +166,11 @@ public class WallFollow : MonoBehaviour
                 continue;
             }
             
-            if (player.GetComponent<PhotonView>().IsMine)
+            if (player.GetComponent<PhotonView>().IsMine && !player.GetComponent<CarController>().bot)
             {
                 _playerRef = player;
                 //Debug.Log("Player Found");
-                //hasFoundPlayer = true;
+                hasFoundPlayer = true;
             }
         }
         

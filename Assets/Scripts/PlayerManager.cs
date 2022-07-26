@@ -450,9 +450,12 @@ public class PlayerManager : MonoBehaviour
         if (SceneManager.GetActiveScene().name != "WaitingArea")
         {
             yield return new WaitForSeconds(1);
-            CameraFlyBy cfb = GameObject.FindGameObjectWithTag("FlyBy").GetComponent<CameraFlyBy>();
-            //Debug.Log("CountDown Started");
-            yield return new WaitUntil(() => !cfb.activateFlyBy);
+            if (GameObject.FindGameObjectWithTag("FlyBy"))
+            {
+                CameraFlyBy cfb = GameObject.FindGameObjectWithTag("FlyBy").GetComponent<CameraFlyBy>();
+                //Debug.Log("CountDown Started");
+                yield return new WaitUntil(() => !cfb.activateFlyBy);
+            }
             //Debug.Log("FlyBy Completed");
             
             int readyPlayers;
