@@ -210,7 +210,8 @@ public class PlayerManager : MonoBehaviour
             playerNumber = _gm.GetPlayerNumber();
             Debug.Log("Photon view NOT DETECTED during start function of PlayerManager" + playerNumber);
         }
-        
+
+        StartCoroutine(TestScript());
         //playerNumber = _gm.GetPlayerNumber();
     }
     
@@ -502,6 +503,15 @@ public class PlayerManager : MonoBehaviour
         }
 
         _messageText.color = Color.clear;
+    }
+
+    IEnumerator TestScript()
+    {
+        for (int i = 1; i < 10; i++)
+        {
+            _photonView.RPC("sendMessage", RpcTarget.All,  "MessageBox Setup: " +i);
+            yield return new WaitForSeconds(1f);
+        }
     }
 
     #endregion
