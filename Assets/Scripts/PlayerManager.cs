@@ -96,21 +96,25 @@ public class PlayerManager : MonoBehaviour
         if (debugMode)
         {
             Debug.Log("DEBUG MODE IS ACTIVE! (PlayerManager)");
+            _cs = GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>();
+            _cc = GetComponent<CarController>();
+            _rb = GetComponent<Rigidbody>();
         }
 
         if (!debugMode)
         {
             SetReadyPlayers(0, 1);
-        }
 
-        //SceneManager.sceneLoaded += LoadPMInLevel;
-        _photonView = GetComponent<PhotonView>();
-        this.gameObject.name = _photonView.Owner.NickName;
-        _mRend = transform.Find("CarMesh").GetComponent<MeshRenderer>();
-        _mFilt = transform.Find("CarMesh").GetComponent<MeshFilter>();
-        _flaps = transform.Find("Flaps").gameObject;
-        _vfx = GetComponent<CarVFXHandler>();
-        object skinNumFromProps;
+
+            //SceneManager.sceneLoaded += LoadPMInLevel;
+            _photonView = GetComponent<PhotonView>();
+            this.gameObject.name = _photonView.Owner.NickName;
+            _mRend = transform.Find("CarMesh").GetComponent<MeshRenderer>();
+            _mFilt = transform.Find("CarMesh").GetComponent<MeshFilter>();
+            _flaps = transform.Find("Flaps").gameObject;
+            _vfx = GetComponent<CarVFXHandler>();
+            object skinNumFromProps;
+        }
         /*if (_photonView.IsMine && !_photonView.Owner.CustomProperties.TryGetValue("Skin", out skinNumFromProps))
         {
             _photonView.Owner.CustomProperties.Add("Skin", PlayerPrefs.GetInt("Skin"));
@@ -142,75 +146,78 @@ public class PlayerManager : MonoBehaviour
             _flaps.SetActive(skinNum < 3);
         }
 
-        if (_photonView.Owner == null)
+        if (!debugMode)
         {
-            playerNameText.text = "Guest";
-            playerLicenseText.text = "Guest";
-            playerFrontLicenseText.text = "Guest";
-        }
-        else
-        {
-            playerNameText.text = _photonView.Owner.NickName;
-            playerLicenseText.text = _photonView.Owner.NickName;
-            playerFrontLicenseText.text = _photonView.Owner.NickName;
-        }
-        if (_photonView != null)
-        {
-            DontDestroyOnLoad(this.gameObject);
-            if (_photonView.IsMine)
+            if (_photonView.Owner == null)
             {
-                _cc = GetComponent<CarController>();
-                _rb = GetComponent<Rigidbody>();
-                _rb.velocity = Vector3.zero;
-                _rb.angularVelocity = Vector3.zero;
-                if (!_cc.debug)
-                {
-                    _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
-                }
-
-                mainCam = Camera.main.gameObject;
-                AudioSource source = mainCam.GetComponent<AudioSource>();
-                source.loop = true;
-                source.clip = Resources.Load<AudioClip>("Audio/Music/NewMusic");
-                source.Play();
-                CinemachineVirtualCamera cvc = mainCam.GetComponent<CinemachineVirtualCamera>();
-                DontDestroyOnLoad(mainCam);
-                var transform1 = transform;
-                cvc.m_Follow = transform1;
-                cvc.m_LookAt = transform1;
-                
-                int spawnNumber = playerNumber;
-                if (_gm != null)
-                {
-                    if (playerNumber == 0)
-                    {
-                        spawnNumber = _gm.GetPlayerNumber();
-                    }
-                }
-                else
-                {
-                    Debug.Log("GameManager does not exist!");
-                }
-
-                _spawnLocation = GameObject.Find("SpawnLocation" + spawnNumber).transform;
+                playerNameText.text = "Guest";
+                playerLicenseText.text = "Guest";
+                playerFrontLicenseText.text = "Guest";
             }
             else
             {
-                //parts = GetComponent<CarController>().boostEffects;
-                _cc = GetComponent<CarController>();
-                Destroy(transform.Find("InputSystem").gameObject);
-                Destroy(_cc);
-                //Destroy(GetComponent<Rigidbody>());
-                Destroy(GetComponent<PlayerPowerups>());
-                Destroy(this);
+                playerNameText.text = _photonView.Owner.NickName;
+                playerLicenseText.text = _photonView.Owner.NickName;
+                playerFrontLicenseText.text = _photonView.Owner.NickName;
+            }
+
+            if (_photonView != null)
+            {
+                DontDestroyOnLoad(this.gameObject);
+                if (_photonView.IsMine)
+                {
+                    _cc = GetComponent<CarController>();
+                    _rb = GetComponent<Rigidbody>();
+                    _rb.velocity = Vector3.zero;
+                    _rb.angularVelocity = Vector3.zero;
+                    if (!_cc.debug)
+                    {
+                        _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+                    }
+
+                    mainCam = Camera.main.gameObject;
+                    AudioSource source = mainCam.GetComponent<AudioSource>();
+                    source.loop = true;
+                    source.clip = Resources.Load<AudioClip>("Audio/Music/NewMusic");
+                    source.Play();
+                    CinemachineVirtualCamera cvc = mainCam.GetComponent<CinemachineVirtualCamera>();
+                    DontDestroyOnLoad(mainCam);
+                    var transform1 = transform;
+                    cvc.m_Follow = transform1;
+                    cvc.m_LookAt = transform1;
+
+                    int spawnNumber = playerNumber;
+                    if (_gm != null)
+                    {
+                        if (playerNumber == 0)
+                        {
+                            spawnNumber = _gm.GetPlayerNumber();
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log("GameManager does not exist!");
+                    }
+
+                    _spawnLocation = GameObject.Find("SpawnLocation" + spawnNumber).transform;
+                }
+                else
+                {
+                    //parts = GetComponent<CarController>().boostEffects;
+                    _cc = GetComponent<CarController>();
+                    Destroy(transform.Find("InputSystem").gameObject);
+                    Destroy(_cc);
+                    //Destroy(GetComponent<Rigidbody>());
+                    Destroy(GetComponent<PlayerPowerups>());
+                    Destroy(this);
+                }
+            }
+            else
+            {
+                playerNumber = _gm.GetPlayerNumber();
+                Debug.Log("Photon view NOT DETECTED during start function of PlayerManager" + playerNumber);
             }
         }
-        else
-        {
-            playerNumber = _gm.GetPlayerNumber();
-            Debug.Log("Photon view NOT DETECTED during start function of PlayerManager" + playerNumber);
-        }
-        
         //playerNumber = _gm.GetPlayerNumber();
     }
     

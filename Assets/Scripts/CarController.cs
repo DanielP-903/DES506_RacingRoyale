@@ -208,8 +208,11 @@ public class CarController : MonoBehaviour
                 _transposer = _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
             }
 
-            _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
-            _photonView = GetComponent<PhotonView>();
+            if (!debug)
+            {
+                _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+                _photonView = GetComponent<PhotonView>();
+            }
 
         }
     
