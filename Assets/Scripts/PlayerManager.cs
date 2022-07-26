@@ -118,7 +118,7 @@ public class PlayerManager : MonoBehaviour
             {
                 { "ReadyPlayer" + stageNum, (bool)setReady }
             };
-            PhotonNetwork.CurrentRoom.SetCustomProperties(props);
+            player.SetCustomProperties(props);
 
             bool wasSet2 = TryGetReadyPlayer(out readyPlayer, stageNum, player);
 
@@ -509,7 +509,9 @@ public class PlayerManager : MonoBehaviour
             bool playerReady = false;
             foreach (Player player in PhotonNetwork.PlayerList)
             {
+                playerReady = false;
                 TryGetReadyPlayer(out playerReady, _gm.GetStageNum(), player);
+                Debug.Log("Player: "+player + " Ready: "+playerReady);
                 if (playerReady)
                 {
                     counter++;
