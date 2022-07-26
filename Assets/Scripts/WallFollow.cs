@@ -121,6 +121,8 @@ public class WallFollow : MonoBehaviour
 
             float rotationAngle = Mathf.Atan2(difference.x, difference.z) * Mathf.Rad2Deg;
             
+            transform.rotation = Quaternion.Euler(0, rotationAngle, 0);
+
             if (_tValue > 1)
             {
                 //Debug.Log("_tValue is > 1");
