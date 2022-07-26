@@ -718,6 +718,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     void SetUp()
     {
+        /*foreach (AudioListener al in FindObjectsOfType<AudioListener>())
+        {
+            Debug.Log("AL: "+al.gameObject);
+        }*/
         Debug.Log("SetUp was called");
         if (this.gameObject != null)
         {
