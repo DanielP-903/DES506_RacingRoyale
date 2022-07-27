@@ -5794,6 +5794,12 @@ MonoBehaviour:
     rightWheel: {fileID: 1118674506502527237}
     motor: 0
     steering: 0
+  wheelResetSpeed: 50
+  wheelTurningSpeed: 1
+  forwardMultiplier: 1
+  backwardMultiplier: 0.5
+  idleBrakeForce: 8000
+  driftSmokeThreshold: 20
   pushForceAmount: 900
   accelerationForce: 5
   boostForceAmount: 15
@@ -5810,6 +5816,7 @@ MonoBehaviour:
   checkpoints: {fileID: 0}
   flybyCam: {fileID: 0}
   audioManager: {fileID: 73668218835031516}
+  flybyDelay: 0.01
   debug: 0
   bot: 0
 --- !u!95 &1118674505751619605
@@ -5994,6 +6001,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614526, guid: a720326c5f6d64e4fae2d6cbf1b9870c, type: 3}
   - {fileID: 8926484042661614526, guid: 98d2075eda426024e999b6db783a749e, type: 3}
   - {fileID: 8926484042661614526, guid: 51f4dc0fbb4b5974baf088bfb477a046, type: 3}
+  - {fileID: 8926484042661614526, guid: 7d6bd74576e9eb3478f79af241b85c66, type: 3}
   driftSmokeEffects:
   - {fileID: 2074094576128462660}
   - {fileID: 5454420110605344980}

@@ -427,6 +427,11 @@ public class PlayerManager : MonoBehaviour
         _spawnLocation = newSpawn;
     }
 
+    public void PassCheckpoint()
+    {
+        _as.displayAlert("Win");
+    }
+
     public void CompleteStage()
     {
         if (!completedStage)
