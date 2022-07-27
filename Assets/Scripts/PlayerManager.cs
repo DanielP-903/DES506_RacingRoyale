@@ -27,6 +27,7 @@ public class PlayerManager : MonoBehaviour
     private CheckpointSystem _cs;
     private TextMeshProUGUI _messageText;
     private CarVFXHandler _vfx;
+    private AlertSystem _as;
     public TextMeshProUGUI startDelayText;
 
     [HideInInspector] public float timer = 3;
@@ -349,6 +350,7 @@ public class PlayerManager : MonoBehaviour
                 //SetReadyPlayers(0, _gm.GetStageNum());
                 startBlocker = GameObject.Find("StartBlocker");
                 _cs = GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>();
+                _as = GameObject.Find("Alerts").GetComponent<AlertSystem>();
                 startDelayText = GameObject.Find("Start Delay").GetComponent<TextMeshProUGUI>();
                 _messageText = GameObject.Find("Message").GetComponent<TextMeshProUGUI>();
                 _messageText.color = Color.clear;
@@ -436,6 +438,7 @@ public class PlayerManager : MonoBehaviour
             GameManager.SetFinishedPlayers(num,_gm.GetStageNum());
             if (_gm.GetStageNum() == 2)
             {
+                _as.displayAlert("Win");
                 elimPosition = num;
                 if (elimPosition < 5)
                 {
@@ -447,6 +450,10 @@ public class PlayerManager : MonoBehaviour
                     Debug.Log(t3.NickName);*/
                 }
             }
+            else
+            {
+                _as.displayAlert("Qualified");
+            }
             _gm.CompletePlayer();
         }
     }
@@ -455,6 +462,7 @@ public class PlayerManager : MonoBehaviour
     {
         if (!completedStage && !eliminated)
         {
+            _as.displayAlert("Eliminated");
             startDelayText.color = new Color(startDelayText.color.r, startDelayText.color.g, startDelayText.color.b, 0);
             //Debug.Log("Player: "+_photonView.Owner.NickName + " Eliminated.");
          
