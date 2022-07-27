@@ -568,9 +568,9 @@ public class PlayerManager : MonoBehaviour
             while (timeLeft > 0)
             {
                 startDelayText.text = timeLeft.ToString("F2");
-                timeLeft -= 0.01f;
+                timeLeft -= 0.02f;
                 timer = timeLeft;
-                yield return new WaitForSeconds(0.01f);
+                yield return new WaitForFixedUpdate();
             }
 
             //Start Code Here

@@ -40,6 +40,16 @@ public class CarController : MonoBehaviour
     public float terminalVelocity = 120;
     [Tooltip("List of axles - DO NOT DELETE")]
     public List<Axle> axles;
+    [Tooltip("Physical wheel turning speed")]
+    public float wheelTurningSpeed = 50;
+    [Tooltip("Multiplier for forward acceleration")]
+    public float forwardMultiplier = 1;
+    [Tooltip("Multiplier for backward acceleration")]
+    public float backwardMultiplier = 0.5f;
+    [Tooltip("Idle brake force")]
+    public float idleBrakeForce = 8000;  
+    [Tooltip("Drift smoke VFX speed threshold")]
+    public float driftSmokeThreshold = 20;
 
     [Header("Forces")] 
     [Tooltip("Jumping force")]
@@ -78,6 +88,7 @@ public class CarController : MonoBehaviour
     public CheckpointSystem checkpoints;
     public Camera flybyCam;
     public AudioManager audioManager;
+    public float flybyDelay = 0.01f;
 
     [Header("DEBUG MODE")] 
     public bool debug;
@@ -431,11 +442,11 @@ public class CarController : MonoBehaviour
     // For updating driving physics with wheel colliders
     private void PhysUpdateDriving()
     {
-        float motorMultiplier = _moveForward ? 1 : _moveBackward ? -0.5f : 0;
+        float motorMultiplier = _moveForward ? forwardMultiplier : _moveBackward ? -backwardMultiplier : 0;
   
         float currentMotorValue = motorForce * motorMultiplier;
 
-        _currentSteeringAngle = Mathf.Lerp(_currentSteeringAngle, _rigidbody.velocity.magnitude * 2.2369362912f > 60 ? 10 : maxSteeringAngle, Time.deltaTime * 50);
+        _currentSteeringAngle = Mathf.Lerp(_currentSteeringAngle, _rigidbody.velocity.magnitude * 2.2369362912f > 60 ? 10 : maxSteeringAngle, Time.deltaTime * wheelTurningSpeed);
 
         if (_moveLeft)
         {
@@ -484,7 +495,7 @@ public class CarController : MonoBehaviour
 
         if (!_moveForward && !_moveBackward)
         {
-            brakeTorque = 8000.0f;
+            brakeTorque = idleBrakeForce;
         }
         else if (_drift)
         {
@@ -509,7 +520,7 @@ public class CarController : MonoBehaviour
         {
             if (_moveLeft || _moveRight)
             {
-                if (_rigidbody.velocity.magnitude * 2.2369362912f > 20)
+                if (_rigidbody.velocity.magnitude * 2.2369362912f > driftSmokeThreshold)
                 {
                     _vfxHandler.PlayVFX("DriftSmoke");
                 }
@@ -533,11 +544,6 @@ public class CarController : MonoBehaviour
 
     #region Getters
 
-    public GameManager GetGM()
-    {
-        return _gm;
-    }
-    
     public float GetBoostDelay()
     {
         return _boostDelay;
@@ -583,7 +589,7 @@ public class CarController : MonoBehaviour
     private IEnumerator DelayFlyBy()
     {
         _gm.halt = true;
-        yield return new WaitForSeconds(0.01f);
+        yield return new WaitForSeconds(flybyDelay);
         _mainCam.gameObject.SetActive(false);
         flybyCam.gameObject.SetActive(true);
         flybyCam.GetComponent<CameraFlyBy>().activateFlyBy = true;
@@ -591,13 +597,10 @@ public class CarController : MonoBehaviour
     
     private void Update()
     {
-        if (_gm)
+        if (_gm && _gm.halt)
         {
-            if (_gm.halt)
-            {
-                _rigidbody.velocity = new Vector3(0, 0, 0);
-                _gm.SetDelayTimer();
-            }
+            _rigidbody.velocity = new Vector3(0, 0, 0);
+            _gm.SetDelayTimer();
         }
 
         WheelCollider currentWheel = axles[0].leftWheel;
@@ -637,20 +640,14 @@ public class CarController : MonoBehaviour
         if (!_grounded)
         {
             _airTime += Time.deltaTime;
-            //Debug.Log("Air time: " + _airTime);
             _delayAirTime = true;
         }
         else
         {
             _boostsInAirLeft = maxBoostsInAir;
-            
-            // if (_delayAirTime && _airTime > 0.5f) 
-            // {
-            //     StartCoroutine(DelayAirTime());
-            // }
+
             if (_airTime > 0.5f)
             {
-                //_vfxHandler.PlayVFXAtPosition("GroundImpact", transform.position);
                 _vfxHandler.SpawnVFXAtPosition("GroundImpact", transform.position + (transform.forward/2) - (transform.up/1.5f), 2,false);
                 if (!bot)
                 {
@@ -663,7 +660,6 @@ public class CarController : MonoBehaviour
 
         if (_cameraFlyBy)
         {
-            //Debug.Log("Activate FlyBy: " + _cameraFlyBy.activateFlyBy);
             if (!_cameraFlyBy.activateFlyBy)
             {
                 flybyCam.gameObject.SetActive(false);
@@ -675,23 +671,9 @@ public class CarController : MonoBehaviour
                 flybyCam.gameObject.SetActive(true);
                 _mainCam.gameObject.SetActive(false);
                 _gm.SetDelayTimer();
-                //_gm.halt = true;
             }
         }
-
-        //RearviewCamera();
-
-        //UpdateCameraAnimation();
     }
-
-    // public void UpdateCameraAnimation()
-    // {
-    //     if (_animCamTime > 0.0f)
-    //     {
-    //         _animCamTime = _animCamTime <= 0 ? 0 : _animCamTime - Time.deltaTime;
-    //         _transposer.m_FollowOffset = new Vector3(0, Mathf.SmoothStep(4, 5, (1 - _animCamTime) / 1), -8);
-    //     }
-    // }
     
     public void ResetPlayer(bool pressedButton = false)
     {
