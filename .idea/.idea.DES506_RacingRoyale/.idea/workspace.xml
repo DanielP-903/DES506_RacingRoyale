@@ -11,6 +11,8 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4c05f01c27d1415bafcda4c1ab7160e038a00/53/a723232a/NonAllocDictionary`2.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4c05f01c27d1415bafcda4c1ab7160e038a00/d1/ec2eba71/PhotonPeer.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/CarController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/CarVFXHandler.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/CheckpointSystem.cs" root0="FORCE_HIGHLIGHTING" />
@@ -80,10 +82,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="8556">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="8556" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -191,9 +193,7 @@
       <workItem from="1658745577828" duration="3396000" />
       <workItem from="1658756192118" duration="595000" />
       <workItem from="1658824196888" duration="20731000" />
-      <workItem from="1658909892419" duration="1292000" />
-      <workItem from="1658912248584" duration="1054000" />
-      <workItem from="1658918148191" duration="2878000" />
+      <workItem from="1658913852781" duration="6174000" />
     </task>
     <servers />
   </component>
@@ -221,17 +221,17 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Photon/PhotonUnityNetworking/Code/PhotonNetworkPart.cs</url>
-          <line>432</line>
-          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Photon\PhotonUnityNetworking\Code\PhotonNetworkPart.cs" initialLine="430" containingFunctionPresentation="method 'ExecuteRpc'">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/ServerSyncScript.cs</url>
+          <line>130</line>
+          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\ServerSyncScript.cs" initialLine="130" containingFunctionPresentation="method 'PlayerHit'">
             <startOffsets>
-              <option value="18345" />
+              <option value="4186" />
             </startOffsets>
             <endOffsets>
-              <option value="18388" />
+              <option value="4237" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="1" />
+          <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
