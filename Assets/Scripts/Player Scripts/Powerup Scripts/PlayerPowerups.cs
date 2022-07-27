@@ -669,6 +669,7 @@ public class PlayerPowerups : MonoBehaviour
              _powerupIconMask.sprite = currentPowerup.powerupUIImage;
              powerupIcon.gameObject.SetActive(true);
              _powerupIconMask.fillAmount = 0;
+             _vfxHandler.SpawnVFXAtPosition("ItemBoxDisappear", collider.transform.position, 1,false);
              _vfxHandler.PlayVFXAtPosition("ItemBoxImpact", transform.position);
              _audioManager.PlaySound("PowerUpCollected");
          }

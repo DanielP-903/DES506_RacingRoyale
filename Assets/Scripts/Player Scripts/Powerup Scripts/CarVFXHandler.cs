@@ -161,6 +161,7 @@ public class CarVFXHandler : MonoBehaviour
             "PortalEffect" => -1,
             "Confetti" => -1,
             "DriftSmoke" => -1,
+            "ItemBoxDisappear" => 6,
             _ => throw new ArgumentOutOfRangeException()
         };
     }
