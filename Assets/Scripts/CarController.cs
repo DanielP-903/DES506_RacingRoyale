@@ -762,6 +762,7 @@ public class CarController : MonoBehaviour
         if (other.transform.CompareTag("Checkpoint") && _passedCheckpoints.ContainsKey(other.gameObject) && !_passedCheckpoints[other.gameObject])
         {
             _vfxHandler.PlayVFX("Confetti");
+            _playerManager.PassCheckpoint();
             _passedCheckpoints[other.gameObject] = true;
             _currentRespawnPoint = other.gameObject.transform;
             int playerNo = !bot ? _playerManager.GetPlayerNumber() : _botCarController.GetBotNumber();
