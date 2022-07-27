@@ -74,7 +74,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         /// <summary>
         /// This client's version number. Users are separated from each other by gameVersion (which allows you to make breaking changes).
         /// </summary>
-        string gameVersion = "0.19.0";
+        string gameVersion = "0.28.0";
 
 
         #endregion

@@ -40,8 +40,10 @@ public class CarController : MonoBehaviour
     public float terminalVelocity = 120;
     [Tooltip("List of axles - DO NOT DELETE")]
     public List<Axle> axles;
+    [Tooltip("Physical wheel reset to idle speed")]
+    public float wheelResetSpeed = 50;    
     [Tooltip("Physical wheel turning speed")]
-    public float wheelTurningSpeed = 50;
+    public float wheelTurningSpeed = 1;
     [Tooltip("Multiplier for forward acceleration")]
     public float forwardMultiplier = 1;
     [Tooltip("Multiplier for backward acceleration")]
@@ -446,19 +448,21 @@ public class CarController : MonoBehaviour
   
         float currentMotorValue = motorForce * motorMultiplier;
 
-        _currentSteeringAngle = Mathf.Lerp(_currentSteeringAngle, _rigidbody.velocity.magnitude * 2.2369362912f > 60 ? 10 : maxSteeringAngle, Time.deltaTime * wheelTurningSpeed);
+        _currentSteeringAngle = Mathf.Lerp(_currentSteeringAngle, _rigidbody.velocity.magnitude * 2.2369362912f > 60 ? 10 : maxSteeringAngle, Time.deltaTime * wheelResetSpeed);
 
         if (_moveLeft)
         {
-            _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, -1, Time.deltaTime * 1.0f);
+            _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, -1, Time.deltaTime * wheelTurningSpeed);
         }
         else if (_moveRight)
         {
-            _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 1, Time.deltaTime * 1.0f);
+            _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 1, Time.deltaTime * wheelTurningSpeed);
         }
         else
         {
-            _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 0, Time.deltaTime * 50.0f);
+            _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 0, Time.deltaTime * wheelResetSpeed);
+            //_currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 0, Time.deltaTime * wheelTurningSpeed);
+            //_currentSteeringAngle = 0;
         }
 
         float currentSteeringValue = maxSteeringAngle * _currentSteeringMulti;
