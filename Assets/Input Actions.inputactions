@@ -360,10 +360,10 @@
                 },
                 {
                     "name": "",
-                    "id": "c1e1d02c-41a0-4101-86ab-61f681a02a9c",
+                    "id": "0781f477-acad-4b38-98e8-6ebd1fe716c0",
                     "path": "<Mouse>/delta/x",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "Scale(factor=-1)",
                     "groups": "",
                     "action": "Roll Left",
                     "isComposite": false,
@@ -393,6 +393,17 @@
                 },
                 {
                     "name": "",
+                    "id": "2af6ffd8-457f-4f64-a7e3-bb2912fd77d6",
+                    "path": "<Mouse>/delta/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pitch Up",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "56b669e0-80e1-4308-bb9d-9e79b9a38078",
                     "path": "<Keyboard>/downArrow",
                     "interactions": "",
@@ -408,6 +419,17 @@
                     "path": "<Gamepad>/rightStick/down",
                     "interactions": "",
                     "processors": "",
+                    "groups": "",
+                    "action": "Pitch Down",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2c8757dd-9d69-46d5-ae67-b6e2e1db16d8",
+                    "path": "<Mouse>/delta/y",
+                    "interactions": "",
+                    "processors": "Scale(factor=-1)",
                     "groups": "",
                     "action": "Pitch Down",
                     "isComposite": false,
@@ -452,6 +474,17 @@
                     "path": "<Gamepad>/rightStick/right",
                     "interactions": "",
                     "processors": "AxisDeadzone",
+                    "groups": "",
+                    "action": "Roll Right",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8066f3df-560f-4407-ab48-fa0f4b450891",
+                    "path": "<Mouse>/delta/x",
+                    "interactions": "",
+                    "processors": "",
                     "groups": "",
                     "action": "Roll Right",
                     "isComposite": false,
@@ -509,17 +542,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Rearview",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "8d5d91b4-532a-41bd-8768-858663a26ebf",
-                    "path": "<Mouse>/delta/x",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Roll Right",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
