@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine.PostFX;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -20,6 +22,9 @@ public class CarVFXHandler : MonoBehaviour
     public VisualEffect elimEffect;
     public GameObject impactEffectObject;
     public GameObject impactEffectPrefab;
+
+    [Header("Camera Profiles (Post-Pro)")] 
+    public List<VolumeProfile> profiles;
     
     [Header("Other")] 
     public float maxWallDistanceAlert = 30.0f;
@@ -338,5 +343,10 @@ public class CarVFXHandler : MonoBehaviour
     public void SetGrappleOutlineActive(bool active)
     {
         _outlineObjectGrapple.SetActive(active);
+    }
+    
+    public void SetCameraProfile(bool isInZone)
+    {
+        _mainCam.GetComponent<CinemachineVolumeSettings>().m_Profile = isInZone ? profiles[1] : profiles[0];
     }
 }

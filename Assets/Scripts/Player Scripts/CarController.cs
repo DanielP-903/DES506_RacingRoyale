@@ -770,21 +770,28 @@ public class CarController : MonoBehaviour
             Debug.Log("Checkpoint passed: " + other.gameObject.name + " , " + newSpawnLocation + " , " + _currentRespawnPoint.name + " , " + (!bot ? _playerManager.GetPlayerNumber() : _botCarController.GetBotNumber()));
             if (!bot) _playerManager.ChangeSpawnLocation(newSpawnLocation.transform);
             else _botCarController.setSpawn(newSpawnLocation.transform);
+            
         }
-        
-        if (other.transform.CompareTag("EliminationZone") && !_hitEliminationZone)
+        if (other.transform.CompareTag("EliminationZone"))
         {
             // Hit elimination wall
-            Debug.Log("Hit the Elimination Wall");
-            //_hitEliminationZone = true; 
-            //if (!bot) _playerManager.EliminateCurrentPlayer();
-            //if (!bot) audioManager.PlaySound("CarEliminatedByWall");
-        }
-
+            Debug.Log("In the Elimination Wall");
+            _vfxHandler.SetCameraProfile(true);
+        } 
         if (other.transform.CompareTag("ResetZone"))
         {
             ResetPlayer();
             if (!bot) audioManager.PlaySound("CarEliminatedOffTrack");
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.transform.CompareTag("EliminationZone"))
+        {
+            // Hit elimination wall
+            Debug.Log("Exit the Elimination Wall");
+            _vfxHandler.SetCameraProfile(false);
         }
     }
 
