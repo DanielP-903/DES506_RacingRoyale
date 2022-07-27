@@ -772,7 +772,7 @@ public class CarController : MonoBehaviour
             else _botCarController.setSpawn(newSpawnLocation.transform);
             
         }
-        if (other.transform.CompareTag("EliminationZone"))
+        if (other.transform.CompareTag("EliminationZone") && !bot)
         {
             // Hit elimination wall
             Debug.Log("In the Elimination Wall");
@@ -787,7 +787,7 @@ public class CarController : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.transform.CompareTag("EliminationZone"))
+        if (other.transform.CompareTag("EliminationZone") && !bot)
         {
             // Hit elimination wall
             Debug.Log("Exit the Elimination Wall");

@@ -29881,8 +29881,8 @@ GameObject:
   - component: {fileID: 8846090683188744374}
   - component: {fileID: 4696580256823738161}
   - component: {fileID: 4015634369664041884}
-  - component: {fileID: 3278325128343381181}
   - component: {fileID: 6747427724573058940}
+  - component: {fileID: 8276028864395317406}
   m_Layer: 7
   m_Name: BotCar
   m_TagString: Player
@@ -30129,7 +30129,7 @@ MonoBehaviour:
   warpPortalTime: 5
   powerupIcon: {fileID: 0}
   powerups: []
---- !u!114 &3278325128343381181
+--- !u!114 &6747427724573058940
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -30138,7 +30138,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 4892388860096004575}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d49378b3e78de0438682085add79bb1, type: 3}
+  m_Script: {fileID: 11500000, guid: bbfd85ce9b96705439c65d95f6d707a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debugMode: 0
+--- !u!114 &8276028864395317406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4892388860096004575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 133e7ad02d92a4549bfc56d24d948685, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   boostEffects:
@@ -30157,26 +30170,17 @@ MonoBehaviour:
   - {fileID: 8926484042661614526, guid: a720326c5f6d64e4fae2d6cbf1b9870c, type: 3}
   - {fileID: 8926484042661614526, guid: 98d2075eda426024e999b6db783a749e, type: 3}
   - {fileID: 8926484042661614526, guid: 51f4dc0fbb4b5974baf088bfb477a046, type: 3}
+  - {fileID: 8926484042661614526, guid: 7d6bd74576e9eb3478f79af241b85c66, type: 3}
   driftSmokeEffects: []
   confettiParticleSystem: {fileID: 0}
   elimEffect: {fileID: 0}
   impactEffectObject: {fileID: 3206420097114395190}
   impactEffectPrefab: {fileID: 4090457144769879042, guid: c5b742ea29c92d341bd95b10a3a57b47, type: 3}
+  profiles:
+  - {fileID: 11400000, guid: 5ff1afaeb8d73704c80b751f18e5029f, type: 2}
+  - {fileID: 11400000, guid: f559484af390b1d4f963cf2c48486195, type: 2}
   maxWallDistanceAlert: 30
   boostPlaying: 0
---- !u!114 &6747427724573058940
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4892388860096004575}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bbfd85ce9b96705439c65d95f6d707a3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  debugMode: 0
 --- !u!1 &4892388860486838944
 GameObject:
   m_ObjectHideFlags: 0
