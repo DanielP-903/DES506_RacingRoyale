@@ -32,6 +32,7 @@ public class ServerSyncScript : MonoBehaviour
         if (!debugMode)
         {
             _fs = GameObject.Find("FadeScreen").GetComponent<fadeScreen>();
+            _mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
         }
     }
 
@@ -54,7 +55,8 @@ public class ServerSyncScript : MonoBehaviour
     void sendMessage(string text)
     {
         //_mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
-        Debug.Log("MessageBox: " + _mb + ":" + text);
+        Debug.Log("MessageToDisplay: " + text);
+        //Debug.Log("MessageBox: " + _mb + ":" + text);
         _mb.sendMessage(text);
     }
     

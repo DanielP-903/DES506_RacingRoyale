@@ -91,7 +91,7 @@ public class MessageBox : MonoBehaviour
         {
             messages.Dequeue();
         }
-        //Debug.Log("Message to Queue: "+text);
+        Debug.Log("Message to Queue: "+text);
         messages.Enqueue(new MessageStruct(text, Time.time));
         UpdateMessages();
     }

@@ -107,12 +107,12 @@ public class PlayerManager : MonoBehaviour
         
         return false;
     }
-    public static void SetReadyPlayer(bool setReady, int stageNum, Player player)
+    public static void SetReadyPlayer(bool setReady, int stageNum)
     {
         bool readyPlayer;
-        bool wasSet = TryGetReadyPlayer(out readyPlayer, stageNum, player);
+        bool wasSet = TryGetReadyPlayer(out readyPlayer, stageNum, PhotonNetwork.LocalPlayer);
 
-        if (!wasSet)
+        /*if (!wasSet)
         {
             ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
             {
@@ -122,13 +122,25 @@ public class PlayerManager : MonoBehaviour
 
             bool wasSet2 = TryGetReadyPlayer(out readyPlayer, stageNum, player);
 
-            Debug.Log("Set Custom Props for Finished Players: " + props.ToStringFull() + " wasSet: " + wasSet +
-                      " NewValue: " + readyPlayer + " , wasSet2: " + wasSet2);
+            Debug.Log("Set Custom Props for Ready Players: " + props.ToStringFull() + " wasSet: " + wasSet +
+                      " NewValue: " + readyPlayer + " , wasSet2: " + wasSet2+" Player: "+player);
         }
         else
         {
-            PhotonNetwork.CurrentRoom.CustomProperties["ReadyPlayer" + stageNum] = setReady;
-        }
+            player.CustomProperties["ReadyPlayer" + stageNum] = setReady;
+            Debug.Log("Set Custom Props for Ready Players: " + setReady+" Player: "+player);
+        }*/
+        
+        ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
+        {
+            { "ReadyPlayer" + stageNum, (bool)setReady }
+        };
+        PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+
+        bool wasSet2 = TryGetReadyPlayer(out readyPlayer, stageNum, PhotonNetwork.LocalPlayer);
+
+        Debug.Log("Set Custom Props for Ready Players: " + props.ToStringFull() + " wasSet: " + wasSet +
+                  " NewValue: " + readyPlayer + " , wasSet2: " + wasSet2+" Player: "+PhotonNetwork.LocalPlayer);
     }
     
     void Start()
@@ -140,11 +152,7 @@ public class PlayerManager : MonoBehaviour
         
         //SceneManager.sceneLoaded += LoadPMInLevel;
         _photonView = GetComponent<PhotonView>();
-        if (!debugMode)
-        {
-            //SetReadyPlayers(0, 1);
-            SetReadyPlayer(false, 1, _photonView.Owner);
-        }
+        
         this.gameObject.name = _photonView.Owner.NickName;
         _mRend = transform.Find("CarMesh").GetComponent<MeshRenderer>();
         _mFilt = transform.Find("CarMesh").GetComponent<MeshFilter>();
@@ -199,6 +207,11 @@ public class PlayerManager : MonoBehaviour
             DontDestroyOnLoad(this.gameObject);
             if (_photonView.IsMine)
             {
+                if (!debugMode)
+                {
+                    //SetReadyPlayers(0, 1);
+                    SetReadyPlayer(false, 1);
+                }
                 _cc = GetComponent<CarController>();
                 _rb = GetComponent<Rigidbody>();
                 _rb.velocity = Vector3.zero;
@@ -266,13 +279,13 @@ public class PlayerManager : MonoBehaviour
        if (ready)
        {
            //Debug.Log("Ready!");
-           int readyPlayers;
-           TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
+           //int readyPlayers;
+           //TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
            //Debug.Log( "Ready Players: "+readyPlayers +":"+ _gm.GetTotalPlayers());
            // && readyPlayers >= _gm.GetTotalPlayers()
            if (_gm.GetStageNum() > 0 && _gm.GetStageNum() < 5 && _gm.halt == false)
            {
-               //_photonView.RPC("startDelayTimer", RpcTarget.All);
+               //_photonView.RPC("startDelayTimer", RpcTarget.AllViaServer);
                startDelayTimer();
            }
 
@@ -342,7 +355,7 @@ public class PlayerManager : MonoBehaviour
                 completedStage = false;
                 _spawnLocation = GameObject.Find("SpawnLocation" + playerNumber).transform;
                 GoToSpawn();
-                _photonView.RPC("sendMessage", RpcTarget.All, "<color=blue>" + _photonView.name + "</color> has loaded.");
+                _photonView.RPC("sendMessage", RpcTarget.AllViaServer, "<color=blue>" + _photonView.name + "</color> has loaded.");
                 
                 /*int readyPlayers;
                 TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
@@ -469,7 +482,7 @@ public class PlayerManager : MonoBehaviour
             GameManager.SetElimPlayers(num);
             _gm.EliminatePlayer(elimPosition);
             string messageToBeSent = _photonView.name + " has been <color=red>Eliminated</color>";
-            _photonView.RPC("sendMessage", RpcTarget.All, messageToBeSent);
+            _photonView.RPC("sendMessage", RpcTarget.AllViaServer, messageToBeSent);
             //Debug.Log("Player: "+_photonView.Owner.NickName + " Eliminated with Position "+elimPosition + "/"+_gm.GetTotalPlayers());
             Debug.Log("PlayerDestroyed");
             _vfx.PlayVFXAtPosition("Elimination", transform.position);
@@ -488,7 +501,7 @@ public class PlayerManager : MonoBehaviour
 
     IEnumerator countdownTimer()
     {
-        if (SceneManager.GetActiveScene().name != "WaitingArea")
+        if (SceneManager.GetActiveScene().name != "WaitingArea" && _photonView.IsMine)
         {
             yield return new WaitForSeconds(1);
             if (GameObject.FindGameObjectWithTag("FlyBy"))
@@ -497,15 +510,15 @@ public class PlayerManager : MonoBehaviour
                 //Debug.Log("CountDown Started");
                 yield return new WaitUntil(() => !cfb.activateFlyBy);
             }
-            //Debug.Log("FlyBy Completed");
+            Debug.Log("Timer Started for "+_photonView.Owner);
             
             //int readyPlayers;
             //TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
             //readyPlayers = readyPlayers + 1;
             //SetReadyPlayers(readyPlayers, _gm.GetStageNum());
-            SetReadyPlayer(true, _gm.GetStageNum(), _photonView.Owner);
+            SetReadyPlayer(true, _gm.GetStageNum());
             bool allPlayersReady = true;
-            int counter = 0;
+            int counter = 1;
             bool playerReady = false;
             foreach (Player player in PhotonNetwork.PlayerList)
             {
@@ -522,24 +535,32 @@ public class PlayerManager : MonoBehaviour
                 }
             }
             
-            _photonView.RPC("sendMessage", RpcTarget.All, "<color=blue>" + _photonView.name + "</color> is ready. "+counter+"/"+PhotonNetwork.CurrentRoom.PlayerCount);
+            _photonView.RPC("sendMessage", RpcTarget.AllViaServer, "<color=blue>" + _photonView.name + "</color> is ready. "+counter+"/"+PhotonNetwork.CurrentRoom.PlayerCount);
             counter = 0;
-            while (!allPlayersReady  && counter < 100000)
+            //&& counter < 100000
+            while (!allPlayersReady && counter < 100)
             {
-                playerReady = false;
+                allPlayersReady = true;
+                //Debug.Log("Running While Loop");
+                string str = "Focus: \n";
                 foreach (Player player in PhotonNetwork.PlayerList)
                 {
+                    playerReady = false;
                     TryGetReadyPlayer(out playerReady, _gm.GetStageNum(), player);
+                    str += "Player: " + player + " Ready: " + playerReady + "\n";
+                    //Debug.Log("Player: "+player + " Ready: "+playerReady+"\n");
                     if (playerReady)
                     {
-                        counter++;
+                        
                     }
                     else
                     {
                         allPlayersReady = false;
                     }
                 }
+                Debug.Log(str);
                 counter++;
+                yield return new WaitForSeconds(0.1f);
             }
             //yield return new WaitUntil(() => allPlayersReady);
             startDelayText.color = Color.clear; // Changed to clear as rubics are in
@@ -584,7 +605,7 @@ public class PlayerManager : MonoBehaviour
     {
         for (int i = 1; i < 10; i++)
         {
-            _photonView.RPC("sendMessage", RpcTarget.All,  "MessageBox Setup: " +i);
+            _photonView.RPC("sendMessage", RpcTarget.AllViaServer,  "MessageBox Setup: " +i);
             yield return new WaitForSeconds(1f);
         }
     }
