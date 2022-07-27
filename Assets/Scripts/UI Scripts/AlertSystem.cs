@@ -42,7 +42,11 @@ public class AlertSystem : MonoBehaviour
 
     public void displayAlert(string alertName)
     {
-        StopCoroutine(storedRoutine);
+        if (storedRoutine != null)
+        {
+            StopCoroutine(storedRoutine);
+        }
+
         storedRoutine = showAlert(alertName);
         StartCoroutine(storedRoutine);
     }

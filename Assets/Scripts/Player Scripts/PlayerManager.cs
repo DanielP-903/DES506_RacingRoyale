@@ -429,7 +429,7 @@ public class PlayerManager : MonoBehaviour
 
     public void PassCheckpoint()
     {
-        _as.displayAlert("Win");
+        _as.displayAlert("Checkpoint");
     }
 
     public void CompleteStage()

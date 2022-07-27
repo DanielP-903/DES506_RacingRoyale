@@ -5794,6 +5794,12 @@ MonoBehaviour:
     rightWheel: {fileID: 1118674506502527237}
     motor: 0
     steering: 0
+  wheelResetSpeed: 50
+  wheelTurningSpeed: 1
+  forwardMultiplier: 1
+  backwardMultiplier: 0.5
+  idleBrakeForce: 8000
+  driftSmokeThreshold: 20
   pushForceAmount: 900
   accelerationForce: 5
   boostForceAmount: 15
@@ -5810,6 +5816,7 @@ MonoBehaviour:
   checkpoints: {fileID: 0}
   flybyCam: {fileID: 0}
   audioManager: {fileID: 73668218835031516}
+  flybyDelay: 0.01
   debug: 0
   bot: 0
 --- !u!95 &1118674505751619605
