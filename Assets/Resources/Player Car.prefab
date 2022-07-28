@@ -5669,10 +5669,10 @@ WheelCollider:
     m_AsymptoteValue: 0.5
     m_Stiffness: 1.2
   m_SidewaysFriction:
-    m_ExtremumSlip: 0.5
-    m_ExtremumValue: 2
+    m_ExtremumSlip: 1.5
+    m_ExtremumValue: 3
     m_AsymptoteSlip: 0.8
-    m_AsymptoteValue: 5
+    m_AsymptoteValue: 5.5
     m_Stiffness: 5
   m_Enabled: 1
 --- !u!1 &1118674505751619608
@@ -5687,7 +5687,6 @@ GameObject:
   - component: {fileID: 1118674505751619609}
   - component: {fileID: 1118674505751619611}
   - component: {fileID: 1118674505751619605}
-  - component: {fileID: 1118674505751619604}
   - component: {fileID: 1978116585297259193}
   - component: {fileID: 7770678307179569261}
   - component: {fileID: 3936345832946547057}
@@ -5699,6 +5698,7 @@ GameObject:
   - component: {fileID: 3685327466689697969}
   - component: {fileID: 6742063343142520576}
   - component: {fileID: 6714147465124506571}
+  - component: {fileID: 6707118113495426057}
   m_Layer: 7
   m_Name: Player Car
   m_TagString: Player
@@ -5783,7 +5783,7 @@ MonoBehaviour:
   centreOfMass: {fileID: 829313175}
   motorForce: 2500
   brakeTorque: 4000
-  maxSteeringAngle: 50
+  maxSteeringAngle: 30
   terminalVelocity: 120
   axles:
   - leftWheel: {fileID: 4938869738104327283}
@@ -5794,8 +5794,9 @@ MonoBehaviour:
     rightWheel: {fileID: 1118674506502527237}
     motor: 0
     steering: 0
-  wheelResetSpeed: 50
-  wheelTurningSpeed: 1
+  wheelResetSpeed: 20
+  wheelTurningSpeed: 2
+  turnAmount: 0.5
   forwardMultiplier: 1
   backwardMultiplier: 0.5
   idleBrakeForce: 8000
@@ -5838,19 +5839,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!65 &1118674505751619604
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1118674505751619608}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1.7, y: 0.98, z: 2.54}
-  m_Center: {x: 0, y: 0.5, z: -0.05}
 --- !u!114 &1978116585297259193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5982,7 +5970,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1118674505751619608}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d49378b3e78de0438682085add79bb1, type: 3}
+  m_Script: {fileID: 11500000, guid: 133e7ad02d92a4549bfc56d24d948685, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   boostEffects:
@@ -6009,7 +5997,10 @@ MonoBehaviour:
   elimEffect: {fileID: 3311324556771291986}
   impactEffectObject: {fileID: 5228566535060769553}
   impactEffectPrefab: {fileID: 4090457144769879042, guid: c5b742ea29c92d341bd95b10a3a57b47, type: 3}
-  maxWallDistanceAlert: 60
+  profiles:
+  - {fileID: 11400000, guid: 5ff1afaeb8d73704c80b751f18e5029f, type: 2}
+  - {fileID: 11400000, guid: f559484af390b1d4f963cf2c48486195, type: 2}
+  maxWallDistanceAlert: 30
   boostPlaying: 0
 --- !u!114 &7146928805486338320
 MonoBehaviour:
@@ -6098,6 +6089,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debugMode: 0
+--- !u!136 &6707118113495426057
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1118674505751619608}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.75
+  m_Height: 2.8
+  m_Direction: 2
+  m_Center: {x: 0, y: 0.6, z: -0.05}
 --- !u!1 &1118674506502527236
 GameObject:
   m_ObjectHideFlags: 0
@@ -6174,10 +6179,10 @@ WheelCollider:
     m_AsymptoteValue: 0.5
     m_Stiffness: 1.2
   m_SidewaysFriction:
-    m_ExtremumSlip: 0.5
-    m_ExtremumValue: 2
+    m_ExtremumSlip: 1.5
+    m_ExtremumValue: 3
     m_AsymptoteSlip: 0.8
-    m_AsymptoteValue: 5
+    m_AsymptoteValue: 5.5
     m_Stiffness: 5
   m_Enabled: 1
 --- !u!1 &1118674506767621016
@@ -6256,10 +6261,10 @@ WheelCollider:
     m_AsymptoteValue: 0.5
     m_Stiffness: 1.2
   m_SidewaysFriction:
-    m_ExtremumSlip: 0.5
-    m_ExtremumValue: 2
+    m_ExtremumSlip: 1.5
+    m_ExtremumValue: 3
     m_AsymptoteSlip: 0.8
-    m_AsymptoteValue: 5
+    m_AsymptoteValue: 5.5
     m_Stiffness: 5
   m_Enabled: 1
 --- !u!1 &1170954730697120631
@@ -24045,10 +24050,10 @@ WheelCollider:
     m_AsymptoteValue: 0.5
     m_Stiffness: 1.2
   m_SidewaysFriction:
-    m_ExtremumSlip: 0.5
-    m_ExtremumValue: 2
+    m_ExtremumSlip: 1.5
+    m_ExtremumValue: 3
     m_AsymptoteSlip: 0.8
-    m_AsymptoteValue: 5
+    m_AsymptoteValue: 5.5
     m_Stiffness: 5
   m_Enabled: 1
 --- !u!1 &4981825420879955686
@@ -47894,6 +47899,38 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 7b874a08-5d88-456d-a038-e18a236f8ea8
     m_ActionName: Master/Escape1[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1118674505751619611}
+        m_TargetAssemblyTypeName: CarController, Assembly-CSharp
+        m_MethodName: ControllerLeft
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: dcf447a7-d745-4144-b170-3dee2f71013f
+    m_ActionName: Master/Controller Left[/XInputControllerWindows/leftStick/left]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1118674505751619611}
+        m_TargetAssemblyTypeName: CarController, Assembly-CSharp
+        m_MethodName: ControllerRight
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: bb5dbfbb-8417-4b5f-bc5b-b64b506c41c3
+    m_ActionName: Master/Controller Right[/XInputControllerWindows/leftStick/right]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Master
