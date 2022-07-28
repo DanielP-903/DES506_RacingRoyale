@@ -44,8 +44,9 @@ public class CarController : MonoBehaviour
     public float wheelResetSpeed = 50;    
     [Tooltip("Physical wheel turning speed")]
     public float wheelTurningSpeed = 1;
+
     [Tooltip("Maximum turn percentage")]
-    public float turnAmount = 0.3f;
+    public float maxTurnAmount = 0.3f;
     [Tooltip("Multiplier for forward acceleration")]
     public float forwardMultiplier = 1;
     [Tooltip("Multiplier for backward acceleration")]
@@ -139,7 +140,7 @@ public class CarController : MonoBehaviour
     private float _airTime = 0.0f;
     private float _animCamTime = 0.0f;
     private Vector3 _savedOilVelocity;
-    
+    private float turnAmount = 0.3f;    
     #endregion
     
     #region Component-References
@@ -324,9 +325,9 @@ public class CarController : MonoBehaviour
         
         if (!_grounded)
         {
-            newValues.x = Mathf.Clamp(newValues.x, -1, 1);
+            //newValues.x = Mathf.Clamp(newValues.x, -3, 3);
             newValues.y = Mathf.Clamp(newValues.y, -3, 3);
-            newValues.z = Mathf.Clamp(newValues.z, -1, 1);
+            //newValues.z = Mathf.Clamp(newValues.z, -3, 3);
         }
         else
         {
@@ -824,6 +825,8 @@ public class CarController : MonoBehaviour
     {
         float value = context.ReadValue<float>();
         _moveLeft = value > 0;
+        if (_moveLeft)
+            turnAmount = maxTurnAmount;
         //Debug.Log("Left detected");
     }
     // D
@@ -831,6 +834,8 @@ public class CarController : MonoBehaviour
     {
         float value = context.ReadValue<float>();
         _moveRight = value > 0;
+        if (_moveRight)
+            turnAmount = maxTurnAmount;
         //Debug.Log("Right detected");
     }
     // Controller Left Stick Left
@@ -838,7 +843,7 @@ public class CarController : MonoBehaviour
     {
         float value = context.ReadValue<float>();
         _moveLeft = value > 0;
-        turnAmount = Mathf.Lerp(0,0.3f, value);
+        turnAmount = Mathf.Lerp(0,maxTurnAmount, value);
         //Debug.Log("Left detected");
     }
     // Controller Left Stick Right
@@ -846,7 +851,7 @@ public class CarController : MonoBehaviour
     {
         float value = context.ReadValue<float>();
         _moveRight = value > 0;
-        turnAmount = Mathf.Lerp(0,0.3f, value);
+        turnAmount = Mathf.Lerp(0,maxTurnAmount, value);
         //Debug.Log("Right detected");
     }
     
