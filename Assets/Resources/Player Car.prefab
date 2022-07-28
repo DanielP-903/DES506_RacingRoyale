@@ -5784,7 +5784,7 @@ MonoBehaviour:
   motorForce: 2500
   brakeTorque: 4000
   maxSteeringAngle: 30
-  maxBackWheelSteeringAngle: -20
+  maxBackWheelSteeringAngle: -23
   terminalVelocity: 120
   axles:
   - leftWheel: {fileID: 4938869738104327283}
@@ -5797,9 +5797,9 @@ MonoBehaviour:
     motor: 0
     steering: 1
     isFrontWheel: 0
-  wheelResetSpeed: 20
-  wheelTurningSpeed: 3
-  maxTurnAmount: 0.5
+  wheelResetSpeed: 15
+  wheelTurningSpeed: 2.25
+  maxTurnAmount: 0.4
   forwardMultiplier: 1
   backwardMultiplier: 0.5
   idleBrakeForce: 8000
