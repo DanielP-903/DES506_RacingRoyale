@@ -23,6 +23,7 @@ public class CarController : MonoBehaviour
         public WheelCollider rightWheel;
         public bool motor;
         public bool steering;
+        public bool isFrontWheel;
     }
     
     #region Editable-Vars
@@ -35,7 +36,9 @@ public class CarController : MonoBehaviour
     [Tooltip("Braking force")]
     public float brakeTorque = 1000;
     [Tooltip("Maximum angle for steering")]
-    public float maxSteeringAngle;
+    public float maxSteeringAngle;    
+    [Tooltip("Maximum angle for back wheel steering")]
+    public float maxBackWheelSteeringAngle;
     [Tooltip("Maximum velocity for accelerating")]
     public float terminalVelocity = 120;
     [Tooltip("List of axles - DO NOT DELETE")]
@@ -473,14 +476,24 @@ public class CarController : MonoBehaviour
 
         float currentSteeringValue = maxSteeringAngle * _currentSteeringMulti;
 
+        
+        
         foreach (var axle in axles)
         {
             axle.leftWheel.brakeTorque = brakeTorque;
             axle.rightWheel.brakeTorque = brakeTorque;
             if (axle.steering)
             {
-                axle.leftWheel.steerAngle = currentSteeringValue;
-                axle.rightWheel.steerAngle = currentSteeringValue;
+                if (axle.isFrontWheel)
+                {
+                    axle.leftWheel.steerAngle = currentSteeringValue;
+                    axle.rightWheel.steerAngle = currentSteeringValue;
+                }
+                else
+                {
+                    axle.leftWheel.steerAngle = maxBackWheelSteeringAngle * _currentSteeringMulti;
+                    axle.rightWheel.steerAngle = maxBackWheelSteeringAngle * _currentSteeringMulti;
+                }
             }
             if (axle.motor)
             {
