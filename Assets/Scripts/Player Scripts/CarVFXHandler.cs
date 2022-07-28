@@ -185,7 +185,7 @@ public class CarVFXHandler : MonoBehaviour
         PlayVFX(vfxName);
     }
 
-    public void SpawnVFXAtPosition(string vfxName, Vector3 pos, int scaleFactor, bool isBillboard)
+    public void SpawnVFXAtPosition(string vfxName, Vector3 pos, float scaleFactor, bool isBillboard)
     {
         GameObject newSpawn = Instantiate(impactEffectPrefab, pos, Quaternion.identity);
         newSpawn.transform.localScale = new Vector3(scaleFactor, scaleFactor, scaleFactor);
