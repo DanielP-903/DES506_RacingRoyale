@@ -44,6 +44,8 @@ public class CarController : MonoBehaviour
     public float wheelResetSpeed = 50;    
     [Tooltip("Physical wheel turning speed")]
     public float wheelTurningSpeed = 1;
+    [Tooltip("Maximum turn percentage")]
+    public float turnAmount = 0.3f;
     [Tooltip("Multiplier for forward acceleration")]
     public float forwardMultiplier = 1;
     [Tooltip("Multiplier for backward acceleration")]
@@ -52,6 +54,7 @@ public class CarController : MonoBehaviour
     public float idleBrakeForce = 8000;  
     [Tooltip("Drift smoke VFX speed threshold")]
     public float driftSmokeThreshold = 20;
+
 
     [Header("Forces")] 
     [Tooltip("Jumping force")]
@@ -450,13 +453,15 @@ public class CarController : MonoBehaviour
 
         _currentSteeringAngle = Mathf.Lerp(_currentSteeringAngle, _rigidbody.velocity.magnitude * 2.2369362912f > 60 ? 10 : maxSteeringAngle, Time.deltaTime * wheelResetSpeed);
 
+        float currentTurnAmount = _moveBackward ? turnAmount * 2 : turnAmount;
+        
         if (_moveLeft)
         {
-            _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, -1, Time.deltaTime * wheelTurningSpeed);
+            _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, -currentTurnAmount, Time.deltaTime * wheelTurningSpeed);
         }
         else if (_moveRight)
         {
-            _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 1, Time.deltaTime * wheelTurningSpeed);
+            _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, currentTurnAmount, Time.deltaTime * wheelTurningSpeed);
         }
         else
         {
