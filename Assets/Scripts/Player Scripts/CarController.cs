@@ -23,6 +23,7 @@ public class CarController : MonoBehaviour
         public WheelCollider rightWheel;
         public bool motor;
         public bool steering;
+        public bool isFrontWheel;
     }
     
     #region Editable-Vars
@@ -35,7 +36,9 @@ public class CarController : MonoBehaviour
     [Tooltip("Braking force")]
     public float brakeTorque = 1000;
     [Tooltip("Maximum angle for steering")]
-    public float maxSteeringAngle;
+    public float maxSteeringAngle;    
+    [Tooltip("Maximum angle for back wheel steering")]
+    public float maxBackWheelSteeringAngle;
     [Tooltip("Maximum velocity for accelerating")]
     public float terminalVelocity = 120;
     [Tooltip("List of axles - DO NOT DELETE")]
@@ -44,6 +47,9 @@ public class CarController : MonoBehaviour
     public float wheelResetSpeed = 50;    
     [Tooltip("Physical wheel turning speed")]
     public float wheelTurningSpeed = 1;
+
+    [Tooltip("Maximum turn percentage")]
+    public float maxTurnAmount = 0.3f;
     [Tooltip("Multiplier for forward acceleration")]
     public float forwardMultiplier = 1;
     [Tooltip("Multiplier for backward acceleration")]
@@ -52,6 +58,7 @@ public class CarController : MonoBehaviour
     public float idleBrakeForce = 8000;  
     [Tooltip("Drift smoke VFX speed threshold")]
     public float driftSmokeThreshold = 20;
+
 
     [Header("Forces")] 
     [Tooltip("Jumping force")]
@@ -136,7 +143,7 @@ public class CarController : MonoBehaviour
     private float _airTime = 0.0f;
     private float _animCamTime = 0.0f;
     private Vector3 _savedOilVelocity;
-    
+    private float turnAmount = 0.3f;    
     #endregion
     
     #region Component-References
@@ -321,9 +328,9 @@ public class CarController : MonoBehaviour
         
         if (!_grounded)
         {
-            newValues.x = Mathf.Clamp(newValues.x, -1, 1);
+            //newValues.x = Mathf.Clamp(newValues.x, -3, 3);
             newValues.y = Mathf.Clamp(newValues.y, -3, 3);
-            newValues.z = Mathf.Clamp(newValues.z, -1, 1);
+            //newValues.z = Mathf.Clamp(newValues.z, -3, 3);
         }
         else
         {
@@ -450,13 +457,15 @@ public class CarController : MonoBehaviour
 
         _currentSteeringAngle = Mathf.Lerp(_currentSteeringAngle, _rigidbody.velocity.magnitude * 2.2369362912f > 60 ? 10 : maxSteeringAngle, Time.deltaTime * wheelResetSpeed);
 
+        float currentTurnAmount = _moveBackward ? turnAmount * 2 : turnAmount;
+        
         if (_moveLeft)
         {
-            _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, -1, Time.deltaTime * wheelTurningSpeed);
+            _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, -currentTurnAmount, Time.deltaTime * wheelTurningSpeed);
         }
         else if (_moveRight)
         {
-            _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 1, Time.deltaTime * wheelTurningSpeed);
+            _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, currentTurnAmount, Time.deltaTime * wheelTurningSpeed);
         }
         else
         {
@@ -467,14 +476,24 @@ public class CarController : MonoBehaviour
 
         float currentSteeringValue = maxSteeringAngle * _currentSteeringMulti;
 
+        
+        
         foreach (var axle in axles)
         {
             axle.leftWheel.brakeTorque = brakeTorque;
             axle.rightWheel.brakeTorque = brakeTorque;
             if (axle.steering)
             {
-                axle.leftWheel.steerAngle = currentSteeringValue;
-                axle.rightWheel.steerAngle = currentSteeringValue;
+                if (axle.isFrontWheel)
+                {
+                    axle.leftWheel.steerAngle = currentSteeringValue;
+                    axle.rightWheel.steerAngle = currentSteeringValue;
+                }
+                else
+                {
+                    axle.leftWheel.steerAngle = maxBackWheelSteeringAngle * _currentSteeringMulti;
+                    axle.rightWheel.steerAngle = maxBackWheelSteeringAngle * _currentSteeringMulti;
+                }
             }
             if (axle.motor)
             {
@@ -740,11 +759,11 @@ public class CarController : MonoBehaviour
         }
         else if (collision.contacts[0].point.y > transform.position.y - 4.0f)
         {
-            Vector3 direction = collision.contacts[0].point - transform.position;
-            _rigidbody.velocity = -(direction.normalized * (bounciness/3));
-            _vfxHandler.PlayVFXAtPosition("SoftImpact", collision.contacts[0].point);
-            int rand = Random.Range(1, 5);
-            if (!bot) audioManager.PlaySound("CarHit0" + rand);
+            // Vector3 direction = collision.contacts[0].point - transform.position;
+            // _rigidbody.velocity = -(direction.normalized * (bounciness/3));
+            // _vfxHandler.PlayVFXAtPosition("SoftImpact", collision.contacts[0].point);
+            // int rand = Random.Range(1, 5);
+            // if (!bot) audioManager.PlaySound("CarHit0" + rand);
         }
     }
 
@@ -819,6 +838,8 @@ public class CarController : MonoBehaviour
     {
         float value = context.ReadValue<float>();
         _moveLeft = value > 0;
+        if (_moveLeft)
+            turnAmount = maxTurnAmount;
         //Debug.Log("Left detected");
     }
     // D
@@ -826,8 +847,27 @@ public class CarController : MonoBehaviour
     {
         float value = context.ReadValue<float>();
         _moveRight = value > 0;
+        if (_moveRight)
+            turnAmount = maxTurnAmount;
         //Debug.Log("Right detected");
     }
+    // Controller Left Stick Left
+    public void ControllerLeft(InputAction.CallbackContext context)
+    {
+        float value = context.ReadValue<float>();
+        _moveLeft = value > 0;
+        turnAmount = Mathf.Lerp(0,maxTurnAmount, value);
+        //Debug.Log("Left detected");
+    }
+    // Controller Left Stick Right
+    public void ControllerRight(InputAction.CallbackContext context)
+    {
+        float value = context.ReadValue<float>();
+        _moveRight = value > 0;
+        turnAmount = Mathf.Lerp(0,maxTurnAmount, value);
+        //Debug.Log("Right detected");
+    }
+    
     // Space
     public void Space(InputAction.CallbackContext context)
     {

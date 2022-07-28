@@ -30,9 +30,25 @@
                     "interactions": ""
                 },
                 {
+                    "name": "Controller Left",
+                    "type": "Button",
+                    "id": "dcf447a7-d745-4144-b170-3dee2f71013f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
                     "name": "Right",
                     "type": "Value",
                     "id": "f58eee68-d987-4b7b-b90e-5d6692752c35",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Controller Right",
+                    "type": "Button",
+                    "id": "bb5dbfbb-8417-4b5f-bc5b-b64b506c41c3",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -179,28 +195,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Right",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "7579e4b0-6d77-465f-9606-bcb3e16da85b",
-                    "path": "<Keyboard>/space",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Push",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "9d64091b-b1a2-4af3-a275-610d36b07eb1",
-                    "path": "<Gamepad>/buttonSouth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Push",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -437,34 +431,12 @@
                 },
                 {
                     "name": "",
-                    "id": "20f5fcc2-add4-4751-9e33-1e59750c43c4",
-                    "path": "<Gamepad>/leftStick/left",
-                    "interactions": "",
-                    "processors": "AxisDeadzone",
-                    "groups": "",
-                    "action": "Left",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "983b8d85-f9a1-43d2-9bd4-7b95d02a08a3",
                     "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Backward",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "313322bf-2aba-49ea-9856-8c5e69dc79fb",
-                    "path": "<Gamepad>/leftStick/right",
-                    "interactions": "",
-                    "processors": "AxisDeadzone",
-                    "groups": "",
-                    "action": "Right",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -542,6 +514,50 @@
                     "processors": "",
                     "groups": "",
                     "action": "Rearview",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7579e4b0-6d77-465f-9606-bcb3e16da85b",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Push",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9d64091b-b1a2-4af3-a275-610d36b07eb1",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Push",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c43685eb-51da-4b47-812e-90b25e276a3a",
+                    "path": "<Gamepad>/leftStick/left",
+                    "interactions": "",
+                    "processors": "AxisDeadzone",
+                    "groups": "",
+                    "action": "Controller Left",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c51035bb-f40c-4e05-9475-38f41ecc2b03",
+                    "path": "<Gamepad>/leftStick/right",
+                    "interactions": "",
+                    "processors": "AxisDeadzone",
+                    "groups": "",
+                    "action": "Controller Right",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

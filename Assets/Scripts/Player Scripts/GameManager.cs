@@ -171,6 +171,11 @@ public class GameManager : MonoBehaviourPunCallbacks
         return counter;
     }
 
+    public void SetWaitingTimer(float time)
+    {
+        waitingTime = time;
+    }
+    
     public int setPlayerNumber()
     {
         int counter = 1;

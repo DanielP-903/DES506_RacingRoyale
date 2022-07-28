@@ -149,8 +149,16 @@ public class PlayerManager : MonoBehaviour
         if (debugMode)
         {
             Debug.Log("DEBUG MODE IS ACTIVE! (PlayerManager)");
+            _cc = GetComponent<CarController>();
+            _rb = GetComponent<Rigidbody>();
+            //_cc.SetUp();
+            _cs = GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>();
         }
         
+        _vfx = GetComponent<CarVFXHandler>();
+        
+        if (!debugMode)
+        {  
         //SceneManager.sceneLoaded += LoadPMInLevel;
         _photonView = GetComponent<PhotonView>();
         
@@ -158,7 +166,6 @@ public class PlayerManager : MonoBehaviour
         _mRend = transform.Find("CarMesh").GetComponent<MeshRenderer>();
         _mFilt = transform.Find("CarMesh").GetComponent<MeshFilter>();
         _flaps = transform.Find("Flaps").gameObject;
-        _vfx = GetComponent<CarVFXHandler>();
         object skinNumFromProps;
         /*if (_photonView.IsMine && !_photonView.Owner.CustomProperties.TryGetValue("Skin", out skinNumFromProps))
         {
@@ -170,8 +177,7 @@ public class PlayerManager : MonoBehaviour
             _photonView.Owner.CustomProperties.Add("Skin", PlayerPrefs.GetInt("Skin"));
         }*/
 
-        if (!debugMode)
-        {
+  
             int skinNum = 0;
             if ((int)_photonView.Owner.CustomProperties["Skin"] != null)
             {
@@ -189,19 +195,20 @@ public class PlayerManager : MonoBehaviour
             _mRend.material = GameObject.Find("DataManager").GetComponent<DataManager>().GetMats()[skinNum];
             _mFilt.mesh = GameObject.Find("DataManager").GetComponent<DataManager>().GetMesh()[skinNum];
             _flaps.SetActive(skinNum < 3);
-        }
-
-        if (_photonView.Owner == null)
-        {
-            playerNameText.text = "Guest";
-            playerLicenseText.text = "Guest";
-            playerFrontLicenseText.text = "Guest";
-        }
-        else
-        {
-            playerNameText.text = _photonView.Owner.NickName;
-            playerLicenseText.text = _photonView.Owner.NickName;
-            playerFrontLicenseText.text = _photonView.Owner.NickName;
+        
+    
+            if (_photonView.Owner == null)
+            {
+                playerNameText.text = "Guest";
+                playerLicenseText.text = "Guest";
+                playerFrontLicenseText.text = "Guest";
+            }
+            else
+            {
+                playerNameText.text = _photonView.Owner.NickName;
+                playerLicenseText.text = _photonView.Owner.NickName;
+                playerFrontLicenseText.text = _photonView.Owner.NickName;
+            }
         }
         if (_photonView != null)
         {
@@ -261,8 +268,11 @@ public class PlayerManager : MonoBehaviour
         }
         else
         {
-            playerNumber = _gm.GetPlayerNumber();
-            Debug.Log("Photon view NOT DETECTED during start function of PlayerManager" + playerNumber);
+            if (!debugMode)
+            {
+                playerNumber = _gm.GetPlayerNumber();
+                Debug.Log("Photon view NOT DETECTED during start function of PlayerManager" + playerNumber);
+            }
         }
 
         //StartCoroutine(TestScript());
@@ -271,27 +281,27 @@ public class PlayerManager : MonoBehaviour
     
     void Update()
     {
-       if (transform.position.y < -5 && _photonView.IsMine)
+        if (transform.position.y < -5 && _photonView.IsMine)
         {
             //Debug.Log("Less than 5");
             GoToSpawn();
         }
 
-       if (ready)
-       {
-           //Debug.Log("Ready!");
-           //int readyPlayers;
-           //TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
-           //Debug.Log( "Ready Players: "+readyPlayers +":"+ _gm.GetTotalPlayers());
-           // && readyPlayers >= _gm.GetTotalPlayers()
-           if (_gm.GetStageNum() > 0 && _gm.GetStageNum() < 5 && _gm.halt == false)
-           {
-               //_photonView.RPC("startDelayTimer", RpcTarget.AllViaServer);
-               startDelayTimer();
-           }
+        if (ready)
+        {
+            //Debug.Log("Ready!");
+            //int readyPlayers;
+            //TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
+            //Debug.Log( "Ready Players: "+readyPlayers +":"+ _gm.GetTotalPlayers());
+            // && readyPlayers >= _gm.GetTotalPlayers()
+            if (_gm.GetStageNum() > 0 && _gm.GetStageNum() < 5 && _gm.halt == false)
+            {
+                //_photonView.RPC("startDelayTimer", RpcTarget.AllViaServer);
+                startDelayTimer();
+            }
 
-           ready = false;
-       }
+            ready = false;
+        }
     }
 
     void OnLevelWasLoaded()
@@ -429,7 +439,8 @@ public class PlayerManager : MonoBehaviour
 
     public void PassCheckpoint()
     {
-        _as.displayAlert("Checkpoint");
+        if (!debugMode)
+            _as.displayAlert("Checkpoint");
     }
 
     public void CompleteStage()
