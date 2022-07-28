@@ -430,8 +430,8 @@ public class CarController : MonoBehaviour
     {
         if (_grounded) return;
         
-        if (_airDown)   _rigidbody.AddTorque(-transform.right/15, ForceMode.VelocityChange);
-        if (_airUp)     _rigidbody.AddTorque(transform.right/15, ForceMode.VelocityChange);
+        if (_airDown)   _rigidbody.AddTorque(-Vector3.right/15, ForceMode.VelocityChange);
+        if (_airUp)     _rigidbody.AddTorque(Vector3.right/15, ForceMode.VelocityChange);
         if (_moveLeft)  _rigidbody.AddTorque(-transform.up/60, ForceMode.VelocityChange);
         if (_moveRight) _rigidbody.AddTorque(transform.up/60, ForceMode.VelocityChange);
         if (_airLeft)   _rigidbody.AddTorque(transform.forward/15, ForceMode.VelocityChange);
