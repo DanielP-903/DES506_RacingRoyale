@@ -21,6 +21,8 @@ public class BotCarController : MonoBehaviour
     private Transform _spawnLocation;
     private int _botNum = -1;
     private bool touchingReset = false;
+    private float target;
+    private bool grounded;
     
     private TextMeshProUGUI name;
     private TextMeshProUGUI lis;
@@ -58,6 +60,7 @@ public class BotCarController : MonoBehaviour
         }
         else
         {
+            Debug.Log("Destroying Bot Control");
             Destroy(GetComponent<CarController>());
             //Destroy(GetComponent<Rigidbody>());
             Destroy(this);
@@ -122,6 +125,93 @@ public class BotCarController : MonoBehaviour
     }
 
     void decideBehaviour()
+    {
+        //Debug.Log("Deciding Behaviour");
+        decideTarget();
+        alignToTarget();
+    }
+
+    void decideTarget()
+    {
+        RaycastHit hit;
+        //Debug.DrawRay(transform.position,  transform.TransformDirection(Vector3.down) * 2f, Color.magenta);
+        if (Physics.Raycast(transform.position,  transform.TransformDirection(Vector3.down), out hit, 3f, _layerMask))
+        {
+            grounded = true;
+            switch (hit.collider.name)
+            {
+                case "scale13":
+                case "polySurface14":
+                    target = hit.collider.transform.rotation.eulerAngles.y - 90;
+                    break;
+                case "PV_OpenArea_1":
+                case "PV_TFlatRamp":
+                    target = hit.collider.transform.rotation.eulerAngles.y + 90;
+                    break;
+                default:
+                    target = hit.collider.transform.rotation.eulerAngles.y;
+                    break;
+            }
+
+            if (target >= 360)
+            {
+                target -= 360;
+            }
+            else if (target < 0)
+            {
+                while (target < 0)
+                {
+                    Debug.Log("StillInWhileLoop: "+target);
+                    target += 360;
+                }
+            }
+            //Debug.Log("Ground Detected!: "+hit.collider.name + " Rot: "+target);
+            //target = hit.collider.transform.rotation.eulerAngles.y;
+        }
+        else
+        {
+            //Debug.Log("No Ground Detected");
+            grounded = false;
+        }
+        //Debug.Log("Decided Target");
+    }
+
+    void alignToTarget()
+    {
+        //Debug.Log("CurrentRot: " + transform.rotation.eulerAngles.y + " TargetRot: "+ target);
+        //Vector2.SignedAngle(new Vector2(0,transform.rotation.eulerAngles.y), new Vector2(0,target))
+        Debug.Log(grounded);
+        if (detectTooClose())
+        {
+            justBackward();
+            Debug.Log("Reversing - CurrentRot: " + transform.rotation.eulerAngles.y + " TargetRot: "+ target);
+        }
+        else if (Mathf.Abs(Mathf.DeltaAngle(transform.rotation.eulerAngles.y, target)) > 1 && grounded)
+        {
+            if (Mathf.DeltaAngle(transform.rotation.eulerAngles.y, target) < 0)
+            {
+                Debug.Log("Turning Left - CurrentRot: " + transform.rotation.eulerAngles.y + " TargetRot: "+ target);
+                leftTurn();
+            }
+            else if (Mathf.DeltaAngle(transform.rotation.eulerAngles.y, target) > 0)
+            {
+                Debug.Log("Turning Right - CurrentRot: " + transform.rotation.eulerAngles.y + " TargetRot: "+ target);
+                rightTurn();
+            }
+            else
+            {
+                Debug.Log("Moving Forward - CurrentRot: " + transform.rotation.eulerAngles.y + " TargetRot: "+ target + " AngleVal: "+Mathf.DeltaAngle(transform.rotation.eulerAngles.y, target));
+                justForward();
+            }
+        }
+        else
+        {
+            Debug.Log("Moving Forward - CurrentRot: " + transform.rotation.eulerAngles.y + " TargetRot: "+ target + " AngleVal: "+Mathf.DeltaAngle(transform.rotation.eulerAngles.y, target));
+            justForward();
+        }
+    }
+
+    void decideOldBehaviour()
     {
         int randomVal = Random.Range((int)0, (int)250);
         if ((detectLeft() && detectForward() && !detectTooClose()) 
@@ -223,10 +313,10 @@ public class BotCarController : MonoBehaviour
     bool detectTooClose()
     {
         RaycastHit hit;
-        //Debug.DrawRay(transform.position,  transform.TransformDirection(Vector3.forward) * 3f, Color.magenta);
-        if (Physics.Raycast(transform.position,  transform.TransformDirection(Vector3.forward), out hit, 5f, _layerMask))
+        Debug.DrawRay(transform.position,  transform.TransformDirection(Vector3.forward) * 3f, Color.magenta);
+        if (Physics.Raycast(transform.position,  transform.TransformDirection(Vector3.forward), out hit, 3f, _layerMask))
         {
-            ////Debug.Log("Too Close!: "+hit.collider.gameObject);
+            Debug.Log("Too Close!: "+hit.collider.gameObject);
             return true;
         }
         else
