@@ -47899,6 +47899,38 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 7b874a08-5d88-456d-a038-e18a236f8ea8
     m_ActionName: Master/Escape1[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1118674505751619611}
+        m_TargetAssemblyTypeName: CarController, Assembly-CSharp
+        m_MethodName: ControllerLeft
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: dcf447a7-d745-4144-b170-3dee2f71013f
+    m_ActionName: Master/Controller Left[/XInputControllerWindows/leftStick/left]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1118674505751619611}
+        m_TargetAssemblyTypeName: CarController, Assembly-CSharp
+        m_MethodName: ControllerRight
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: bb5dbfbb-8417-4b5f-bc5b-b64b506c41c3
+    m_ActionName: Master/Controller Right[/XInputControllerWindows/leftStick/right]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Master

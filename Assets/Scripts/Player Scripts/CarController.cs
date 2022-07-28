@@ -833,6 +833,23 @@ public class CarController : MonoBehaviour
         _moveRight = value > 0;
         //Debug.Log("Right detected");
     }
+    // Controller Left Stick Left
+    public void ControllerLeft(InputAction.CallbackContext context)
+    {
+        float value = context.ReadValue<float>();
+        _moveLeft = value > 0;
+        turnAmount = Mathf.Lerp(0,0.3f, value);
+        //Debug.Log("Left detected");
+    }
+    // Controller Left Stick Right
+    public void ControllerRight(InputAction.CallbackContext context)
+    {
+        float value = context.ReadValue<float>();
+        _moveRight = value > 0;
+        turnAmount = Mathf.Lerp(0,0.3f, value);
+        //Debug.Log("Right detected");
+    }
+    
     // Space
     public void Space(InputAction.CallbackContext context)
     {
