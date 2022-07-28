@@ -430,8 +430,8 @@ public class CarController : MonoBehaviour
     {
         if (_grounded) return;
         
-        if (_airDown)   _rigidbody.AddTorque(-Vector3.right/15, ForceMode.VelocityChange);
-        if (_airUp)     _rigidbody.AddTorque(Vector3.right/15, ForceMode.VelocityChange);
+        if (_airDown)   _rigidbody.AddTorque(-transform.right/15, ForceMode.VelocityChange);
+        if (_airUp)     _rigidbody.AddTorque(transform.right/15, ForceMode.VelocityChange);
         if (_moveLeft)  _rigidbody.AddTorque(-transform.up/60, ForceMode.VelocityChange);
         if (_moveRight) _rigidbody.AddTorque(transform.up/60, ForceMode.VelocityChange);
         if (_airLeft)   _rigidbody.AddTorque(transform.forward/15, ForceMode.VelocityChange);
@@ -745,11 +745,11 @@ public class CarController : MonoBehaviour
         }
         else if (collision.contacts[0].point.y > transform.position.y - 4.0f)
         {
-            Vector3 direction = collision.contacts[0].point - transform.position;
-            _rigidbody.velocity = -(direction.normalized * (bounciness/3));
-            _vfxHandler.PlayVFXAtPosition("SoftImpact", collision.contacts[0].point);
-            int rand = Random.Range(1, 5);
-            if (!bot) audioManager.PlaySound("CarHit0" + rand);
+            // Vector3 direction = collision.contacts[0].point - transform.position;
+            // _rigidbody.velocity = -(direction.normalized * (bounciness/3));
+            // _vfxHandler.PlayVFXAtPosition("SoftImpact", collision.contacts[0].point);
+            // int rand = Random.Range(1, 5);
+            // if (!bot) audioManager.PlaySound("CarHit0" + rand);
         }
     }
 
