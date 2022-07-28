@@ -203,8 +203,9 @@ MonoBehaviour:
   - {fileID: 3668854219613119128}
   - {fileID: -7764530827067231555}
   - {fileID: -1668478499025158270}
-  - {fileID: 7554579513586288109}
   - {fileID: 1625858454577460534}
+  - {fileID: 7554579513586288109}
+  - {fileID: 185563220992956392}
 --- !u!114 &185563220992956392
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -217,24 +218,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 558a8e2b6826cf840aae193990ba9f2e, type: 3}
   m_Name: ShadowsMidtonesHighlights
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   m_AdvancedMode: 0
   shadows:
-    m_OverrideState: 0
-    m_Value: {x: 1, y: 1, z: 1, w: 0}
+    m_OverrideState: 1
+    m_Value: {x: 0.748028, y: 0.7410932, z: 1, w: 0}
   midtones:
-    m_OverrideState: 0
-    m_Value: {x: 1, y: 1, z: 1, w: 0}
+    m_OverrideState: 1
+    m_Value: {x: 1, y: 0.75770736, z: 0.86103886, w: 0.2988185}
   highlights:
-    m_OverrideState: 0
-    m_Value: {x: 1, y: 1, z: 1, w: 0}
+    m_OverrideState: 1
+    m_Value: {x: 1, y: 0.38389564, z: 0.8314235, w: 0.180681}
   shadowsStart:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
     min: 0
   shadowsEnd:
     m_OverrideState: 0
-    m_Value: 0.3
+    m_Value: 0.27
     min: 0
   highlightsStart:
     m_OverrideState: 0
