@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Photon.Pun;
 using TMPro;
 using UnityEngine;
@@ -18,8 +20,13 @@ public class BotCarController : MonoBehaviour
     private bool touchingReset = false;
     private float target;
     private bool grounded;
+    private bool botPointsFound;
+    private float stuckTimer;
+    private Vector3 stuckPos;
+    private bool boostAllowed = true;
 
     private BotPoint[] _botPoints;
+    private List<BotPoint> _passedBotPoints;
 
     //private Transform[] _passedBotPoints;
     private int currentOrder = 0;
@@ -48,7 +55,17 @@ public class BotCarController : MonoBehaviour
             _layerMask = ~_layerMask;
             _carBody = transform.Find("CarMesh");
             _spawnLocation = GameObject.Find("SpawnLocation" + _botNum).transform;
-            _botPoints = GameObject.Find("BotPoints").GetComponentsInChildren<BotPoint>();
+            if (GameObject.Find("BotPoints"))
+            {
+                _botPoints = GameObject.Find("BotPoints").GetComponentsInChildren<BotPoint>();
+                botPointsFound = true;
+            }
+            else
+            {
+                botPointsFound = false;
+            }
+
+            _passedBotPoints = new List<BotPoint>();
         }
         else if (_debugMode)
         {
@@ -61,7 +78,17 @@ public class BotCarController : MonoBehaviour
             _layerMask = ~_layerMask;
             _carBody = transform.Find("CarMesh");
             _spawnLocation = GameObject.Find("SpawnLocation" + _botNum).transform;
-            _botPoints = GameObject.Find("BotPoints").GetComponentsInChildren<BotPoint>();
+            if (GameObject.Find("BotPoints"))
+            {
+                _botPoints = GameObject.Find("BotPoints").GetComponentsInChildren<BotPoint>();
+                botPointsFound = true;
+            }
+            else
+            {
+                botPointsFound = false;
+            }
+            //Debug.Log(_botPoints.Length);
+            _passedBotPoints = new List<BotPoint>();
         }
         else
         {
@@ -81,6 +108,18 @@ public class BotCarController : MonoBehaviour
     {
         decideBehaviour();
         checkReset();
+        if (Time.time - stuckTimer > 30)
+        {
+            stuckTimer = Time.time;
+            if (Vector3.Distance(stuckPos, transform.position) < 3)
+            {
+                goToSpawn();
+            }
+            else
+            {
+                stuckPos = transform.position;
+            }
+        }
         name.text = _pv.name;
         lis.text = _pv.name;
         flis.text = _pv.name;
@@ -124,7 +163,10 @@ public class BotCarController : MonoBehaviour
             thisTransform.rotation = rotation;
             thisTransform.position = position;
 
-            decideChoice();
+            if (botPointsFound)
+            {
+                decideChoice();
+            }
         }
     }
 
@@ -137,15 +179,21 @@ public class BotCarController : MonoBehaviour
     {
         //Debug.Log("Deciding Behaviour");
         //decideTarget();
-        decideTargetPoint();
-        alignToTarget();
+        if (botPointsFound)
+        {
+            decideTargetPoint();
+            alignToTarget();
+        }
+        else
+        {
+            decideOldBehaviour();
+        }
     }
 
     void decideTargetPoint()
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 3f,
-                _layerMask))
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 3f, _layerMask))
         {
             grounded = true;
         }
@@ -158,12 +206,16 @@ public class BotCarController : MonoBehaviour
         foreach (BotPoint bt in _botPoints)
         {
             //Debug.Log(bt.name);
-            if (nearestPoint == null && bt.choice == currentChoice)
+            if (nearestPoint == null && bt.choice == currentChoice && !_passedBotPoints.Contains(bt))
             {
                 nearestPoint = bt.transform;
             }
+            if (nearestPoint == null)
+            {
+                
+            }
             else if (Vector3.Distance(transform.position, bt.transform.position) <
-                     Vector3.Distance(transform.position, nearestPoint.position) && bt.choice == currentChoice)
+                     Vector3.Distance(transform.position, nearestPoint.position) && bt.choice == currentChoice && !_passedBotPoints.Contains(bt))
             {
                 nearestPoint = bt.transform;
             }
@@ -171,10 +223,12 @@ public class BotCarController : MonoBehaviour
 
         //Debug.Log(nearestPoint.name + ":"+nearestPoint.position+":" +transform.position+"-"+Vector2.SignedAngle(new Vector2(transform.position.x, transform.position.z), new Vector2(nearestPoint.position.x, nearestPoint.position.z)));
         //target = Vector2.SignedAngle(new Vector2(transform.position.x, transform.position.z), new Vector2(nearestPoint.position.x, nearestPoint.position.z));
-        target = Mathf.Atan((transform.position.z - nearestPoint.position.z) /
-                            (transform.position.x - nearestPoint.position.x));
+        target = Mathf.Rad2Deg * Mathf.Atan2(transform.InverseTransformPoint(nearestPoint.position).x,
+            transform.InverseTransformPoint(nearestPoint.position).z);
+        //target = Mathf.Atan((nearestPoint.position.z - transform.position.z)/ (nearestPoint.position.x - transform.position.x)) * Mathf.Rad2Deg;
         //Debug.Log(nearestPoint.name + ":" + nearestPoint.position + ":" + transform.position + " " + target);
-        if (target >= 360)
+        //Debug.Log("Target: "+nearestPoint.name);
+        /*if (target >= 360)
         {
             target -= 360;
         }
@@ -185,11 +239,13 @@ public class BotCarController : MonoBehaviour
                 //Debug.Log("StillInWhileLoop: "+target);
                 target += 360;
             }
-        }
+        }*/
+        Debug.Log(nearestPoint.name + ":" + nearestPoint.position + ":" + transform.position + " " + target);
     }
 
     void decideChoice()
     {
+        _passedBotPoints.Clear();
         Transform nearestPoint = null;
         foreach (BotPoint bt in _botPoints)
         {
@@ -268,6 +324,8 @@ public class BotCarController : MonoBehaviour
             Debug.Log("Reversing - CurrentRot: " + transform.rotation.eulerAngles.y + " TargetRot: "+ target);
         }
         else */
+        
+        
         if (Mathf.Abs(Mathf.DeltaAngle(transform.rotation.eulerAngles.y, target)) > 1) //&& grounded
         {
             if (Mathf.DeltaAngle(transform.rotation.eulerAngles.y, target) < 0 && !detectTooClose())
@@ -300,12 +358,29 @@ public class BotCarController : MonoBehaviour
         {
             //Debug.Log("Moving Forward Grounded: " +grounded+" - CurrentRot: " + transform.rotation.eulerAngles.y + " TargetRot: "+ target + " AngleVal: "+Mathf.DeltaAngle(transform.rotation.eulerAngles.y, target));
             justForward();
+            if (!grounded && boostAllowed)
+            {
+                _cc.BotBoost();
+            }
+            else
+            {
+                _cc.BotNotBoost();
+            }
+
+            if (!detectForwardPit())
+            {
+                _cc.BotSpace();
+            }
+            else
+            {
+                _cc.BotNotSpace();
+            }
         }
     }
 
     void leftTurn()
     {
-        Debug.Log("TurningToLeft");
+        //Debug.Log("TurningToLeft");
         _cc.BotLeft();
         _cc.BotForward();
         _cc.BotNotRight();
@@ -314,7 +389,7 @@ public class BotCarController : MonoBehaviour
 
     void rightTurn()
     {
-        Debug.Log("TurningToRight");
+        //Debug.Log("TurningToRight");
         _cc.BotRight();
         _cc.BotForward();
         _cc.BotNotLeft();
@@ -323,7 +398,7 @@ public class BotCarController : MonoBehaviour
 
     void justForward()
     {
-        Debug.Log("JustForward");
+        //Debug.Log("JustForward");
         _cc.BotForward();
         _cc.BotNotRight();
         _cc.BotNotLeft();
@@ -332,7 +407,7 @@ public class BotCarController : MonoBehaviour
 
     void justBackward()
     {
-        Debug.Log("JustBackward");
+        //Debug.Log("JustBackward");
         _cc.BotNotForward();
         _cc.BotNotRight();
         _cc.BotNotLeft();
@@ -341,7 +416,7 @@ public class BotCarController : MonoBehaviour
 
     void leftBackward()
     {
-        Debug.Log("LeftBackward");
+        //Debug.Log("LeftBackward");
         _cc.BotNotForward();
         _cc.BotNotRight();
         _cc.BotLeft();
@@ -350,7 +425,7 @@ public class BotCarController : MonoBehaviour
 
     void rightBackward()
     {
-        Debug.Log("RightBackward");
+        //Debug.Log("RightBackward");
         _cc.BotNotForward();
         _cc.BotRight();
         _cc.BotNotLeft();
@@ -432,8 +507,15 @@ public class BotCarController : MonoBehaviour
         Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 5f, Color.magenta);
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 5f, _layerMask))
         {
-            //Debug.Log("Too Close!: "+hit.collider.gameObject);
-            return true;
+            //Debug.Log("Too Close!: " + hit.collider.gameObject);
+            if (hit.collider.tag == "Checkpoint")
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
         else
         {
@@ -533,7 +615,7 @@ public class BotCarController : MonoBehaviour
     bool detectForwardPit()
     {
         //Debug.DrawRay(transform.position + transform.forward * 5, transform.TransformDirection(Vector3.down) * 5f, Color.cyan);
-        if (Physics.Raycast(transform.position + transform.forward * 5, transform.TransformDirection(Vector3.down), 5f,
+        if (Physics.Raycast(transform.position + transform.forward * 2, transform.TransformDirection(Vector3.down), 5f,
                 _layerMask))
         {
             return true;
@@ -557,10 +639,29 @@ public class BotCarController : MonoBehaviour
         {
             PhotonNetwork.Destroy(this.gameObject);
         }
-        else if (other.gameObject.GetComponent<BotPoint>() &&
-                 other.gameObject.GetComponent<BotPoint>().choices.Length > 0)
+        else if (other.tag == "BotsNoBoost")
         {
-            pickChoice(other.gameObject.GetComponent<BotPoint>().choices);
+            boostAllowed = false;
+        }
+        else if (other.gameObject.GetComponent<BotPoint>())
+        {
+            BotPoint bp = other.gameObject.GetComponent<BotPoint>();
+            Debug.Log("Hit Bot Point: "+bp.name);
+            _passedBotPoints.Add(bp);
+            currentOrder = bp.order + 1;
+            currentChoice = bp.choice;
+            if (bp.choices.Length > 0)
+            {
+                pickChoice(bp.choices);
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "BotsNoBoost")
+        {
+            boostAllowed = true;
         }
     }
 }

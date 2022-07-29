@@ -187,7 +187,7 @@ public class CarController : MonoBehaviour
         if (bot)
         {
             _botCarController = GetComponent<BotCarController>();
-            accelerationForce /= 2;
+            //accelerationForce /= 2;
         }
 
         _passedFinishLine = false;
@@ -229,7 +229,7 @@ public class CarController : MonoBehaviour
                 foreach (var checkpoint in checkpoints.checkpointObjects)
                 {
                     _passedCheckpoints.Add(checkpoint, false);
-                    Debug.Log(_passedCheckpoints[checkpoint] + " : " + checkpoint);
+                    //Debug.Log(_passedCheckpoints[checkpoint] + " : " + checkpoint);
                 }
             }
             else
@@ -814,9 +814,7 @@ public class CarController : MonoBehaviour
             _currentRespawnPoint = other.gameObject.transform;
             int playerNo = !bot ? _playerManager.GetPlayerNumber() : _botCarController.GetBotNumber();
             GameObject newSpawnLocation = other.gameObject.transform.GetChild(playerNo).gameObject;
-            Debug.Log("Checkpoint passed: " + other.gameObject.name + " , " + newSpawnLocation + " , " +
-                      _currentRespawnPoint.name + " , " +
-                      (!bot ? _playerManager.GetPlayerNumber() : _botCarController.GetBotNumber()));
+            //Debug.Log("Checkpoint passed: " + other.gameObject.name + " , " + newSpawnLocation + " , " +_currentRespawnPoint.name + " , " +(!bot ? _playerManager.GetPlayerNumber() : _botCarController.GetBotNumber()));
             if (!bot) _playerManager.ChangeSpawnLocation(newSpawnLocation.transform);
             else _botCarController.setSpawn(newSpawnLocation.transform);
 
