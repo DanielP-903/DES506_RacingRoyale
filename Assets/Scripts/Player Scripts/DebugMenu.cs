@@ -1,6 +1,5 @@
 using System.Collections;
 using Photon.Pun;
-using Player_Scripts.Powerup_Scripts;
 using UnityEngine;
 
 public class DebugMenu : MonoBehaviour
