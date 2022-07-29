@@ -1,13 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public struct Top3PlayerData
+namespace Player_Scripts
 {
-    public string name;
-
-    public Top3PlayerData(string inputName)
+    public struct Top3PlayerData
     {
-        name = inputName;
+        public string name;
+
+        public Top3PlayerData(string inputName)
+        {
+            name = inputName;
+        }
     }
 }

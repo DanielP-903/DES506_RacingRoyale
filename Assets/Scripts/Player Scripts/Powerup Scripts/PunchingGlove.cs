@@ -1,48 +1,49 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
-public class PunchingGlove : MonoBehaviour
+namespace Player_Scripts.Powerup_Scripts
 {
-    private GameObject _playerRef;
-    private PlayerPowerups _playerPowerups;
-    private bool _hasFoundPlayer = false;
-
-    private void Start()
+    public class PunchingGlove : MonoBehaviour
     {
-        _hasFoundPlayer = false;
-        StartCoroutine(WaitForPlayer());
-    }
+        private GameObject _playerRef;
+        private PlayerPowerups _playerPowerups;
+        private bool _hasFoundPlayer = false;
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (!other.CompareTag("Player") && other.gameObject.layer != 7 && _hasFoundPlayer) // Player layer
+        private void Start()
         {
-            _playerPowerups.ResetPunch();
+            _hasFoundPlayer = false;
+            StartCoroutine(WaitForPlayer());
         }
-    }
 
-    IEnumerator WaitForPlayer()
-    {
-        yield return new WaitForSeconds(1);
-        
-        GameObject[] listOfPlayers = GameObject.FindGameObjectsWithTag("Player");
-        foreach (GameObject player in listOfPlayers)
+        private void OnTriggerEnter(Collider other)
         {
-            //Debug.Log("Player: " + player);
-            if (!player.GetComponent<PhotonView>())
+            if (!other.CompareTag("Player") && other.gameObject.layer != 7 && _hasFoundPlayer) // Player layer
             {
-                continue;
+                _playerPowerups.ResetPunch();
             }
-            
-            if (player.GetComponent<PhotonView>().IsMine && !player.GetComponent<CarController>().bot)
+        }
+
+        IEnumerator WaitForPlayer()
+        {
+            yield return new WaitForSeconds(1);
+        
+            GameObject[] listOfPlayers = GameObject.FindGameObjectsWithTag("Player");
+            foreach (GameObject player in listOfPlayers)
             {
-                _playerRef = player;
-                //Debug.Log("Player Found");
-                _hasFoundPlayer = true;
-                _playerPowerups = _playerRef.GetComponent<PlayerPowerups>();
+                //Debug.Log("Player: " + player);
+                if (!player.GetComponent<PhotonView>())
+                {
+                    continue;
+                }
+            
+                if (player.GetComponent<PhotonView>().IsMine && !player.GetComponent<CarController>().bot)
+                {
+                    _playerRef = player;
+                    //Debug.Log("Player Found");
+                    _hasFoundPlayer = true;
+                    _playerPowerups = _playerRef.GetComponent<PlayerPowerups>();
+                }
             }
         }
     }

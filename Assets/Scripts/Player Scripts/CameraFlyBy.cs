@@ -1,37 +1,38 @@
-using System.Collections;
-using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CameraFlyBy : MonoBehaviour
+namespace Player_Scripts
 {
-    public bool activateFlyBy = false;
-    [SerializeField] private float maxFlyByPathPosition = 16.95f;
-
-    private Animator _animator;
-    private CinemachineVirtualCamera _vc;
-    // Start is called before the first frame update
-    void Start()
+    public class CameraFlyBy : MonoBehaviour
     {
-        _vc = GetComponent<CinemachineVirtualCamera>();
-        _animator = GetComponent<Animator>();
-        //activateFlyBy = true;
-    }
+        public bool activateFlyBy = false;
+        [SerializeField] private float maxFlyByPathPosition = 16.95f;
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (activateFlyBy)
+        private Animator _animator;
+        private CinemachineVirtualCamera _vc;
+        // Start is called before the first frame update
+        void Start()
         {
-            _animator.Play("FlyBy");
+            _vc = GetComponent<CinemachineVirtualCamera>();
+            _animator = GetComponent<Animator>();
+            //activateFlyBy = true;
         }
 
-        if (_vc.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition > maxFlyByPathPosition || Keyboard.current.anyKey.isPressed)
+        // Update is called once per frame
+        void Update()
         {
-            Debug.Log("Flyby Complete");
-            activateFlyBy = false;
-            _animator.StopPlayback();
+            if (activateFlyBy)
+            {
+                _animator.Play("FlyBy");
+            }
+
+            if (_vc.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition > maxFlyByPathPosition || Keyboard.current.anyKey.isPressed)
+            {
+                Debug.Log("Flyby Complete");
+                activateFlyBy = false;
+                _animator.StopPlayback();
+            }
         }
     }
 }

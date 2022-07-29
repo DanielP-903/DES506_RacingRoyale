@@ -172,13 +172,25 @@ public class Launcher : MonoBehaviourPunCallbacks
             {
                 mixer.SetFloat("Master", PlayerPrefs.GetFloat("MasterVol"));
             }
+            else
+            {
+                mixer.SetFloat("Master", 0);
+            }
             if (PlayerPrefs.HasKey("MusicVol"))
             {
                 mixer.SetFloat("Music", PlayerPrefs.GetFloat("MusicVol"));
             }
+            else
+            {
+                mixer.SetFloat("Master", 0);
+            }
             if (PlayerPrefs.HasKey("SoundVol"))
             {
                 mixer.SetFloat("Sound", PlayerPrefs.GetFloat("SoundVol"));
+            }
+            else
+            {
+                mixer.SetFloat("Master", 0);
             }
 
             if (PlayerPrefs.HasKey("FullScreen"))
