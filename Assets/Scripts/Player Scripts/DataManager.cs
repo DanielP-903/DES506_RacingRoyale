@@ -1,38 +1,34 @@
 using UnityEngine;
 
-namespace Player_Scripts
+
+public class DataManager : MonoBehaviour
 {
-    public class DataManager : MonoBehaviour
+    [SerializeField] private Mesh[] meshArray;
+    [SerializeField] private Material[] matArray;
+
+    private static GameObject instance;
+
+    // Start is called before the first frame update
+    void Start()
     {
-        [SerializeField]
-        private Mesh[] meshArray;
-        [SerializeField]
-        private Material[] matArray;
+        if (!instance)
+        {
+            instance = this.gameObject;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+    }
 
-        private static GameObject instance;
-    
-        // Start is called before the first frame update
-        void Start()
-        {
-            if (!instance)
-            {
-                instance = this.gameObject;
-                DontDestroyOnLoad(this.gameObject);
-            }
-            else
-            {
-                Destroy(this.gameObject);
-            }
-        }
+    public Mesh[] GetMesh()
+    {
+        return meshArray;
+    }
 
-        public Mesh[] GetMesh()
-        {
-            return meshArray;
-        }
-    
-        public Material[] GetMats()
-        {
-            return matArray;
-        }
+    public Material[] GetMats()
+    {
+        return matArray;
     }
 }
