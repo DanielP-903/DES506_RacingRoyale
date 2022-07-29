@@ -17,7 +17,7 @@ public class CarVFXHandler : MonoBehaviour
     
     [Header("Impact VFX")]
     public List<VisualEffectAsset> impactEffectAssets = new List<VisualEffectAsset>();
-    public List<VisualEffect> driftSmokeEffects = new List<VisualEffect>();
+    public List<ParticleSystem> driftSmokeEffects = new List<ParticleSystem>();
     public ParticleSystem confettiParticleSystem;
     public VisualEffect elimEffect;
     public GameObject impactEffectObject;
