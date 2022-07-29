@@ -557,10 +557,13 @@ public class BotCarController : MonoBehaviour
         {
             PhotonNetwork.Destroy(this.gameObject);
         }
-        else if (other.gameObject.GetComponent<BotPoint>() &&
-                 other.gameObject.GetComponent<BotPoint>().choices.Length > 0)
+        else if (other.gameObject.GetComponent<BotPoint>())
         {
-            pickChoice(other.gameObject.GetComponent<BotPoint>().choices);
+            currentOrder = other.gameObject.GetComponent<BotPoint>().order + 1;
+            if (other.gameObject.GetComponent<BotPoint>().choices.Length > 0)
+            {
+                pickChoice(other.gameObject.GetComponent<BotPoint>().choices);
+            }
         }
     }
 }

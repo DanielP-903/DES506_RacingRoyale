@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using Photon.Pun;
-using Player_Scripts.Powerup_Scripts;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -188,7 +187,7 @@ public class CarController : MonoBehaviour
         if (bot)
         {
             _botCarController = GetComponent<BotCarController>();
-            accelerationForce /= 2;
+            //accelerationForce /= 2;
         }
 
         _passedFinishLine = false;
