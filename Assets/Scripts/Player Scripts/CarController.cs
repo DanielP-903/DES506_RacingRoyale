@@ -186,6 +186,7 @@ public class CarController : MonoBehaviour
             if (bot)
             {
                 _botCarController = GetComponent<BotCarController>();
+                accelerationForce /= 2;
             }
             
             _passedFinishLine = false;

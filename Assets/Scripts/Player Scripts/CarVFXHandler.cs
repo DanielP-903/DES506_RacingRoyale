@@ -191,8 +191,7 @@ public class CarVFXHandler : MonoBehaviour
         newSpawn.transform.localScale = new Vector3(scaleFactor, scaleFactor, scaleFactor);
         newSpawn.GetComponent<TemporaryEffect>().doNotDelete = false;
         newSpawn.GetComponent<TemporaryEffect>().isBillboard = isBillboard;
-        newSpawn.GetComponent<VisualEffect>().visualEffectAsset = impactEffectAssets[GetVFXIndex(vfxName)]; //impactEffectAssets[2];
-        //newSpawn.GetComponent<VisualEffect>().Play();
+        newSpawn.GetComponent<VisualEffect>().visualEffectAsset = impactEffectAssets[GetVFXIndex(vfxName)];
     }
     
     #endregion
@@ -206,6 +205,7 @@ public class CarVFXHandler : MonoBehaviour
     void Start()
     {
         _photonView = GetComponent<PhotonView>();
+        _rigidbody = GetComponent<Rigidbody>();
 
         if (!_carController.debug)
         {
@@ -214,7 +214,6 @@ public class CarVFXHandler : MonoBehaviour
             matArray = _dm.GetMats();
         }
 
-        _rigidbody = GetComponent<Rigidbody>();
 
         _currentEffect = impactEffectObject.GetComponent<VisualEffect>();
         
@@ -301,6 +300,7 @@ public class CarVFXHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!_photonView.IsMine) return;
         if (!_wall) return;
         if (_carController && _carController.bot) return;
 
@@ -325,6 +325,7 @@ public class CarVFXHandler : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!_photonView.IsMine) return;
         if (_carController && _carController.bot) return;
         
         float clampedVelocity = Mathf.Clamp((_rigidbody.velocity.magnitude * 2.2369362912f) - 60, 0, 100);
