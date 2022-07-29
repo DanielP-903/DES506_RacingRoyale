@@ -553,6 +553,11 @@ public class CarController : MonoBehaviour
         if (_moveForward) _rigidbody.AddForce(transform.forward * accelerationForce, ForceMode.Acceleration);
         if (_moveBackward) _rigidbody.AddForce(-transform.forward * accelerationForce, ForceMode.Acceleration);
 
+        if (!_grounded)
+        {
+            _vfxHandler.StopDriftEffects();
+        }
+        
         if (!_grounded) return;
 
         if (_moveLeft) _rigidbody.AddForce(transform.right * (accelerationForce / 4), ForceMode.Acceleration);
@@ -575,10 +580,6 @@ public class CarController : MonoBehaviour
             {
                 _vfxHandler.StopDriftEffects();
             }
-        }
-        else
-        {
-            _vfxHandler.StopDriftEffects();
         }
     }
 
