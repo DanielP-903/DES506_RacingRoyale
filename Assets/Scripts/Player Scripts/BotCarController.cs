@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Photon.Pun;
 using TMPro;
 using UnityEngine;
@@ -18,8 +19,10 @@ public class BotCarController : MonoBehaviour
     private bool touchingReset = false;
     private float target;
     private bool grounded;
+    private bool botPointsFound;
 
     private BotPoint[] _botPoints;
+    private List<BotPoint> _passedBotPoints;
 
     //private Transform[] _passedBotPoints;
     private int currentOrder = 0;
@@ -48,7 +51,17 @@ public class BotCarController : MonoBehaviour
             _layerMask = ~_layerMask;
             _carBody = transform.Find("CarMesh");
             _spawnLocation = GameObject.Find("SpawnLocation" + _botNum).transform;
-            _botPoints = GameObject.Find("BotPoints").GetComponentsInChildren<BotPoint>();
+            if (GameObject.Find("BotPoints"))
+            {
+                _botPoints = GameObject.Find("BotPoints").GetComponentsInChildren<BotPoint>();
+                botPointsFound = true;
+            }
+            else
+            {
+                botPointsFound = false;
+            }
+
+            _passedBotPoints = new List<BotPoint>();
         }
         else if (_debugMode)
         {
@@ -61,7 +74,17 @@ public class BotCarController : MonoBehaviour
             _layerMask = ~_layerMask;
             _carBody = transform.Find("CarMesh");
             _spawnLocation = GameObject.Find("SpawnLocation" + _botNum).transform;
-            _botPoints = GameObject.Find("BotPoints").GetComponentsInChildren<BotPoint>();
+            if (GameObject.Find("BotPoints"))
+            {
+                _botPoints = GameObject.Find("BotPoints").GetComponentsInChildren<BotPoint>();
+                botPointsFound = true;
+            }
+            else
+            {
+                botPointsFound = false;
+            }
+            //Debug.Log(_botPoints.Length);
+            _passedBotPoints = new List<BotPoint>();
         }
         else
         {
@@ -124,7 +147,10 @@ public class BotCarController : MonoBehaviour
             thisTransform.rotation = rotation;
             thisTransform.position = position;
 
-            decideChoice();
+            if (botPointsFound)
+            {
+                decideChoice();
+            }
         }
     }
 
@@ -137,15 +163,21 @@ public class BotCarController : MonoBehaviour
     {
         //Debug.Log("Deciding Behaviour");
         //decideTarget();
-        decideTargetPoint();
-        alignToTarget();
+        if (botPointsFound)
+        {
+            decideTargetPoint();
+            alignToTarget();
+        }
+        else
+        {
+            decideOldBehaviour();
+        }
     }
 
     void decideTargetPoint()
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 3f,
-                _layerMask))
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 3f, _layerMask))
         {
             grounded = true;
         }
@@ -157,10 +189,14 @@ public class BotCarController : MonoBehaviour
         Transform nearestPoint = null;
         foreach (BotPoint bt in _botPoints)
         {
-            //Debug.Log(bt.name);
-            if (nearestPoint == null && bt.choice == currentChoice)
+            Debug.Log(bt.name);
+            if (nearestPoint == null && bt.choice == currentChoice && !_passedBotPoints.Contains(bt))
             {
                 nearestPoint = bt.transform;
+            }
+            if (nearestPoint == null)
+            {
+                
             }
             else if (Vector3.Distance(transform.position, bt.transform.position) <
                      Vector3.Distance(transform.position, nearestPoint.position) && bt.choice == currentChoice)
@@ -209,6 +245,7 @@ public class BotCarController : MonoBehaviour
 
     void pickChoice(int[] choices)
     {
+        _passedBotPoints.Clear();
         currentChoice = choices[Random.Range(0, choices.Length - 1)];
     }
 
@@ -268,6 +305,8 @@ public class BotCarController : MonoBehaviour
             Debug.Log("Reversing - CurrentRot: " + transform.rotation.eulerAngles.y + " TargetRot: "+ target);
         }
         else */
+        
+        
         if (Mathf.Abs(Mathf.DeltaAngle(transform.rotation.eulerAngles.y, target)) > 1) //&& grounded
         {
             if (Mathf.DeltaAngle(transform.rotation.eulerAngles.y, target) < 0 && !detectTooClose())
@@ -300,12 +339,29 @@ public class BotCarController : MonoBehaviour
         {
             //Debug.Log("Moving Forward Grounded: " +grounded+" - CurrentRot: " + transform.rotation.eulerAngles.y + " TargetRot: "+ target + " AngleVal: "+Mathf.DeltaAngle(transform.rotation.eulerAngles.y, target));
             justForward();
+            if (!grounded)
+            {
+                _cc.BotBoost();
+            }
+            else
+            {
+                _cc.BotNotBoost();
+            }
+
+            if (!detectForwardPit())
+            {
+                _cc.BotSpace();
+            }
+            else
+            {
+                _cc.BotNotSpace();
+            }
         }
     }
 
     void leftTurn()
     {
-        Debug.Log("TurningToLeft");
+        //Debug.Log("TurningToLeft");
         _cc.BotLeft();
         _cc.BotForward();
         _cc.BotNotRight();
@@ -314,7 +370,7 @@ public class BotCarController : MonoBehaviour
 
     void rightTurn()
     {
-        Debug.Log("TurningToRight");
+        //Debug.Log("TurningToRight");
         _cc.BotRight();
         _cc.BotForward();
         _cc.BotNotLeft();
@@ -323,7 +379,7 @@ public class BotCarController : MonoBehaviour
 
     void justForward()
     {
-        Debug.Log("JustForward");
+        //Debug.Log("JustForward");
         _cc.BotForward();
         _cc.BotNotRight();
         _cc.BotNotLeft();
@@ -332,7 +388,7 @@ public class BotCarController : MonoBehaviour
 
     void justBackward()
     {
-        Debug.Log("JustBackward");
+        //Debug.Log("JustBackward");
         _cc.BotNotForward();
         _cc.BotNotRight();
         _cc.BotNotLeft();
@@ -341,7 +397,7 @@ public class BotCarController : MonoBehaviour
 
     void leftBackward()
     {
-        Debug.Log("LeftBackward");
+        //Debug.Log("LeftBackward");
         _cc.BotNotForward();
         _cc.BotNotRight();
         _cc.BotLeft();
@@ -350,7 +406,7 @@ public class BotCarController : MonoBehaviour
 
     void rightBackward()
     {
-        Debug.Log("RightBackward");
+        //Debug.Log("RightBackward");
         _cc.BotNotForward();
         _cc.BotRight();
         _cc.BotNotLeft();
@@ -533,7 +589,7 @@ public class BotCarController : MonoBehaviour
     bool detectForwardPit()
     {
         //Debug.DrawRay(transform.position + transform.forward * 5, transform.TransformDirection(Vector3.down) * 5f, Color.cyan);
-        if (Physics.Raycast(transform.position + transform.forward * 5, transform.TransformDirection(Vector3.down), 5f,
+        if (Physics.Raycast(transform.position + transform.forward * 2, transform.TransformDirection(Vector3.down), 5f,
                 _layerMask))
         {
             return true;
@@ -559,10 +615,14 @@ public class BotCarController : MonoBehaviour
         }
         else if (other.gameObject.GetComponent<BotPoint>())
         {
-            currentOrder = other.gameObject.GetComponent<BotPoint>().order + 1;
-            if (other.gameObject.GetComponent<BotPoint>().choices.Length > 0)
+            BotPoint bp = other.gameObject.GetComponent<BotPoint>();
+            Debug.Log("Hit Bot Point: "+bp.name);
+            _passedBotPoints.Add(bp);
+            currentOrder = bp.order + 1;
+            currentChoice = bp.choice;
+            if (bp.choices.Length > 0)
             {
-                pickChoice(other.gameObject.GetComponent<BotPoint>().choices);
+                pickChoice(bp.choices);
             }
         }
     }
