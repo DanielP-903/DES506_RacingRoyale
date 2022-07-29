@@ -1,8 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace Player_Scripts.Powerup_Scripts
-{
+
     public class BoxingGloveObstacle : MonoBehaviour
     {
         public float outSpeed = 100f, inSpeed = 10f, distance = 50f, outTime = 5f, inTime = 3f;
@@ -86,5 +85,4 @@ namespace Player_Scripts.Powerup_Scripts
         //}
 
     }
-}
-    
+

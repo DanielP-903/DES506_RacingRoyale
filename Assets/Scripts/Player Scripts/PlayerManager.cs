@@ -2,7 +2,6 @@ using System.Collections;
 using Cinemachine;
 using Photon.Pun;
 using Photon.Realtime;
-using Player_Scripts.Powerup_Scripts;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
