@@ -189,6 +189,7 @@ namespace Player_Scripts
             if (bot)
             {
                 _botCarController = GetComponent<BotCarController>();
+                accelerationForce /= 2;
             }
             
             _passedFinishLine = false;
