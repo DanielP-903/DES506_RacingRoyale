@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
+using Player_Scripts;
 using UnityEngine;
 
 public class SpectateButtons : MonoBehaviour

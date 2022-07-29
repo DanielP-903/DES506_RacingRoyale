@@ -1,22 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Wheel : MonoBehaviour
+namespace Player_Scripts
 {
-    private GameObject _parent;
-
-    private WheelCollider _wheelCollider;
-    // Start is called before the first frame update
-    void Start()
+    public class Wheel : MonoBehaviour
     {
-        _parent = transform.parent.gameObject;
-        _wheelCollider = _parent.GetComponent<WheelCollider>();
-    }
+        private GameObject _parent;
 
-    // Update is called once per frame
-    void Update()
-    {
-        transform.localRotation = Quaternion.Euler(_wheelCollider.rpm,(_wheelCollider.steerAngle),0);
+        private WheelCollider _wheelCollider;
+        // Start is called before the first frame update
+        void Start()
+        {
+            _parent = transform.parent.gameObject;
+            _wheelCollider = _parent.GetComponent<WheelCollider>();
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            transform.localRotation = Quaternion.Euler(_wheelCollider.rpm,(_wheelCollider.steerAngle),0);
+        }
     }
 }
