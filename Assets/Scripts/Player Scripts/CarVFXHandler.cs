@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Cinemachine.PostFX;
 using Photon.Pun;
+using Player_Scripts;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
