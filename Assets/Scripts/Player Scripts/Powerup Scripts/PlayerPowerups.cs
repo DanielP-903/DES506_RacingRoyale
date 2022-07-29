@@ -86,7 +86,7 @@ public class PlayerPowerups : MonoBehaviour
     //private GameManager _gm;
     private GameObject _currentTarget;
     private PhotonView _photonView;
-    
+    private bool deleteIcon = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -379,7 +379,6 @@ public class PlayerPowerups : MonoBehaviour
      private void SuperBoost()
      {
          StartCoroutine(DelayRemoveIconBoost());
-         currentPowerupType = PowerupType.None;
          _vfxHandler.PlayBoostEffectAlt();
          _vfxHandler.PlayVFX("BoostEffect");
          if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
@@ -396,14 +395,12 @@ public class PlayerPowerups : MonoBehaviour
      private void BouncyWallShield()
      {
          _wallShieldTimer = wallShieldTime;
-         currentPowerupType = PowerupType.None;
          _audioManager.PlaySound("BouncyWallShield");
      }
      
      private void WarpPortal()
      {
          _warpPortalTimer = warpPortalTime;
-         currentPowerupType = PowerupType.None;
          _audioManager.PlaySound("WarpPortal");
      }
 
@@ -425,7 +422,6 @@ public class PlayerPowerups : MonoBehaviour
 
          StartCoroutine(DelayRemoveIcon());
          //_powerupIconMask.fillAmount = 0;
-         currentPowerupType = PowerupType.None;
          _audioManager.PlaySound("PunchingGlove");
      }
      
@@ -502,7 +498,6 @@ public class PlayerPowerups : MonoBehaviour
                  // Found a player to grapple!
                  grappleLineObject.SetActive(true);
                  StartCoroutine(Grapple());
-                 currentPowerupType = PowerupType.None;
                  Debug.Log("HIT!!!");
                  _audioManager.PlaySound("GrapplingHook");
                  _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.GrapplingHook, true);
@@ -556,7 +551,6 @@ public class PlayerPowerups : MonoBehaviour
              positions2[0] = transform.position + transform.forward;;
              positions2[1] = transform.position + transform.forward;
     
-             currentPowerupType = PowerupType.None;
              _punchLine.SetPositions(positions2);
              _photonView.RPC("UpdatePunchingGlove", RpcTarget.All, _photonView.ViewID, positions2);
              
@@ -578,7 +572,6 @@ public class PlayerPowerups : MonoBehaviour
          positions2[0] = transform.position + transform.forward;;
          positions2[1] = transform.position + transform.forward;
  
-         currentPowerupType = PowerupType.None;
          _punchLine.SetPositions(positions2);
          _photonView.RPC("UpdatePunchingGlove", RpcTarget.All, _photonView.ViewID, positions2);
          
@@ -599,7 +592,6 @@ public class PlayerPowerups : MonoBehaviour
          _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.AirBlast, true);
          _airBlasting = true;
          _airBlastTimer = airBlastTime;
-         currentPowerupType = PowerupType.None;
          foreach (var effect in airBlastEffects)
          {
              effect.Play();
@@ -613,14 +605,9 @@ public class PlayerPowerups : MonoBehaviour
      {
          _superBoostTimer = 1;
          _boosting = true;
-         powerupIcon.gameObject.GetComponent<Animator>().Play("PowerupPopOut");
-         yield return new WaitForSeconds(1);
-         powerupIcon.gameObject.SetActive(false);
-         
+         yield return new WaitForSeconds(3);
+         StartCoroutine(DelayRemoveIcon());
          _vfxHandler.StopBoostEffect();
-         
-         _powerupIconMask.fillAmount = 0;
-
          _boosting = false;
      }
 
@@ -630,6 +617,7 @@ public class PlayerPowerups : MonoBehaviour
          yield return new WaitForSeconds(0.25f);
          powerupIcon.gameObject.SetActive(false);
          _powerupIconMask.fillAmount = 0;
+         currentPowerupType = PowerupType.None;
      }
 
      public void DebugSetCurrentPowerup(PowerupType powerupType)
