@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Photon.Pun;
 using TMPro;
@@ -20,6 +21,9 @@ public class BotCarController : MonoBehaviour
     private float target;
     private bool grounded;
     private bool botPointsFound;
+    private float stuckTimer;
+    private Vector3 stuckPos;
+    private bool boostAllowed = true;
 
     private BotPoint[] _botPoints;
     private List<BotPoint> _passedBotPoints;
@@ -104,6 +108,18 @@ public class BotCarController : MonoBehaviour
     {
         decideBehaviour();
         checkReset();
+        if (Time.time - stuckTimer > 30)
+        {
+            stuckTimer = Time.time;
+            if (Vector3.Distance(stuckPos, transform.position) < 3)
+            {
+                goToSpawn();
+            }
+            else
+            {
+                stuckPos = transform.position;
+            }
+        }
         name.text = _pv.name;
         lis.text = _pv.name;
         flis.text = _pv.name;
@@ -189,7 +205,7 @@ public class BotCarController : MonoBehaviour
         Transform nearestPoint = null;
         foreach (BotPoint bt in _botPoints)
         {
-            Debug.Log(bt.name);
+            //Debug.Log(bt.name);
             if (nearestPoint == null && bt.choice == currentChoice && !_passedBotPoints.Contains(bt))
             {
                 nearestPoint = bt.transform;
@@ -199,7 +215,7 @@ public class BotCarController : MonoBehaviour
                 
             }
             else if (Vector3.Distance(transform.position, bt.transform.position) <
-                     Vector3.Distance(transform.position, nearestPoint.position) && bt.choice == currentChoice)
+                     Vector3.Distance(transform.position, nearestPoint.position) && bt.choice == currentChoice && !_passedBotPoints.Contains(bt))
             {
                 nearestPoint = bt.transform;
             }
@@ -207,10 +223,12 @@ public class BotCarController : MonoBehaviour
 
         //Debug.Log(nearestPoint.name + ":"+nearestPoint.position+":" +transform.position+"-"+Vector2.SignedAngle(new Vector2(transform.position.x, transform.position.z), new Vector2(nearestPoint.position.x, nearestPoint.position.z)));
         //target = Vector2.SignedAngle(new Vector2(transform.position.x, transform.position.z), new Vector2(nearestPoint.position.x, nearestPoint.position.z));
-        target = Mathf.Atan((transform.position.z - nearestPoint.position.z) /
-                            (transform.position.x - nearestPoint.position.x));
+        target = Mathf.Rad2Deg * Mathf.Atan2(transform.InverseTransformPoint(nearestPoint.position).x,
+            transform.InverseTransformPoint(nearestPoint.position).z);
+        //target = Mathf.Atan((nearestPoint.position.z - transform.position.z)/ (nearestPoint.position.x - transform.position.x)) * Mathf.Rad2Deg;
         //Debug.Log(nearestPoint.name + ":" + nearestPoint.position + ":" + transform.position + " " + target);
-        if (target >= 360)
+        //Debug.Log("Target: "+nearestPoint.name);
+        /*if (target >= 360)
         {
             target -= 360;
         }
@@ -221,11 +239,13 @@ public class BotCarController : MonoBehaviour
                 //Debug.Log("StillInWhileLoop: "+target);
                 target += 360;
             }
-        }
+        }*/
+        Debug.Log(nearestPoint.name + ":" + nearestPoint.position + ":" + transform.position + " " + target);
     }
 
     void decideChoice()
     {
+        _passedBotPoints.Clear();
         Transform nearestPoint = null;
         foreach (BotPoint bt in _botPoints)
         {
@@ -245,7 +265,6 @@ public class BotCarController : MonoBehaviour
 
     void pickChoice(int[] choices)
     {
-        _passedBotPoints.Clear();
         currentChoice = choices[Random.Range(0, choices.Length - 1)];
     }
 
@@ -339,7 +358,7 @@ public class BotCarController : MonoBehaviour
         {
             //Debug.Log("Moving Forward Grounded: " +grounded+" - CurrentRot: " + transform.rotation.eulerAngles.y + " TargetRot: "+ target + " AngleVal: "+Mathf.DeltaAngle(transform.rotation.eulerAngles.y, target));
             justForward();
-            if (!grounded)
+            if (!grounded && boostAllowed)
             {
                 _cc.BotBoost();
             }
@@ -488,8 +507,15 @@ public class BotCarController : MonoBehaviour
         Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 5f, Color.magenta);
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 5f, _layerMask))
         {
-            //Debug.Log("Too Close!: "+hit.collider.gameObject);
-            return true;
+            //Debug.Log("Too Close!: " + hit.collider.gameObject);
+            if (hit.collider.tag == "Checkpoint")
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
         else
         {
@@ -613,6 +639,10 @@ public class BotCarController : MonoBehaviour
         {
             PhotonNetwork.Destroy(this.gameObject);
         }
+        else if (other.tag == "BotsNoBoost")
+        {
+            boostAllowed = false;
+        }
         else if (other.gameObject.GetComponent<BotPoint>())
         {
             BotPoint bp = other.gameObject.GetComponent<BotPoint>();
@@ -624,6 +654,14 @@ public class BotCarController : MonoBehaviour
             {
                 pickChoice(bp.choices);
             }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "BotsNoBoost")
+        {
+            boostAllowed = true;
         }
     }
 }
