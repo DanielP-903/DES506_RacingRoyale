@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
 using Photon.Pun;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -43,14 +40,14 @@ public class ServerSyncScript : MonoBehaviour
         //Debug.Log("MessageBase: "+ _mb);
         _mbFound = true;
     }
-    
+
     [PunRPC]
     void fadeOut()
     {
         Debug.Log("FadeScreen: " + _fs);
         _fs.fadeOut();
     }
-    
+
     [PunRPC]
     void sendMessage(string text)
     {
@@ -59,12 +56,12 @@ public class ServerSyncScript : MonoBehaviour
         //Debug.Log("MessageBox: " + _mb + ":" + text);
         _mb.sendMessage(text);
     }
-    
+
     [PunRPC]
-    void Powerup(int id, PowerupType type, bool active)//GameObject subobj = null) 
+    void Powerup(int id, PowerupType type, bool active) //GameObject subobj = null) 
     {
-        GameObject obj = null;// = PhotonView.Find(id).transform.get;
-        GameObject subobj = null;// = PhotonView.Find(id).transform.get;
+        GameObject obj = null; // = PhotonView.Find(id).transform.get;
+        GameObject subobj = null; // = PhotonView.Find(id).transform.get;
         switch (type)
         {
             case PowerupType.None:
@@ -84,7 +81,7 @@ public class ServerSyncScript : MonoBehaviour
             case PowerupType.PunchingGlove:
                 obj = PhotonView.Find(id).transform.GetChild(3).gameObject;
                 subobj = PhotonView.Find(id).transform.GetChild(2).gameObject;
-                
+
                 // if (subobj != null)
                 //     subobj.SetActive(true);
                 // else
@@ -96,12 +93,12 @@ public class ServerSyncScript : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }
-        
+
         if (obj)
             obj.SetActive(active);
         else
             Debug.LogError("obj is null in 'TriggerPowerup'!");
-        
+
         if (subobj)
             subobj.SetActive(active);
     }
@@ -110,9 +107,10 @@ public class ServerSyncScript : MonoBehaviour
     void UpdateAirBlast(int id, float radius)
     {
         SphereCollider col = PhotonView.Find(id).transform.GetChild(1).GetComponent<SphereCollider>();
-        col.radius =  Mathf.Lerp(col.radius, radius, Time.deltaTime);;
+        col.radius = Mathf.Lerp(col.radius, radius, Time.deltaTime);
+        ;
     }
-    
+
     [PunRPC]
     void UpdateGrappleHook(int id, Vector3[] positions)
     {
@@ -124,7 +122,7 @@ public class ServerSyncScript : MonoBehaviour
     {
         PhotonView.Find(id).transform.GetChild(2).GetComponent<LineRenderer>().SetPositions(positions);
     }
-    
+
     [PunRPC]
     void PlayerHit(int id, Vector3 direction, Vector3 contactPoint, float bounciness)
     {
@@ -132,32 +130,34 @@ public class ServerSyncScript : MonoBehaviour
 
         if (!target)
         {
-            Debug.Log("Target not found via id! ID: " + id);    
+            Debug.Log("Target not found via id! ID: " + id);
         }
 
         Rigidbody rb = target.GetComponent<Rigidbody>();
         if (!rb)
         {
-            Debug.Log("Rigidbody not found! ID: " + id);    
+            Debug.Log("Rigidbody not found! ID: " + id);
         }
-        
-        rb.velocity = -(direction.normalized * (bounciness/10));
+
+        rb.velocity = -(direction.normalized * (bounciness / 10));
         Debug.Log("HIT ANOTHER PLAYER WITH RIGIDBODY VELOCITY: " + rb.velocity);
         target.GetComponent<CarVFXHandler>().PlayVFXAtPosition("Impact", contactPoint);
         int rand = Random.Range(1, 5);
         //if (!target.GetComponent<CarController>().bot) target.GetComponent<AudioManager>().PlaySound("CarHit0" + rand);;
     }
-    
+
     [PunRPC]
     void UpdateOutlineMeshes(int id, int meshIndex)
     {
         GameObject target = PhotonView.Find(id).gameObject;
         GameObject _outlineObject = target.transform.GetChild(6).gameObject;
         GameObject _outlineObjectGrapple = target.transform.GetChild(7).gameObject;
-        _outlineObject.GetComponent<MeshFilter>().sharedMesh = meshArray[(int)PhotonNetwork.LocalPlayer.CustomProperties["Skin"]]; 
-        _outlineObjectGrapple.GetComponent<MeshFilter>().sharedMesh = meshArray[(int)PhotonNetwork.LocalPlayer.CustomProperties["Skin"]];
+        _outlineObject.GetComponent<MeshFilter>().sharedMesh =
+            meshArray[(int)PhotonNetwork.LocalPlayer.CustomProperties["Skin"]];
+        _outlineObjectGrapple.GetComponent<MeshFilter>().sharedMesh =
+            meshArray[(int)PhotonNetwork.LocalPlayer.CustomProperties["Skin"]];
     }
-    
+
     // [PunRPC]
     // void ResetPunchingGlove(GameObject obj, Vector3 pos)
     // {

@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GhostRecorder : MonoBehaviour
@@ -8,6 +5,7 @@ public class GhostRecorder : MonoBehaviour
     public SO_CarGhost ghost;
     private float timer;
     private float timeStampValue;
+
     private void Awake()
     {
         if (ghost.mode == GhostMode.Record)
@@ -23,7 +21,7 @@ public class GhostRecorder : MonoBehaviour
         timer += Time.unscaledDeltaTime;
         timeStampValue += Time.unscaledDeltaTime;
 
-        if (ghost.mode == GhostMode.Record && timer >= (1/ghost.frequency))
+        if (ghost.mode == GhostMode.Record && timer >= (1 / ghost.frequency))
         {
             ghost.timeStamp.Add(timeStampValue);
             ghost.position.Add(transform.position);

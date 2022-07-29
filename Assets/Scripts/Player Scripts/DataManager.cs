@@ -1,16 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
 
 public class DataManager : MonoBehaviour
 {
-    [SerializeField]
-    private Mesh[] meshArray;
-    [SerializeField]
-    private Material[] matArray;
+    [SerializeField] private Mesh[] meshArray;
+    [SerializeField] private Material[] matArray;
 
     private static GameObject instance;
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,7 +26,7 @@ public class DataManager : MonoBehaviour
     {
         return meshArray;
     }
-    
+
     public Material[] GetMats()
     {
         return matArray;

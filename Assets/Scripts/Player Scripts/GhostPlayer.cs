@@ -1,10 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
 // Adapted from: https://www.youtube.com/watch?v=c5G2jv7YCxM
+
 public class GhostPlayer : MonoBehaviour
 {
     public SO_CarGhost ghost;
@@ -42,7 +40,7 @@ public class GhostPlayer : MonoBehaviour
             else if (ghost.timeStamp[i] < _timeStepValue && _timeStepValue < ghost.timeStamp[i + 1])
             {
                 _index1 = i;
-                _index2 = i+1;
+                _index2 = i + 1;
                 return;
             }
         }
@@ -50,7 +48,7 @@ public class GhostPlayer : MonoBehaviour
         _index1 = ghost.timeStamp.Count - 1;
         _index2 = ghost.timeStamp.Count - 1;
     }
-    
+
     private void SetTransform()
     {
         if (_index1 == _index2)

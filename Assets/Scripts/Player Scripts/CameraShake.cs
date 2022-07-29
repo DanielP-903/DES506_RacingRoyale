@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using Cinemachine;
 using Photon.Pun;
 using UnityEngine;
@@ -11,7 +9,7 @@ public class CameraShake : MonoBehaviour
     private Rigidbody _rb;
     private CarController _cc;
 
-    
+
     private CinemachineVirtualCamera _virtualCamera;
     private CinemachineBasicMultiChannelPerlin _noiseSettings;
 
@@ -20,7 +18,7 @@ public class CameraShake : MonoBehaviour
     private float _intensity;
 
     private bool _hasFoundPlayer = false;
-    
+
     private void Start()
     {
         _virtualCamera = GetComponent<CinemachineVirtualCamera>();
@@ -33,7 +31,7 @@ public class CameraShake : MonoBehaviour
         _virtualCamera = GetComponent<CinemachineVirtualCamera>();
         _noiseSettings = _virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
     }
-    
+
 
     // Update is called once per frame
     void Update()
@@ -42,7 +40,7 @@ public class CameraShake : MonoBehaviour
         {
             if (_cc.GetGrounded() && (_rb.velocity.magnitude * 2.2369362912f) > 60)
             {
-                _noiseSettings.m_AmplitudeGain = (_rb.velocity.magnitude*2) / 100;
+                _noiseSettings.m_AmplitudeGain = (_rb.velocity.magnitude * 2) / 100;
             }
             else
             {
@@ -54,11 +52,11 @@ public class CameraShake : MonoBehaviour
     }
 
 
-    
+
     IEnumerator WaitForPlayer()
     {
         yield return new WaitForSeconds(1);
-        
+
         GameObject[] listOfPlayers = GameObject.FindGameObjectsWithTag("Player");
         foreach (GameObject player in listOfPlayers)
         {
@@ -67,7 +65,7 @@ public class CameraShake : MonoBehaviour
             {
                 continue;
             }
-            
+
             if (player.GetComponent<PhotonView>().IsMine && !player.GetComponent<CarController>().bot)
             {
                 _target = player;
@@ -75,7 +73,7 @@ public class CameraShake : MonoBehaviour
                 _hasFoundPlayer = true;
             }
         }
-        
+
         _rb = _target.GetComponent<Rigidbody>();
         _cc = _target.GetComponent<CarController>();
     }

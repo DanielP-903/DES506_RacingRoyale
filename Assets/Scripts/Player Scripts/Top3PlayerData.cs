@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public struct Top3PlayerData
 {
     public string name;
@@ -11,3 +7,4 @@ public struct Top3PlayerData
         name = inputName;
     }
 }
+

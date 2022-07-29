@@ -1,18 +1,20 @@
 using System.Collections;
-using System.Collections.Generic;
 using Cinemachine;
 using Photon.Pun;
-using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
+using Player_Scripts.Powerup_Scripts;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using TMPro;
+
 
 public class PlayerManager : MonoBehaviour
 {
 
     // COMPONENTS, INTS AND BOOLS
+
     #region Private Variables
+
     private PhotonView _photonView;
     private CarController _cc;
     private MeshRenderer _mRend;
@@ -31,44 +33,48 @@ public class PlayerManager : MonoBehaviour
     public TextMeshProUGUI startDelayText;
 
     [HideInInspector] public float timer = 3;
-    
+
     private int playerNumber = 0;
     private bool completedStage = false;
     private bool eliminated = false;
     private int elimPosition = 0;
     private bool ready = false;
+
     #endregion
 
     // PLAYER NAME UI
+
     #region Serializable Variables
-    [SerializeField]
-    private TextMeshProUGUI playerNameText;
-    [SerializeField]
-    private TextMeshProUGUI playerLicenseText;
-    [SerializeField] 
-    private TextMeshProUGUI playerFrontLicenseText;
+
+    [SerializeField] private TextMeshProUGUI playerNameText;
+    [SerializeField] private TextMeshProUGUI playerLicenseText;
+    [SerializeField] private TextMeshProUGUI playerFrontLicenseText;
 
     [SerializeField] private bool debugMode;
-    
+
     #endregion
 
     // PRIVATE METHODS: START, LOAD, UPDATE
+
     #region Private Methods
+
     public static bool TryGetReadyPlayers(out int readyPlayers, int stageNum)
     {
         readyPlayers = 0;
 
         object readyPlayersFromProps;
 
-        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("ReadyPlayers"+stageNum, out readyPlayersFromProps))
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("ReadyPlayers" + stageNum,
+                out readyPlayersFromProps))
         {
             readyPlayers = (int)readyPlayersFromProps;
             return true;
         }
-        
-        
+
+
         return false;
     }
+
     public static void SetReadyPlayers(int num, int stageNum)
     {
         int readyPlayers;
@@ -92,7 +98,7 @@ public class PlayerManager : MonoBehaviour
             PhotonNetwork.CurrentRoom.CustomProperties["ReadyPlayers" + stageNum] = num;
         }
     }
-    
+
     public static bool TryGetReadyPlayer(out bool readyPlayer, int stageNum, Player player)
     {
         readyPlayer = false;
@@ -104,34 +110,35 @@ public class PlayerManager : MonoBehaviour
             readyPlayer = (bool)readyPlayerFromProps;
             return true;
         }
-        
-        
+
+
         return false;
     }
+
     public static void SetReadyPlayer(bool setReady, int stageNum)
     {
         bool readyPlayer;
         bool wasSet = TryGetReadyPlayer(out readyPlayer, stageNum, PhotonNetwork.LocalPlayer);
 
         /*if (!wasSet)
+    {
+        ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
         {
-            ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
-            {
-                { "ReadyPlayer" + stageNum, (bool)setReady }
-            };
-            player.SetCustomProperties(props);
+            { "ReadyPlayer" + stageNum, (bool)setReady }
+        };
+        player.SetCustomProperties(props);
 
-            bool wasSet2 = TryGetReadyPlayer(out readyPlayer, stageNum, player);
+        bool wasSet2 = TryGetReadyPlayer(out readyPlayer, stageNum, player);
 
-            Debug.Log("Set Custom Props for Ready Players: " + props.ToStringFull() + " wasSet: " + wasSet +
-                      " NewValue: " + readyPlayer + " , wasSet2: " + wasSet2+" Player: "+player);
-        }
-        else
-        {
-            player.CustomProperties["ReadyPlayer" + stageNum] = setReady;
-            Debug.Log("Set Custom Props for Ready Players: " + setReady+" Player: "+player);
-        }*/
-        
+        Debug.Log("Set Custom Props for Ready Players: " + props.ToStringFull() + " wasSet: " + wasSet +
+                  " NewValue: " + readyPlayer + " , wasSet2: " + wasSet2+" Player: "+player);
+    }
+    else
+    {
+        player.CustomProperties["ReadyPlayer" + stageNum] = setReady;
+        Debug.Log("Set Custom Props for Ready Players: " + setReady+" Player: "+player);
+    }*/
+
         ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
         {
             { "ReadyPlayer" + stageNum, (bool)setReady }
@@ -141,9 +148,9 @@ public class PlayerManager : MonoBehaviour
         bool wasSet2 = TryGetReadyPlayer(out readyPlayer, stageNum, PhotonNetwork.LocalPlayer);
 
         Debug.Log("Set Custom Props for Ready Players: " + props.ToStringFull() + " wasSet: " + wasSet +
-                  " NewValue: " + readyPlayer + " , wasSet2: " + wasSet2+" Player: "+PhotonNetwork.LocalPlayer);
+                  " NewValue: " + readyPlayer + " , wasSet2: " + wasSet2 + " Player: " + PhotonNetwork.LocalPlayer);
     }
-    
+
     void Start()
     {
         if (debugMode)
@@ -154,30 +161,30 @@ public class PlayerManager : MonoBehaviour
             //_cc.SetUp();
             _cs = GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>();
         }
-        
-        _vfx = GetComponent<CarVFXHandler>();
-        
-        if (!debugMode)
-        {  
-        //SceneManager.sceneLoaded += LoadPMInLevel;
-        _photonView = GetComponent<PhotonView>();
-        
-        this.gameObject.name = _photonView.Owner.NickName;
-        _mRend = transform.Find("CarMesh").GetComponent<MeshRenderer>();
-        _mFilt = transform.Find("CarMesh").GetComponent<MeshFilter>();
-        _flaps = transform.Find("Flaps").gameObject;
-        object skinNumFromProps;
-        /*if (_photonView.IsMine && !_photonView.Owner.CustomProperties.TryGetValue("Skin", out skinNumFromProps))
-        {
-            _photonView.Owner.CustomProperties.Add("Skin", PlayerPrefs.GetInt("Skin"));
-        }
-        else if (_photonView.IsMine)
-        {
-            _photonView.Owner.CustomProperties.Remove("Skin");
-            _photonView.Owner.CustomProperties.Add("Skin", PlayerPrefs.GetInt("Skin"));
-        }*/
 
-  
+        _vfx = GetComponent<CarVFXHandler>();
+
+        if (!debugMode)
+        {
+            //SceneManager.sceneLoaded += LoadPMInLevel;
+            _photonView = GetComponent<PhotonView>();
+
+            this.gameObject.name = _photonView.Owner.NickName;
+            _mRend = transform.Find("CarMesh").GetComponent<MeshRenderer>();
+            _mFilt = transform.Find("CarMesh").GetComponent<MeshFilter>();
+            _flaps = transform.Find("Flaps").gameObject;
+            object skinNumFromProps;
+            /*if (_photonView.IsMine && !_photonView.Owner.CustomProperties.TryGetValue("Skin", out skinNumFromProps))
+    {
+        _photonView.Owner.CustomProperties.Add("Skin", PlayerPrefs.GetInt("Skin"));
+    }
+    else if (_photonView.IsMine)
+    {
+        _photonView.Owner.CustomProperties.Remove("Skin");
+        _photonView.Owner.CustomProperties.Add("Skin", PlayerPrefs.GetInt("Skin"));
+    }*/
+
+
             int skinNum = 0;
             if ((int)_photonView.Owner.CustomProperties["Skin"] != null)
             {
@@ -186,17 +193,17 @@ public class PlayerManager : MonoBehaviour
 
             //Debug.Log("FoundSkinNum: " + (int)_photonView.Owner.CustomProperties["Skin"]);
             /*object skinNumFromProps;
-            if (_photonView.Owner.CustomProperties.TryGetValue("Skin", out skinNumFromProps))
-            {
-                skinNum = (int)skinNumFromProps;
-                Debug.Log("FoundSkinNum");
-            }*/
-            
+        if (_photonView.Owner.CustomProperties.TryGetValue("Skin", out skinNumFromProps))
+        {
+            skinNum = (int)skinNumFromProps;
+            Debug.Log("FoundSkinNum");
+        }*/
+
             _mRend.material = GameObject.Find("DataManager").GetComponent<DataManager>().GetMats()[skinNum];
             _mFilt.mesh = GameObject.Find("DataManager").GetComponent<DataManager>().GetMesh()[skinNum];
             _flaps.SetActive(skinNum < 3);
-        
-    
+
+
             if (_photonView.Owner == null)
             {
                 playerNameText.text = "Guest";
@@ -210,6 +217,7 @@ public class PlayerManager : MonoBehaviour
                 playerFrontLicenseText.text = _photonView.Owner.NickName;
             }
         }
+
         if (_photonView != null)
         {
             DontDestroyOnLoad(this.gameObject);
@@ -220,6 +228,7 @@ public class PlayerManager : MonoBehaviour
                     //SetReadyPlayers(0, 1);
                     SetReadyPlayer(false, 1);
                 }
+
                 _cc = GetComponent<CarController>();
                 _rb = GetComponent<Rigidbody>();
                 _rb.velocity = Vector3.zero;
@@ -239,7 +248,7 @@ public class PlayerManager : MonoBehaviour
                 var transform1 = transform;
                 cvc.m_Follow = transform1;
                 cvc.m_LookAt = transform1;
-                
+
                 int spawnNumber = playerNumber;
                 if (_gm != null)
                 {
@@ -278,7 +287,7 @@ public class PlayerManager : MonoBehaviour
         //StartCoroutine(TestScript());
         //playerNumber = _gm.GetPlayerNumber();
     }
-    
+
     void Update()
     {
         if (transform.position.y < -5 && _photonView.IsMine)
@@ -319,7 +328,7 @@ public class PlayerManager : MonoBehaviour
             var transform1 = transform;
             cvc.m_Follow = transform1;
             cvc.m_LookAt = transform1;
-            
+
             if ((SceneManager.GetActiveScene().name == "Launcher" || SceneManager.GetActiveScene().name == "EndStage"))
             {
                 if (mainCam != null)
@@ -327,6 +336,7 @@ public class PlayerManager : MonoBehaviour
                     Debug.Log("MainCamDestroyed");
                     Destroy(mainCam.gameObject);
                 }
+
                 Debug.Log("PlayerDestroyed");
                 PhotonNetwork.Destroy(this.gameObject);
             }
@@ -340,6 +350,7 @@ public class PlayerManager : MonoBehaviour
                     source.clip = Resources.Load<AudioClip>("Audio/Music/MenuMusic1");
                     source.Play();
                 }
+
                 if (SceneManager.GetActiveScene().name == "Stage1")
                 {
                     playerNumber = _gm.setPlayerNumber();
@@ -352,7 +363,7 @@ public class PlayerManager : MonoBehaviour
                 {
                     EliminateCurrentPlayer();
                 }
-                
+
                 transform.gameObject.GetComponent<PlayerPowerups>().SetUp();
                 transform.gameObject.GetComponent<CarVFXHandler>().SetUp();
                 transform.gameObject.GetComponent<ServerSyncScript>().SetUp();
@@ -367,15 +378,16 @@ public class PlayerManager : MonoBehaviour
                 completedStage = false;
                 _spawnLocation = GameObject.Find("SpawnLocation" + playerNumber).transform;
                 GoToSpawn();
-                _photonView.RPC("sendMessage", RpcTarget.AllViaServer, "<color=blue>" + _photonView.name + "</color> has loaded.");
-                
+                _photonView.RPC("sendMessage", RpcTarget.AllViaServer,
+                    "<color=blue>" + _photonView.name + "</color> has loaded.");
+
                 /*int readyPlayers;
-                TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
-                readyPlayers = readyPlayers + 1;
-                SetReadyPlayers(readyPlayers, _gm.GetStageNum());*/
+            TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
+            readyPlayers = readyPlayers + 1;
+            SetReadyPlayers(readyPlayers, _gm.GetStageNum());*/
 
                 ready = true;
-                
+
                 //Debug.Log(_spawnLocation + "- Player: " + playerNumber + " Name: " +_photonView.Owner.NickName);
 
             }
@@ -386,10 +398,13 @@ public class PlayerManager : MonoBehaviour
             //Debug.Log("ERROR: NO PHOTON VIEW DETECTED! On player " + playerNumber);
         }
     }
+
     #endregion
 
     // PUBLIC METHODS: SETNAME, GETPLAYERNUM, GOTOSPAWN, CHANGESPAWN, COMPLETESTAGE, ELIMPLAYER
+
     #region Public Methods
+
     public int GetPlayerNumber()
     {
         return playerNumber;
@@ -402,12 +417,14 @@ public class PlayerManager : MonoBehaviour
 
     public void GoToSpawn(bool pressedButton = false)
     {
-        if (pressedButton && !_spawnLocation.name.Contains("SpawnLocation") && _cs.GetCheckpointElimination(_spawnLocation.parent.gameObject))
+        if (pressedButton && !_spawnLocation.name.Contains("SpawnLocation") &&
+            _cs.GetCheckpointElimination(_spawnLocation.parent.gameObject))
         {
             _messageText.color = Color.white;
             StartCoroutine(fadeMessage());
         }
-        else if (!_spawnLocation.name.Contains("SpawnLocation") && _cs.GetCheckpointElimination(_spawnLocation.parent.gameObject))
+        else if (!_spawnLocation.name.Contains("SpawnLocation") &&
+                 _cs.GetCheckpointElimination(_spawnLocation.parent.gameObject))
         {
             EliminateCurrentPlayer();
         }
@@ -431,7 +448,7 @@ public class PlayerManager : MonoBehaviour
     {
         return _spawnLocation;
     }
-    
+
     public void ChangeSpawnLocation(Transform newSpawn)
     {
         _spawnLocation = newSpawn;
@@ -451,7 +468,7 @@ public class PlayerManager : MonoBehaviour
             completedStage = true;
             GameManager.TryGetFinishedPlayers(out int num, _gm.GetStageNum());
             num = num + 1;
-            GameManager.SetFinishedPlayers(num,_gm.GetStageNum());
+            GameManager.SetFinishedPlayers(num, _gm.GetStageNum());
             if (_gm.GetStageNum() == 2)
             {
                 _as.displayAlert("Win");
@@ -462,18 +479,19 @@ public class PlayerManager : MonoBehaviour
                     //GameManager.SetTop3Players(_photonView.Owner.NickName, elimPosition);
                     GameManager.SetTopPlayers(_photonView.Owner, elimPosition);
                     /*Player t3;
-                    GameManager.TryGetTopPlayers(out t3, elimPosition);
-                    Debug.Log(t3.NickName);*/
+                GameManager.TryGetTopPlayers(out t3, elimPosition);
+                Debug.Log(t3.NickName);*/
                 }
             }
             else
             {
                 _as.displayAlert("Qualified");
             }
+
             _gm.CompletePlayer();
         }
     }
-    
+
     public void EliminateCurrentPlayer()
     {
         if (!completedStage && !eliminated)
@@ -481,17 +499,17 @@ public class PlayerManager : MonoBehaviour
             _as.displayAlert("Eliminated");
             startDelayText.color = new Color(startDelayText.color.r, startDelayText.color.g, startDelayText.color.b, 0);
             //Debug.Log("Player: "+_photonView.Owner.NickName + " Eliminated.");
-         
+
             ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
             {
-                {"Eliminated", true}
+                { "Eliminated", true }
             };
             _photonView.Owner.SetCustomProperties(props);
-            
+
             eliminated = true;
             GameManager.TryGetElimPlayers(out int num);
             elimPosition = _gm.GetTotalPlayers() - num;
-            
+
             if (elimPosition < 5)
             {
                 //Debug.Log("Finished at:" +elimPosition);
@@ -501,7 +519,7 @@ public class PlayerManager : MonoBehaviour
                 //GameManager.TryGetTop3Players(out t3, elimPosition);
                 //Debug.Log(t3);
             }
-            
+
             num = num + 1;
             GameManager.SetElimPlayers(num);
             _gm.EliminatePlayer(elimPosition);
@@ -513,8 +531,9 @@ public class PlayerManager : MonoBehaviour
             PhotonNetwork.Destroy(this.gameObject);
         }
     }
+
     #endregion
-    
+
     #region RPCs
 
     [PunRPC]
@@ -534,8 +553,9 @@ public class PlayerManager : MonoBehaviour
                 //Debug.Log("CountDown Started");
                 yield return new WaitUntil(() => !cfb.activateFlyBy);
             }
-            Debug.Log("Timer Started for "+_photonView.Owner);
-            
+
+            Debug.Log("Timer Started for " + _photonView.Owner);
+
             //int readyPlayers;
             //TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
             //readyPlayers = readyPlayers + 1;
@@ -548,7 +568,7 @@ public class PlayerManager : MonoBehaviour
             {
                 playerReady = false;
                 TryGetReadyPlayer(out playerReady, _gm.GetStageNum(), player);
-                Debug.Log("Player: "+player + " Ready: "+playerReady);
+                Debug.Log("Player: " + player + " Ready: " + playerReady);
                 if (playerReady)
                 {
                     counter++;
@@ -558,8 +578,10 @@ public class PlayerManager : MonoBehaviour
                     allPlayersReady = false;
                 }
             }
-            
-            _photonView.RPC("sendMessage", RpcTarget.AllViaServer, "<color=blue>" + _photonView.name + "</color> is ready. "+counter+"/"+PhotonNetwork.CurrentRoom.PlayerCount);
+
+            _photonView.RPC("sendMessage", RpcTarget.AllViaServer,
+                "<color=blue>" + _photonView.name + "</color> is ready. " + counter + "/" +
+                PhotonNetwork.CurrentRoom.PlayerCount);
             counter = 0;
             //&& counter < 100000
             while (!allPlayersReady && counter < 100)
@@ -575,17 +597,19 @@ public class PlayerManager : MonoBehaviour
                     //Debug.Log("Player: "+player + " Ready: "+playerReady+"\n");
                     if (playerReady)
                     {
-                        
+
                     }
                     else
                     {
                         allPlayersReady = false;
                     }
                 }
+
                 Debug.Log(str);
                 counter++;
                 yield return new WaitForSeconds(0.1f);
             }
+
             //yield return new WaitUntil(() => allPlayersReady);
             startDelayText.color = Color.clear; // Changed to clear as rubics are in
             float timeLeft = _gm.GetStartDelay();
@@ -610,6 +634,7 @@ public class PlayerManager : MonoBehaviour
         }
 
     }
+
     #endregion
 
     #region TimedScripts
@@ -618,7 +643,7 @@ public class PlayerManager : MonoBehaviour
     {
         while (_messageText.color.a < 0)
         {
-            _messageText.color = new Color(1,1,1,_messageText.color.a - 0.02f);
+            _messageText.color = new Color(1, 1, 1, _messageText.color.a - 0.02f);
             yield return new WaitForFixedUpdate();
         }
 
@@ -629,7 +654,7 @@ public class PlayerManager : MonoBehaviour
     {
         for (int i = 1; i < 10; i++)
         {
-            _photonView.RPC("sendMessage", RpcTarget.AllViaServer,  "MessageBox Setup: " +i);
+            _photonView.RPC("sendMessage", RpcTarget.AllViaServer, "MessageBox Setup: " + i);
             yield return new WaitForSeconds(1f);
         }
     }

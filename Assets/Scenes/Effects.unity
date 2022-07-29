@@ -6237,11 +6237,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2774631455131860148, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.00000001697037
+      value: -0.000000016970368
       objectReference: {fileID: 0}
     - target: {fileID: 2774631455131860148, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0000000028400904
+      value: 0.0000000028400902
       objectReference: {fileID: 0}
     - target: {fileID: 2774631455131860148, guid: 418f8b52a2be54743b65d29f88272e1a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -6781,19 +6781,22 @@ MonoBehaviour:
   motorForce: 2500
   brakeTorque: 2000
   maxSteeringAngle: 30
+  maxBackWheelSteeringAngle: 0
   terminalVelocity: 120
   axles:
   - leftWheel: {fileID: 8756000731361754118}
     rightWheel: {fileID: 3643314323773911831}
     motor: 1
     steering: 1
+    isFrontWheel: 0
   - leftWheel: {fileID: 3643314325313645550}
     rightWheel: {fileID: 3643314325577034096}
     motor: 0
     steering: 0
+    isFrontWheel: 0
   wheelResetSpeed: 50
   wheelTurningSpeed: 1
-  turnAmount: 0.3
+  maxTurnAmount: 0.3
   forwardMultiplier: 1
   backwardMultiplier: 0.5
   idleBrakeForce: 8000
@@ -7174,7 +7177,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2991117166659822522, guid: db8f5338480f88c40a1bacacc39e106a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.9
+      value: 2.04
       objectReference: {fileID: 0}
     - target: {fileID: 2991117166659822522, guid: db8f5338480f88c40a1bacacc39e106a, type: 3}
       propertyPath: m_LocalPosition.y

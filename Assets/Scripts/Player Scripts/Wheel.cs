@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Wheel : MonoBehaviour
@@ -7,6 +5,7 @@ public class Wheel : MonoBehaviour
     private GameObject _parent;
 
     private WheelCollider _wheelCollider;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -17,6 +16,6 @@ public class Wheel : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.localRotation = Quaternion.Euler(_wheelCollider.rpm,(_wheelCollider.steerAngle),0);
+        transform.localRotation = Quaternion.Euler(_wheelCollider.rpm, (_wheelCollider.steerAngle), 0);
     }
 }
