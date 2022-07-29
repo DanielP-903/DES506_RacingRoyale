@@ -1,12 +1,10 @@
-namespace Player_Scripts
+public struct Top3PlayerData
 {
-    public struct Top3PlayerData
-    {
-        public string name;
+    public string name;
 
-        public Top3PlayerData(string inputName)
-        {
-            name = inputName;
-        }
+    public Top3PlayerData(string inputName)
+    {
+        name = inputName;
     }
 }
+

@@ -1,8 +1,6 @@
 using Photon.Pun;
 using UnityEngine;
 
-namespace Player_Scripts.Powerup_Scripts
-{
     public class CarEffectManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         private ParticleSystem[] flame;
@@ -91,4 +89,3 @@ namespace Player_Scripts.Powerup_Scripts
             }
         }
     }
-}

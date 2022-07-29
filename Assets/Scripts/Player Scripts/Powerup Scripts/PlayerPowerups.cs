@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using ExitGames.Client.Photon.StructWrapping;
 using Photon.Pun;
-using Player_Scripts;
-using Player_Scripts.Powerup_Scripts;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;

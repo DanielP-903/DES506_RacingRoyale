@@ -2,8 +2,7 @@ using System.Collections;
 using Photon.Pun;
 using UnityEngine;
 
-namespace Player_Scripts.Powerup_Scripts
-{
+
     public class PunchingGlove : MonoBehaviour
     {
         private GameObject _playerRef;
@@ -47,4 +46,4 @@ namespace Player_Scripts.Powerup_Scripts
             }
         }
     }
-}
+

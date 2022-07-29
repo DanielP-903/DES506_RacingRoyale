@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Player_Scripts.Powerup_Scripts
-{
     public class PowerupSpawner : MonoBehaviour
     {
         public float spawnDelay = 2.0f;
@@ -79,4 +77,3 @@ namespace Player_Scripts.Powerup_Scripts
             return currentPowerup;
         }
     }
-}
