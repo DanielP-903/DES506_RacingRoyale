@@ -68,6 +68,7 @@ public class PlayerPowerups : MonoBehaviour
     private bool _boosting = false;
     private bool _grappling = false;
     private bool _punching = false;
+    private bool _usingPowerup = false;
     private float _wallShieldTimer = 0.0f;
     private float _warpPortalTimer = 0.0f;
     private float _airBlastTimer = 0.0f;
@@ -350,7 +351,7 @@ public class PlayerPowerups : MonoBehaviour
             punchGlove.SetActive(false);
         }
         
-        if (_carController.GetActivate())
+        if (_carController.GetActivate() && !_usingPowerup)
         {
             switch (currentPowerupType)
             {
@@ -363,7 +364,7 @@ public class PlayerPowerups : MonoBehaviour
                 case PowerupType.WarpPortal: WarpPortal(); break;
                 default: throw new ArgumentOutOfRangeException();
             }
-
+            _usingPowerup =true;
 
             if (_wallShieldTimer < wallShieldTime - 1.0f)
             {
@@ -618,6 +619,7 @@ public class PlayerPowerups : MonoBehaviour
          powerupIcon.gameObject.SetActive(false);
          _powerupIconMask.fillAmount = 0;
          currentPowerupType = PowerupType.None;
+         _usingPowerup = false;
      }
 
      public void DebugSetCurrentPowerup(PowerupType powerupType)
