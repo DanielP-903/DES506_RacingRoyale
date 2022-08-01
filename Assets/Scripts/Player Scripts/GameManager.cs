@@ -560,7 +560,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         //Debug.Log("Running!");
         Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
         //SceneManager.sceneLoaded -= LoadPlayerInLevel;
         DontDestroyOnLoad(this.gameObject);
         _timer = GameObject.Find("Timer").GetComponent<TextMeshProUGUI>();
@@ -624,6 +623,11 @@ public class GameManager : MonoBehaviourPunCallbacks
         return botsStored;
     }
 
+    public int GetMaxBots()
+    {
+        return maxBots;
+    }
+    
     void OnLevelWasLoaded()
     {
         if (SceneManager.GetActiveScene().name != "WaitingArea")
