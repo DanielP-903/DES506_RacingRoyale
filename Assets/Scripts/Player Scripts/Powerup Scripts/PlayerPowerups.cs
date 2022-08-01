@@ -498,7 +498,7 @@ public class PlayerPowerups : MonoBehaviour
                  Debug.Log("HIT!!!");
                  _audioManager.PlaySound("GrapplingHook");
                  _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.GrapplingHook, true);
-
+                 _carController.audioManager.PlaySound("GrapplingHook");
              }
              else
              {

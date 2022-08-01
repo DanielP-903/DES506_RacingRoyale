@@ -11,6 +11,7 @@ public class StringAudioDictionary : SerializableDictionary<string, AudioSource>
 
 public class AudioManager : MonoBehaviour
 {
+    public bool isUI;
     private AudioSource _engineSounds;
     private Rigidbody _rb;
     
@@ -78,7 +79,7 @@ public class AudioManager : MonoBehaviour
 
     void Start()
     {
-        if (SceneManager.GetActiveScene().name != "Launcher")
+        if (!isUI)
         {
             _engineSounds = GetComponent<AudioSource>();
             _rb = GetComponentInParent<Rigidbody>();
@@ -90,7 +91,7 @@ public class AudioManager : MonoBehaviour
 
     void Update()
     {
-        if (SceneManager.GetActiveScene().name != "Launcher")
+        if (!isUI)
         {
             Vector2 horizontalSpeed = new Vector2(_rb.velocity.x, _rb.velocity.z);
             _engineSounds.volume = Mathf.Min(horizontalSpeed.magnitude, 5f) / 9;
