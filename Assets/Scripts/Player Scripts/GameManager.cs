@@ -870,12 +870,14 @@ public class GameManager : MonoBehaviourPunCallbacks
                     TryGetElimPlayers(out elimPlayersTotal);
                     string s = Resources.Load<TextAsset>("Names").ToString();
                     string[] linesInFile = s.Split('\n');
+                    botsStored = new GameObject[maxBots];
                     for (int i = _totalPlayers - elimPlayersTotal + 1; i < playersInScene && i < maxBotsInScene; i++)
                     {
                         GameObject bot = PhotonNetwork.Instantiate(this.botPrefab.name,
                             new Vector3(0, -100, 0),
                             quaternion.identity, 0);
                         bot.name = "Bot " + linesInFile[Random.Range(0, linesInFile.Length - 1)];
+                        botsStored[i] = bot;
                         //bot.GetComponent<BotCarController>().setName(linesInFile[Random.Range(0, linesInFile.Length-1)]);
                     }
                 }
