@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             _photonView.RPC("sendMessage", RpcTarget.AllViaServer,
                 other.NickName + " has joined. " + PhotonNetwork.CurrentRoom.PlayerCount + "/" +
                 PhotonNetwork.CurrentRoom.MaxPlayers);
-            PhotonNetwork.Destroy(botsStored[PhotonNetwork.CurrentRoom.PlayerCount - 1]);
+            PhotonNetwork.Destroy(botsStored[PhotonNetwork.CurrentRoom.PlayerCount - 2]);
             //Debug.LogFormat("OnPlayerEnteredRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
 
 
@@ -616,6 +616,11 @@ public class GameManager : MonoBehaviourPunCallbacks
             SetElimPlayers(0);
             CountdownTimer.SetStartTime();
         }
+    }
+
+    public GameObject[] GetBots()
+    {
+        return botsStored;
     }
 
     void OnLevelWasLoaded()

@@ -27,7 +27,8 @@ public class BotCarController : MonoBehaviour
 
     private BotPoint[] _botPoints;
     private List<BotPoint> _passedBotPoints;
-
+    private Transform botTarget;
+    
     //private Transform[] _passedBotPoints;
     private int currentOrder = 0;
     private int currentChoice = 0;
@@ -108,7 +109,7 @@ public class BotCarController : MonoBehaviour
     {
         decideBehaviour();
         checkReset();
-        if (Time.time - stuckTimer > 30)
+        if (Time.time - stuckTimer > 15)
         {
             stuckTimer = Time.time;
             if (Vector3.Distance(stuckPos, transform.position) < 3)
@@ -202,31 +203,39 @@ public class BotCarController : MonoBehaviour
             grounded = false;
         }
 
-        Transform nearestPoint = null;
-        foreach (BotPoint bt in _botPoints)
+        if (botTarget == null)
         {
-            //Debug.Log(bt.name);
-            if (nearestPoint == null && bt.choice == currentChoice && !_passedBotPoints.Contains(bt))
+            Transform nearestPoint = null;
+            foreach (BotPoint bt in _botPoints)
             {
-                nearestPoint = bt.transform;
+                //Debug.Log(bt.name);
+                if (nearestPoint == null && bt.choice == currentChoice && !_passedBotPoints.Contains(bt))
+                {
+                    nearestPoint = bt.transform;
+                }
+
+                if (nearestPoint == null)
+                {
+
+                }
+                else if (Vector3.Distance(transform.position, bt.transform.position) <
+                         Vector3.Distance(transform.position, nearestPoint.position)
+                         && bt.choice == currentChoice && !_passedBotPoints.Contains(bt)
+                         && bt.order > currentOrder)
+                {
+                    nearestPoint = bt.transform;
+                }
             }
-            if (nearestPoint == null)
-            {
-                
-            }
-            else if (Vector3.Distance(transform.position, bt.transform.position) <
-                     Vector3.Distance(transform.position, nearestPoint.position) 
-                     && bt.choice == currentChoice && !_passedBotPoints.Contains(bt)
-                     && bt.order >= currentOrder)
-            {
-                nearestPoint = bt.transform;
-            }
+            botTarget = nearestPoint;
+            //Debug.Log( nearestPoint);
         }
+
+        
 
         //Debug.Log(nearestPoint.name + ":"+nearestPoint.position+":" +transform.position+"-"+Vector2.SignedAngle(new Vector2(transform.position.x, transform.position.z), new Vector2(nearestPoint.position.x, nearestPoint.position.z)));
         //target = Vector2.SignedAngle(new Vector2(transform.position.x, transform.position.z), new Vector2(nearestPoint.position.x, nearestPoint.position.z));
         //target = Mathf.Rad2Deg * Mathf.Atan2(transform.InverseTransformPoint(nearestPoint.position).x, transform.InverseTransformPoint(nearestPoint.position).z);
-        target = Mathf.Rad2Deg * Mathf.Atan2(nearestPoint.position.x - transform.position.x, nearestPoint.position.z - transform.position.z);
+        target = Mathf.Rad2Deg * Mathf.Atan2(botTarget.position.x - transform.position.x, botTarget.position.z - transform.position.z);
         Debug.DrawRay(this.transform.position, (Quaternion.AngleAxis(target, Vector3.up) * Vector3.forward) * 100f, Color.yellow );
         //target = Mathf.Atan((nearestPoint.position.z - transform.position.z)/ (nearestPoint.position.x - transform.position.x)) * Mathf.Rad2Deg;
         //Debug.Log(nearestPoint.name + ":" + nearestPoint.position + ":" + transform.position + " " + target);
@@ -243,11 +252,12 @@ public class BotCarController : MonoBehaviour
                 target += 360;
             }
         }*/
-        Debug.Log(nearestPoint.name + ":" + nearestPoint.position + ":" + transform.position + " " + target);
+        //Debug.Log(nearestPoint.name + ":" + nearestPoint.position + ":" + transform.position + " " + target);
     }
 
     void decideChoice()
     {
+        botTarget = null;
         currentOrder = 0;
         _passedBotPoints.Clear();
         Transform nearestPoint = null;
@@ -649,8 +659,9 @@ public class BotCarController : MonoBehaviour
         }
         else if (other.gameObject.GetComponent<BotPoint>())
         {
+            botTarget = null;
             BotPoint bp = other.gameObject.GetComponent<BotPoint>();
-            Debug.Log("Hit Bot Point: "+bp.name);
+            //Debug.Log("Hit Bot Point: "+bp.name);
             _passedBotPoints.Add(bp);
             currentOrder = bp.order + 1;
             currentChoice = bp.choice;
