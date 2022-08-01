@@ -463,12 +463,23 @@ public class PlayerManager : MonoBehaviour
         {
             GameObject[] bots = _gm.GetBots();
             int botsToChange = Random.Range(1, 4);
-            int startBot = Random.Range(0, _gm.GetMaxBots() - 4);
-            for (int i = startBot; i < botsToChange; i++)
+            //int startBot = Random.Range(0, _gm.GetMaxBots() - 4);
+            for (int i = 0; i < botsToChange; i++)
             {
-                BotCarController bcc = bots[i].GetComponent<BotCarController>();
-                bcc.setSpawn(_spawnLocation);
-                bcc.RandomSpawn();
+                int randBot = Random.Range(0, _gm.GetMaxBots());
+                while (bots[randBot] == null)
+                {
+                    if (bots[randBot] != null)
+                    {
+                        BotCarController bcc = bots[randBot].GetComponent<BotCarController>();
+                        bcc.setSpawn(_spawnLocation);
+                        bcc.RandomSpawn();
+                    }
+                    else
+                    {
+                        randBot = Random.Range(0, _gm.GetMaxBots());
+                    }
+                }
             }
         }
     }
