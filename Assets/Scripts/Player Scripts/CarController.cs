@@ -707,13 +707,14 @@ public class CarController : MonoBehaviour
         {
             _boostsInAirLeft = maxBoostsInAir;
 
-            if (_airTime > 0.5f)
+            if (_airTime > 1)
             {
                 _vfxHandler.SpawnVFXAtPosition("GroundImpact",
                     transform.position + (transform.forward / 2) - (transform.up / 1.5f), 2, false);
                 if (!bot)
                 {
                     _impulseSource.GenerateImpulseAt(transform.position + Vector3.down, new Vector3(0, -_airTime, 0));
+                    audioManager.PlaySound("CarLand");
                 }
 
                 _airTime = 0;
