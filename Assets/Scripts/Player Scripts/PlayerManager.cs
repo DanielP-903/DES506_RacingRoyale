@@ -466,20 +466,16 @@ public class PlayerManager : MonoBehaviour
             //int startBot = Random.Range(0, _gm.GetMaxBots() - 4);
             for (int i = 0; i < botsToChange; i++)
             {
+                int counter = 0;
                 int randBot = Random.Range(0, _gm.GetMaxBots());
-                while (bots[randBot] == null)
+                while (bots[randBot] == null && counter < 100)
                 {
-                    if (bots[randBot] != null)
-                    {
-                        BotCarController bcc = bots[randBot].GetComponent<BotCarController>();
-                        bcc.setSpawn(_spawnLocation);
-                        bcc.RandomSpawn();
-                    }
-                    else
-                    {
-                        randBot = Random.Range(0, _gm.GetMaxBots());
-                    }
+                    counter++;
+                    randBot = Random.Range(0, _gm.GetMaxBots());
                 }
+                BotCarController bcc = bots[randBot].GetComponent<BotCarController>();
+                bcc.setSpawn(_spawnLocation);
+                bcc.RandomSpawn();
             }
         }
     }
