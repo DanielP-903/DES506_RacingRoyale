@@ -562,6 +562,8 @@ public class CarController : MonoBehaviour
         if (!_grounded)
         {
             _vfxHandler.StopDriftEffects();
+            audioManager.SetSoundVolume("TireSqueelLoop", 0.0f);
+            if (!bot) audioManager.StopSound("TireSqueelLoop");
         }
         
         if (!_grounded) return;
@@ -576,15 +578,21 @@ public class CarController : MonoBehaviour
                 if (_rigidbody.velocity.magnitude * 2.2369362912f > driftSmokeThreshold)
                 {
                     _vfxHandler.PlayVFX("DriftSmoke");
+                    audioManager.SetSoundVolume("TireSqueelLoop", Mathf.Abs(_currentSteeringMulti));
+                    if (!bot && !audioManager.IsPlayingSound("TireSqueelLoop")) audioManager.PlaySound("TireSqueelLoop");
                 }
             }
             else if (_drift)
             {
                 _vfxHandler.PlayVFX("DriftSmoke");
+                audioManager.SetSoundVolume("TireSqueelLoop", Mathf.Abs(_currentSteeringMulti));
+                if (!bot && !audioManager.IsPlayingSound("TireSqueelLoop")) audioManager.PlaySound("TireSqueelLoop");
             }
             else
             {
                 _vfxHandler.StopDriftEffects();
+                audioManager.SetSoundVolume("TireSqueelLoop", 0.0f);
+                if (!bot) audioManager.StopSound("TireSqueelLoop");
             }
         }
     }
@@ -699,13 +707,14 @@ public class CarController : MonoBehaviour
         {
             _boostsInAirLeft = maxBoostsInAir;
 
-            if (_airTime > 0.5f)
+            if (_airTime > 1)
             {
                 _vfxHandler.SpawnVFXAtPosition("GroundImpact",
                     transform.position + (transform.forward / 2) - (transform.up / 1.5f), 2, false);
                 if (!bot)
                 {
                     _impulseSource.GenerateImpulseAt(transform.position + Vector3.down, new Vector3(0, -_airTime, 0));
+                    audioManager.PlaySound("CarLand");
                 }
 
                 _airTime = 0;
@@ -731,9 +740,20 @@ public class CarController : MonoBehaviour
 
     public void ResetPlayer(bool pressedButton = false)
     {
-        if (!bot && pressedButton) _playerManager.GoToSpawn(true);
-        else if (!bot) _playerManager.GoToSpawn();
-        else _botCarController.goToSpawn();
+        if (!bot && pressedButton)
+        {
+            _playerManager.GoToSpawn(true);
+            audioManager.PlaySound("CarEliminatedOffTrack");
+        }
+        else if (!bot)
+        {
+            _playerManager.GoToSpawn();
+            audioManager.PlaySound("CarEliminatedOffTrack");
+        }
+        else
+        {
+            _botCarController.goToSpawn();
+        }
     }
 
     void OnDrawGizmos()

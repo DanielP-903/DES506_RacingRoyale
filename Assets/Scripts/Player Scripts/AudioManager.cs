@@ -38,7 +38,43 @@ public class AudioManager : MonoBehaviour
             Debug.LogError("ERROR: Cannot find sound name '" + soundName + "' in dictionary");
         }
     }
-    
+    public void StopSound(string soundName)
+    {
+        if (audio.ContainsKey(soundName))
+        {
+            audio[soundName].Stop();
+        }
+        else
+        {
+            Debug.LogError("ERROR: Cannot find sound name '" + soundName + "' in dictionary");
+        }
+    }
+    public bool IsPlayingSound(string soundName)
+    {
+        if (audio.ContainsKey(soundName))
+        {
+            return audio[soundName].isPlaying;
+        }
+        else
+        {
+            Debug.LogError("ERROR: Cannot find sound name '" + soundName + "' in dictionary");
+        }
+
+        return false;
+    }
+    public void SetSoundVolume(string soundName, float volume)
+    {
+        if (audio.ContainsKey(soundName))
+        {
+            audio[soundName].volume = volume;
+        }
+        else
+        {
+            Debug.LogError("ERROR: Cannot find sound name '" + soundName + "' in dictionary");
+        }
+
+    }
+
     void Start()
     {
         _engineSounds = GetComponent<AudioSource>();

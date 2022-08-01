@@ -560,6 +560,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         //Debug.Log("Running!");
         Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
         //SceneManager.sceneLoaded -= LoadPlayerInLevel;
         DontDestroyOnLoad(this.gameObject);
         _timer = GameObject.Find("Timer").GetComponent<TextMeshProUGUI>();
