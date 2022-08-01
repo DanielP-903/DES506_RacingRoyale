@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
 using TMPro;
@@ -678,5 +679,16 @@ public class BotCarController : MonoBehaviour
         {
             boostAllowed = true;
         }
+    }
+
+    public void RandomSpawn()
+    {
+        StartCoroutine(RandomReset());
+    }
+
+    IEnumerator RandomReset()
+    {
+        yield return new WaitForSeconds(Random.Range(0, 5));
+        goToSpawn();
     }
 }
