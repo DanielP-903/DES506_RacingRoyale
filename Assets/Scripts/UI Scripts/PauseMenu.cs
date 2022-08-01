@@ -113,6 +113,7 @@ public class PauseMenu : MonoBehaviour
     public void Resume()
     {
         Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
         pausePanel.SetActive(false);
         optionsPanel.SetActive(false);
         controlsPanel.SetActive(false);
@@ -121,6 +122,7 @@ public class PauseMenu : MonoBehaviour
     public void GoToMainMenu()
     {
         Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
         pausePanel.SetActive(true);
         optionsPanel.SetActive(false);
         controlsPanel.SetActive(false);
@@ -131,6 +133,7 @@ public class PauseMenu : MonoBehaviour
     public void GoToOptions()
     {
         Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
         pausePanel.SetActive(false);
         optionsPanel.SetActive(true);
         controlsPanel.SetActive(false);
@@ -141,6 +144,7 @@ public class PauseMenu : MonoBehaviour
     public void GoToControls()
     {
         Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
         pausePanel.SetActive(false);
         optionsPanel.SetActive(false);
         controlsPanel.SetActive(true);
