@@ -836,7 +836,7 @@ public class CarController : MonoBehaviour
             _vfxHandler.PlayVFX("Confetti");
             audioManager.PlaySound("Checkpoint");
             //audioManager.PlaySound("Confetti");
-            if (!bot) _playerManager.PassCheckpoint();
+            
 
             _passedCheckpoints[other.gameObject] = true;
             int playerNo = !bot ? _playerManager.GetPlayerNumber() : _botCarController.GetBotNumber();
@@ -844,6 +844,7 @@ public class CarController : MonoBehaviour
             //Debug.Log("Checkpoint passed: " + other.gameObject.name + " , " + newSpawnLocation + " , " +_currentRespawnPoint.name + " , " +(!bot ? _playerManager.GetPlayerNumber() : _botCarController.GetBotNumber()));
             if (!bot) _playerManager.ChangeSpawnLocation(newSpawnLocation.transform);
             else _botCarController.setSpawn(newSpawnLocation.transform);
+            if (!bot) _playerManager.PassCheckpoint();
 
         }
 

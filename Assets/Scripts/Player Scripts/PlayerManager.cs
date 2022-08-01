@@ -459,6 +459,18 @@ public class PlayerManager : MonoBehaviour
     {
         if (!debugMode)
             _as.displayAlert("Checkpoint");
+        if (_photonView.Owner.IsMasterClient)
+        {
+            GameObject[] bots = _gm.GetBots();
+            int botsToChange = Random.Range(1, 4);
+            int startBot = Random.Range(0, _gm.GetMaxBots() - 4);
+            for (int i = startBot; i < botsToChange; i++)
+            {
+                BotCarController bcc = bots[i].GetComponent<BotCarController>();
+                bcc.setSpawn(_spawnLocation);
+                bcc.RandomSpawn();
+            }
+        }
     }
 
     public void CompleteStage()

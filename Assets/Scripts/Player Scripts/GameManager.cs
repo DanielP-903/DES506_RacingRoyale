@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             _photonView.RPC("sendMessage", RpcTarget.AllViaServer,
                 other.NickName + " has joined. " + PhotonNetwork.CurrentRoom.PlayerCount + "/" +
                 PhotonNetwork.CurrentRoom.MaxPlayers);
-            PhotonNetwork.Destroy(botsStored[PhotonNetwork.CurrentRoom.PlayerCount - 1]);
+            PhotonNetwork.Destroy(botsStored[PhotonNetwork.CurrentRoom.PlayerCount - 2]);
             //Debug.LogFormat("OnPlayerEnteredRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
 
 
@@ -560,7 +560,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         //Debug.Log("Running!");
         Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
         //SceneManager.sceneLoaded -= LoadPlayerInLevel;
         DontDestroyOnLoad(this.gameObject);
         _timer = GameObject.Find("Timer").GetComponent<TextMeshProUGUI>();
@@ -619,6 +618,16 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
+    public GameObject[] GetBots()
+    {
+        return botsStored;
+    }
+
+    public int GetMaxBots()
+    {
+        return maxBots;
+    }
+    
     void OnLevelWasLoaded()
     {
         if (SceneManager.GetActiveScene().name != "WaitingArea")
