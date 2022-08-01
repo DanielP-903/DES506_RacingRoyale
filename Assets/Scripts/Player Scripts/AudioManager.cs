@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
 [Serializable]
@@ -77,17 +78,23 @@ public class AudioManager : MonoBehaviour
 
     void Start()
     {
-        _engineSounds = GetComponent<AudioSource>();
-        _rb = GetComponentInParent<Rigidbody>();
-        _engineSounds.clip = engineClip;
-        _engineSounds.loop = true;
-        _engineSounds.Play();
+        if (SceneManager.GetActiveScene().name != "Launcher")
+        {
+            _engineSounds = GetComponent<AudioSource>();
+            _rb = GetComponentInParent<Rigidbody>();
+            _engineSounds.clip = engineClip;
+            _engineSounds.loop = true;
+            _engineSounds.Play();
+        }
     }
 
     void Update()
     {
-        Vector2 horizontalSpeed = new Vector2(_rb.velocity.x, _rb.velocity.z);
-        _engineSounds.volume = Mathf.Min(horizontalSpeed.magnitude, 5f)/9;
-        _engineSounds.pitch = Mathf.Max(Mathf.Min(horizontalSpeed.magnitude, 50) / 50, 1);
+        if (SceneManager.GetActiveScene().name != "Launcher")
+        {
+            Vector2 horizontalSpeed = new Vector2(_rb.velocity.x, _rb.velocity.z);
+            _engineSounds.volume = Mathf.Min(horizontalSpeed.magnitude, 5f) / 9;
+            _engineSounds.pitch = Mathf.Max(Mathf.Min(horizontalSpeed.magnitude, 50) / 50, 1);
+        }
     }
 }
