@@ -193,7 +193,7 @@ public class BotCarController : MonoBehaviour
     void decideTargetPoint()
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 3f, _layerMask))
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 5f, _layerMask))
         {
             grounded = true;
         }
@@ -215,7 +215,9 @@ public class BotCarController : MonoBehaviour
                 
             }
             else if (Vector3.Distance(transform.position, bt.transform.position) <
-                     Vector3.Distance(transform.position, nearestPoint.position) && bt.choice == currentChoice && !_passedBotPoints.Contains(bt))
+                     Vector3.Distance(transform.position, nearestPoint.position) 
+                     && bt.choice == currentChoice && !_passedBotPoints.Contains(bt)
+                     && bt.order >= currentOrder)
             {
                 nearestPoint = bt.transform;
             }
@@ -223,8 +225,9 @@ public class BotCarController : MonoBehaviour
 
         //Debug.Log(nearestPoint.name + ":"+nearestPoint.position+":" +transform.position+"-"+Vector2.SignedAngle(new Vector2(transform.position.x, transform.position.z), new Vector2(nearestPoint.position.x, nearestPoint.position.z)));
         //target = Vector2.SignedAngle(new Vector2(transform.position.x, transform.position.z), new Vector2(nearestPoint.position.x, nearestPoint.position.z));
-        target = Mathf.Rad2Deg * Mathf.Atan2(transform.InverseTransformPoint(nearestPoint.position).x,
-            transform.InverseTransformPoint(nearestPoint.position).z);
+        //target = Mathf.Rad2Deg * Mathf.Atan2(transform.InverseTransformPoint(nearestPoint.position).x, transform.InverseTransformPoint(nearestPoint.position).z);
+        target = Mathf.Rad2Deg * Mathf.Atan2(nearestPoint.position.x - transform.position.x, nearestPoint.position.z - transform.position.z);
+        Debug.DrawRay(this.transform.position, (Quaternion.AngleAxis(target, Vector3.up) * Vector3.forward) * 100f, Color.yellow );
         //target = Mathf.Atan((nearestPoint.position.z - transform.position.z)/ (nearestPoint.position.x - transform.position.x)) * Mathf.Rad2Deg;
         //Debug.Log(nearestPoint.name + ":" + nearestPoint.position + ":" + transform.position + " " + target);
         //Debug.Log("Target: "+nearestPoint.name);
@@ -245,6 +248,7 @@ public class BotCarController : MonoBehaviour
 
     void decideChoice()
     {
+        currentOrder = 0;
         _passedBotPoints.Clear();
         Transform nearestPoint = null;
         foreach (BotPoint bt in _botPoints)

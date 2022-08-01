@@ -5803,7 +5803,7 @@ MonoBehaviour:
   forwardMultiplier: 1
   backwardMultiplier: 0.5
   idleBrakeForce: 8000
-  driftSmokeThreshold: 20
+  driftSmokeThreshold: 40
   pushForceAmount: 900
   accelerationForce: 5
   boostForceAmount: 15
@@ -23709,7 +23709,7 @@ AudioSource:
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -47934,6 +47934,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: bb5dbfbb-8417-4b5f-bc5b-b64b506c41c3
     m_ActionName: Master/Controller Right[/XInputControllerWindows/leftStick/right]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1118674505751619611}
+        m_TargetAssemblyTypeName: CarController, Assembly-CSharp
+        m_MethodName: Horn
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: aad05049-52f4-4a5e-a3f6-e4d8d7f266a0
+    m_ActionName: Master/Horn[/Keyboard/h]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Master
@@ -53880,7 +53896,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: -5791893445727110642, guid: d6643c6f6427be04c8e16666c13b4bce, type: 2}
   m_audioClip: {fileID: 8300000, guid: e3dabb9bd77ea4c4989b53d1e37d864c, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.6
   m_Pitch: 1
   Loop: 0
   Mute: 0
