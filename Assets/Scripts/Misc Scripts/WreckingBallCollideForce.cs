@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WreckingBallCollideForce : MonoBehaviour
 {
-
+    public int power = 10000000;
     
     // Update is called once per frame
     void Start()
@@ -15,14 +15,14 @@ public class WreckingBallCollideForce : MonoBehaviour
 
         if (collision.gameObject.tag == "Player")
         {
+
             GameObject hitPlayer = collision.gameObject;
             if (hitPlayer.GetComponent<Rigidbody>())
             {
                 //ContactPoint contactPoint = collision.GetContact(0);
-                Vector3 direction = (hitPlayer.transform.position - transform.position).normalized;
+                Vector3 direction = (transform.position - hitPlayer.transform.position).normalized;
                 //hitPlayer.GetComponent<Rigidbody>().AddForce(direction * power);
-                Debug.Log("test + " + direction * 100);
-                hitPlayer.GetComponent<Rigidbody>().AddForce(Vector3.up * 10000, ForceMode.Impulse);
+                hitPlayer.GetComponent<Rigidbody>().AddForce(direction * power);
             }
 
 

@@ -140,10 +140,10 @@ public class CarController : MonoBehaviour
     private float _boostDelay = 2.0f;
     private float _resetDelay = 2.0f;
     private float _padDelay = 2.0f;
-    private float _airTime = 0.0f;
-    private float _animCamTime = 0.0f;
+    private float _airTime;
+    private float _turnAmount = 0.3f;
+    private float _hornTimer;
     private Vector3 _savedOilVelocity;
-    private float turnAmount = 0.3f;
 
     #endregion
 
@@ -165,10 +165,8 @@ public class CarController : MonoBehaviour
 
     private RaycastHit _hit;
     private Dictionary<GameObject, bool> _passedCheckpoints = new Dictionary<GameObject, bool>();
-    private Transform _currentRespawnPoint;
     private Camera _mainCam;
     private CarVFXHandler _vfxHandler;
-    private bool _delayAirTime;
     private int _boostsInAirLeft = 1;
     private CameraFlyBy _cameraFlyBy;
     private PauseMenu _pm;
@@ -473,7 +471,7 @@ public class CarController : MonoBehaviour
             _rigidbody.velocity.magnitude * 2.2369362912f > 60 ? 10 : maxSteeringAngle,
             Time.deltaTime * wheelResetSpeed);
 
-        float currentTurnAmount = _moveBackward ? turnAmount * 2 : turnAmount;
+        float currentTurnAmount = _moveBackward ? _turnAmount * 2 : _turnAmount;
 
         if (bot && _moveLeft)
         {
@@ -648,6 +646,8 @@ public class CarController : MonoBehaviour
 
     private void Update()
     {
+        _hornTimer = _hornTimer <= 0 ? 0 : _hornTimer - Time.deltaTime;
+        
         if (_gm && _gm.halt)
         {
             _rigidbody.velocity = new Vector3(0, 0, 0);
@@ -694,7 +694,6 @@ public class CarController : MonoBehaviour
         if (!_grounded)
         {
             _airTime += Time.deltaTime;
-            _delayAirTime = true;
         }
         else
         {
@@ -709,7 +708,6 @@ public class CarController : MonoBehaviour
                     _impulseSource.GenerateImpulseAt(transform.position + Vector3.down, new Vector3(0, -_airTime, 0));
                 }
 
-                _animCamTime = 1.0f;
                 _airTime = 0;
             }
         }
@@ -793,11 +791,11 @@ public class CarController : MonoBehaviour
         }
         else if (collision.contacts[0].point.y > transform.position.y - 4.0f)
         {
-            // Vector3 direction = collision.contacts[0].point - transform.position;
-            // _rigidbody.velocity = -(direction.normalized * (bounciness/3));
-            // _vfxHandler.PlayVFXAtPosition("SoftImpact", collision.contacts[0].point);
-            // int rand = Random.Range(1, 5);
-            // if (!bot) audioManager.PlaySound("CarHit0" + rand);
+            Vector3 direction = collision.contacts[0].point - transform.position;
+            _rigidbody.velocity = -(direction.normalized * (bounciness/6));
+            _vfxHandler.PlayVFXAtPosition("SoftImpact", collision.contacts[0].point);
+            int rand = Random.Range(1, 5);
+            if (!bot) audioManager.PlaySound("CarHit0" + rand);
         }
     }
 
@@ -819,7 +817,6 @@ public class CarController : MonoBehaviour
             if (!bot) _playerManager.PassCheckpoint();
 
             _passedCheckpoints[other.gameObject] = true;
-            _currentRespawnPoint = other.gameObject.transform;
             int playerNo = !bot ? _playerManager.GetPlayerNumber() : _botCarController.GetBotNumber();
             GameObject newSpawnLocation = other.gameObject.transform.GetChild(playerNo).gameObject;
             //Debug.Log("Checkpoint passed: " + other.gameObject.name + " , " + newSpawnLocation + " , " +_currentRespawnPoint.name + " , " +(!bot ? _playerManager.GetPlayerNumber() : _botCarController.GetBotNumber()));
@@ -879,7 +876,7 @@ public class CarController : MonoBehaviour
         float value = context.ReadValue<float>();
         _moveLeft = value > 0;
         if (_moveLeft)
-            turnAmount = maxTurnAmount;
+            _turnAmount = maxTurnAmount;
         //Debug.Log("Left detected");
     }
 
@@ -889,7 +886,7 @@ public class CarController : MonoBehaviour
         float value = context.ReadValue<float>();
         _moveRight = value > 0;
         if (_moveRight)
-            turnAmount = maxTurnAmount;
+            _turnAmount = maxTurnAmount;
         //Debug.Log("Right detected");
     }
 
@@ -898,7 +895,7 @@ public class CarController : MonoBehaviour
     {
         float value = context.ReadValue<float>();
         _moveLeft = value > 0;
-        turnAmount = Mathf.Lerp(0, maxTurnAmount, value);
+        _turnAmount = Mathf.Lerp(0, maxTurnAmount, value);
         //Debug.Log("Left detected");
     }
 
@@ -907,7 +904,7 @@ public class CarController : MonoBehaviour
     {
         float value = context.ReadValue<float>();
         _moveRight = value > 0;
-        turnAmount = Mathf.Lerp(0, maxTurnAmount, value);
+        _turnAmount = Mathf.Lerp(0, maxTurnAmount, value);
         //Debug.Log("Right detected");
     }
 
@@ -997,7 +994,19 @@ public class CarController : MonoBehaviour
         float value = context.ReadValue<float>();
         //_lookBehind = value > 0;
         RearviewCamera(value > 0);
-        //Debug.Log("Escape detected");
+        //Debug.Log("Rearview detected");
+    }
+    
+    // Horn
+    public void Horn(InputAction.CallbackContext context)
+    {
+        float value = context.ReadValue<float>();
+        if (value > 0 && _hornTimer <= 0)
+        {
+            audioManager.PlaySound("CarHorn0" + Random.Range(1, 5));
+            _hornTimer = 0.1f;
+        }
+        //Debug.Log("Horn detected");
     }
 
     private void RearviewCamera(bool backCam)
@@ -1023,7 +1032,7 @@ public class CarController : MonoBehaviour
 
     #region AI-Input
 
-    //AIONLY
+    //AI ONLY
     public void BotForward()
     {
         _moveForward = true;

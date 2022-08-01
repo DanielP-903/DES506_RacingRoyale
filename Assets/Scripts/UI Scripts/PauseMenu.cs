@@ -98,8 +98,13 @@ public class PauseMenu : MonoBehaviour
         }
         escapeKey = lastKey;
     }
-    
 
+    void OnLevelWasLoaded()
+    {
+        PlayerPrefs.SetFloat("MasterVol", PlayerPrefs.GetFloat("MasterVol"));
+        mixer.SetFloat("Master", PlayerPrefs.GetFloat("MasterVol"));
+    }
+    
     public void SetEscape(bool input)
     {
         escapeKey = input;
