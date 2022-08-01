@@ -823,7 +823,7 @@ public class CarController : MonoBehaviour
         {
             _vfxHandler.PlayVFX("Confetti");
             audioManager.PlaySound("FinishLine");
-            //audioManager.PlaySound("Confetti");
+            audioManager.PlaySound("Confetti");
             // Passed finish line
             Debug.Log("Passed finish line!");
             _passedFinishLine = true;
@@ -835,7 +835,7 @@ public class CarController : MonoBehaviour
         {
             _vfxHandler.PlayVFX("Confetti");
             audioManager.PlaySound("Checkpoint");
-            //audioManager.PlaySound("Confetti");
+            audioManager.PlaySound("Confetti");
             
 
             _passedCheckpoints[other.gameObject] = true;

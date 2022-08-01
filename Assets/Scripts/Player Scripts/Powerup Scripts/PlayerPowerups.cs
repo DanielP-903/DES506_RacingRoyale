@@ -429,6 +429,7 @@ public class PlayerPowerups : MonoBehaviour
          hits = Physics.SphereCastAll(transform.position, detectionRadius, transform.forward,  achievablePunchRange);
          if (hits.Length > 0)
          {
+             _carController.audioManager.PlaySound("PunchingGloveLaunch");
              float distance = 1000000.0f;
              _nearestHit = hits[0];
              foreach (var hit in hits)
@@ -479,6 +480,7 @@ public class PlayerPowerups : MonoBehaviour
          hits = Physics.SphereCastAll(transform.position, 5, transform.forward,  achievableDistance);
          if (hits.Length > 0)
          {
+             _carController.audioManager.PlaySound("GrapplingHookLaunch");
              float distance = 1000000.0f;
              _nearestHit = hits[0];
              foreach (var hit in hits)
