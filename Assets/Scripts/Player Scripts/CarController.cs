@@ -743,12 +743,10 @@ public class CarController : MonoBehaviour
         if (!bot && pressedButton)
         {
             _playerManager.GoToSpawn(true);
-            audioManager.PlaySound("CarEliminatedOffTrack");
         }
         else if (!bot)
         {
             _playerManager.GoToSpawn();
-            audioManager.PlaySound("CarEliminatedOffTrack");
         }
         else
         {
@@ -824,6 +822,8 @@ public class CarController : MonoBehaviour
         if (other.transform.CompareTag("FinishLine") && !_passedFinishLine && !bot)
         {
             _vfxHandler.PlayVFX("Confetti");
+            audioManager.PlaySound("FinishLine");
+            //audioManager.PlaySound("Confetti");
             // Passed finish line
             Debug.Log("Passed finish line!");
             _passedFinishLine = true;
@@ -834,6 +834,8 @@ public class CarController : MonoBehaviour
             !_passedCheckpoints[other.gameObject])
         {
             _vfxHandler.PlayVFX("Confetti");
+            audioManager.PlaySound("Checkpoint");
+            //audioManager.PlaySound("Confetti");
             if (!bot) _playerManager.PassCheckpoint();
 
             _passedCheckpoints[other.gameObject] = true;

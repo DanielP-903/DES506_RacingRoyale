@@ -425,6 +425,7 @@ public class PlayerManager : MonoBehaviour
         else if (!_spawnLocation.name.Contains("SpawnLocation") &&
                  _cs.GetCheckpointElimination(_spawnLocation.parent.gameObject))
         {
+            _cc.audioManager.PlaySound("CarEliminatedByWall");
             EliminateCurrentPlayer();
         }
         else
@@ -440,6 +441,7 @@ public class PlayerManager : MonoBehaviour
             thisTransform.position = position;
             mainCam.transform.rotation = rotation;
             mainCam.transform.position = position + new Vector3(0, 6, -10);
+            _cc.audioManager.PlaySound("CarEliminatedOffTrack");
         }
     }
 
@@ -491,6 +493,11 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public bool IsEliminated()
+    {
+        return eliminated;
+    }
+    
     public void EliminateCurrentPlayer()
     {
         if (!completedStage && !eliminated)

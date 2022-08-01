@@ -32,5 +32,7 @@ public class EndStageDisable : MonoBehaviour
             _dangerWallEffect.Stop(); // Note this might stop it from working entirely
             _portalEffect.Stop(); // Note this might stop it from working entirely
         }
+        
+        Cursor.lockState = CursorLockMode.None;
     }
 }
