@@ -473,6 +473,14 @@ public class CarController : MonoBehaviour
 
         float currentTurnAmount = _moveBackward ? _turnAmount * 2 : _turnAmount;
 
+        if (bot && _moveLeft)
+        {
+            _turnAmount = maxTurnAmount;
+        }
+        if (bot && _moveRight)
+        {
+            _turnAmount = maxTurnAmount;
+        }
         if (_moveLeft)
         {
             _currentSteeringMulti =
