@@ -8992,7 +8992,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1061442190}
   m_Layer: 0
-  m_Name: AudioSources
+  m_Name: UI AudioSources
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13959,7 +13959,7 @@ GameObject:
   - component: {fileID: 1726549357}
   - component: {fileID: 1726549356}
   m_Layer: 7
-  m_Name: Audio Manager
+  m_Name: UI Audio Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14073,6 +14073,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 546b3a27eeea84847b35316d41e3b504, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isUI: 1
   engineClip: {fileID: 8300000, guid: 0a0c814d3b492294ab5fc6016a986aa7, type: 3}
   audio:
     m_keys:
