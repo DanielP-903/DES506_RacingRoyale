@@ -554,6 +554,8 @@ public class CarController : MonoBehaviour
         if (!_grounded)
         {
             _vfxHandler.StopDriftEffects();
+            audioManager.SetSoundVolume("TireSqueelLoop", 0.0f);
+            if (!bot) audioManager.StopSound("TireSqueelLoop");
         }
         
         if (!_grounded) return;
@@ -568,15 +570,21 @@ public class CarController : MonoBehaviour
                 if (_rigidbody.velocity.magnitude * 2.2369362912f > driftSmokeThreshold)
                 {
                     _vfxHandler.PlayVFX("DriftSmoke");
+                    audioManager.SetSoundVolume("TireSqueelLoop", Mathf.Abs(_currentSteeringMulti));
+                    if (!bot && !audioManager.IsPlayingSound("TireSqueelLoop")) audioManager.PlaySound("TireSqueelLoop");
                 }
             }
             else if (_drift)
             {
                 _vfxHandler.PlayVFX("DriftSmoke");
+                audioManager.SetSoundVolume("TireSqueelLoop", Mathf.Abs(_currentSteeringMulti));
+                if (!bot && !audioManager.IsPlayingSound("TireSqueelLoop")) audioManager.PlaySound("TireSqueelLoop");
             }
             else
             {
                 _vfxHandler.StopDriftEffects();
+                audioManager.SetSoundVolume("TireSqueelLoop", 0.0f);
+                if (!bot) audioManager.StopSound("TireSqueelLoop");
             }
         }
     }
