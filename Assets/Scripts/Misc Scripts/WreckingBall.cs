@@ -33,8 +33,10 @@ public class WreckingBall : MonoBehaviour
             GameObject hitPlayer = collision.gameObject;
             if (hitPlayer.GetComponent<Rigidbody>())
             {
-                Vector3 direction = (transform.position - hitPlayer.transform.position).normalized;
-                hitPlayer.GetComponent<Rigidbody>().AddForce(direction * force);
+                Vector3 contactPoint = collision.GetContact(0).point;
+                Vector3 direction = transform.position - contactPoint;
+                direction = new Vector3(0, 0, direction.z);
+                hitPlayer.GetComponent<Rigidbody>().AddForce(direction * force,ForceMode.Impulse);
             }
         }
     }
