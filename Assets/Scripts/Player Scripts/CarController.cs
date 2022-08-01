@@ -475,11 +475,11 @@ public class CarController : MonoBehaviour
 
         if (bot && _moveLeft)
         {
-            turnAmount = maxTurnAmount;
+            _turnAmount = maxTurnAmount;
         }
         if (bot && _moveRight)
         {
-            turnAmount = maxTurnAmount;
+            _turnAmount = maxTurnAmount;
         }
         if (_moveLeft)
         {
