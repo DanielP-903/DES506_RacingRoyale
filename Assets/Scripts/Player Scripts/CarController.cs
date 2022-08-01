@@ -740,9 +740,20 @@ public class CarController : MonoBehaviour
 
     public void ResetPlayer(bool pressedButton = false)
     {
-        if (!bot && pressedButton) _playerManager.GoToSpawn(true);
-        else if (!bot) _playerManager.GoToSpawn();
-        else _botCarController.goToSpawn();
+        if (!bot && pressedButton)
+        {
+            _playerManager.GoToSpawn(true);
+            audioManager.PlaySound("CarEliminatedOffTrack");
+        }
+        else if (!bot)
+        {
+            _playerManager.GoToSpawn();
+            audioManager.PlaySound("CarEliminatedOffTrack");
+        }
+        else
+        {
+            _botCarController.goToSpawn();
+        }
     }
 
     void OnDrawGizmos()
