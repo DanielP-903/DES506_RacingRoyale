@@ -4,7 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="873a249a-5863-4717-a004-718a85933296" name="Changes" comment="" />
+    <list default="true" id="873a249a-5863-4717-a004-718a85933296" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.DES506_RacingRoyale/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DES506_RacingRoyale/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Input Actions.inputactions" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Input Actions.inputactions" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Player Car.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Player Car.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Misc Scripts/AudioManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Player Scripts/AudioManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Misc Scripts/AudioManager.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Player Scripts/AudioManager.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Player Scripts/CarController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Player Scripts/CarController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Player Scripts/Powerup Scripts/PlayerPowerups.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Player Scripts/Powerup Scripts/PlayerPowerups.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI Scripts/PauseMenu.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI Scripts/PauseMenu.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.probuilder/Settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.probuilder/Settings.json" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -53,7 +63,7 @@
       <method v="2" />
     </configuration>
     <configuration name="UnitTests (batch mode)" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="C:\Program Files\Unity 2020.3.0\Editor\Unity.exe" />
+      <option name="EXE_PATH" value="D:\Program Files (x86)\Unity\2020.3.0f1\Editor\Unity.exe" />
       <option name="PROGRAM_PARAMETERS" value="-runTests -batchmode -projectPath M:\GitHub\DES506_RacingRoyale -testResults Logs/results.xml -testPlatform EditMode -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="M:\GitHub\DES506_RacingRoyale" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -70,10 +80,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="11584">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="11584" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -192,6 +202,7 @@
       <workItem from="1659091820213" duration="2746000" />
       <workItem from="1659098972194" duration="2962000" />
       <workItem from="1659102179072" duration="3269000" />
+      <workItem from="1659343149418" duration="2497000" />
     </task>
     <servers />
   </component>
@@ -221,15 +232,34 @@
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/Photon/PhotonUnityNetworking/Code/PhotonNetworkPart.cs</url>
           <line>432</line>
-          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Photon\PhotonUnityNetworking\Code\PhotonNetworkPart.cs" initialLine="430" containingFunctionPresentation="method 'ExecuteRpc'">
+          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Photon\PhotonUnityNetworking\Code\PhotonNetworkPart.cs" initialLine="430" containingFunctionPresentation="method 'ExecuteRpc'" />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/Player Scripts/Powerup Scripts/PlayerPowerups.cs</url>
+          <line>352</line>
+          <properties documentPath="D:\Users\Ping998\Documents\GitHub\DES506_RacingRoyale\Assets\Scripts\Player Scripts\Powerup Scripts\PlayerPowerups.cs" initialLine="352" containingFunctionPresentation="method 'PhysUpdatePowerups'">
             <startOffsets>
-              <option value="18345" />
+              <option value="14547" />
             </startOffsets>
             <endOffsets>
-              <option value="18388" />
+              <option value="14575" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="1" />
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/Player Scripts/Powerup Scripts/PlayerPowerups.cs</url>
+          <line>350</line>
+          <properties documentPath="D:\Users\Ping998\Documents\GitHub\DES506_RacingRoyale\Assets\Scripts\Player Scripts\Powerup Scripts\PlayerPowerups.cs" initialLine="350" containingFunctionPresentation="method 'PhysUpdatePowerups'">
+            <startOffsets>
+              <option value="14473" />
+            </startOffsets>
+            <endOffsets>
+              <option value="14524" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
