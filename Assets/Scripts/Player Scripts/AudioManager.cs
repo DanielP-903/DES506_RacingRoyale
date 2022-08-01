@@ -85,7 +85,7 @@ public class AudioManager : MonoBehaviour
     }
 
     void Update()
-    {
+    { 
         Vector2 horizontalSpeed = new Vector2(_rb.velocity.x, _rb.velocity.z);
         _engineSounds.volume = Mathf.Min(horizontalSpeed.magnitude, 5f)/9;
         _engineSounds.pitch = Mathf.Max(Mathf.Min(horizontalSpeed.magnitude, 50) / 50, 1);
