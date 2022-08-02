@@ -5,7 +5,6 @@ using Cinemachine.PostFX;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -26,20 +25,6 @@ public class CarVFXHandler : MonoBehaviour
 
     [Header("Camera Profiles (Post-Pro)")] 
     public List<VolumeProfile> profiles;
-
-    [Header("NORMAL VALUES")]
-    [SerializeField] private Color vignColourBefore;
-    [SerializeField] private float vignIntensityBefore;
-    [SerializeField] private float vignSmoothnessBefore;
-    [SerializeField] private bool vignRoundedBefore;
-    [SerializeField] private float chromIntensityBefore;
-    
-    [Header("IN-ZONE VALUES")] 
-    [SerializeField] private Color vignColourAfter;
-    [SerializeField] private float vignIntensityAfter;
-    [SerializeField] private float vignSmoothnessAfter;
-    [SerializeField] private bool vignRoundedAfter;
-    [SerializeField] private float chromIntensityAfter;
     
     [Header("Other")] 
     public float maxWallDistanceAlert = 30.0f;
@@ -65,19 +50,9 @@ public class CarVFXHandler : MonoBehaviour
     private VisualEffect _currentEffect;
     private PhotonView _photonView;
     private DataManager _dm;
-    private Mesh[] _meshArray;
-    private VolumeProfile _profile;
+    private Mesh[] meshArray;
+    private Material[] matArray;
     
-    // Profile components
-    private Vignette _vignette;
-    private ChromaticAberration _chromaticAberration;
-    private ColorAdjustments _colourAdjustments;
-    private SplitToning _splitToning;
-    private DepthOfField _depthOfField;
-    private ShadowsMidtonesHighlights _shadowsMidtonesHighlights;
-    
-    
-    private bool _inZone;
     
     #region VFX-Activation
 
@@ -235,7 +210,8 @@ public class CarVFXHandler : MonoBehaviour
         if (!_carController.debug)
         {
             _dm = GameObject.Find("DataManager").GetComponent<DataManager>();
-            _meshArray = _dm.GetMesh();
+            meshArray = _dm.GetMesh();
+            matArray = _dm.GetMats();
         }
 
 
@@ -276,9 +252,9 @@ public class CarVFXHandler : MonoBehaviour
         if (!_carController.bot && !_carController.debug)
         {
             _outlineObject.GetComponent<MeshFilter>().sharedMesh =
-                _meshArray[(int)PhotonNetwork.LocalPlayer.CustomProperties["Skin"]];
+                meshArray[(int)PhotonNetwork.LocalPlayer.CustomProperties["Skin"]];
             _outlineObjectGrapple.GetComponent<MeshFilter>().sharedMesh =
-                _meshArray[(int)PhotonNetwork.LocalPlayer.CustomProperties["Skin"]];
+                meshArray[(int)PhotonNetwork.LocalPlayer.CustomProperties["Skin"]];
         }
 
         if (!_carController.debug)
@@ -319,35 +295,6 @@ public class CarVFXHandler : MonoBehaviour
             _speedLinesEffect.Stop();
             _dangerWallEffect.Stop(); // Note this might stop it from working entirely
         }
-
-        _profile = _mainCam.GetComponent<CinemachineVolumeSettings>().m_Profile;
-
-        #region PostProComponentGetters
-        if( _profile.TryGet<Vignette>( out var vign ) )
-        {
-            _vignette = vign;
-        }        
-        if( _profile.TryGet<ChromaticAberration>( out var chrom ) )
-        {
-            _chromaticAberration = chrom;
-        }
-        if( _profile.TryGet<ColorAdjustments>( out var colo ) )
-        {
-            _colourAdjustments = colo;
-        }
-        if( _profile.TryGet<SplitToning>( out var spli ) )
-        {
-            _splitToning = spli;
-        }  
-        if( _profile.TryGet<DepthOfField>( out var dept ) )
-        {
-            _depthOfField = dept;
-        }
-        if( _profile.TryGet<ShadowsMidtonesHighlights>( out var shad ) )
-        {
-            _shadowsMidtonesHighlights = shad;
-        }  
-        #endregion
     }
 
     // Update is called once per frame
@@ -374,33 +321,6 @@ public class CarVFXHandler : MonoBehaviour
         {
             _speedLinesEffect.Play();
         }
-
-        if (_inZone)
-        {
-            _vignette.color.value = Color.Lerp(_vignette.color.value, vignColourAfter, Time.deltaTime);
-            _vignette.intensity.value = Mathf.Lerp(_vignette.intensity.value, vignIntensityAfter, Time.deltaTime);
-            _vignette.smoothness.value = Mathf.Lerp(_vignette.smoothness.value, vignSmoothnessAfter, Time.deltaTime);
-            _vignette.rounded.value = vignRoundedAfter;
-            _chromaticAberration.intensity.value = Mathf.Lerp(_chromaticAberration.intensity.value, chromIntensityAfter, Time.deltaTime);
-
-            _colourAdjustments.active = true;
-            _splitToning.active = true;
-            _depthOfField.active = true;
-            _shadowsMidtonesHighlights.active = true;
-        }
-        else
-        {
-            _vignette.color.value = Color.Lerp(_vignette.color.value, vignColourBefore, Time.deltaTime);
-            _vignette.intensity.value = Mathf.Lerp(_vignette.intensity.value, vignIntensityBefore, Time.deltaTime);
-            _vignette.smoothness.value = Mathf.Lerp(_vignette.smoothness.value, vignSmoothnessBefore, Time.deltaTime);
-            _vignette.rounded.value = vignRoundedBefore;
-            _chromaticAberration.intensity.value = Mathf.Lerp(_chromaticAberration.intensity.value,  chromIntensityBefore, Time.deltaTime);
-            
-            _colourAdjustments.active = false;
-            _splitToning.active = false;
-            _depthOfField.active = false;
-            _shadowsMidtonesHighlights.active = false;
-        }
     }
 
     private void FixedUpdate()
@@ -426,10 +346,8 @@ public class CarVFXHandler : MonoBehaviour
         _outlineObjectGrapple.SetActive(active);
     }
     
-    public void SetInZone(bool isInZone)
+    public void SetCameraProfile(bool isInZone)
     {
-         //= isInZone ? profiles[1] : profiles[0];
-         _inZone = isInZone;
-
+        _mainCam.GetComponent<CinemachineVolumeSettings>().m_Profile = isInZone ? profiles[1] : profiles[0];
     }
 }

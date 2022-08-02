@@ -637,14 +637,13 @@ public class PlayerManager : MonoBehaviour
 
             //yield return new WaitUntil(() => allPlayersReady);
             startDelayText.color = Color.clear; // Changed to clear as rubics are in
-            float timeLeft = _gm.GetStartDelay() + 1;
+            float timeLeft = _gm.GetStartDelay();
             while (timeLeft > 0)
             {
                 startDelayText.text = timeLeft.ToString("F2");
-                timeLeft--;
+                timeLeft -= 0.02f;
                 timer = timeLeft;
-                Debug.Log("timeLeft: " + timeLeft);
-                yield return new WaitForSecondsRealtime(1);
+                yield return new WaitForFixedUpdate();
             }
 
             //Start Code Here
