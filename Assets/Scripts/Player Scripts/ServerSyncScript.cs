@@ -81,13 +81,7 @@ public class ServerSyncScript : MonoBehaviour
             case PowerupType.PunchingGlove:
                 obj = PhotonView.Find(id).transform.GetChild(3).gameObject;
                 subobj = PhotonView.Find(id).transform.GetChild(2).gameObject;
-                // Reset line between them
-                Vector3[] positions = new Vector3[2];
-                positions[0] = PhotonView.Find(id).transform.position + PhotonView.Find(id).transform.forward;
-                positions[1] = PhotonView.Find(id).transform.position + PhotonView.Find(id).transform.forward;
-            
-                subobj.GetComponent<LineRenderer>().SetPositions(positions);
-                obj.transform.position = positions[1];
+
                 // if (subobj != null)
                 //     subobj.SetActive(true);
                 // else
@@ -128,7 +122,21 @@ public class ServerSyncScript : MonoBehaviour
     {
         PhotonView.Find(id).transform.GetChild(2).GetComponent<LineRenderer>().SetPositions(positions);
     }
-
+    
+    [PunRPC]
+    void PunchingGloveHit(int id, Vector3 hitPosition)
+    {
+        // Reset line between them
+        Vector3[] positions = new Vector3[2];
+        positions[0] = PhotonView.Find(id).transform.position + PhotonView.Find(id).transform.forward;
+        positions[1] = PhotonView.Find(id).transform.position + PhotonView.Find(id).transform.forward;
+            
+        PhotonView.Find(id).transform.GetChild(2).GetComponent<LineRenderer>().SetPositions(positions);
+        PhotonView.Find(id).transform.GetChild(3).transform.position = positions[1];
+        PhotonView.Find(id).gameObject.GetComponent<CarVFXHandler>().PlayVFXAtPosition("Impact",hitPosition);
+        
+    }
+    
     [PunRPC]
     void PlayerHit(int id, Vector3 direction, Vector3 contactPoint, float bounciness)
     {
