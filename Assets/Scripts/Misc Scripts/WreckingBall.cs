@@ -16,29 +16,29 @@ public class WreckingBall : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!reverse)
-            time = time + 0.014f;
-        else
-            time = time - 0.014f;
-        float angle = distance * Mathf.Sin(time * speed);
+        //if(!reverse)
+        //    time = time + 0.014f;
+        //else
+        //    time = time - 0.014f;
+        float angle = distance * Mathf.Sin(Time.time * speed);
         transform.localRotation = Quaternion.Euler( x ? angle : 0, y ? angle : 0, z ? angle : 0);
 
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Player")
-        {
-            reverse = !reverse;
-            GameObject hitPlayer = collision.gameObject;
-            if (hitPlayer.GetComponent<Rigidbody>())
-            {
-                Vector3 contactPoint = collision.GetContact(0).point;
-                Vector3 direction = contactPoint - transform.position;
-                direction = new Vector3(0, 0, direction.z);
-                Debug.Log("test " + direction);
-                hitPlayer.GetComponent<Rigidbody>().AddForce(direction * force,ForceMode.Impulse);
-            }
-        }
+        //if (collision.gameObject.tag == "Player")
+        //{
+        //    reverse = !reverse;
+        //    GameObject hitPlayer = collision.gameObject;
+        //    if (hitPlayer.GetComponent<Rigidbody>())
+        //    {
+        //        Vector3 contactPoint = collision.GetContact(0).point;
+        //        Vector3 direction = contactPoint - transform.position;
+        //        direction = new Vector3(0, 0, direction.z);
+        //        Debug.Log("test " + direction);
+        //        hitPlayer.GetComponent<Rigidbody>().AddForce(direction * force,ForceMode.Impulse);
+        //    }
+        //}
     }
 }
