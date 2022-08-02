@@ -276,7 +276,7 @@ public class PlayerPowerups : MonoBehaviour
                 _grappling = false;
                 _grappleLineObject.SetActive(false);
                 StartCoroutine(DelayRemoveIcon());
-                _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.GrapplingHook, false);
+                _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.GrapplingHook, false, transform.position);
 
             }
         }
@@ -292,7 +292,7 @@ public class PlayerPowerups : MonoBehaviour
             if (!_wallObject.activeInHierarchy)
             {
                 _wallObject.SetActive(true);
-                _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.BouncyWallShield, true);
+                _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.BouncyWallShield, true, transform.position);
             }
         }
         else
@@ -302,7 +302,7 @@ public class PlayerPowerups : MonoBehaviour
                 //_powerupIconMask.fillAmount = 0;
                 _wallObject.SetActive(false);
                 StartCoroutine(DelayRemoveIcon());
-                _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.BouncyWallShield, false);
+                _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.BouncyWallShield, false, transform.position);
             }
         }
 
@@ -312,7 +312,7 @@ public class PlayerPowerups : MonoBehaviour
             if (!_warpObject.activeInHierarchy)
             {
                 _warpObject.SetActive(true);
-                _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.WarpPortal, true);
+                _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.WarpPortal, true, transform.position);
             }
         }
         else
@@ -322,7 +322,7 @@ public class PlayerPowerups : MonoBehaviour
                 //_powerupIconMask.fillAmount = 0;
                 _warpObject.SetActive(false);
                 StartCoroutine(DelayRemoveIcon());
-                _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.WarpPortal, false);
+                _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.WarpPortal, false, transform.position);
             }
         }
 
@@ -339,7 +339,7 @@ public class PlayerPowerups : MonoBehaviour
                 _airBlasting = false;
                 _airBlastTimer = 0;
                 StartCoroutine(DelayRemoveIcon());
-                _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.AirBlast, false);
+                _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.AirBlast, false, transform.position);
             }
         }
 
@@ -681,7 +681,7 @@ public class PlayerPowerups : MonoBehaviour
              //_rigidbody.AddForce(-(direction.normalized * punchingForce)); 
              Debug.Log("Ouch!! Hit with velocity: " + _rigidbody.velocity);
              //collider.transform.parent.gameObject.GetComponent<PlayerPowerups>().DetectPunch();
-             _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.PunchingGlove, true);
+             _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.PunchingGlove);
              _vfxHandler.SpawnVFXAtPosition("PunchImpact", transform.position, 1,true);
              _audioManager.PlaySound("PunchingGlove");
          }

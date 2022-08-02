@@ -93,7 +93,8 @@ public class CarVFXHandler : MonoBehaviour
 
     public void PlayVFX(string vfxName)
     {
-        if (_carController.bot) return;
+        if (_carController)
+            if (_carController.bot) return;
 
         switch (vfxName)
         {
