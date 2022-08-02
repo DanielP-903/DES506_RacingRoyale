@@ -33,7 +33,6 @@ public class WallFollow : MonoBehaviour
     private float _tValueMax;
 
     private bool _begin = false;
-    private bool _end = false;
     
     private GameObject _playerRef;
     private CarController _carController;
@@ -96,7 +95,7 @@ public class WallFollow : MonoBehaviour
             _wallOMeterPlayer.transform.localPosition = newValues;
         }
 
-        if (_begin && !_end)
+        if (_begin)
         {
             _tValue += Time.deltaTime * chaseSpeed;
             _tValuePersistant += Time.deltaTime * chaseSpeed;
@@ -109,7 +108,7 @@ public class WallFollow : MonoBehaviour
             
             if (hasFoundPlayer && _playerRef)
             {
-                _wallOMeterSlider.value = Mathf.Lerp(1, 0, (_tValueMax - _tValuePersistant)/_tValueMax);
+                _wallOMeterSlider.value = Mathf.Lerp(_tValueMax, 0, (_tValueMax - _tValuePersistant)/_tValueMax);
             }
             
             transform.position = newPosition;
@@ -126,13 +125,12 @@ public class WallFollow : MonoBehaviour
                 routeNumber += 3;
                 if (routeNumber >= _bezierCurveGenerator.controlPoints.Count - 1)
                 {
-                    _end = true;
-                    // routeNumber = 0;
-                    // _tValuePersistant = 0.0f;
+                    routeNumber = 0;
+                    _tValuePersistant = 0.0f;
                 }
             }
         }
-        else if (!_end)
+        else
         {
             _startDelayTimer = _startDelayTimer <= 0 ? 0 : _startDelayTimer - Time.deltaTime;
             if (_startDelayTimer < 1)
@@ -142,6 +140,7 @@ public class WallFollow : MonoBehaviour
                 _begin = true;
             }
         }
+
     }
 
     private IEnumerator RemoveDelayText()
