@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: CathoderTry1
   m_Shader: {fileID: 4800000, guid: 912853a34ef79c445a00ce06e28673ff, type: 3}
-  m_ShaderKeywords: _COLORBLEED_ON _DISPLAY_COLOR _OVERSCAN_ON _SOURCERES_ON
+  m_ShaderKeywords: _COLORBLEED_ON _DISPLAY_COLOR _OVERSCAN_ON _PIP_ON _SOURCERES_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -107,19 +107,19 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _Height: 638
+    - _Height: 656
     - _Intensity: 1.84
     - _Lcd: 0
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Overlay: 0
-    - _OverlayAlpha: 0
+    - _OverlayAlpha: 1
     - _Overscan: 1
     - _OverscanX: 0
     - _OverscanY: 0
     - _Parallax: 0.005
-    - _PiP: 0
-    - _PiPAlpha: 0.094
+    - _PiP: 1
+    - _PiPAlpha: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _Smoothness: 0.5

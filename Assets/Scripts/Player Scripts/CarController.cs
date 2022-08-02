@@ -852,7 +852,7 @@ public class CarController : MonoBehaviour
         {
             // Hit elimination wall
             Debug.Log("In the Elimination Wall");
-            _vfxHandler.SetCameraProfile(true);
+            _vfxHandler.SetInZone(true);
         }
 
         if (other.transform.CompareTag("ResetZone"))
@@ -868,7 +868,7 @@ public class CarController : MonoBehaviour
         {
             // Hit elimination wall
             Debug.Log("Exit the Elimination Wall");
-            _vfxHandler.SetCameraProfile(false);
+            _vfxHandler.SetInZone(false);
         }
     }
 
