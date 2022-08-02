@@ -401,26 +401,7 @@ public class PlayerPowerups : MonoBehaviour
          _audioManager.PlaySound("WarpPortal");
      }
 
-     private void DetectPunch()
-     {
-         // Reset line between them
-         Vector3[] positions = new Vector3[2];
-         positions[0] = transform.position + transform.forward;
-         positions[1] = transform.position + transform.forward;
-            
-         _punchLine.SetPositions(positions);
-         _punchGlove.transform.position = positions[1];
-         _photonView.RPC("UpdatePunchingGlove", RpcTarget.All, _photonView.ViewID, positions);
-
-         _punching = false;
-         _punchObject.SetActive(false);
-         _punchGlove.SetActive(false);
-         _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.PunchingGlove, true);
-
-         StartCoroutine(DelayRemoveIcon());
-         //_powerupIconMask.fillAmount = 0;
-         _audioManager.PlaySound("PunchingGlove");
-     }
+ 
      
      private void PunchingGlove()
      {
@@ -699,7 +680,8 @@ public class PlayerPowerups : MonoBehaviour
              _rigidbody.velocity = -(direction.normalized * punchingForce); //Time.fixedDeltaTime * 50;
              //_rigidbody.AddForce(-(direction.normalized * punchingForce)); 
              Debug.Log("Ouch!! Hit with velocity: " + _rigidbody.velocity);
-             collider.transform.parent.GetComponent<PlayerPowerups>().DetectPunch();
+             //collider.transform.parent.gameObject.GetComponent<PlayerPowerups>().DetectPunch();
+             _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.PunchingGlove, true);
              _vfxHandler.SpawnVFXAtPosition("PunchImpact", transform.position, 1,true);
              _audioManager.PlaySound("PunchingGlove");
          }
