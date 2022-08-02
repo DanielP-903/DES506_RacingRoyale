@@ -32831,6 +32831,9 @@ MonoBehaviour:
   startDelay: 4
   chaseSpeed: 0.1
   startDelayText: {fileID: 0}
+  timeUntilDissolve: 10
+  dissolveTime: 3
+  colliderDissolveThreshold: 0.5
 --- !u!65 &777962320
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -58245,7 +58248,7 @@ PrefabInstance:
       objectReference: {fileID: 1604882999}
     - target: {fileID: 1118674505751619611, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
       propertyPath: accelerationForce
-      value: 15
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1978116585297259193, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
       propertyPath: debugMode

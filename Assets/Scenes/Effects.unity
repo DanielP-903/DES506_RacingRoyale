@@ -6781,16 +6781,26 @@ MonoBehaviour:
   motorForce: 2500
   brakeTorque: 2000
   maxSteeringAngle: 30
+  maxBackWheelSteeringAngle: 0
   terminalVelocity: 120
   axles:
   - leftWheel: {fileID: 8756000731361754118}
     rightWheel: {fileID: 3643314323773911831}
     motor: 1
     steering: 1
+    isFrontWheel: 0
   - leftWheel: {fileID: 3643314325313645550}
     rightWheel: {fileID: 3643314325577034096}
     motor: 0
     steering: 0
+    isFrontWheel: 0
+  wheelResetSpeed: 50
+  wheelTurningSpeed: 1
+  maxTurnAmount: 0.3
+  forwardMultiplier: 1
+  backwardMultiplier: 0.5
+  idleBrakeForce: 8000
+  driftSmokeThreshold: 20
   pushForceAmount: 700
   accelerationForce: 5
   boostForceAmount: 15
@@ -6807,6 +6817,7 @@ MonoBehaviour:
   checkpoints: {fileID: 0}
   flybyCam: {fileID: 0}
   audioManager: {fileID: 0}
+  flybyDelay: 0.01
   debug: 0
   bot: 0
 --- !u!4 &3643314324163680367
@@ -7149,6 +7160,63 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1118674505751619610, guid: 23177890d672c3b4a94393ee6b4044b3, type: 3}
   m_PrefabInstance: {fileID: 5652394359645816181}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &4892527302496023088
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 32505497539385995, guid: db8f5338480f88c40a1bacacc39e106a, type: 3}
+      propertyPath: m_Name
+      value: SmokeParticleSys
+      objectReference: {fileID: 0}
+    - target: {fileID: 2991117166659822522, guid: db8f5338480f88c40a1bacacc39e106a, type: 3}
+      propertyPath: m_RootOrder
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 2991117166659822522, guid: db8f5338480f88c40a1bacacc39e106a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 2991117166659822522, guid: db8f5338480f88c40a1bacacc39e106a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.336
+      objectReference: {fileID: 0}
+    - target: {fileID: 2991117166659822522, guid: db8f5338480f88c40a1bacacc39e106a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2991117166659822522, guid: db8f5338480f88c40a1bacacc39e106a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 2991117166659822522, guid: db8f5338480f88c40a1bacacc39e106a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 2991117166659822522, guid: db8f5338480f88c40a1bacacc39e106a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2991117166659822522, guid: db8f5338480f88c40a1bacacc39e106a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2991117166659822522, guid: db8f5338480f88c40a1bacacc39e106a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 2991117166659822522, guid: db8f5338480f88c40a1bacacc39e106a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2991117166659822522, guid: db8f5338480f88c40a1bacacc39e106a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: db8f5338480f88c40a1bacacc39e106a, type: 3}
 --- !u!1001 &5011151025633690798
 PrefabInstance:
   m_ObjectHideFlags: 0

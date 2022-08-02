@@ -11,19 +11,9 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4c05f01c27d1415bafcda4c1ab7160e038a00/53/a723232a/NonAllocDictionary`2.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4c05f01c27d1415bafcda4c1ab7160e038a00/d1/ec2eba71/PhotonPeer.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/CarController.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/CarVFXHandler.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/CheckpointSystem.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/DialRotator.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/GameManager.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Launcher.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/PlayerHUDController.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/PlayerManager.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/PlayerNameInputField.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/PlayerPowerups.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/PowerupSpawner.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Player Scripts/AudioManager.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Player Scripts/BotPoint.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.postprocessing@3.0.3/PostProcessing/Runtime/Effects/DepthOfField.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.universal@10.3.2/Runtime/ShadowUtils.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.visualeffectgraph@10.3.2/Editor/Models/VFXGraph.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
@@ -55,6 +45,11 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="reset" />
+    </option>
+  </component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Standalone Player" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="$USER_HOME$/Downloads\RacingRoyale.exe" />
@@ -82,10 +77,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="8556">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="8556" />
+      <option name="pid" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -193,7 +188,15 @@
       <workItem from="1658745577828" duration="3396000" />
       <workItem from="1658756192118" duration="595000" />
       <workItem from="1658824196888" duration="20731000" />
-      <workItem from="1658913852781" duration="6174000" />
+      <workItem from="1658909892419" duration="1292000" />
+      <workItem from="1658912248584" duration="1054000" />
+      <workItem from="1658918148191" duration="4435000" />
+      <workItem from="1658929042278" duration="1197000" />
+      <workItem from="1658998481808" duration="11227000" />
+      <workItem from="1659082032940" duration="1030000" />
+      <workItem from="1659083092408" duration="16473000" />
+      <workItem from="1659341867462" duration="12837000" />
+      <workItem from="1659430158689" duration="5209000" />
     </task>
     <servers />
   </component>
@@ -221,17 +224,23 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/ServerSyncScript.cs</url>
-          <line>130</line>
-          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\ServerSyncScript.cs" initialLine="130" containingFunctionPresentation="method 'PlayerHit'">
+          <url>file://$PROJECT_DIR$/Assets/Photon/PhotonUnityNetworking/Code/PhotonNetworkPart.cs</url>
+          <line>432</line>
+          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Photon\PhotonUnityNetworking\Code\PhotonNetworkPart.cs" initialLine="430" containingFunctionPresentation="method 'ExecuteRpc'" />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/Player Scripts/CarVFXHandler.cs</url>
+          <line>100</line>
+          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\Player Scripts\CarVFXHandler.cs" initialLine="81" containingFunctionPresentation="method 'ActivateBoostEffect'">
             <startOffsets>
-              <option value="4186" />
+              <option value="3058" />
             </startOffsets>
             <endOffsets>
-              <option value="4237" />
+              <option value="3059" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="4" />
+          <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
