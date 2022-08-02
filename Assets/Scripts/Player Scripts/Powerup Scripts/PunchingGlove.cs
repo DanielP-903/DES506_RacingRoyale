@@ -5,7 +5,7 @@ using UnityEngine;
 
     public class PunchingGlove : MonoBehaviour
     {
-        private GameObject _playerRef;
+        public GameObject _playerRef;
         private PlayerPowerups _playerPowerups;
         private bool _hasFoundPlayer = false;
 

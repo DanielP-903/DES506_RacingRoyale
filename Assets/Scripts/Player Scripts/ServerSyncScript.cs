@@ -133,7 +133,7 @@ public class ServerSyncScript : MonoBehaviour
             
         PhotonView.Find(id).transform.GetChild(2).GetComponent<LineRenderer>().SetPositions(positions);
         PhotonView.Find(id).transform.GetChild(3).transform.position = positions[1];
-        PhotonView.Find(id).gameObject.GetComponent<CarVFXHandler>().PlayVFXAtPosition("Impact",hitPosition);
+        PhotonView.Find(id).gameObject.GetComponent<CarVFXHandler>().PlayVFXAtPosition("PunchImpact",hitPosition);
         
     }
     

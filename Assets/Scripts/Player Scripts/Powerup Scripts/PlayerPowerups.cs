@@ -339,7 +339,7 @@ public class PlayerPowerups : MonoBehaviour
                 _airBlasting = false;
                 _airBlastTimer = 0;
                 StartCoroutine(DelayRemoveIcon());
-                _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.AirBlast, false, transform.position);
+                _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.AirBlast, false);
             }
         }
 
@@ -681,7 +681,10 @@ public class PlayerPowerups : MonoBehaviour
              //_rigidbody.AddForce(-(direction.normalized * punchingForce)); 
              Debug.Log("Ouch!! Hit with velocity: " + _rigidbody.velocity);
              //collider.transform.parent.gameObject.GetComponent<PlayerPowerups>().DetectPunch();
-             _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.PunchingGlove);
+             _photonView.RPC("PunchingGloveHit", RpcTarget.All, collider.transform.parent.gameObject.GetComponent<PhotonView>().ViewID,
+                 collider.transform.position);
+             _photonView.RPC("Powerup", RpcTarget.All, collider.transform.parent.gameObject.GetComponent<PhotonView>().ViewID,
+                 PowerupType.PunchingGlove, false);
              _vfxHandler.SpawnVFXAtPosition("PunchImpact", transform.position, 1,true);
              _audioManager.PlaySound("PunchingGlove");
          }
