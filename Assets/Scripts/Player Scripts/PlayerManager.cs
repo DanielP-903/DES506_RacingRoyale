@@ -468,7 +468,7 @@ public class PlayerManager : MonoBehaviour
             {
                 int counter = 0;
                 int randBot = Random.Range(0, _gm.GetMaxBots());
-                while (bots[randBot] == null && counter < 100)
+                while (bots[randBot] && counter < 100)
                 {
                     counter++;
                     randBot = Random.Range(0, _gm.GetMaxBots());

@@ -971,7 +971,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 if (PhotonNetwork.CurrentRoom.IsOpen &&
                     (PhotonNetwork.ServerTimestamp - hit) / 1000f > waitingTime)
                 {
-                    _totalPlayers = PhotonNetwork.CurrentRoom.Players.Count;
+                    _totalPlayers = PhotonNetwork.CurrentRoom.PlayerCount;
                     //Debug.Log("TotalPlayers: "+_totalPlayers);
 
                     progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(11).gameObject;
