@@ -28,13 +28,15 @@ public class CarController : MonoBehaviour
 
     #region Editable-Vars
 
-    [Header("Car Driving Physics")] [Tooltip("Object to represent transform of centre of mass")]
+    [Header("Car Driving Physics")] 
+    [Tooltip("Object to represent transform of centre of mass")]
     public GameObject centreOfMass;
 
     [Tooltip("Amount of force applied to the motor wheels")]
     public float motorForce;
 
-    [Tooltip("Braking force")] public float brakeTorque = 1000;
+    [Tooltip("Braking force")] 
+    public float brakeTorque = 1000;
 
     [Tooltip("Maximum angle for steering")]
     public float maxSteeringAngle;
@@ -54,7 +56,8 @@ public class CarController : MonoBehaviour
     [Tooltip("Physical wheel turning speed")]
     public float wheelTurningSpeed = 1;
 
-    [Tooltip("Maximum turn percentage")] public float maxTurnAmount = 0.3f;
+    [Tooltip("Maximum turn percentage")] 
+    public float maxTurnAmount = 0.3f;
 
     [Tooltip("Multiplier for forward acceleration")]
     public float forwardMultiplier = 1;
@@ -62,17 +65,25 @@ public class CarController : MonoBehaviour
     [Tooltip("Multiplier for backward acceleration")]
     public float backwardMultiplier = 0.5f;
 
-    [Tooltip("Idle brake force")] public float idleBrakeForce = 8000;
+    [Tooltip("Idle brake force")]
+     public float idleBrakeForce = 8000;
 
     [Tooltip("Drift smoke VFX speed threshold")]
     public float driftSmokeThreshold = 20;
 
-
-    [Header("Forces")] [Tooltip("Jumping force")]
+    [Tooltip("Max forward turning angle in the air")]
+    public float maxAirTurnAngle = 180;    
+    
+        
+    [Header("Forces")] 
+    [Tooltip("Jumping force")]
     public float pushForceAmount = 5.0f;
 
-    [Tooltip("Main forward speed force")] public float accelerationForce = 5.0f;
-    [Tooltip("Boost force")] public float boostForceAmount = 5.0f;
+    [Tooltip("Main forward speed force")] 
+    public float accelerationForce = 5.0f;
+    
+    [Tooltip("Boost force")] 
+    public float boostForceAmount = 5.0f;
 
     [Tooltip("Drifting force (might not be in use currently)")]
     public float driftForceAmount = 3000.0f;
@@ -80,30 +91,45 @@ public class CarController : MonoBehaviour
     [Tooltip("Max number of boosts allowed in the air")]
     public int maxBoostsInAir = 1;
 
-    [Header("Environmental Pads")] [Tooltip("Jumping pad force")]
+
+    [Header("Environmental Pads")] 
+    [Tooltip("Jumping pad force")]
     public float jumpPadForce = 5.0f;
 
-    [Tooltip("Boost pad force")] public float boostPadForce = 5.0f;
+    [Tooltip("Boost pad force")] 
+    public float boostPadForce = 5.0f;
 
-    [Header("Collisions")] [Tooltip("Collision force applied when bouncing off of players and objects")]
+
+    [Header("Collisions")] 
+    [Tooltip("Collision force applied when bouncing off of players and objects")]
     public float bounciness = 100.0f;
 
-    [Header("Cooldowns (in seconds)")] [Tooltip("Jumping cooldown time")]
+
+    [Header("Cooldowns (in seconds)")] 
+    [Tooltip("Jumping cooldown time")]
     public float jumpCooldown = 2.0f;
 
-    [Tooltip("Boosting cooldown time")] public float boostCooldown = 2.0f;
-    [Tooltip("Reset cooldown time")] public float resetCooldown = 2.0f;
-    [Tooltip("Jump pad cooldown time")] public float padCooldown = 2.0f;
+    [Tooltip("Boosting cooldown time")]
+     public float boostCooldown = 2.0f;
+     
+    [Tooltip("Reset cooldown time")] 
+    public float resetCooldown = 2.0f;
+    
+    [Tooltip("Jump pad cooldown time")] 
+    public float padCooldown = 2.0f;
 
-    [Header("Other")] public GameObject minimapArrow;
+    [Header("Other")] 
+    public GameObject minimapArrow;
     public CheckpointSystem checkpoints;
     public Camera flybyCam;
     public AudioManager audioManager;
     public float flybyDelay = 0.01f;
 
-    [Header("DEBUG MODE")] public bool debug;
+    [Header("DEBUG MODE")] 
+    public bool debug;
 
-    [Header("BOT MODE")] public bool bot;
+    [Header("BOT MODE")] 
+    public bool bot;
 
     #endregion
 
@@ -123,6 +149,7 @@ public class CarController : MonoBehaviour
     private bool _reset;
     private bool _activatePowerup;
     private bool _grounded;
+    private bool _groundedPreviousFrame;
     private bool _onOil;
     private bool _onOilPreviousFrame;
     private bool _passedFinishLine;
@@ -143,8 +170,9 @@ public class CarController : MonoBehaviour
     private float _airTime;
     private float _turnAmount = 0.3f;
     private float _hornTimer;
+    private float _currentAirAngle;
     private Vector3 _savedOilVelocity;
-
+    private Vector3 _groundForward;
     #endregion
 
     #region Component-References
@@ -446,6 +474,13 @@ public class CarController : MonoBehaviour
 
         if (_airDown) _rigidbody.AddTorque(-transform.right / 15, ForceMode.VelocityChange);
         if (_airUp) _rigidbody.AddTorque(transform.right / 15, ForceMode.VelocityChange);
+        if (Vector3.Angle(transform.forward, _groundForward) > maxAirTurnAngle)
+        {
+            //_rigidbody.angularVelocity = new Vector3(_rigidbody.angularVelocity.x,_rigidbody.angularVelocity.y,_rigidbody.angularVelocity.z);
+            //_rigidbody.angularVelocity = new Vector3(_rigidbody.angularVelocity.x,_rigidbody.angularVelocity.y, 0);
+            _rigidbody.angularVelocity = new Vector3(0,_rigidbody.angularVelocity.y, 0);
+        }
+        
         if (_moveLeft) _rigidbody.AddTorque(-transform.up / 60, ForceMode.VelocityChange);
         if (_moveRight) _rigidbody.AddTorque(transform.up / 60, ForceMode.VelocityChange);
         if (_airLeft) _rigidbody.AddTorque(transform.forward / 15, ForceMode.VelocityChange);
@@ -595,6 +630,8 @@ public class CarController : MonoBehaviour
                 if (!bot) audioManager.StopSound("TireSqueelLoop");
             }
         }
+        
+        
     }
 
     #endregion
@@ -671,7 +708,15 @@ public class CarController : MonoBehaviour
         Debug.DrawRay(currentWheel.transform.position, Vector3.up * currentRpm / 100, Color.green);
         Debug.DrawRay(currentWheel.transform.position, -currentWheel.transform.parent.forward * currentBrake / 100,
             Color.red);
+        Debug.DrawRay(currentWheel.transform.position, _groundForward * currentBrake / 100,
+            Color.magenta);
+        Debug.DrawRay(currentWheel.transform.position, currentWheel.transform.parent.forward * currentBrake / 100,
+            Color.yellow);
+        // if (Vector3.Angle(transform.forward, _groundForward) > maxAirTurnAngle)
+        // {
+        // }
 
+        
         _hitDetect = Physics.BoxCast(transform.position + transform.up, transform.localScale, -transform.up, out _hit,
             transform.rotation, 1);
         _grounded = _hitDetect;
@@ -689,6 +734,12 @@ public class CarController : MonoBehaviour
             }
         }
 
+        if (_grounded != _groundedPreviousFrame)
+        {
+            // Just left the ground!
+            _groundForward = transform.forward;
+        }
+
 
         _resetDelay = _resetDelay <= 0 ? 0 : _resetDelay - Time.deltaTime;
         if (_reset && _resetDelay <= 0)
@@ -698,7 +749,7 @@ public class CarController : MonoBehaviour
         }
 
         _onOilPreviousFrame = _onOil;
-
+        _groundedPreviousFrame = _grounded;
         if (!_grounded)
         {
             _airTime += Time.deltaTime;
