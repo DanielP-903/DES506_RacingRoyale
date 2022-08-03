@@ -6058,6 +6058,7 @@ MonoBehaviour:
   backwardMultiplier: 0.5
   idleBrakeForce: 8000
   driftSmokeThreshold: 40
+  maxAirTurnAngle: 120
   pushForceAmount: 900
   accelerationForce: 5
   boostForceAmount: 15
@@ -6565,7 +6566,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -5791893445727110642, guid: d6643c6f6427be04c8e16666c13b4bce, type: 2}
-  m_audioClip: {fileID: 8300000, guid: 3d848febd91a5e946b08600b779cef74, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 5c1bd7ff99cccb34290a03afeb3b852a, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -53391,6 +53392,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af481200c0b47ab45bd58ca5559689f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerRef: {fileID: 0}
 --- !u!114 &3636215852468938975
 MonoBehaviour:
   m_ObjectHideFlags: 0
