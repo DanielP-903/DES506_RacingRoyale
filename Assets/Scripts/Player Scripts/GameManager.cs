@@ -996,17 +996,18 @@ public class GameManager : MonoBehaviourPunCallbacks
             case "Stage1":
                 //_timer.gameObject.SetActive(false);
                 TryGetFinishedPlayers(out playersCompleted, _stage);
-                if (Mathf.Ceil((float)_totalPlayers / 2) - playersCompleted == 1)
+                TryGetElimPlayers(out elimPlayers);
+                if (Mathf.Min(Mathf.Ceil((float)_totalPlayers / 2) - playersCompleted, PhotonNetwork.CurrentRoom.PlayerCount-playersCompleted) == 1)
                 {
                     _placeCounter.text = "1 place left!";
                 }
                 else
                 {
-                    _placeCounter.text = Mathf.Ceil((float)_totalPlayers / 2) - playersCompleted + " places left!";
+                    _placeCounter.text = Mathf.Min(Mathf.Ceil((float)_totalPlayers / 2) - playersCompleted, PhotonNetwork.CurrentRoom.PlayerCount-playersCompleted) - playersCompleted + " places left!";
                 }
                 //Debug.Log("Name: "+SceneManager.GetActiveScene().name + " Stage: " + _stage + " Players Finished: "+playersCompleted+" Goal: " + (_totalPlayers/2));
 
-                if (_stage == 1 && playersCompleted >= (float)_totalPlayers / 2)
+                if (_stage == 1 && (playersCompleted >= (float)_totalPlayers / 2 || playersCompleted + elimPlayers >= _totalPlayers))
                 {
                     _stage = 2;
                     SetFinishedPlayers(0, _stage);
