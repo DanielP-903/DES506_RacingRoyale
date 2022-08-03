@@ -715,13 +715,29 @@ public class CarController : MonoBehaviour
         // if (Vector3.Angle(transform.forward, _groundForward) > maxAirTurnAngle)
         // {
         // }
-
         
         _hitDetect = Physics.BoxCast(transform.position + transform.up, transform.localScale, -transform.up, out _hit,
             transform.rotation, 1);
-        if (!_hit.collider.isTrigger)
+        _grounded = _hitDetect;
+        if (_hit.collider && !_hit.collider.isTrigger)
         {
-            _grounded = _hitDetect;
+            if (_grounded != _groundedPreviousFrame)
+            {
+                if (!_groundedPreviousFrame)
+                {
+                    if (_airTime > 1)
+                    {
+                        _vfxHandler.SpawnVFXAtPosition("GroundImpact", transform.position + (transform.forward / 2) - (transform.up / 1.5f), 2, false);
+                        if (!bot)
+                        {
+                            _impulseSource.GenerateImpulseAt(transform.position + Vector3.down, new Vector3(0, -_airTime, 0));
+                            audioManager.PlaySound("CarLand");
+                        }
+
+                        _airTime = 0;
+                    }
+                }
+            }
         } 
 
         if (_hit.transform != null)
@@ -741,21 +757,6 @@ public class CarController : MonoBehaviour
         {
             // Just left the ground!
             _groundForward = transform.forward;
-
-            if (!_groundedPreviousFrame)
-            {
-                if (_airTime > 1)
-                {
-                    _vfxHandler.SpawnVFXAtPosition("GroundImpact", transform.position + (transform.forward / 2) - (transform.up / 1.5f), 2, false);
-                    if (!bot)
-                    {
-                        _impulseSource.GenerateImpulseAt(transform.position + Vector3.down, new Vector3(0, -_airTime, 0));
-                        audioManager.PlaySound("CarLand");
-                    }
-
-                    _airTime = 0;
-                }
-            }
         }
 
 
