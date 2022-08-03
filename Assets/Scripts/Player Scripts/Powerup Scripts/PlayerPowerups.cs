@@ -276,7 +276,7 @@ public class PlayerPowerups : MonoBehaviour
                 _grappling = false;
                 _grappleLineObject.SetActive(false);
                 StartCoroutine(DelayRemoveIcon());
-                _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.GrapplingHook, false, transform.position);
+                _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.GrapplingHook, false);
 
             }
         }
@@ -292,7 +292,7 @@ public class PlayerPowerups : MonoBehaviour
             if (!_wallObject.activeInHierarchy)
             {
                 _wallObject.SetActive(true);
-                _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.BouncyWallShield, true, transform.position);
+                _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.BouncyWallShield, true);
             }
         }
         else
@@ -302,7 +302,7 @@ public class PlayerPowerups : MonoBehaviour
                 //_powerupIconMask.fillAmount = 0;
                 _wallObject.SetActive(false);
                 StartCoroutine(DelayRemoveIcon());
-                _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.BouncyWallShield, false, transform.position);
+                _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.BouncyWallShield, false);
             }
         }
 
@@ -312,7 +312,7 @@ public class PlayerPowerups : MonoBehaviour
             if (!_warpObject.activeInHierarchy)
             {
                 _warpObject.SetActive(true);
-                _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.WarpPortal, true, transform.position);
+                _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.WarpPortal, true);
             }
         }
         else
@@ -322,7 +322,7 @@ public class PlayerPowerups : MonoBehaviour
                 //_powerupIconMask.fillAmount = 0;
                 _warpObject.SetActive(false);
                 StartCoroutine(DelayRemoveIcon());
-                _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.WarpPortal, false, transform.position);
+                _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.WarpPortal, false);
             }
         }
 

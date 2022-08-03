@@ -416,13 +416,13 @@ public class PlayerManager : MonoBehaviour
 
     public void GoToSpawn(bool pressedButton = false)
     {
-        if (pressedButton && !_spawnLocation.name.Contains("SpawnLocation") &&
+        if (pressedButton && _spawnLocation && !_spawnLocation.name.Contains("SpawnLocation") &&
             _cs.GetCheckpointElimination(_spawnLocation.parent.gameObject))
         {
             _messageText.color = Color.white;
             StartCoroutine(fadeMessage());
         }
-        else if (!_spawnLocation.name.Contains("SpawnLocation") &&
+        else if (_spawnLocation && !_spawnLocation.name.Contains("SpawnLocation") &&
                  _cs.GetCheckpointElimination(_spawnLocation.parent.gameObject))
         {
             _cc.audioManager.PlaySound("CarEliminatedByWall");
