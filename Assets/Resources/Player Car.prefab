@@ -6058,6 +6058,7 @@ MonoBehaviour:
   backwardMultiplier: 0.5
   idleBrakeForce: 8000
   driftSmokeThreshold: 40
+  maxAirTurnAngle: 120
   pushForceAmount: 900
   accelerationForce: 5
   boostForceAmount: 15
@@ -53391,6 +53392,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af481200c0b47ab45bd58ca5559689f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerRef: {fileID: 0}
 --- !u!114 &3636215852468938975
 MonoBehaviour:
   m_ObjectHideFlags: 0
