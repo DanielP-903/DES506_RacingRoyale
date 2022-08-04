@@ -807,6 +807,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             mixer.SetFloat("Sound", PlayerPrefs.GetFloat("SoundVol"));
         }*/
 
+            _totalPlayers = (int)PhotonNetwork.CurrentRoom.CustomProperties["TotalPlayerCount"];
             _totalBots = 0;
 
             // progressPanel = GameObject.FindGameObjectWithTag("LoadingBar");
@@ -971,7 +972,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 if (PhotonNetwork.CurrentRoom.IsOpen &&
                     (PhotonNetwork.ServerTimestamp - hit) / 1000f > waitingTime)
                 {
-                    _totalPlayers = PhotonNetwork.CurrentRoom.PlayerCount;
+                    //_totalPlayers = PhotonNetwork.CurrentRoom.PlayerCount;
                     //Debug.Log("TotalPlayers: "+_totalPlayers);
 
                     progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(11).gameObject;
@@ -979,6 +980,9 @@ public class GameManager : MonoBehaviourPunCallbacks
                     StartCoroutine(LoadingBar());
                     if (PhotonNetwork.IsMasterClient)
                     {
+                        ExitGames.Client.Photon.Hashtable hash = new ExitGames.Client.Photon.Hashtable();
+                        hash.Add("TotalPlayerCount", (int)PhotonNetwork.CurrentRoom.PlayerCount);
+                        PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
                         PhotonNetwork.CurrentRoom.IsOpen = false;
                         LoadArena("Stage1");
                     }
