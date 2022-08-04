@@ -486,7 +486,7 @@ public class PlayerManager : MonoBehaviour
                     randBot = Random.Range(0, _gm.GetMaxBots());
                 }
                 BotCarController bcc = bots[randBot].GetComponent<BotCarController>();
-                bcc.setSpawn(_spawnLocation);
+                bcc.setSpawn(_spawnLocation.parent.GetChild(i+1));
                 bcc.RandomSpawn();
             }
         }
