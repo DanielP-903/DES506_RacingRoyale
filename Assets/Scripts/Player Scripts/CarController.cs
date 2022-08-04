@@ -918,7 +918,7 @@ public class CarController : MonoBehaviour
         if (other.transform.CompareTag("EliminationZone") && !bot)
         {
             // Hit elimination wall
-            Debug.Log("In the Elimination Wall");
+            //Debug.Log("In the Elimination Wall");
             _vfxHandler.SetCameraProfile(true);
         }
 

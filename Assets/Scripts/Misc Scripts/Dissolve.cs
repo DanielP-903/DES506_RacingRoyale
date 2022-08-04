@@ -82,7 +82,7 @@ public class Dissolve : MonoBehaviour
         {
             if (isCheckpoint)
             {
-                Debug.Log("Eliminated Checkpoint");
+                //Debug.Log("Eliminated Checkpoint");
                 _cs.EliminateCheckpoint(this.gameObject);
             }
             else

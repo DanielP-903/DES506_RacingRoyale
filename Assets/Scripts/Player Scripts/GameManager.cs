@@ -136,21 +136,21 @@ public class GameManager : MonoBehaviourPunCallbacks
             };
             _photonView.Owner.SetCustomProperties(props);
 
-            GameManager.TryGetElimPlayers(out int num);
+            TryGetElimPlayers(out int num);
             int elimPosition = GetTotalPlayers() - num;
 
             if (elimPosition < 5)
             {
                 //Debug.Log("Finished at:" +elimPosition);
                 //GameManager.SetTop3Players(_photonView.Owner.NickName, elimPosition);
-                GameManager.SetTopPlayers(_photonView.Owner, elimPosition);
+                SetTopPlayers(_photonView.Owner, elimPosition);
                 //string t3;
                 //GameManager.TryGetTop3Players(out t3, elimPosition);
                 //Debug.Log(t3);
             }
 
             num = num + 1;
-            GameManager.SetElimPlayers(num);
+            SetElimPlayers(num);
             //EliminatePlayer(elimPosition);
         }
 
@@ -766,7 +766,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("AL: "+al.gameObject);
     }*/
-        Debug.Log("SetUp was called");
+        //Debug.Log("SetUp was called");
         if (this.gameObject != null)
         {
             //_photonView = attachedPlayer.GetComponent<PhotonView>();
