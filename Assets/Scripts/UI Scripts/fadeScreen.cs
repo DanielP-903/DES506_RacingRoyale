@@ -32,6 +32,10 @@ public class fadeScreen : MonoBehaviour
 
     IEnumerator FadeIn()
     {
+        if (PlayerPrefs.HasKey("MasterVol"))
+        {
+            mixer.SetFloat("Master", 0);
+        }
         fadeScreenUI.color = new Color(fadeScreenUI.color.r, fadeScreenUI.color.g, fadeScreenUI.color.b, 1);
         //Debug.Log("Fading In");
         fadedOut = false;
@@ -57,6 +61,18 @@ public class fadeScreen : MonoBehaviour
                 mixer.GetFloat("Master", out vol);
             }
             yield return new WaitForFixedUpdate();
+        }
+        if (PlayerPrefs.HasKey("MasterVol"))
+        {
+            mixer.SetFloat("Master", PlayerPrefs.GetFloat("MasterVol"));
+        }
+        if (PlayerPrefs.HasKey("MusicVol"))
+        {
+            mixer.SetFloat("Music", PlayerPrefs.GetFloat("MusicVol"));
+        }
+        if (PlayerPrefs.HasKey("SoundVol"))
+        {
+            mixer.SetFloat("Sound", PlayerPrefs.GetFloat("SoundVol"));
         }
     }
     

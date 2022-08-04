@@ -626,7 +626,7 @@ public class PlayerManager : MonoBehaviour
                 PhotonNetwork.CurrentRoom.PlayerCount);
             counter = 0;
             //&& counter < 100000
-            while (!allPlayersReady && counter < 300)
+            while (!allPlayersReady && counter < 10)
             {
                 allPlayersReady = true;
                 //Debug.Log("Running While Loop");
@@ -659,16 +659,32 @@ public class PlayerManager : MonoBehaviour
             
             if (_photonView.Owner.IsMasterClient) 
             {
-                CountdownTimer.SetStartTime();
+                ExitGames.Client.Photon.Hashtable hash = new ExitGames.Client.Photon.Hashtable();
+                hash.Add(("Timer"+_gm.GetStageNum()), (int)PhotonNetwork.ServerTimestamp);
+                PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
             }
             //yield return new WaitUntil(() => allPlayersReady);
             startDelayText.color = Color.clear; // Changed to clear as rubics are in
-            CountdownTimer.TryGetStartTime(out var hit);
+            Debug.Log("A: "+PhotonNetwork.CurrentRoom);
+            Debug.Log("B: "+"Timer"+_gm.GetStageNum());
+            Debug.Log("C: "+PhotonNetwork.CurrentRoom.CustomProperties[("Timer"+_gm.GetStageNum())]);
+            //int notZero = (int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer" + _gm.GetStageNum())];
+            bool notNull = (PhotonNetwork.CurrentRoom.CustomProperties[("Timer" + _gm.GetStageNum())] == null);
+            while (notNull)
+            {
+                notNull = (PhotonNetwork.CurrentRoom.CustomProperties[("Timer" + _gm.GetStageNum())] == null);
+                yield return new WaitForFixedUpdate();
+            }
+            //yield return new WaitUntil(() => ((int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer"+_gm.GetStageNum())] != null);
+            int hit = (int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer"+_gm.GetStageNum())];
+            object hitFromProps;
+            PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(("Timer" + _gm.GetStageNum()), out hitFromProps);
+            hit = (int)hitFromProps;
             float timeLeft = _gm.GetStartDelay() - ((PhotonNetwork.ServerTimestamp - hit) / 1000f);
             while (timeLeft > 0)
             {
                 startDelayText.text = timeLeft.ToString("F2");
-                CountdownTimer.TryGetStartTime(out hit);
+                hit = (int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer"+_gm.GetStageNum())];
                 timeLeft = _gm.GetStartDelay() - ((PhotonNetwork.ServerTimestamp - hit) / 1000f);
                 timer = timeLeft;
                 //yield return new WaitForFixedUpdate();
