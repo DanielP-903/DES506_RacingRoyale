@@ -141,6 +141,7 @@ public class WallFollow : MonoBehaviour
             }
         }
 
+        
     }
 
     private IEnumerator RemoveDelayText()
