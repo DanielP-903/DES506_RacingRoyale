@@ -1,6 +1,7 @@
 using System.Collections;
 using Cinemachine;
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
@@ -647,13 +648,24 @@ public class PlayerManager : MonoBehaviour
                 yield return new WaitForSeconds(0.1f);
             }
 
+            if (counter >= 100)
+            {
+                Debug.LogError("Counter Broke Chain");
+            }
+            
+            if (_photonView.Owner.IsMasterClient) 
+            {
+                CountdownTimer.SetStartTime();
+            }
             //yield return new WaitUntil(() => allPlayersReady);
             startDelayText.color = Color.clear; // Changed to clear as rubics are in
-            float timeLeft = _gm.GetStartDelay();
+            CountdownTimer.TryGetStartTime(out var hit);
+            float timeLeft = _gm.GetStartDelay() - ((PhotonNetwork.ServerTimestamp - hit) / 1000f);
             while (timeLeft > 0)
             {
                 startDelayText.text = timeLeft.ToString("F2");
-                timeLeft -= 0.02f;
+                CountdownTimer.TryGetStartTime(out hit);
+                timeLeft = _gm.GetStartDelay() - ((PhotonNetwork.ServerTimestamp - hit) / 1000f);
                 timer = timeLeft;
                 yield return new WaitForFixedUpdate();
             }
