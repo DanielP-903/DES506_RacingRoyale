@@ -543,6 +543,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     IEnumerator loadingArena(string arenaName)
     {
+        yield return new WaitForSeconds(5f);
         _photonView.RPC("fadeOut", RpcTarget.AllViaServer);
         yield return new WaitForSeconds(2f);
         if (!PhotonNetwork.IsMasterClient)
