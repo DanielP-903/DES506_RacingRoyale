@@ -472,8 +472,8 @@ public class CarController : MonoBehaviour
     {
         if (_grounded) return;
 
-        if (_airDown) _rigidbody.AddTorque(-transform.right / 15, ForceMode.VelocityChange);
-        if (_airUp) _rigidbody.AddTorque(transform.right / 15, ForceMode.VelocityChange);
+        // if (_airDown) _rigidbody.AddTorque(-transform.right / 15, ForceMode.VelocityChange);
+        // if (_airUp) _rigidbody.AddTorque(transform.right / 15, ForceMode.VelocityChange);
         if (Vector3.Angle(transform.forward, _groundForward) > maxAirTurnAngle)
         {
             //_rigidbody.angularVelocity = new Vector3(_rigidbody.angularVelocity.x,_rigidbody.angularVelocity.y,_rigidbody.angularVelocity.z);
@@ -481,10 +481,13 @@ public class CarController : MonoBehaviour
             _rigidbody.angularVelocity = new Vector3(0,_rigidbody.angularVelocity.y, 0);
         }
         
-        if (_moveLeft) _rigidbody.AddTorque(-transform.up / 60, ForceMode.VelocityChange);
-        if (_moveRight) _rigidbody.AddTorque(transform.up / 60, ForceMode.VelocityChange);
-        if (_airLeft) _rigidbody.AddTorque(transform.forward / 15, ForceMode.VelocityChange);
-        if (_airRight) _rigidbody.AddTorque(-transform.forward / 15, ForceMode.VelocityChange);
+        if (_moveLeft) _rigidbody.AddTorque(-transform.up / 200, ForceMode.VelocityChange);
+        if (_moveRight) _rigidbody.AddTorque(transform.up / 200, ForceMode.VelocityChange);
+        if (_moveForward) _rigidbody.AddTorque(-transform.right / 150, ForceMode.VelocityChange);
+        if (_moveBackward) _rigidbody.AddTorque(transform.right / 150, ForceMode.VelocityChange);
+        
+        // if (_airLeft) _rigidbody.AddTorque(transform.forward / 15, ForceMode.VelocityChange);
+        // if (_airRight) _rigidbody.AddTorque(-transform.forward / 15, ForceMode.VelocityChange);
 
         if (!_airLeft && !_airRight && !_airUp && !_airDown)
         {
@@ -596,42 +599,50 @@ public class CarController : MonoBehaviour
 
         if (!_grounded)
         {
+            // IN AIR
             _vfxHandler.StopDriftEffects();
             audioManager.SetSoundVolume("TireSqueelLoop", 0.0f);
             if (!bot) audioManager.StopSound("TireSqueelLoop");
+            
+            
+            if (_moveLeft) _rigidbody.AddForce(-transform.right * (accelerationForce / 100), ForceMode.VelocityChange);
+            if (_moveRight) _rigidbody.AddForce(transform.right * (accelerationForce / 100), ForceMode.VelocityChange);
+        }
+        else
+        {
+            // ON GROUND
+            if (_moveLeft) _rigidbody.AddForce(transform.right * (accelerationForce / 4), ForceMode.Acceleration);
+            if (_moveRight) _rigidbody.AddForce(-transform.right * (accelerationForce / 4), ForceMode.Acceleration);
         }
         
+
+        
+        // EXCLUSIVELY ON THE GROUND
         if (!_grounded) return;
-
-        if (_moveLeft) _rigidbody.AddForce(transform.right * (accelerationForce / 4), ForceMode.Acceleration);
-        if (_moveRight) _rigidbody.AddForce(-transform.right * (accelerationForce / 4), ForceMode.Acceleration);
-
-        if (_grounded)
+        
+        if (_moveLeft || _moveRight)
         {
-            if (_moveLeft || _moveRight)
-            {
-                if (_rigidbody.velocity.magnitude * 2.2369362912f > driftSmokeThreshold)
-                {
-                    _vfxHandler.PlayVFX("DriftSmoke");
-                    audioManager.SetSoundVolume("TireSqueelLoop", Mathf.Abs(_currentSteeringMulti));
-                    if (!bot && !audioManager.IsPlayingSound("TireSqueelLoop")) audioManager.PlaySound("TireSqueelLoop");
-                }
-            }
-            else if (_drift)
+            if (_rigidbody.velocity.magnitude * 2.2369362912f > driftSmokeThreshold)
             {
                 _vfxHandler.PlayVFX("DriftSmoke");
                 audioManager.SetSoundVolume("TireSqueelLoop", Mathf.Abs(_currentSteeringMulti));
                 if (!bot && !audioManager.IsPlayingSound("TireSqueelLoop")) audioManager.PlaySound("TireSqueelLoop");
             }
-            else
-            {
-                _vfxHandler.StopDriftEffects();
-                audioManager.SetSoundVolume("TireSqueelLoop", 0.0f);
-                if (!bot) audioManager.StopSound("TireSqueelLoop");
-            }
         }
-        
-        
+        else if (_drift)
+        {
+            _vfxHandler.PlayVFX("DriftSmoke");
+            audioManager.SetSoundVolume("TireSqueelLoop", Mathf.Abs(_currentSteeringMulti));
+            if (!bot && !audioManager.IsPlayingSound("TireSqueelLoop")) audioManager.PlaySound("TireSqueelLoop");
+        }
+        else
+        {
+            _vfxHandler.StopDriftEffects();
+            audioManager.SetSoundVolume("TireSqueelLoop", 0.0f);
+            if (!bot) audioManager.StopSound("TireSqueelLoop");
+        }
+
+
     }
 
     #endregion
@@ -712,9 +723,6 @@ public class CarController : MonoBehaviour
             Color.magenta);
         Debug.DrawRay(currentWheel.transform.position, currentWheel.transform.parent.forward * currentBrake / 100,
             Color.yellow);
-        // if (Vector3.Angle(transform.forward, _groundForward) > maxAirTurnAngle)
-        // {
-        // }
         
         _hitDetect = Physics.BoxCast(transform.position + transform.up, transform.localScale, -transform.up, out _hit,
             transform.rotation, 1);
