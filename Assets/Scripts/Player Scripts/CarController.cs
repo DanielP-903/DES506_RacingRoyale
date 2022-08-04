@@ -74,7 +74,22 @@ public class CarController : MonoBehaviour
     [Tooltip("Max forward turning angle in the air")]
     public float maxAirTurnAngle = 180;    
     
-        
+    [Header("----------------------------")]     
+    [Header("Air Turning Settings")]     
+    [Header("----------------------------")]     
+    [Tooltip("Sideways move force")]
+    public float sidewaysMoveForce = 100;
+    
+    [Tooltip("Sideways turn force (YAW)")]
+    public float sidewaysTurnForceYaw = 200;
+    
+    [Tooltip("Sideways turn force (PITCH)")]
+    public float sidewaysTurnForcePitch = 15;
+    
+    [Tooltip("Sideways turn force (ROLL)")]
+    public float sidewaysTurnForceRoll = 15;
+    [Header("----------------------------")]     
+
     [Header("Forces")] 
     [Tooltip("Jumping force")]
     public float pushForceAmount = 5.0f;
@@ -472,8 +487,8 @@ public class CarController : MonoBehaviour
     {
         if (_grounded) return;
 
-         if (_airDown) _rigidbody.AddTorque(-transform.right / 15, ForceMode.VelocityChange);
-         if (_airUp) _rigidbody.AddTorque(transform.right / 15, ForceMode.VelocityChange);
+         if (_airDown) _rigidbody.AddTorque(-transform.right / sidewaysTurnForcePitch, ForceMode.VelocityChange);
+         if (_airUp) _rigidbody.AddTorque(transform.right / sidewaysTurnForcePitch, ForceMode.VelocityChange);
         if (Vector3.Angle(transform.forward, _groundForward) > maxAirTurnAngle)
         {
             //_rigidbody.angularVelocity = new Vector3(_rigidbody.angularVelocity.x,_rigidbody.angularVelocity.y,_rigidbody.angularVelocity.z);
@@ -481,15 +496,15 @@ public class CarController : MonoBehaviour
             _rigidbody.angularVelocity = new Vector3(0,_rigidbody.angularVelocity.y, 0);
         }
         
-        if (_moveLeft) _rigidbody.AddTorque(-transform.up / 200, ForceMode.VelocityChange);
-        if (_moveRight) _rigidbody.AddTorque(transform.up / 200, ForceMode.VelocityChange);
-        if (_moveBackward) _rigidbody.AddTorque(-transform.right / 10, ForceMode.VelocityChange);
-        if (_moveForward) _rigidbody.AddTorque(transform.right / 10, ForceMode.VelocityChange);
-        // if (_moveLeft) _rigidbody.AddTorque(transform.forward / 15, ForceMode.VelocityChange);
-        // if (_moveRight) _rigidbody.AddTorque(-transform.forward / 15, ForceMode.VelocityChange);
+        if (_moveLeft) _rigidbody.AddTorque(-transform.up / sidewaysTurnForceYaw, ForceMode.VelocityChange);
+        if (_moveRight) _rigidbody.AddTorque(transform.up / sidewaysTurnForceYaw, ForceMode.VelocityChange);
+        //if (_moveBackward) _rigidbody.AddTorque(-transform.right / 10, ForceMode.VelocityChange);
+        //if (_moveForward) _rigidbody.AddTorque(transform.right / 10, ForceMode.VelocityChange);
+         //if (_moveLeft) _rigidbody.AddTorque(transform.forward / 15, ForceMode.VelocityChange);
+         //if (_moveRight) _rigidbody.AddTorque(-transform.forward / 15, ForceMode.VelocityChange);
 
-         if (_airLeft) _rigidbody.AddTorque(transform.forward / 15, ForceMode.VelocityChange);
-         if (_airRight) _rigidbody.AddTorque(-transform.forward / 15, ForceMode.VelocityChange);
+         if (_airLeft) _rigidbody.AddTorque(transform.forward / sidewaysTurnForceRoll, ForceMode.VelocityChange);
+         if (_airRight) _rigidbody.AddTorque(-transform.forward / sidewaysTurnForceRoll, ForceMode.VelocityChange);
 
         if (!_airLeft && !_airRight && !_airUp && !_airDown)
         {
@@ -539,9 +554,7 @@ public class CarController : MonoBehaviour
         }
 
         float currentSteeringValue = maxSteeringAngle * _currentSteeringMulti;
-
-
-
+        
         foreach (var axle in axles)
         {
             axle.leftWheel.brakeTorque = brakeTorque;
@@ -604,10 +617,9 @@ public class CarController : MonoBehaviour
             _vfxHandler.StopDriftEffects();
             audioManager.SetSoundVolume("TireSqueelLoop", 0.0f);
             if (!bot) audioManager.StopSound("TireSqueelLoop");
-            
-            
-            if (_moveLeft) _rigidbody.AddForce(-transform.right * (accelerationForce / 100), ForceMode.Acceleration);
-            if (_moveRight) _rigidbody.AddForce(transform.right * (accelerationForce / 100), ForceMode.Acceleration);
+
+            if (_moveLeft) _rigidbody.AddForce(-transform.right * (accelerationForce / sidewaysMoveForce), ForceMode.VelocityChange);
+            if (_moveRight) _rigidbody.AddForce(transform.right * (accelerationForce / sidewaysMoveForce), ForceMode.VelocityChange);
         }
         else
         {
@@ -617,8 +629,6 @@ public class CarController : MonoBehaviour
             
             if (_moveBackward) _rigidbody.AddForce(-transform.forward * accelerationForce, ForceMode.Acceleration);
         }
-        
-
         
         // EXCLUSIVELY ON THE GROUND
         if (!_grounded) return;
@@ -644,8 +654,6 @@ public class CarController : MonoBehaviour
             audioManager.SetSoundVolume("TireSqueelLoop", 0.0f);
             if (!bot) audioManager.StopSound("TireSqueelLoop");
         }
-
-
     }
 
     #endregion
