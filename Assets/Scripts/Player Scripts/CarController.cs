@@ -485,8 +485,8 @@ public class CarController : MonoBehaviour
         if (_moveRight) _rigidbody.AddTorque(transform.up / 200, ForceMode.VelocityChange);
         if (_moveBackward) _rigidbody.AddTorque(-transform.right / 10, ForceMode.VelocityChange);
         if (_moveForward) _rigidbody.AddTorque(transform.right / 10, ForceMode.VelocityChange);
-        if (_moveLeft) _rigidbody.AddTorque(transform.forward / 15, ForceMode.VelocityChange);
-        if (_moveRight) _rigidbody.AddTorque(-transform.forward / 15, ForceMode.VelocityChange);
+        // if (_moveLeft) _rigidbody.AddTorque(transform.forward / 15, ForceMode.VelocityChange);
+        // if (_moveRight) _rigidbody.AddTorque(-transform.forward / 15, ForceMode.VelocityChange);
 
          if (_airLeft) _rigidbody.AddTorque(transform.forward / 15, ForceMode.VelocityChange);
          if (_airRight) _rigidbody.AddTorque(-transform.forward / 15, ForceMode.VelocityChange);

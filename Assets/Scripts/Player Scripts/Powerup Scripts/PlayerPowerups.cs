@@ -385,8 +385,9 @@ public class PlayerPowerups : MonoBehaviour
      private void SuperBoost()
      {
          StartCoroutine(DelayRemoveIconBoost());
-         _vfxHandler.PlayBoostEffectAlt();
+         _vfxHandler.PlaySuperBoostEffectAlt();
          _vfxHandler.PlayVFX("BoostEffect");
+         _audioManager.PlaySound("SuperBoostLong");
          if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
          {                
              _rigidbody.velocity = transform.forward * superBoostForce;
@@ -395,7 +396,6 @@ public class PlayerPowerups : MonoBehaviour
          {
              _rigidbody.AddForce(transform.forward * superBoostForce, ForceMode.VelocityChange);
          }
-         _audioManager.PlaySound("SuperBoostLoop");
      }
 
      private void BouncyWallShield()
@@ -596,7 +596,7 @@ public class PlayerPowerups : MonoBehaviour
          _boosting = true;
          yield return new WaitForSeconds(3);
          StartCoroutine(DelayRemoveIcon());
-         _vfxHandler.StopBoostEffect();
+         _vfxHandler.StopSuperBoostEffect();
          _boosting = false;
      }
 
