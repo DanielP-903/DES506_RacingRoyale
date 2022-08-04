@@ -14,6 +14,7 @@ public class CarVFXHandler : MonoBehaviour
 {
     [Header("Boost VFX")]
     public List<ParticleSystem> boostEffects = new List<ParticleSystem>();
+    public List<ParticleSystem> superBoostEffects = new List<ParticleSystem>();
     
     [Header("Impact VFX")]
     public List<VisualEffectAsset> impactEffectAssets = new List<VisualEffectAsset>();
@@ -82,6 +83,14 @@ public class CarVFXHandler : MonoBehaviour
             effect.Play();
         }
     }
+    
+    public void PlaySuperBoostEffectAlt()
+    {
+        foreach (var effect in superBoostEffects)
+        {
+            effect.Play();
+        }
+    }
 
     public void StopBoostEffect()
     {
@@ -90,7 +99,13 @@ public class CarVFXHandler : MonoBehaviour
             effect.Stop();
         }
     }
-
+    public void StopSuperBoostEffect()
+    {
+        foreach (var effect in superBoostEffects)
+        {
+            effect.Stop();
+        }
+    }
     public void PlayVFX(string vfxName)
     {
         if (_carController)
