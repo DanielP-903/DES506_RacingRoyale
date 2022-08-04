@@ -205,6 +205,7 @@ public class PlayerPowerups : MonoBehaviour
                     else
                         _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(true);
                     Debug.Log("HIT!!!");
+                    powerupIcon.transform.GetChild(2).gameObject.SetActive(false);
                 }
                 else
                 {
@@ -219,6 +220,7 @@ public class PlayerPowerups : MonoBehaviour
                     }
 
                     Debug.Log("No hit!");
+                    powerupIcon.transform.GetChild(2).gameObject.SetActive(true);
                 }
             }
             else
@@ -232,6 +234,7 @@ public class PlayerPowerups : MonoBehaviour
                     _currentTarget = null;
                 }
                 Debug.Log("No hit!");
+                powerupIcon.transform.GetChild(2).gameObject.SetActive(true);
             }
         }
         else
@@ -243,6 +246,7 @@ public class PlayerPowerups : MonoBehaviour
                 else
                     _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(false);
                 _currentTarget = null;
+                powerupIcon.transform.GetChild(2).gameObject.SetActive(false);
             }
         }
 
@@ -376,8 +380,6 @@ public class PlayerPowerups : MonoBehaviour
                 _wallShieldTimer = 0.0f;
             }
         }
-        
-        
     }
 
      #region Powerup_Functionality
@@ -445,10 +447,12 @@ public class PlayerPowerups : MonoBehaviour
                  //currentPowerupType = PowerupType.None;
                  _punchTimer = punchTime;
                  Debug.Log("HIT!!!");
+                 powerupIcon.transform.GetChild(2).gameObject.SetActive(false);
              }
              else
              {
                  Debug.Log("No hit!");
+                 powerupIcon.transform.GetChild(2).gameObject.SetActive(true);
                  _punchObject.SetActive(false);
                  _punchGlove.SetActive(false);
                  _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.PunchingGlove, false);
@@ -457,6 +461,7 @@ public class PlayerPowerups : MonoBehaviour
          else
          {
              Debug.Log("No hit!");
+             powerupIcon.transform.GetChild(2).gameObject.SetActive(true);
              _punchObject.SetActive(false);
              _punchGlove.SetActive(false);
              _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.PunchingGlove, false);
@@ -488,6 +493,7 @@ public class PlayerPowerups : MonoBehaviour
                  _grappleLineObject.SetActive(true);
                  StartCoroutine(Grapple());
                  Debug.Log("HIT!!!");
+                 powerupIcon.transform.GetChild(2).gameObject.SetActive(false);
                  _audioManager.PlaySound("GrapplingHook");
                  _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.GrapplingHook, true);
                  _carController.audioManager.PlaySound("GrapplingHook");
@@ -495,6 +501,7 @@ public class PlayerPowerups : MonoBehaviour
              else
              {
                  Debug.Log("No hit!");
+                 powerupIcon.transform.GetChild(2).gameObject.SetActive(true);
                  _grappleLineObject.SetActive(false);
                  _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.GrapplingHook, false);
              }
@@ -502,6 +509,7 @@ public class PlayerPowerups : MonoBehaviour
          else
          {
              Debug.Log("No hit!");
+             powerupIcon.transform.GetChild(2).gameObject.SetActive(true);
              _grappleLineObject.SetActive(false);
              _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.GrapplingHook, false);
          }
@@ -661,6 +669,7 @@ public class PlayerPowerups : MonoBehaviour
              _vfxHandler.SpawnVFXAtPosition("ItemBoxDisappear", collider.transform.position, 0.5f,false);
              _vfxHandler.PlayVFXAtPosition("ItemBoxImpact", transform.position);
              _audioManager.PlaySound("PowerUpCollected");
+             powerupIcon.transform.GetChild(2).gameObject.SetActive(false);
          }
          
          if (collider.transform.CompareTag("WallShield"))
