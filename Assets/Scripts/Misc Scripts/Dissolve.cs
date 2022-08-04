@@ -18,6 +18,7 @@ public class Dissolve : MonoBehaviour
     
     public bool dissolve = false;
     public bool isCheckpoint = false;
+    public bool isStartingLocation = false;
 
     private WallFollow _wallFollow;
     
@@ -31,10 +32,18 @@ public class Dissolve : MonoBehaviour
             _canDetect = true;
             dissolve = false;
         }
+        else if (isStartingLocation)
+        {
+            dissolveTimer = 0.0f;
+            _canDetect = true;
+            dissolve = false;
+        }
         else
         {
             _meshRenderer = GetComponent<MeshRenderer>();
-            _meshRendererClip = transform.parent.GetChild(0).GetComponent<MeshRenderer>();
+            GameObject meshRendererClipObject = transform.parent.GetChild(0).gameObject;
+            if (!meshRendererClipObject) Debug.LogError("meshRendererClipObject DOES NOT exist!");
+            _meshRendererClip = meshRendererClipObject.GetComponent<MeshRenderer>();
             _meshCollider = GetComponent<MeshCollider>();
             dissolveTimer = 0.0f;
             _canDetect = true;
@@ -56,7 +65,7 @@ public class Dissolve : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (dissolve)
+        if (dissolve && !isStartingLocation)
         {
             dissolveTimer += Time.deltaTime;
             dissolveTimer = Mathf.Clamp(dissolveTimer, 0, _wallFollow.dissolveTime);
