@@ -271,6 +271,8 @@ public class PlayerPowerups : MonoBehaviour
                 _rigidbody.AddForce((_nearestHit.transform.position - transform.position).normalized * grappleForce, ForceMode.VelocityChange);
             }
             
+            if (_audioManager.IsPlayingSound("GrappleZip"))
+            
             if ((_nearestHit.transform.position - transform.position).magnitude < grappleThreshold)
             {
                 _grappling = false;

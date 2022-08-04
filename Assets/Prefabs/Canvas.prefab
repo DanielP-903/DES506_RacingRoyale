@@ -4631,6 +4631,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5717768603649333307}
   - component: {fileID: 7363437401138142712}
+  - component: {fileID: 6399972432256946507}
   m_Layer: 5
   m_Name: Wallometer
   m_TagString: Untagged
@@ -4712,6 +4713,18 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6399972432256946507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3154999367670977839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fee267ca30444649aa6d099f58f796d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3159731722281781495
 GameObject:
   m_ObjectHideFlags: 0
@@ -7309,7 +7322,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 7994863371643758010}
   m_Direction: 3
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
