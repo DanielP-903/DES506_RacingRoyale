@@ -180,7 +180,7 @@ public class WallFollow : MonoBehaviour
         //Debug.Log("Wall Hit: "+other.gameObject.name+":"+other.tag);
         if (other.CompareTag("Checkpoint"))
         {
-            Debug.Log("Hit Checkpoint");
+            //Debug.Log("Hit Checkpoint");
             _checkpointSystem.EliminateCheckpoint(other.gameObject);
         }
     }

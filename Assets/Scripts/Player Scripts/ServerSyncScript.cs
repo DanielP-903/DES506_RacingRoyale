@@ -44,7 +44,7 @@ public class ServerSyncScript : MonoBehaviour
     [PunRPC]
     void fadeOut()
     {
-        Debug.Log("FadeScreen: " + _fs);
+        //Debug.Log("FadeScreen: " + _fs);
         if (_fs)
             _fs.fadeOut();
     }

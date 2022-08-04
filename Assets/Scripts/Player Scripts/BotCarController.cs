@@ -94,7 +94,7 @@ public class BotCarController : MonoBehaviour
         }
         else
         {
-            Debug.Log("Destroying Bot Control");
+            //Debug.Log("Destroying Bot Control");
             Destroy(GetComponent<CarController>());
             //Destroy(GetComponent<Rigidbody>());
             Destroy(this);
