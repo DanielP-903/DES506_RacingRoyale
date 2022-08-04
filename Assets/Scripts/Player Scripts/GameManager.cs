@@ -1031,7 +1031,14 @@ public class GameManager : MonoBehaviourPunCallbacks
                 //_timer.gameObject.SetActive(false);
                 TryGetFinishedPlayers(out playersCompleted, _stage);
                 TryGetElimPlayers(out elimPlayers);
-                _placeCounter.text = Mathf.Ceil(_totalPlayers - elimPlayers) + " players left!";
+                if (Mathf.Min(Mathf.Ceil((float)_totalPlayers / 2) - playersCompleted, PhotonNetwork.CurrentRoom.PlayerCount-playersCompleted) == 1)
+                {
+                    _placeCounter.text = "1 podium space left!";
+                }
+                else
+                {
+                    _placeCounter.text = Mathf.Min(4 - playersCompleted,PhotonNetwork.CurrentRoom.PlayerCount-playersCompleted) + " podium spaces left!";
+                }
 
                 //Debug.Log("Name: "+SceneManager.GetActiveScene().name + " Stage: " + _stage + " Players Finished: "+(_totalPlayers - elimPlayers)+" Goal: 0");
                 //_stage == 2 && playersCompleted >= (float)_totalPlayers/16

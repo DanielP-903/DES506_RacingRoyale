@@ -32,7 +32,7 @@ public class PlayerManager : MonoBehaviour
     private AlertSystem _as;
     public TextMeshProUGUI startDelayText;
 
-    [HideInInspector] public float timer = 3;
+    public float timer = 3;
 
     private int playerNumber = 0;
     private bool completedStage = false;
@@ -480,14 +480,18 @@ public class PlayerManager : MonoBehaviour
             {
                 int counter = 0;
                 int randBot = Random.Range(0, _gm.GetMaxBots());
-                while (bots[randBot] && counter < 100)
+                while (bots[randBot] != null && counter < 100)
                 {
                     counter++;
                     randBot = Random.Range(0, _gm.GetMaxBots());
                 }
-                BotCarController bcc = bots[randBot].GetComponent<BotCarController>();
-                bcc.setSpawn(_spawnLocation.parent.GetChild(i+1));
-                bcc.RandomSpawn();
+
+                if (bots[randBot] != null)
+                {
+                    BotCarController bcc = bots[randBot].GetComponent<BotCarController>();
+                    bcc.setSpawn(_spawnLocation.parent.GetChild(i + 1));
+                    bcc.RandomSpawn();
+                }
             }
         }
     }
@@ -622,7 +626,7 @@ public class PlayerManager : MonoBehaviour
                 PhotonNetwork.CurrentRoom.PlayerCount);
             counter = 0;
             //&& counter < 100000
-            while (!allPlayersReady && counter < 100)
+            while (!allPlayersReady && counter < 300)
             {
                 allPlayersReady = true;
                 //Debug.Log("Running While Loop");
@@ -650,7 +654,7 @@ public class PlayerManager : MonoBehaviour
 
             if (counter >= 100)
             {
-                Debug.LogError("Counter Broke Chain");
+                //Debug.LogError("Counter Broke Chain");
             }
             
             if (_photonView.Owner.IsMasterClient) 
@@ -667,8 +671,9 @@ public class PlayerManager : MonoBehaviour
                 CountdownTimer.TryGetStartTime(out hit);
                 timeLeft = _gm.GetStartDelay() - ((PhotonNetwork.ServerTimestamp - hit) / 1000f);
                 timer = timeLeft;
-                yield return new WaitForFixedUpdate();
+                //yield return new WaitForFixedUpdate();
             }
+            Debug.Log("TIME LEFT IS: " + _gm.GetStartDelay() + ": Server:" +PhotonNetwork.ServerTimestamp + ": TimeSet:" + hit);
 
             //Start Code Here
             startBlocker.SetActive(false);
