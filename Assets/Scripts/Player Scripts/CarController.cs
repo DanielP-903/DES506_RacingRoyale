@@ -478,14 +478,16 @@ public class CarController : MonoBehaviour
         {
             //_rigidbody.angularVelocity = new Vector3(_rigidbody.angularVelocity.x,_rigidbody.angularVelocity.y,_rigidbody.angularVelocity.z);
             //_rigidbody.angularVelocity = new Vector3(_rigidbody.angularVelocity.x,_rigidbody.angularVelocity.y, 0);
-            _rigidbody.angularVelocity = new Vector3(0,_rigidbody.angularVelocity.y, 0);
+            //_rigidbody.angularVelocity = new Vector3(0,_rigidbody.angularVelocity.y, 0);
         }
         
         if (_moveLeft) _rigidbody.AddTorque(-transform.up / 200, ForceMode.VelocityChange);
         if (_moveRight) _rigidbody.AddTorque(transform.up / 200, ForceMode.VelocityChange);
         if (_moveForward) _rigidbody.AddTorque(-transform.right / 100, ForceMode.VelocityChange);
         if (_moveBackward) _rigidbody.AddTorque(transform.right / 100, ForceMode.VelocityChange);
-        
+        if (_moveLeft) _rigidbody.AddTorque(transform.forward / 15, ForceMode.VelocityChange);
+        if (_moveRight) _rigidbody.AddTorque(-transform.forward / 15, ForceMode.VelocityChange);
+
         // if (_airLeft) _rigidbody.AddTorque(transform.forward / 15, ForceMode.VelocityChange);
         // if (_airRight) _rigidbody.AddTorque(-transform.forward / 15, ForceMode.VelocityChange);
 
