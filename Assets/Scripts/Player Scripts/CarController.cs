@@ -483,8 +483,8 @@ public class CarController : MonoBehaviour
         
         if (_moveLeft) _rigidbody.AddTorque(-transform.up / 200, ForceMode.VelocityChange);
         if (_moveRight) _rigidbody.AddTorque(transform.up / 200, ForceMode.VelocityChange);
-        if (_moveForward) _rigidbody.AddTorque(-transform.right / 150, ForceMode.VelocityChange);
-        if (_moveBackward) _rigidbody.AddTorque(transform.right / 150, ForceMode.VelocityChange);
+        if (_moveForward) _rigidbody.AddTorque(-transform.right / 100, ForceMode.VelocityChange);
+        if (_moveBackward) _rigidbody.AddTorque(transform.right / 100, ForceMode.VelocityChange);
         
         // if (_airLeft) _rigidbody.AddTorque(transform.forward / 15, ForceMode.VelocityChange);
         // if (_airRight) _rigidbody.AddTorque(-transform.forward / 15, ForceMode.VelocityChange);
@@ -595,7 +595,6 @@ public class CarController : MonoBehaviour
         }
 
         if (_moveForward) _rigidbody.AddForce(transform.forward * accelerationForce, ForceMode.Acceleration);
-        if (_moveBackward) _rigidbody.AddForce(-transform.forward * accelerationForce, ForceMode.Acceleration);
 
         if (!_grounded)
         {
@@ -613,6 +612,8 @@ public class CarController : MonoBehaviour
             // ON GROUND
             if (_moveLeft) _rigidbody.AddForce(transform.right * (accelerationForce / 4), ForceMode.Acceleration);
             if (_moveRight) _rigidbody.AddForce(-transform.right * (accelerationForce / 4), ForceMode.Acceleration);
+            
+            if (_moveBackward) _rigidbody.AddForce(-transform.forward * accelerationForce, ForceMode.Acceleration);
         }
         
 

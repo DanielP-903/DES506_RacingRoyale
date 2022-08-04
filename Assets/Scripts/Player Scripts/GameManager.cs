@@ -1003,10 +1003,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 }
                 else
                 {
-                    float t1 = Mathf.Ceil((float)_totalPlayers / 2) - playersCompleted;
-                    float t2 = PhotonNetwork.CurrentRoom.PlayerCount-playersCompleted
-                
-                    _placeCounter.text = Mathf.Min(t1,t2) - playersCompleted + " places left!";
+                    _placeCounter.text = Mathf.Min(Mathf.Ceil((float)_totalPlayers / 2) - playersCompleted,PhotonNetwork.CurrentRoom.PlayerCount-playersCompleted) - playersCompleted + " places left!";
                 }
                 //Debug.Log("Name: "+SceneManager.GetActiveScene().name + " Stage: " + _stage + " Players Finished: "+playersCompleted+" Goal: " + (_totalPlayers/2));
 
