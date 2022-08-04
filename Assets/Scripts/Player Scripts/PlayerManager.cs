@@ -422,8 +422,19 @@ public class PlayerManager : MonoBehaviour
             _messageText.color = Color.white;
             StartCoroutine(fadeMessage());
         }
+        else if (pressedButton && _spawnLocation && _spawnLocation.name.Contains("SpawnLocation") && _spawnLocation.parent.GetComponent<Dissolve>().dissolve)
+        {
+            _messageText.color = Color.white;
+            StartCoroutine(fadeMessage());
+        }
         else if (_spawnLocation && !_spawnLocation.name.Contains("SpawnLocation") &&
                  _cs.GetCheckpointElimination(_spawnLocation.parent.gameObject))
+        {
+            _cc.audioManager.PlaySound("CarEliminatedByWall");
+            EliminateCurrentPlayer();
+        }
+        else if (_spawnLocation && _spawnLocation.name.Contains("SpawnLocation") &&
+                 _spawnLocation.parent.GetComponent<Dissolve>().dissolve)
         {
             _cc.audioManager.PlaySound("CarEliminatedByWall");
             EliminateCurrentPlayer();
