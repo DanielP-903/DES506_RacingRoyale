@@ -270,11 +270,18 @@ public class PlayerPowerups : MonoBehaviour
             {
                 _rigidbody.AddForce((_nearestHit.transform.position - transform.position).normalized * grappleForce, ForceMode.VelocityChange);
             }
-            
-            if (_audioManager.IsPlayingSound("GrappleZip"))
+
+            if (!_audioManager.IsPlayingSound("GrapplingHookZip"))
+            {
+                _audioManager.PlaySound("GrapplingHookZip");
+            }
             
             if ((_nearestHit.transform.position - transform.position).magnitude < grappleThreshold)
             {
+                if (_audioManager.IsPlayingSound("GrapplingHookZip"))
+                {
+                    _audioManager.StopSound("GrapplingHookZip");
+                }
                 _grappling = false;
                 _grappleLineObject.SetActive(false);
                 StartCoroutine(DelayRemoveIcon());
