@@ -472,8 +472,8 @@ public class CarController : MonoBehaviour
     {
         if (_grounded) return;
 
-        if (_airDown) _rigidbody.AddTorque(-transform.right / 15, ForceMode.VelocityChange);
-        if (_airUp) _rigidbody.AddTorque(transform.right / 15, ForceMode.VelocityChange);
+        // if (_airDown) _rigidbody.AddTorque(-transform.right / 15, ForceMode.VelocityChange);
+        // if (_airUp) _rigidbody.AddTorque(transform.right / 15, ForceMode.VelocityChange);
         if (Vector3.Angle(transform.forward, _groundForward) > maxAirTurnAngle)
         {
             //_rigidbody.angularVelocity = new Vector3(_rigidbody.angularVelocity.x,_rigidbody.angularVelocity.y,_rigidbody.angularVelocity.z);
@@ -483,8 +483,11 @@ public class CarController : MonoBehaviour
         
         if (_moveLeft) _rigidbody.AddTorque(-transform.up / 200, ForceMode.VelocityChange);
         if (_moveRight) _rigidbody.AddTorque(transform.up / 200, ForceMode.VelocityChange);
-        if (_airLeft) _rigidbody.AddTorque(transform.forward / 15, ForceMode.VelocityChange);
-        if (_airRight) _rigidbody.AddTorque(-transform.forward / 15, ForceMode.VelocityChange);
+        if (_moveForward) _rigidbody.AddTorque(-transform.right / 150, ForceMode.VelocityChange);
+        if (_moveBackward) _rigidbody.AddTorque(transform.right / 150, ForceMode.VelocityChange);
+        
+        // if (_airLeft) _rigidbody.AddTorque(transform.forward / 15, ForceMode.VelocityChange);
+        // if (_airRight) _rigidbody.AddTorque(-transform.forward / 15, ForceMode.VelocityChange);
 
         if (!_airLeft && !_airRight && !_airUp && !_airDown)
         {
