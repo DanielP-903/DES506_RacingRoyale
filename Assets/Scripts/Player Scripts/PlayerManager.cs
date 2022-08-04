@@ -468,7 +468,7 @@ public class PlayerManager : MonoBehaviour
             {
                 int counter = 0;
                 int randBot = Random.Range(0, _gm.GetMaxBots());
-                while (bots[randBot] == null && counter < 100)
+                while (bots[randBot] && counter < 100)
                 {
                     counter++;
                     randBot = Random.Range(0, _gm.GetMaxBots());
@@ -571,15 +571,16 @@ public class PlayerManager : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().name != "WaitingArea" && _photonView.IsMine)
         {
-            yield return new WaitForSeconds(1);
+            //yield return new WaitForSeconds(1);
             if (GameObject.FindGameObjectWithTag("FlyBy"))
             {
                 CameraFlyBy cfb = GameObject.FindGameObjectWithTag("FlyBy").GetComponent<CameraFlyBy>();
                 //Debug.Log("CountDown Started");
+                yield return new WaitUntil(() => cfb.activateFlyBy);
                 yield return new WaitUntil(() => !cfb.activateFlyBy);
             }
 
-            Debug.Log("Timer Started for " + _photonView.Owner);
+            //Debug.Log("Timer Started for " + _photonView.Owner);
 
             //int readyPlayers;
             //TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
@@ -630,7 +631,7 @@ public class PlayerManager : MonoBehaviour
                     }
                 }
 
-                Debug.Log(str);
+                //Debug.Log(str);
                 counter++;
                 yield return new WaitForSeconds(0.1f);
             }

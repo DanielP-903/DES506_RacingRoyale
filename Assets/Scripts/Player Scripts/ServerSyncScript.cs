@@ -44,7 +44,7 @@ public class ServerSyncScript : MonoBehaviour
     [PunRPC]
     void fadeOut()
     {
-        Debug.Log("FadeScreen: " + _fs);
+        //Debug.Log("FadeScreen: " + _fs);
         if (_fs)
             _fs.fadeOut();
     }
@@ -53,7 +53,7 @@ public class ServerSyncScript : MonoBehaviour
     void sendMessage(string text)
     {
         //_mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
-        Debug.Log("MessageToDisplay: " + text);
+        //Debug.Log("MessageToDisplay: " + text);
         //Debug.Log("MessageBox: " + _mb + ":" + text);
         _mb.sendMessage(text);
     }
