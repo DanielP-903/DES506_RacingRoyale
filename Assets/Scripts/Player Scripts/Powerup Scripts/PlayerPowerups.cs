@@ -163,16 +163,16 @@ public class PlayerPowerups : MonoBehaviour
                     if (_currentTarget)
                     {
                         if (_currentPowerupType == PowerupType.PunchingGlove)
-                            _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(false);
+                            _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(false, _currentTarget);
                         else
-                            _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(false);
+                            _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(false, _currentTarget);
                     }
 
                     _currentTarget = _nearestHit.transform.gameObject;
                     if (_currentPowerupType == PowerupType.PunchingGlove)
-                        _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(true);
+                        _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(true, _currentTarget);
                     else
-                        _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(true);
+                        _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(true, _currentTarget);
                     Debug.Log("HIT!!!");
                     powerupIcon.transform.GetChild(2).gameObject.SetActive(false);
                 }
@@ -181,9 +181,9 @@ public class PlayerPowerups : MonoBehaviour
                     if (_currentTarget)
                     {
                         if (_currentPowerupType == PowerupType.PunchingGlove)
-                            _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(false);
+                            _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(false, _currentTarget);
                         else
-                            _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(false);
+                            _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(false, _currentTarget);
 
                         _currentTarget = null;
                     }
@@ -197,9 +197,9 @@ public class PlayerPowerups : MonoBehaviour
                 if (_currentTarget)
                 {
                     if (_currentPowerupType == PowerupType.PunchingGlove)
-                        _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(false);
+                        _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(false, _currentTarget);
                     else
-                        _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(false);
+                        _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(false, _currentTarget);
                     _currentTarget = null;
                 }
                 Debug.Log("No hit!");
@@ -285,9 +285,9 @@ public class PlayerPowerups : MonoBehaviour
             if (_currentTarget)
             {
                 if (_currentPowerupType == PowerupType.PunchingGlove)
-                    _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(false);
+                    _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(false,_currentTarget);
                 else
-                    _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(false);
+                    _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(false,_currentTarget);
                 _currentTarget = null;
                 powerupIcon.transform.GetChild(2).gameObject.SetActive(false);
             }
