@@ -587,12 +587,12 @@ public class PlayerManager : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().name != "WaitingArea" && _photonView.IsMine)
         {
-            //yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(1);
             if (GameObject.FindGameObjectWithTag("FlyBy"))
             {
                 CameraFlyBy cfb = GameObject.FindGameObjectWithTag("FlyBy").GetComponent<CameraFlyBy>();
                 //Debug.Log("CountDown Started");
-                yield return new WaitUntil(() => cfb.activateFlyBy);
+                //yield return new WaitUntil(() => cfb.activateFlyBy);
                 yield return new WaitUntil(() => !cfb.activateFlyBy);
             }
 
@@ -657,29 +657,33 @@ public class PlayerManager : MonoBehaviour
                 //Debug.LogError("Counter Broke Chain");
             }
             
-            if (_photonView.Owner.IsMasterClient) 
+            if (_photonView.Owner.IsMasterClient)
             {
-                ExitGames.Client.Photon.Hashtable hash = new ExitGames.Client.Photon.Hashtable();
-                hash.Add(("Timer"+_gm.GetStageNum()), (int)PhotonNetwork.ServerTimestamp);
-                PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
+                int timeSet = PhotonNetwork.ServerTimestamp;
+                //ExitGames.Client.Photon.Hashtable hash = new ExitGames.Client.Photon.Hashtable();
+                //hash.Add(("Timer"+_gm.GetStageNum()), timeSet);
+                //PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
+                PhotonNetwork.CurrentRoom.CustomProperties[("Timer" + _gm.GetStageNum())] = timeSet;
             }
             //yield return new WaitUntil(() => allPlayersReady);
             startDelayText.color = Color.clear; // Changed to clear as rubics are in
             Debug.Log("A: "+PhotonNetwork.CurrentRoom);
             Debug.Log("B: "+"Timer"+_gm.GetStageNum());
             Debug.Log("C: "+PhotonNetwork.CurrentRoom.CustomProperties[("Timer"+_gm.GetStageNum())]);
-            //int notZero = (int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer" + _gm.GetStageNum())];
-            bool notNull = (PhotonNetwork.CurrentRoom.CustomProperties[("Timer" + _gm.GetStageNum())] == null);
-            while (notNull)
+            //int notZero = (int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer" + _gm.GetStageNum())];;
+            counter = 0;
+            while ((int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer"+_gm.GetStageNum())] == 0 && counter < 600)
             {
-                notNull = (PhotonNetwork.CurrentRoom.CustomProperties[("Timer" + _gm.GetStageNum())] == null);
+                counter++;
                 yield return new WaitForFixedUpdate();
             }
+            Debug.Log("Count: "+counter);
             //yield return new WaitUntil(() => ((int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer"+_gm.GetStageNum())] != null);
             int hit = (int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer"+_gm.GetStageNum())];
-            object hitFromProps;
-            PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(("Timer" + _gm.GetStageNum()), out hitFromProps);
-            hit = (int)hitFromProps;
+            Debug.Log("Timer: "+hit);
+            //object hitFromProps;
+            //PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(("Timer" + _gm.GetStageNum()), out hitFromProps);
+            //hit = (int)hitFromProps;
             float timeLeft = _gm.GetStartDelay() - ((PhotonNetwork.ServerTimestamp - hit) / 1000f);
             while (timeLeft > 0)
             {
@@ -687,9 +691,9 @@ public class PlayerManager : MonoBehaviour
                 hit = (int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer"+_gm.GetStageNum())];
                 timeLeft = _gm.GetStartDelay() - ((PhotonNetwork.ServerTimestamp - hit) / 1000f);
                 timer = timeLeft;
-                //yield return new WaitForFixedUpdate();
+                yield return new WaitForFixedUpdate();
             }
-            Debug.Log("TIME LEFT IS: " + _gm.GetStartDelay() + ": Server:" +PhotonNetwork.ServerTimestamp + ": TimeSet:" + hit);
+            Debug.Log("TIME LEFT IS: " + _gm.GetStartDelay() + ": Server:" +PhotonNetwork.ServerTimestamp + ": TimeSet:" + hit + " Total Timer Value: "+(_gm.GetStartDelay() - ((PhotonNetwork.ServerTimestamp - hit) / 1000f)));
 
             //Start Code Here
             startBlocker.SetActive(false);

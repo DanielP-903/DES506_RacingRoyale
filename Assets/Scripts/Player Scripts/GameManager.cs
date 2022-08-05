@@ -611,6 +611,19 @@ public class GameManager : MonoBehaviourPunCallbacks
                 bot.name = "Bot " + linesInFile[Random.Range(0, linesInFile.Length - 1)];
                 botsStored[i] = bot;
                 //bot.GetComponent<BotCarController>().setName(linesInFile[Random.Range(0, linesInFile.Length-1)]);
+                
+                ExitGames.Client.Photon.Hashtable hash = new ExitGames.Client.Photon.Hashtable();
+                hash.Add(("Timer1"), 0);
+                PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
+                hash = new ExitGames.Client.Photon.Hashtable();
+                hash.Add(("Timer2"), 0);
+                PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
+                hash = new ExitGames.Client.Photon.Hashtable();
+                hash.Add(("Timer3"), 0);
+                PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
+                hash = new ExitGames.Client.Photon.Hashtable();
+                hash.Add(("Timer4"), 0);
+                PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
             }
 
             SetFinishedPlayers(0, _stage);
@@ -853,6 +866,10 @@ public class GameManager : MonoBehaviourPunCallbacks
                         case "Stage1":
                             playersInScene = PhotonNetwork.CurrentRoom.MaxPlayers;
                             maxBotsInScene = maxBots;
+                            foreach (DictionaryEntry entry in PhotonNetwork.CurrentRoom.CustomProperties)
+                            {
+                                Debug.Log("K: "+entry.Key + " V: "+entry.Value);
+                            }
                             break;
                         case "Stage2":
                             playersInScene = PhotonNetwork.CurrentRoom.MaxPlayers / 2;

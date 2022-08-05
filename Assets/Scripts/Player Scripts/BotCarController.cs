@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Photon.Pun;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class BotCarController : MonoBehaviour
@@ -25,6 +26,7 @@ public class BotCarController : MonoBehaviour
     private float stuckTimer;
     private Vector3 stuckPos;
     private bool boostAllowed = true;
+    private bool canStart = false;
 
     private BotPoint[] _botPoints;
     private List<BotPoint> _passedBotPoints;
@@ -65,6 +67,15 @@ public class BotCarController : MonoBehaviour
             else
             {
                 botPointsFound = false;
+            }
+
+            if (SceneManager.GetActiveScene().name == "WaitingArea")
+            {
+                canStart = true;
+            }
+            else
+            {
+                canStart = false;
             }
 
             _passedBotPoints = new List<BotPoint>();
@@ -108,18 +119,25 @@ public class BotCarController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        decideBehaviour();
-        checkReset();
-        if (Time.time - stuckTimer > 15)
+        if (!canStart && (int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer" + _gm.GetStageNum())] != 0)
         {
-            stuckTimer = Time.time;
-            if (Vector3.Distance(stuckPos, transform.position) < 3)
+            canStart = true;
+        }
+        else if(canStart)
+        { 
+            decideBehaviour();
+            checkReset();
+            if (Time.time - stuckTimer > 15)
             {
-                goToSpawn();
-            }
-            else
-            {
-                stuckPos = transform.position;
+                stuckTimer = Time.time;
+                if (Vector3.Distance(stuckPos, transform.position) < 3)
+                {
+                    goToSpawn();
+                }
+                else
+                {
+                    stuckPos = transform.position;
+                }
             }
         }
         name.text = _pv.name;
