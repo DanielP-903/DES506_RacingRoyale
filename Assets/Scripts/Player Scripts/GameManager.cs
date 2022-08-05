@@ -216,9 +216,10 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void CompletePlayer()
     {
         Spectate();
+        _photonView.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
         //PhotonNetwork.Destroy(_photonView.gameObject);
         //_photonView.gameObject.SetActive(false);
-        //_photonView.gameObject.transform.position = new Vector3(1000,1000,1000);
+        _photonView.gameObject.transform.position = new Vector3(1000,1000,1000);
     }
 
     public int GetTotalPlayers()
@@ -250,7 +251,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         Debug.Log(spectateTargets[0]);
         foreach (PhotonView pv in PhotonNetwork.PhotonViewCollection)
         {
-            if (!pv.Owner.CustomProperties.ContainsKey("Eliminated") && pv.gameObject != null && pv.gameObject.tag == "Player")
+            if (!pv.Owner.CustomProperties.ContainsKey("Eliminated") && pv.gameObject != null && pv.gameObject.tag == "Player" && pv.gameObject.name != _photonView.Owner.NickName)
             {
                 spectateTargets.Add(pv.gameObject.transform);
                 Debug.Log("AddedToSpec");
@@ -475,6 +476,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     void Spectate()
     {
         Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         if (spectateText != null)
         {
             spectateText.gameObject.SetActive(true);
@@ -496,7 +498,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         bool foundView = false;
         foreach (PhotonView pv in PhotonNetwork.PhotonViewCollection)
         {
-            if (!pv.Owner.CustomProperties.ContainsKey("Eliminated") && pv.gameObject != null && pv.gameObject.tag == "Player")
+            if (!pv.Owner.CustomProperties.ContainsKey("Eliminated") && pv.gameObject != null && pv.gameObject.tag == "Player" && pv.gameObject.name != _photonView.Owner.NickName)
             {
                 spectateTarget = pv.gameObject.transform;
                 foundView = true;
@@ -784,49 +786,15 @@ public class GameManager : MonoBehaviourPunCallbacks
         //Debug.Log("SetUp was called");
         if (this.gameObject != null)
         {
-            //_photonView = attachedPlayer.GetComponent<PhotonView>();
-            /*if (playerPrefab == null)
-        {
-            Debug.LogError("<Color=Red><a>Missing</a></Color> playerPrefab Reference. Please set it up in GameObject 'Game Manager'",this);
-        }
-        else if (_eliminated)
-        {
-            Debug.Log("PlayerEliminated");
-            Spectate();
-        }
-        else 
-        {
-            //Debug.LogFormat("We are Instantiating LocalPlayer from {0}", Application.loadedLevelName);
-            // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
-            //PhotonNetwork.Instantiate(this.playerPrefab.name, GameObject.Find("SpawnLocation"+PhotonNetwork.CurrentRoom.PlayerCount).transform.position, Quaternion.identity, 0);
-            //Debug.Log("Player Number: "+PhotonNetwork.LocalPlayer.GetPlayerNumber()); //GetPlayerNumber()
-            GameObject player = PhotonNetwork.Instantiate(this.playerPrefab.name, GameObject.Find("SpawnLocation" + GetPlayerNumber()).transform.position, GameObject.Find("SpawnLocation" + GetPlayerNumber()).transform.rotation, 0);
-            _photonView = player.GetComponent<PhotonView>();
-            player.name = _photonView.Owner.NickName;
-        }*/
-
-            //Debug.Log("Loading GameMaster Settings");
-
-            /*if (PlayerPrefs.HasKey("MasterVol"))
-        {
-            mixer.SetFloat("Master", PlayerPrefs.GetFloat("MasterVol"));
-        }
-
-        if (PlayerPrefs.HasKey("MusicVol"))
-        {
-            mixer.SetFloat("Music", PlayerPrefs.GetFloat("MusicVol"));
-        }
-
-        if (PlayerPrefs.HasKey("SoundVol"))
-        {
-            mixer.SetFloat("Sound", PlayerPrefs.GetFloat("SoundVol"));
-        }*/
+            if (_eliminated)
+            {
+                Debug.Log("PlayerEliminated");
+                Spectate();
+            }
 
             _totalPlayers = (int)PhotonNetwork.CurrentRoom.CustomProperties["TotalPlayerCount"];
             _totalBots = 0;
 
-            // progressPanel = GameObject.FindGameObjectWithTag("LoadingBar");
-            // progressPanel.SetActive(false);
             //Debug.Log("GameManager Loading Level");
             if (SceneManager.GetActiveScene().name == "Launcher")
             {
