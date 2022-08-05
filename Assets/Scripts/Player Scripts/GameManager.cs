@@ -129,7 +129,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void LeaveRoom()
     {
         //Debug.Log("Player: "+_photonView.Owner.NickName + " Eliminated.");
-        if (_photonView)
+        if (_photonView && !_eliminated && !(_stage == 2 && _completed))
         {
             ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
             {
@@ -799,6 +799,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         //Debug.Log("SetUp was called");
         if (this.gameObject != null)
         {
+            StartCoroutine(setLevelTimer());
             if (_eliminated)
             {
                 Debug.Log("SetupPlayerEliminated");
@@ -1140,6 +1141,80 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     #region IEnumerators
 
+
+    IEnumerator setLevelTimer()
+    {
+        int counter = 0;
+        bool allPlayersReady = true;
+        bool playerReady = false;
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            playerReady = false;
+            PlayerManager.TryGetReadyPlayer(out playerReady, GetStageNum(), player);
+            Debug.Log("Player: " + player + " Ready: " + playerReady);
+            if (playerReady)
+            {
+                counter++;
+            }
+            else
+            {
+                allPlayersReady = false;
+            }
+        }
+            //&& counter < 100000
+            while (!allPlayersReady && counter < 100)
+            {
+                allPlayersReady = true;
+                //Debug.Log("Running While Loop");
+                string str = "Focus: \n";
+                int numOfReadyPlayers = 0;
+                GameManager.TryGetElimPlayers(out int elimPlayers);
+                foreach (Player player in PhotonNetwork.PlayerList)
+                {
+                    playerReady = false;
+                    PlayerManager.TryGetReadyPlayer(out playerReady, GetStageNum(), player);
+                    str += "Player: " + player + " Ready: " + playerReady + "\n";
+                    //Debug.Log("Player: "+player + " Ready: "+playerReady+"\n");
+                    if (playerReady)
+                    {
+                        numOfReadyPlayers++;
+                    }
+                    else
+                    {
+                        allPlayersReady = false;
+                    }
+                }
+
+                if (numOfReadyPlayers + elimPlayers >= GetTotalPlayers())
+                {
+                    allPlayersReady = true;
+                }
+                else
+                {
+                    allPlayersReady = false;
+                }
+
+                Debug.Log("N: "+numOfReadyPlayers +" E: "+ elimPlayers +" T: "+ GetTotalPlayers());
+                //Debug.Log(str);
+                counter++;
+                yield return new WaitForSeconds(0.1f);
+            }
+
+            if (counter >= 100)
+            {
+                //Debug.LogError("Counter Broke Chain");
+            }
+            
+            if (_photonView.Owner.IsMasterClient)
+            {
+                int timeSet = PhotonNetwork.ServerTimestamp;
+                ExitGames.Client.Photon.Hashtable hash = new ExitGames.Client.Photon.Hashtable();
+                hash.Add(("Timer"+GetStageNum()), timeSet);
+                PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
+                //PhotonNetwork.CurrentRoom.CustomProperties[("Timer" + _gm.GetStageNum())] = timeSet;
+            }
+    }
+    
     // IEnumerator LoadingBar() 
     // {
     //     //Debug.Log("Progress: " + PhotonNetwork.LevelLoadingProgress);
