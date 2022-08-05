@@ -138,6 +138,7 @@ public class PlayerPowerups : MonoBehaviour
 
     private void DetectTarget()
     {
+        _usingPowerup = false;
         RaycastHit[] hits;
             if (_currentPowerupType == PowerupType.PunchingGlove)
                 hits = Physics.SphereCastAll(transform.position, detectionRadius, transform.forward,  achievablePunchRange);
@@ -276,7 +277,8 @@ public class PlayerPowerups : MonoBehaviour
         
         if (_currentPowerupType == PowerupType.PunchingGlove || _currentPowerupType == PowerupType.GrapplingHook)
         {
-            DetectTarget();
+            if (!_grappling && !_punching)
+                DetectTarget();
         }
         else
         {
