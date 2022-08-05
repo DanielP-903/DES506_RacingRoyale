@@ -488,7 +488,7 @@ public class PlayerManager : MonoBehaviour
 
     public void CompleteStage()
     {
-        if (!completedStage)
+        if (!completedStage && !eliminated)
         {
             //Debug.Log("Stage Completed Player: " + GetPlayerNumber());
             completedStage = true;
@@ -585,13 +585,6 @@ public class PlayerManager : MonoBehaviour
                 //yield return new WaitUntil(() => cfb.activateFlyBy);
                 yield return new WaitUntil(() => !cfb.activateFlyBy);
             }
-
-            //Debug.Log("Timer Started for " + _photonView.Owner);
-
-            //int readyPlayers;
-            //TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
-            //readyPlayers = readyPlayers + 1;
-            //SetReadyPlayers(readyPlayers, _gm.GetStageNum());
             SetReadyPlayer(true, _gm.GetStageNum());
             bool allPlayersReady = true;
             int counter = 1;
@@ -616,7 +609,7 @@ public class PlayerManager : MonoBehaviour
                 PhotonNetwork.CurrentRoom.PlayerCount);
             counter = 0;
             //&& counter < 100000
-            while (!allPlayersReady && counter < 100)
+            /*while (!allPlayersReady && counter < 100)
             {
                 allPlayersReady = true;
                 //Debug.Log("Running While Loop");
@@ -666,7 +659,7 @@ public class PlayerManager : MonoBehaviour
                 hash.Add(("Timer"+_gm.GetStageNum()), timeSet);
                 PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
                 //PhotonNetwork.CurrentRoom.CustomProperties[("Timer" + _gm.GetStageNum())] = timeSet;
-            }
+            }*/
             //yield return new WaitUntil(() => allPlayersReady);
             startDelayText.color = Color.clear; // Changed to clear as rubics are in
             Debug.Log("A: "+PhotonNetwork.CurrentRoom);
