@@ -35,7 +35,7 @@ public class PlayerManager : MonoBehaviour
     public float timer = 3;
 
     private int playerNumber = 0;
-    private bool completedStage = false;
+    public bool completedStage = false;
     private bool eliminated = false;
     private int elimPosition = 0;
     private bool ready = false;
@@ -365,6 +365,7 @@ public class PlayerManager : MonoBehaviour
                     EliminateCurrentPlayer();
                 }
 
+
                 transform.gameObject.GetComponent<PlayerPowerups>().SetUp();
                 transform.gameObject.GetComponent<CarVFXHandler>().SetUp();
                 transform.gameObject.GetComponent<ServerSyncScript>().SetUp();
@@ -381,13 +382,14 @@ public class PlayerManager : MonoBehaviour
                 GoToSpawn();
                 _photonView.RPC("sendMessage", RpcTarget.AllViaServer,
                     "<color=blue>" + _photonView.name + "</color> has loaded.");
+                ready = true;
 
                 /*int readyPlayers;
             TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
             readyPlayers = readyPlayers + 1;
             SetReadyPlayers(readyPlayers, _gm.GetStageNum());*/
 
-                ready = true;
+                
 
                 //Debug.Log(_spawnLocation + "- Player: " + playerNumber + " Name: " +_photonView.Owner.NickName);
 
