@@ -92,7 +92,6 @@ public class PlayerPowerups : MonoBehaviour
         _audioManager = GetComponent<CarController>().audioManager;
         _vfxHandler = GetComponent<CarVFXHandler>();
         _rigidbody = GetComponent<Rigidbody>();
-        _wallObject = transform.GetChild(0).gameObject;
         _blastObject = transform.GetChild(1).gameObject;
         _blastObjectCollider = _blastObject.GetComponent<SphereCollider>();
         powerupIcon = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(4).GetComponent<Image>();
@@ -102,7 +101,6 @@ public class PlayerPowerups : MonoBehaviour
         _punchObject = transform.GetChild(2).gameObject;
         _punchGlove = transform.GetChild(3).gameObject;
         _punchLine = _grappleLineObject.GetComponent<LineRenderer>();
-        _warpObject = transform.GetChild(4).gameObject;
         _blastObject.SetActive(false);
         _photonView = GetComponent<PhotonView>();
     }
@@ -118,7 +116,6 @@ public class PlayerPowerups : MonoBehaviour
         _audioManager = GetComponent<CarController>().audioManager;
         _vfxHandler = GetComponent<CarVFXHandler>();
         _rigidbody = GetComponent<Rigidbody>();
-        _wallObject = transform.GetChild(0).gameObject;
         _blastObject = transform.GetChild(1).gameObject;
         _blastObjectCollider = _blastObject.GetComponent<SphereCollider>();
         powerupIcon = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(4).GetComponent<Image>();
@@ -128,10 +125,7 @@ public class PlayerPowerups : MonoBehaviour
         _punchObject = transform.GetChild(2).gameObject;
         _punchGlove = transform.GetChild(3).gameObject;
         _punchLine = _grappleLineObject.GetComponent<LineRenderer>();
-        _warpObject = transform.GetChild(4).gameObject;
         _blastObject.SetActive(false);
-
-        //Debug.Log("Blast object is active? " + blastObject.activeInHierarchy);
     }
 
     void FixedUpdate()
@@ -140,37 +134,11 @@ public class PlayerPowerups : MonoBehaviour
         
         PhysUpdatePowerups();
     }
-    
-    private void PhysUpdatePowerups()
+
+
+    private void DetectTarget()
     {
-        _wallShieldTimer = _wallShieldTimer <= 0 ? 0 : _wallShieldTimer - Time.fixedDeltaTime;
-        _airBlastTimer = _airBlastTimer <= 0 ? 0 : _airBlastTimer - Time.fixedDeltaTime;
-        _superBoostTimer = _superBoostTimer <= 0 ? 0 : _superBoostTimer - Time.fixedDeltaTime;
-        _grappleTimer = _grappleTimer <= 0 ? 0 : _grappleTimer - Time.fixedDeltaTime;
-        _punchTimer = _punchTimer <= 0 ? 0 : _punchTimer - Time.fixedDeltaTime;
-        _warpPortalTimer = _warpPortalTimer <= 0 ? 0 : _warpPortalTimer - Time.fixedDeltaTime;
-
-        if (_punching && _nearestHit.transform != null)
-        {
-            _powerupIconMask.fillAmount = (punchTime - _punchTimer)/punchTime;
-            _punchLine.startColor = Color.green;
-            _punchLine.endColor = Color.red;
-            
-            // Draw line between them
-            Vector3[] positions = new Vector3[2];
-            positions[0] = transform.position;
-            positions[1] = Vector3.Lerp(transform.position + transform.forward,  _nearestHit.transform.position, (punchTime - _punchTimer) / punchTime );
-            
-            _punchLine.SetPositions(positions);
-            _punchGlove.transform.position = positions[1];
-
-            _photonView.RPC("UpdatePunchingGlove", RpcTarget.All, _photonView.ViewID, positions);
-        }
-
-        if (_currentPowerupType == PowerupType.PunchingGlove || _currentPowerupType == PowerupType.GrapplingHook)
-        {
-            // Detect opponent to grapple to
-            RaycastHit[] hits;
+        RaycastHit[] hits;
             if (_currentPowerupType == PowerupType.PunchingGlove)
                 hits = Physics.SphereCastAll(transform.position, detectionRadius, transform.forward,  achievablePunchRange);
             else
@@ -236,24 +204,40 @@ public class PlayerPowerups : MonoBehaviour
                 Debug.Log("No hit!");
                 powerupIcon.transform.GetChild(2).gameObject.SetActive(true);
             }
-        }
-        else
+    }
+    
+    private void PhysUpdatePowerups()
+    {
+        _airBlastTimer = _airBlastTimer <= 0 ? 0 : _airBlastTimer - Time.fixedDeltaTime;
+        _superBoostTimer = _superBoostTimer <= 0 ? 0 : _superBoostTimer - Time.fixedDeltaTime;
+        _grappleTimer = _grappleTimer <= 0 ? 0 : _grappleTimer - Time.fixedDeltaTime;
+        _punchTimer = _punchTimer <= 0 ? 0 : _punchTimer - Time.fixedDeltaTime;
+
+        if (_punching && _nearestHit.transform != null)
         {
-            if (_currentTarget)
-            {
-                if (_currentPowerupType == PowerupType.PunchingGlove)
-                    _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(false);
-                else
-                    _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(false);
-                _currentTarget = null;
-                powerupIcon.transform.GetChild(2).gameObject.SetActive(false);
-            }
+            _powerupIconMask.fillAmount = (punchTime - _punchTimer)/punchTime;
+            _punchLine.startColor = Color.green;
+            _punchLine.endColor = Color.red;
+            
+            // Draw line between them
+            Vector3[] positions = new Vector3[2];
+            positions[0] = transform.position;
+            positions[1] = Vector3.Lerp(transform.position + transform.forward,  _nearestHit.transform.position, (punchTime - _punchTimer) / punchTime );
+            
+            _punchLine.SetPositions(positions);
+            _punchGlove.transform.position = positions[1];
+
+            _photonView.RPC("UpdatePunchingGlove", RpcTarget.All, _photonView.ViewID, positions);
         }
 
+        if (!_punching && _punchGlove.activeInHierarchy)
+        {
+            _punchGlove.SetActive(false);
+        }
+        
         if (_grappling && _nearestHit.transform != null)
         {      
             _powerupIconMask.fillAmount = (grappleTime - _grappleTimer)/grappleTime;
-
             _grappleLine.startColor = Color.green;
             _grappleLine.endColor = Color.red;
             
@@ -276,68 +260,41 @@ public class PlayerPowerups : MonoBehaviour
             }
 
             if (!_audioManager.IsPlayingSound("GrapplingHookZip"))
-            {
                 _audioManager.PlaySound("GrapplingHookZip");
-            }
-            
+
             if ((_nearestHit.transform.position - transform.position).magnitude < grappleThreshold)
             {
                 if (_audioManager.IsPlayingSound("GrapplingHookZip"))
-                {
                     _audioManager.StopSound("GrapplingHookZip");
-                }
+                
                 _grappling = false;
                 _grappleLineObject.SetActive(false);
                 StartCoroutine(DelayRemoveIcon());
                 _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.GrapplingHook, false);
-
             }
         }
+        
+        if (_currentPowerupType == PowerupType.PunchingGlove || _currentPowerupType == PowerupType.GrapplingHook)
+        {
+            DetectTarget();
+        }
+        else
+        {
+            if (_currentTarget)
+            {
+                if (_currentPowerupType == PowerupType.PunchingGlove)
+                    _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(false);
+                else
+                    _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(false);
+                _currentTarget = null;
+                powerupIcon.transform.GetChild(2).gameObject.SetActive(false);
+            }
+        }
+
+ 
         
         if (_boosting)
-        {
             _powerupIconMask.fillAmount = (1 - _superBoostTimer);
-        }
-        
-        if (_wallShieldTimer > 0)
-        {
-            _powerupIconMask.fillAmount = (wallShieldTime - _wallShieldTimer) / wallShieldTime;
-            if (!_wallObject.activeInHierarchy)
-            {
-                _wallObject.SetActive(true);
-                _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.BouncyWallShield, true);
-            }
-        }
-        else
-        {
-            if (_wallObject.activeInHierarchy)
-            {
-                //_powerupIconMask.fillAmount = 0;
-                _wallObject.SetActive(false);
-                StartCoroutine(DelayRemoveIcon());
-                _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.BouncyWallShield, false);
-            }
-        }
-
-        if (_warpPortalTimer > 0)
-        {
-            _powerupIconMask.fillAmount = (warpPortalTime - _warpPortalTimer) / warpPortalTime;
-            if (!_warpObject.activeInHierarchy)
-            {
-                _warpObject.SetActive(true);
-                _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.WarpPortal, true);
-            }
-        }
-        else
-        {
-            if (_warpObject.activeInHierarchy)
-            {
-                //_powerupIconMask.fillAmount = 0;
-                _warpObject.SetActive(false);
-                StartCoroutine(DelayRemoveIcon());
-                _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.WarpPortal, false);
-            }
-        }
 
         if (_airBlasting)
         {
@@ -346,7 +303,6 @@ public class PlayerPowerups : MonoBehaviour
             _photonView.RPC("UpdateAirBlast", RpcTarget.All, _photonView.ViewID,  airBlastRadius);
             if (_airBlastTimer <= 0)
             {
-                //_powerupIconMask.fillAmount = 0;
                 _blastObject.SetActive(false);
                 _blastObjectCollider.radius = 2;
                 _airBlasting = false;
@@ -356,10 +312,6 @@ public class PlayerPowerups : MonoBehaviour
             }
         }
 
-        if (!_punching && _punchGlove.activeInHierarchy)
-        {
-            _punchGlove.SetActive(false);
-        }
         
         if (_carController.GetActivate() && !_usingPowerup)
         {
@@ -367,17 +319,10 @@ public class PlayerPowerups : MonoBehaviour
             {
                 case PowerupType.None: break; //Debug.Log("No powerup equipped!"); break;
                 case PowerupType.Superboost: SuperBoost(); _usingPowerup =true; break;
-                case PowerupType.BouncyWallShield: BouncyWallShield(); _usingPowerup =true; break;
                 case PowerupType.AirBlast: AirBlast(); _usingPowerup =true; break;
                 case PowerupType.GrapplingHook: GrapplingHook(); _usingPowerup =true; break;
                 case PowerupType.PunchingGlove: PunchingGlove(); _usingPowerup =true; break;
-                case PowerupType.WarpPortal: WarpPortal(); _usingPowerup =true; break;
                 default: throw new ArgumentOutOfRangeException();
-            }
-
-            if (_wallShieldTimer < wallShieldTime - 1.0f)
-            {
-                _wallShieldTimer = 0.0f;
             }
         }
     }
@@ -400,20 +345,6 @@ public class PlayerPowerups : MonoBehaviour
          }
      }
 
-     private void BouncyWallShield()
-     {
-         _wallShieldTimer = wallShieldTime;
-         _audioManager.PlaySound("BouncyWallShield");
-     }
-     
-     private void WarpPortal()
-     {
-         _warpPortalTimer = warpPortalTime;
-         _audioManager.PlaySound("WarpPortal");
-     }
-
- 
-     
      private void PunchingGlove()
      {
          // Detect opponent to grapple to
@@ -470,53 +401,63 @@ public class PlayerPowerups : MonoBehaviour
 
      private void GrapplingHook()
      {
-         // Detect opponent to grapple to
-         RaycastHit[] hits;
-         hits = Physics.SphereCastAll(transform.position, 5, transform.forward,  achievableDistance);
-         if (hits.Length > 0)
-         {
-             _carController.audioManager.PlaySound("GrapplingHookLaunch");
-             float distance = 1000000.0f;
-             _nearestHit = hits[0];
-             foreach (var hit in hits)
-             {
-                 if (hit.distance < distance && hit.transform.CompareTag("Player") && hit.transform.gameObject != transform.gameObject)
-                 {
-                     distance = hit.distance;
-                     _nearestHit = hit;
-                 }
-             }
+         // // Detect opponent to grapple to
+         // RaycastHit[] hits;
+         // hits = Physics.SphereCastAll(transform.position, 5, transform.forward,  achievableDistance);
+         // if (hits.Length > 0)
+         // {
+         //     _carController.audioManager.PlaySound("GrapplingHookLaunch");
+         //     float distance = 1000000.0f;
+         //     _nearestHit = hits[0];
+         //     foreach (var hit in hits)
+         //     {
+         //         if (hit.distance < distance && hit.transform.CompareTag("Player") && hit.transform.gameObject != transform.gameObject)
+         //         {
+         //             distance = hit.distance;
+         //             _nearestHit = hit;
+         //         }
+         //     }
+         //
+         //     if (_nearestHit.transform.CompareTag("Player") && _nearestHit.transform.gameObject != transform.gameObject)
+         //     {
+         //         // Found a player to grapple!
+         //         _grappleLineObject.SetActive(true);
+         //         StartCoroutine(Grapple());
+         //         Debug.Log("HIT!!!");
+         //         powerupIcon.transform.GetChild(2).gameObject.SetActive(false);
+         //         _audioManager.PlaySound("GrapplingHook");
+         //         _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.GrapplingHook, true);
+         //         _carController.audioManager.PlaySound("GrapplingHook");
+         //     }
+         //     else
+         //     {
+         //         Debug.Log("No hit!");
+         //         powerupIcon.transform.GetChild(2).gameObject.SetActive(true);
+         //         _grappleLineObject.SetActive(false);
+         //         _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.GrapplingHook, false);
+         //     }
+         // }
+         // else
+         // {
+         //     Debug.Log("No hit!");
+         //     powerupIcon.transform.GetChild(2).gameObject.SetActive(true);
+         //     _grappleLineObject.SetActive(false);
+         //     _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.GrapplingHook, false);
+         // }
 
-             if (_nearestHit.transform.CompareTag("Player") && _nearestHit.transform.gameObject != transform.gameObject)
-             {
-                 // Found a player to grapple!
-                 _grappleLineObject.SetActive(true);
-                 StartCoroutine(Grapple());
-                 Debug.Log("HIT!!!");
-                 powerupIcon.transform.GetChild(2).gameObject.SetActive(false);
-                 _audioManager.PlaySound("GrapplingHook");
-                 _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.GrapplingHook, true);
-                 _carController.audioManager.PlaySound("GrapplingHook");
-             }
-             else
-             {
-                 Debug.Log("No hit!");
-                 powerupIcon.transform.GetChild(2).gameObject.SetActive(true);
-                 _grappleLineObject.SetActive(false);
-                 _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.GrapplingHook, false);
-             }
-         }
-         else
+         if (_currentTarget)
          {
-             Debug.Log("No hit!");
-             powerupIcon.transform.GetChild(2).gameObject.SetActive(true);
-             _grappleLineObject.SetActive(false);
-             _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.GrapplingHook, false);
+             _grappleLineObject.SetActive(true);
+             StartCoroutine(Grapple());
+             powerupIcon.transform.GetChild(2).gameObject.SetActive(false);
+             _audioManager.PlaySound("GrapplingHook");
+             _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.GrapplingHook, true);
          }
      }
 
      private IEnumerator Grapple()
      {
+         powerupIcon.transform.GetChild(2).gameObject.SetActive(false);
          // Apply a constant acceleration force towards the player for a limited time
          _grappling = true;
          yield return new WaitForSeconds(grappleTime);
@@ -627,9 +568,6 @@ public class PlayerPowerups : MonoBehaviour
              case PowerupType.Superboost:
                  _currentPowerup = powerups[0];
                  break;
-             case PowerupType.BouncyWallShield:
-                 _currentPowerup = powerups[1];
-                 break;
              case PowerupType.AirBlast:
                  _currentPowerup = powerups[2];
                  break;
@@ -639,50 +577,41 @@ public class PlayerPowerups : MonoBehaviour
              case PowerupType.PunchingGlove:
                  _currentPowerup = powerups[4];
                  break;
+             case PowerupType.BouncyWallShield:
              case PowerupType.WarpPortal:
-                 _currentPowerup = powerups[5];
-                 break;
              default:
                  throw new ArgumentOutOfRangeException(nameof(powerupType), powerupType, null);
          }
          _currentPowerupType = _currentPowerup.powerupType;
          powerupIcon.sprite = _currentPowerup.powerupUIImage;
-         _powerupIconMask.sprite = _currentPowerup.powerupUIImage;
          powerupIcon.gameObject.SetActive(true);
+         _powerupIconMask.sprite = _currentPowerup.powerupUIImage;
          _powerupIconMask.fillAmount = 0;
          _vfxHandler.PlayVFXAtPosition("ItemBoxImpact", transform.position);
          _audioManager.PlaySound("PowerUpCollected");
      }
+
+     private bool IsUsingAnyPowerup()
+     {
+         return (_boosting || _grappling || _punching || _airBlasting);
+     }
      
      private void OnTriggerEnter(Collider collider)
      {
-         if (collider.transform.CompareTag("Powerup") && _warpPortalTimer <= 0 && _wallShieldTimer <= 0 && !_boosting && !_grappling && !_punching && !_airBlasting && !_carController.bot)
+         if (collider.transform.CompareTag("Powerup") && !IsUsingAnyPowerup() && !_carController.bot)
          {
              _currentPowerup = collider.transform.parent.GetComponent<PowerupSpawner>().GetCurrentPowerup();
              _currentPowerupType = _currentPowerup.powerupType;
              collider.transform.parent.GetComponent<PowerupSpawner>().ResetTimer();
              powerupIcon.sprite = _currentPowerup.powerupUIImage;
              _powerupIconMask.sprite = _currentPowerup.powerupUIImage;
-             powerupIcon.gameObject.SetActive(true);
              _powerupIconMask.fillAmount = 0;
+             powerupIcon.gameObject.SetActive(true);
              powerupIcon.gameObject.GetComponent<Animator>().Play("PowerupPopIn");
              _vfxHandler.SpawnVFXAtPosition("ItemBoxDisappear", collider.transform.position, 0.5f,false);
              _vfxHandler.PlayVFXAtPosition("ItemBoxImpact", transform.position);
              _audioManager.PlaySound("PowerUpCollected");
              powerupIcon.transform.GetChild(2).gameObject.SetActive(false);
-         }
-         
-         if (collider.transform.CompareTag("WallShield"))
-         {
-             if (_rigidbody.velocity.magnitude * 2.2369362912f < 0.1f)
-             {                
-                 _rigidbody.velocity = -collider.transform.forward * wallShieldBounciness * 2;
-             }
-             else
-             {
-                 _rigidbody.AddForce(-collider.transform.forward * wallShieldBounciness * 2, ForceMode.VelocityChange);
-             }        
-             _audioManager.PlaySound("BouncyWallShield");
          }
          
          if (collider.transform.CompareTag("Blast") && collider.transform.parent.gameObject != transform.gameObject)
@@ -695,25 +624,12 @@ public class PlayerPowerups : MonoBehaviour
          if (collider.transform.CompareTag("PunchingGlove") && collider.transform.parent.gameObject != transform.gameObject)
          {
              Vector3 direction = collider.transform.position - transform.position;
-             _rigidbody.velocity = -(direction.normalized * punchingForce); //Time.fixedDeltaTime * 50;
+             _rigidbody.velocity = -(direction.normalized * punchingForce);
              _rigidbody.AddForce(transform.up * (_carController.pushForceAmount * 700.0f), ForceMode.Force);
-             //_rigidbody.AddForce(-(direction.normalized * punchingForce)); 
-             Debug.Log("Ouch!! Hit with velocity: " + _rigidbody.velocity);
-             //collider.transform.parent.gameObject.GetComponent<PlayerPowerups>().DetectPunch();
-             _photonView.RPC("PunchingGloveHit", RpcTarget.All, collider.transform.parent.gameObject.GetComponent<PhotonView>().ViewID,
-                 collider.transform.position);
-             _photonView.RPC("Powerup", RpcTarget.All, collider.transform.parent.gameObject.GetComponent<PhotonView>().ViewID,
-                 PowerupType.PunchingGlove, false);
+             _photonView.RPC("PunchingGloveHit", RpcTarget.All, collider.transform.parent.gameObject.GetComponent<PhotonView>().ViewID, collider.transform.position);
+             _photonView.RPC("Powerup", RpcTarget.All, collider.transform.parent.gameObject.GetComponent<PhotonView>().ViewID, PowerupType.PunchingGlove, false);
              _vfxHandler.SpawnVFXAtPosition("PunchImpact", transform.position, 1,true);
              _audioManager.PlaySound("PunchingGlove");
-         }
-         
-           
-         if (collider.transform.CompareTag("WarpPortal"))
-         {
-             _vfxHandler.PlayVFX("PortalEffect");
-             _carController.ResetPlayer();
-             _audioManager.PlaySound("WarpPortal");
          }
      }
 }
