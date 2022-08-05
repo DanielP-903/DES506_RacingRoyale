@@ -499,7 +499,12 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             spectateMenu.SetActive(true);
         }
-        GameObject.Find("FlyByCam").SetActive(false);
+
+        if (GameObject.Find("CM vcam1"))
+        {
+            GameObject.Find("CM vcam1").SetActive(false);
+        }
+
         CinemachineVirtualCamera cvc = GameObject.Find("PlayerCamera").GetComponent<CinemachineVirtualCamera>();
 
         spectateTarget = transform;
