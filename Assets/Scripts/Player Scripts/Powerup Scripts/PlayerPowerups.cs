@@ -696,6 +696,7 @@ public class PlayerPowerups : MonoBehaviour
          {
              Vector3 direction = collider.transform.position - transform.position;
              _rigidbody.velocity = -(direction.normalized * punchingForce); //Time.fixedDeltaTime * 50;
+             _rigidbody.AddForce(transform.up * (_carController.pushForceAmount * 700.0f), ForceMode.Force);
              //_rigidbody.AddForce(-(direction.normalized * punchingForce)); 
              Debug.Log("Ouch!! Hit with velocity: " + _rigidbody.velocity);
              //collider.transform.parent.gameObject.GetComponent<PlayerPowerups>().DetectPunch();

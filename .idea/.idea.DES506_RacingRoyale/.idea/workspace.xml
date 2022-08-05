@@ -77,10 +77,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="15924">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="15924" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -200,6 +200,7 @@
       <workItem from="1659517801588" duration="3325000" />
       <workItem from="1659529565936" duration="4502000" />
       <workItem from="1659601325868" duration="13920000" />
+      <workItem from="1659688092625" duration="2099000" />
     </task>
     <servers />
   </component>
@@ -227,10 +228,17 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/Player Scripts/Powerup Scripts/PlayerPowerups.cs</url>
-          <line>682</line>
-          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\Player Scripts\Powerup Scripts\PlayerPowerups.cs" initialLine="701" containingFunctionPresentation="method 'OnTriggerEnter'" />
-          <option name="timeStamp" value="4" />
+          <url>file://$PROJECT_DIR$/Assets/Scripts/Misc Scripts/WallFollow.cs</url>
+          <line>110</line>
+          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\Misc Scripts\WallFollow.cs" initialLine="110" containingFunctionPresentation="method 'Update'">
+            <startOffsets>
+              <option value="4158" />
+            </startOffsets>
+            <endOffsets>
+              <option value="4247" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="7" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
