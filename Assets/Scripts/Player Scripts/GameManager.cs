@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private int _stage = 1;
     private int _totalPlayers = 0;
     public bool _eliminated = false;
+    public bool _completed = false;
     private int _elimPositon = 0;
     private int _playerNumber = 0;
     private int _totalBots = 0;
@@ -215,6 +216,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void CompletePlayer()
     {
+        _completed = true;
         Spectate();
         _photonView.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
         //PhotonNetwork.Destroy(_photonView.gameObject);
@@ -251,7 +253,12 @@ public class GameManager : MonoBehaviourPunCallbacks
         Debug.Log(spectateTargets[0]);
         foreach (PhotonView pv in PhotonNetwork.PhotonViewCollection)
         {
-            if (!pv.Owner.CustomProperties.ContainsKey("Eliminated") && pv.gameObject != null && pv.gameObject.tag == "Player" && pv.gameObject.name != _photonView.Owner.NickName)
+            bool notCompleted = true;
+            if (pv.gameObject.GetComponent<PlayerManager>())
+            {
+                notCompleted = !pv.gameObject.GetComponent<PlayerManager>().completedStage;
+            }
+            if (!pv.Owner.CustomProperties.ContainsKey("Eliminated") && pv.gameObject != null && pv.gameObject.tag == "Player" && pv.gameObject.name != _photonView.Owner.NickName && notCompleted)
             {
                 spectateTargets.Add(pv.gameObject.transform);
                 Debug.Log("AddedToSpec");
@@ -475,6 +482,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     void Spectate()
     {
+        Debug.Log("Spectating: " + SceneManager.GetActiveScene().name);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         if (spectateText != null)
@@ -492,7 +500,12 @@ public class GameManager : MonoBehaviourPunCallbacks
             spectateMenu.SetActive(true);
         }
 
-        CinemachineVirtualCamera cvc = Camera.main.gameObject.GetComponent<CinemachineVirtualCamera>();
+        if (GameObject.Find("CM vcam1"))
+        {
+            GameObject.Find("CM vcam1").SetActive(false);
+        }
+
+        CinemachineVirtualCamera cvc = GameObject.Find("PlayerCamera").GetComponent<CinemachineVirtualCamera>();
 
         spectateTarget = transform;
         bool foundView = false;
@@ -788,10 +801,15 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             if (_eliminated)
             {
-                Debug.Log("PlayerEliminated");
+                Debug.Log("SetupPlayerEliminated");
                 Spectate();
             }
+            else if (_completed)
+            {
+                _completed = false;
+            }
 
+            GameObject.Find("Message").GetComponent<TextMeshProUGUI>().color = Color.clear;
             _totalPlayers = (int)PhotonNetwork.CurrentRoom.CustomProperties["TotalPlayerCount"];
             _totalBots = 0;
 
@@ -810,7 +828,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             {
                 //_photonView.gameObject.SetActive(true);
                 //_photonView.gameObject.GetComponent<PlayerManager>().SetUp();
-                if (!_photonView.gameObject.activeInHierarchy)
+                if (_photonView != null && !_photonView.gameObject.activeInHierarchy)
                 {
                     _photonView.gameObject.SetActive(true);
                     _photonView.gameObject.GetComponent<PlayerManager>().SetUp();
@@ -1002,6 +1020,10 @@ public class GameManager : MonoBehaviourPunCallbacks
                 {
                     _stage = 2;
                     SetFinishedPlayers(0, _stage);
+                    if (!_completed && !_eliminated)
+                    {
+                        _photonView.gameObject.GetComponent<PlayerManager>().EliminateCurrentPlayer();
+                    }
                     if (PhotonNetwork.IsMasterClient)
                     {
                         progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(11)

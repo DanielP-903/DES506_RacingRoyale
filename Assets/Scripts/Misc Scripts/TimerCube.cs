@@ -12,6 +12,7 @@ public class TimerCube : MonoBehaviour
 
     private PlayerManager _playerRef;
     private bool _hasFoundPlayer;
+    private GameManager _gm;
 
     private float _currentTimerValue;
 
@@ -20,29 +21,32 @@ public class TimerCube : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
         _meshRenderer = GetComponent<MeshRenderer>();
         _meshRenderer.enabled = true;
         _effect = transform.GetChild(0).GetComponent<VisualEffect>();
-        StartCoroutine(WaitForPlayer());
+        //StartCoroutine(WaitForPlayer());
      
     }
 
     void OnLevelWasLoaded()
     {
+        _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
         _meshRenderer = GetComponent<MeshRenderer>();
         _meshRenderer.enabled = true;
         _effect = transform.GetChild(0).GetComponent<VisualEffect>();
         _effect.Stop();
-        StartCoroutine(WaitForPlayer());
+        //StartCoroutine(WaitForPlayer());
         _currentTimerValue = 3;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (_hasFoundPlayer && _playerRef)
+        if ((int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer"+_gm.GetStageNum())] != 0)
         {
-            _currentTimerValue = _playerRef.timer;
+            int hit = (int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer"+_gm.GetStageNum())];
+            _currentTimerValue = _gm.GetStartDelay() - ((PhotonNetwork.ServerTimestamp - hit) / 1000f);
             // if (_playerRef.startDelayText.text != "Go!")
             // {
             //     _currentTimerValue = _playerRef.timer;

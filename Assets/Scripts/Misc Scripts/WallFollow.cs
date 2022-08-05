@@ -169,11 +169,11 @@ public class WallFollow : MonoBehaviour
                 _playerRef = player;
                 //Debug.Log("Player Found");
                 hasFoundPlayer = true;
+                _carController = _playerRef.GetComponent<CarController>();
+                _rigidbodyRef = _carController.GetComponent<Rigidbody>();
             }
         }
         
-        _carController = _playerRef.GetComponent<CarController>();
-        _rigidbodyRef = _carController.GetComponent<Rigidbody>();
     }
 
     private void OnTriggerEnter(Collider other)

@@ -35,7 +35,7 @@ public class PlayerManager : MonoBehaviour
     public float timer = 3;
 
     private int playerNumber = 0;
-    private bool completedStage = false;
+    public bool completedStage = false;
     private bool eliminated = false;
     private int elimPosition = 0;
     private bool ready = false;
@@ -365,6 +365,7 @@ public class PlayerManager : MonoBehaviour
                     EliminateCurrentPlayer();
                 }
 
+
                 transform.gameObject.GetComponent<PlayerPowerups>().SetUp();
                 transform.gameObject.GetComponent<CarVFXHandler>().SetUp();
                 transform.gameObject.GetComponent<ServerSyncScript>().SetUp();
@@ -374,23 +375,12 @@ public class PlayerManager : MonoBehaviour
                 _cs = GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>();
                 _as = GameObject.Find("Alerts").GetComponent<AlertSystem>();
                 startDelayText = GameObject.Find("Start Delay").GetComponent<TextMeshProUGUI>();
-                _messageText = GameObject.Find("Message").GetComponent<TextMeshProUGUI>();
-                _messageText.color = Color.clear;
                 completedStage = false;
                 _spawnLocation = GameObject.Find("SpawnLocation" + playerNumber).transform;
                 GoToSpawn();
                 _photonView.RPC("sendMessage", RpcTarget.AllViaServer,
                     "<color=blue>" + _photonView.name + "</color> has loaded.");
-
-                /*int readyPlayers;
-            TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
-            readyPlayers = readyPlayers + 1;
-            SetReadyPlayers(readyPlayers, _gm.GetStageNum());*/
-
                 ready = true;
-
-                //Debug.Log(_spawnLocation + "- Player: " + playerNumber + " Name: " +_photonView.Owner.NickName);
-
             }
         }
         else
@@ -650,7 +640,7 @@ public class PlayerManager : MonoBehaviour
                     }
                 }
 
-                if (numOfReadyPlayers - elimPlayers >= _gm.GetTotalPlayers())
+                if (numOfReadyPlayers + elimPlayers >= _gm.GetTotalPlayers())
                 {
                     allPlayersReady = true;
                 }
