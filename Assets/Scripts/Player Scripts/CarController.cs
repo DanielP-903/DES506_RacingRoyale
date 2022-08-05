@@ -88,7 +88,6 @@ public class CarController : MonoBehaviour
     
     [Tooltip("Sideways turn force (ROLL)")]
     public float sidewaysTurnForceRoll = 15;
-    [Header("----------------------------")]     
 
     [Header("Forces")] 
     [Tooltip("Jumping force")]
