@@ -482,6 +482,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     void Spectate()
     {
+        Debug.Log("Spectating: " + SceneManager.GetActiveScene().name);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         if (spectateText != null)
@@ -498,8 +499,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             spectateMenu.SetActive(true);
         }
-
-        CinemachineVirtualCamera cvc = Camera.main.gameObject.GetComponent<CinemachineVirtualCamera>();
+        GameObject.Find("FlyByCam").SetActive(false);
+        CinemachineVirtualCamera cvc = GameObject.Find("PlayerCamera").GetComponent<CinemachineVirtualCamera>();
 
         spectateTarget = transform;
         bool foundView = false;

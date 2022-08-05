@@ -640,7 +640,7 @@ public class PlayerManager : MonoBehaviour
                     }
                 }
 
-                if (numOfReadyPlayers - elimPlayers >= _gm.GetTotalPlayers())
+                if (numOfReadyPlayers + elimPlayers >= _gm.GetTotalPlayers())
                 {
                     allPlayersReady = true;
                 }
