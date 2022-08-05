@@ -660,10 +660,10 @@ public class PlayerManager : MonoBehaviour
             if (_photonView.Owner.IsMasterClient)
             {
                 int timeSet = PhotonNetwork.ServerTimestamp;
-                //ExitGames.Client.Photon.Hashtable hash = new ExitGames.Client.Photon.Hashtable();
-                //hash.Add(("Timer"+_gm.GetStageNum()), timeSet);
-                //PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
-                PhotonNetwork.CurrentRoom.CustomProperties[("Timer" + _gm.GetStageNum())] = timeSet;
+                ExitGames.Client.Photon.Hashtable hash = new ExitGames.Client.Photon.Hashtable();
+                hash.Add(("Timer"+_gm.GetStageNum()), timeSet);
+                PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
+                //PhotonNetwork.CurrentRoom.CustomProperties[("Timer" + _gm.GetStageNum())] = timeSet;
             }
             //yield return new WaitUntil(() => allPlayersReady);
             startDelayText.color = Color.clear; // Changed to clear as rubics are in
