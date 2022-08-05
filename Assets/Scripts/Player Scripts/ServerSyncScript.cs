@@ -82,11 +82,6 @@ public class ServerSyncScript : MonoBehaviour
             case PowerupType.PunchingGlove:
                 obj = PhotonView.Find(id).transform.GetChild(3).gameObject;
                 subobj = PhotonView.Find(id).transform.GetChild(2).gameObject;
-
-                // if (subobj != null)
-                //     subobj.SetActive(true);
-                // else
-                //     Debug.LogError("subobj in PunRPC function 'TriggerPowerup' is missing!");
                 break;
             case PowerupType.WarpPortal:
                 obj = PhotonView.Find(id).transform.GetChild(4).gameObject;
@@ -158,7 +153,6 @@ public class ServerSyncScript : MonoBehaviour
         Debug.Log("HIT ANOTHER PLAYER WITH RIGIDBODY VELOCITY: " + rb.velocity);
         target.GetComponent<CarVFXHandler>().PlayVFXAtPosition("Impact", contactPoint);
         int rand = Random.Range(1, 5);
-        //if (!target.GetComponent<CarController>().bot) target.GetComponent<AudioManager>().PlaySound("CarHit0" + rand);;
     }
 
     [PunRPC]
@@ -172,45 +166,4 @@ public class ServerSyncScript : MonoBehaviour
         _outlineObjectGrapple.GetComponent<MeshFilter>().sharedMesh =
             meshArray[(int)PhotonNetwork.LocalPlayer.CustomProperties["Skin"]];
     }
-
-    // [PunRPC]
-    // void ResetPunchingGlove(GameObject obj, Vector3 pos)
-    // {
-    //     obj.transform.position = pos;
-    // }
-
-    // [PunRPC]
-    // void DisablePowerup(GameObject obj, PowerupType type, GameObject subobj = null)
-    // {
-    //     switch (type)
-    //     {
-    //         case PowerupType.None:
-    //             break;
-    //         case PowerupType.Superboost:
-    //             break;
-    //         case PowerupType.BouncyWallShield:
-    //             obj.SetActive(false);
-    //             break;
-    //         case PowerupType.AirBlast:
-    //             obj.SetActive(false);
-    //             obj.GetComponent<SphereCollider>().radius = 2;
-    //             break;
-    //         case PowerupType.GrapplingHook:
-    //             obj.SetActive(false);
-    //             break;
-    //         case PowerupType.PunchingGlove:
-    //             obj.SetActive(false);
-    //             if (subobj != null)
-    //                 subobj.SetActive(false);
-    //             else
-    //                 Debug.LogError("subobj in PunRPC function 'DisablePowerup' is missing!");
-    //             break;
-    //         case PowerupType.WarpPortal:
-    //             obj.SetActive(false);
-    //             break;
-    //         default:
-    //             throw new ArgumentOutOfRangeException(nameof(type), type, null);
-    //     }
-    // }
-
 }
