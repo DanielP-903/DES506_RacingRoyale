@@ -817,17 +817,24 @@ public class CarController : MonoBehaviour
 
     public void ResetPlayer(bool pressedButton = false)
     {
-        if (!bot && pressedButton)
+        if (_photonView.Owner.IsMasterClient && _photonView.IsMine)
         {
-            _playerManager.GoToSpawn(true);
-        }
-        else if (!bot)
-        {
-            _playerManager.GoToSpawn();
+            if (!bot && pressedButton)
+            {
+                _playerManager.GoToSpawn(true);
+            }
+            else if (!bot)
+            {
+                _playerManager.GoToSpawn();
+            }
+            else
+            {
+                _botCarController.goToSpawn();
+            }
         }
         else
         {
-            _botCarController.goToSpawn();
+            PhotonNetwork.Destroy(this.gameObject);
         }
     }
 
