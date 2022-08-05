@@ -113,7 +113,14 @@ public class PauseMenu : MonoBehaviour
     public void Resume()
     {
         Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        if (_gm._eliminated)
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
         pausePanel.SetActive(false);
         optionsPanel.SetActive(false);
         controlsPanel.SetActive(false);

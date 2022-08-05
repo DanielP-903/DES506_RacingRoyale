@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private PhotonView _photonView;
     private int _stage = 1;
     private int _totalPlayers = 0;
-    private bool _eliminated = false;
+    public bool _eliminated = false;
     private int _elimPositon = 0;
     private int _playerNumber = 0;
     private int _totalBots = 0;
@@ -474,6 +474,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     void Spectate()
     {
+        Cursor.lockState = CursorLockMode.None;
         if (spectateText != null)
         {
             spectateText.gameObject.SetActive(true);
