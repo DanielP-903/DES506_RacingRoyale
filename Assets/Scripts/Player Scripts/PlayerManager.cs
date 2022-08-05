@@ -323,6 +323,7 @@ public class PlayerManager : MonoBehaviour
         //Debug.Log("PlayerManger Loading Level");
         if (_photonView != null)
         {
+            _rb.constraints = RigidbodyConstraints.None;
             CinemachineVirtualCamera cvc = mainCam.GetComponent<CinemachineVirtualCamera>();
             //Debug.Log("LoadingPlayer: "+cvc);
             var transform1 = transform;
@@ -626,11 +627,13 @@ public class PlayerManager : MonoBehaviour
                 PhotonNetwork.CurrentRoom.PlayerCount);
             counter = 0;
             //&& counter < 100000
-            while (!allPlayersReady && counter < 10)
+            while (!allPlayersReady && counter < 100)
             {
                 allPlayersReady = true;
                 //Debug.Log("Running While Loop");
                 string str = "Focus: \n";
+                int numOfReadyPlayers = 0;
+                GameManager.TryGetElimPlayers(out int elimPlayers);
                 foreach (Player player in PhotonNetwork.PlayerList)
                 {
                     playerReady = false;
@@ -639,7 +642,7 @@ public class PlayerManager : MonoBehaviour
                     //Debug.Log("Player: "+player + " Ready: "+playerReady+"\n");
                     if (playerReady)
                     {
-
+                        numOfReadyPlayers++;
                     }
                     else
                     {
@@ -647,6 +650,16 @@ public class PlayerManager : MonoBehaviour
                     }
                 }
 
+                if (numOfReadyPlayers - elimPlayers >= _gm.GetTotalPlayers())
+                {
+                    allPlayersReady = true;
+                }
+                else
+                {
+                    allPlayersReady = false;
+                }
+
+                Debug.Log("N: "+numOfReadyPlayers +" E: "+ elimPlayers +" T: "+ _gm.GetTotalPlayers());
                 //Debug.Log(str);
                 counter++;
                 yield return new WaitForSeconds(0.1f);
