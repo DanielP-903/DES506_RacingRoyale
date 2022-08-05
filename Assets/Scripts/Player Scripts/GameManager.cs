@@ -799,7 +799,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         //Debug.Log("SetUp was called");
         if (this.gameObject != null)
         {
-            StartCoroutine(setLevelTimer());
             if (_eliminated)
             {
                 Debug.Log("SetupPlayerEliminated");
@@ -887,6 +886,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                         botsStored[i] = bot;
                         //bot.GetComponent<BotCarController>().setName(linesInFile[Random.Range(0, linesInFile.Length-1)]);
                     }
+                    StartCoroutine(setLevelTimer());
                 }
             }
             // UPON REACHING PEDESTAL STAGE
