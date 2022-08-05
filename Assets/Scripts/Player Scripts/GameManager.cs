@@ -795,7 +795,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             if (_eliminated)
             {
-                Debug.Log("PlayerEliminated");
+                Debug.Log("SetupPlayerEliminated");
                 Spectate();
             }
             else if (_completed)
@@ -803,6 +803,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 _completed = false;
             }
 
+            GameObject.Find("Message").GetComponent<TextMeshProUGUI>().color = Color.clear;
             _totalPlayers = (int)PhotonNetwork.CurrentRoom.CustomProperties["TotalPlayerCount"];
             _totalBots = 0;
 
@@ -821,7 +822,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             {
                 //_photonView.gameObject.SetActive(true);
                 //_photonView.gameObject.GetComponent<PlayerManager>().SetUp();
-                if (!_photonView.gameObject.activeInHierarchy)
+                if (_photonView != null && !_photonView.gameObject.activeInHierarchy)
                 {
                     _photonView.gameObject.SetActive(true);
                     _photonView.gameObject.GetComponent<PlayerManager>().SetUp();

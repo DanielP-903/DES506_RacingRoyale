@@ -375,24 +375,12 @@ public class PlayerManager : MonoBehaviour
                 _cs = GameObject.Find("CheckpointSystem").GetComponent<CheckpointSystem>();
                 _as = GameObject.Find("Alerts").GetComponent<AlertSystem>();
                 startDelayText = GameObject.Find("Start Delay").GetComponent<TextMeshProUGUI>();
-                _messageText = GameObject.Find("Message").GetComponent<TextMeshProUGUI>();
-                _messageText.color = Color.clear;
                 completedStage = false;
                 _spawnLocation = GameObject.Find("SpawnLocation" + playerNumber).transform;
                 GoToSpawn();
                 _photonView.RPC("sendMessage", RpcTarget.AllViaServer,
                     "<color=blue>" + _photonView.name + "</color> has loaded.");
                 ready = true;
-
-                /*int readyPlayers;
-            TryGetReadyPlayers(out readyPlayers, _gm.GetStageNum());
-            readyPlayers = readyPlayers + 1;
-            SetReadyPlayers(readyPlayers, _gm.GetStageNum());*/
-
-                
-
-                //Debug.Log(_spawnLocation + "- Player: " + playerNumber + " Name: " +_photonView.Owner.NickName);
-
             }
         }
         else
