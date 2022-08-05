@@ -273,7 +273,7 @@ public class CarVFXHandler : MonoBehaviour
                 meshArray[(int)PhotonNetwork.LocalPlayer.CustomProperties["Skin"]];
         }
 
-        if (!_carController.debug)
+        if (!_carController.debug && !_carController.bot)
             _photonView.RPC("UpdateOutlineMeshes", RpcTarget.All, _photonView.ViewID, (int)PhotonNetwork.LocalPlayer.CustomProperties["Skin"]);
 
         StopDriftEffects();

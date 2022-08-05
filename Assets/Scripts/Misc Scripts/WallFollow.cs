@@ -108,7 +108,7 @@ public class WallFollow : MonoBehaviour
             
             if (hasFoundPlayer && _playerRef)
             {
-                _wallOMeterSlider.value = Mathf.Lerp(_tValueMax, 0, (_tValueMax - _tValuePersistant)/_tValueMax);
+                _wallOMeterSlider.value = Mathf.Lerp(1, 0, (_tValueMax - _tValuePersistant) / _tValueMax);
             }
             
             transform.position = newPosition;
