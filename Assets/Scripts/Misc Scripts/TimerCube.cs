@@ -25,7 +25,7 @@ public class TimerCube : MonoBehaviour
         _meshRenderer = GetComponent<MeshRenderer>();
         _meshRenderer.enabled = true;
         _effect = transform.GetChild(0).GetComponent<VisualEffect>();
-        StartCoroutine(WaitForPlayer());
+        //StartCoroutine(WaitForPlayer());
      
     }
 
