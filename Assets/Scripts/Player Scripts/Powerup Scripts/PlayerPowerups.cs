@@ -290,8 +290,6 @@ public class PlayerPowerups : MonoBehaviour
                 powerupIcon.transform.GetChild(2).gameObject.SetActive(false);
             }
         }
-
- 
         
         if (_boosting)
             _powerupIconMask.fillAmount = (1 - _superBoostTimer);
@@ -454,6 +452,20 @@ public class PlayerPowerups : MonoBehaviour
              _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.GrapplingHook, true);
          }
      }
+     
+     private void AirBlast()
+     {
+         _blastObject.SetActive(true);
+         _blastObjectCollider.radius = 2;
+         _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.AirBlast, true);
+         _airBlasting = true;
+         _airBlastTimer = airBlastTime;
+         foreach (var effect in airBlastEffects)
+         {
+             effect.Play();
+         }
+         _audioManager.PlaySound("AirBlast");
+     }
 
      private IEnumerator Grapple()
      {
@@ -469,6 +481,7 @@ public class PlayerPowerups : MonoBehaviour
             _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.GrapplingHook, false);
          }
      }
+     
      private IEnumerator Punch()
      {            
          // Reset line
@@ -491,10 +504,7 @@ public class PlayerPowerups : MonoBehaviour
     
              _punchLine.SetPositions(positions2);
              _photonView.RPC("UpdatePunchingGlove", RpcTarget.All, _photonView.ViewID, positions2);
-             
              _punchGlove.transform.position = positions2[1];
-             //_photonView.RPC("ResetPunchingGlove", RpcTarget.All, punchGlove, positions2[1]);
-
              _punching = false;
              _punchObject.SetActive(false);
              _punchGlove.SetActive(false);
@@ -512,29 +522,12 @@ public class PlayerPowerups : MonoBehaviour
  
          _punchLine.SetPositions(positions2);
          _photonView.RPC("UpdatePunchingGlove", RpcTarget.All, _photonView.ViewID, positions2);
-         
          _punchGlove.transform.position = positions2[1];
-         //_photonView.RPC("ResetPunchingGlove", RpcTarget.All, punchGlove, positions2[1]);
-
          _punching = false;
          _punchObject.SetActive(false);
          _punchGlove.SetActive(false);
          _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.PunchingGlove, false);
          StartCoroutine(DelayRemoveIcon());
-     }
-     
-     private void AirBlast()
-     {
-         _blastObject.SetActive(true);
-         _blastObjectCollider.radius = 2;
-         _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.AirBlast, true);
-         _airBlasting = true;
-         _airBlastTimer = airBlastTime;
-         foreach (var effect in airBlastEffects)
-         {
-             effect.Play();
-         }
-         _audioManager.PlaySound("AirBlast");
      }
      
      #endregion
