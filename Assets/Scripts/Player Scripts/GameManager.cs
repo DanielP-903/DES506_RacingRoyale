@@ -250,7 +250,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         Debug.Log(spectateTargets[0]);
         foreach (PhotonView pv in PhotonNetwork.PhotonViewCollection)
         {
-            if (!pv.Owner.CustomProperties.ContainsKey("Eliminated") && pv.gameObject != null)
+            if (!pv.Owner.CustomProperties.ContainsKey("Eliminated") && pv.gameObject != null && pv.gameObject.tag == "Player")
             {
                 spectateTargets.Add(pv.gameObject.transform);
                 Debug.Log("AddedToSpec");
@@ -495,7 +495,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         bool foundView = false;
         foreach (PhotonView pv in PhotonNetwork.PhotonViewCollection)
         {
-            if (!pv.Owner.CustomProperties.ContainsKey("Eliminated") && pv.gameObject != null)
+            if (!pv.Owner.CustomProperties.ContainsKey("Eliminated") && pv.gameObject != null && pv.gameObject.tag == "Player")
             {
                 spectateTarget = pv.gameObject.transform;
                 foundView = true;
