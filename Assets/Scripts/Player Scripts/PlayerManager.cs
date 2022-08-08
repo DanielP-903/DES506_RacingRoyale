@@ -378,7 +378,7 @@ public class PlayerManager : MonoBehaviour
                 _spawnLocation = GameObject.Find("SpawnLocation" + playerNumber).transform;
                 GoToSpawn();
                 _photonView.RPC("sendMessage", RpcTarget.AllViaServer,
-                    "<color=blue>" + _photonView.name + "</color> has loaded.");
+                    "<color=blue>" + _photonView.Owner.NickName + "</color> has loaded.");
                 ready = true;
             }
         }
