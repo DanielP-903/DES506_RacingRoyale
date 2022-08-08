@@ -52,6 +52,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private GameObject spectateMenu;
     private TextMeshProUGUI spectateText;
     private GameObject attachedPlayer;
+    private float _playersPreviousFrame;
 
     #endregion
 
@@ -1010,7 +1011,14 @@ public class GameManager : MonoBehaviourPunCallbacks
                 //_timer.gameObject.SetActive(false);
                 TryGetFinishedPlayers(out playersCompleted, _stage);
                 TryGetElimPlayers(out elimPlayers);
-                if (Mathf.Min(Mathf.Ceil((float)_totalPlayers / 2) - playersCompleted, PhotonNetwork.CurrentRoom.PlayerCount-playersCompleted) == 1)
+                float currentPlayerCount = Mathf.Min(Mathf.Ceil((float)_totalPlayers / 2) - playersCompleted, PhotonNetwork.CurrentRoom.PlayerCount-playersCompleted);
+
+                if (currentPlayerCount != _playersPreviousFrame)
+                {
+                    _placeCounter.GetComponent<Animator>().Play("PlacesPop");
+                }
+                
+                if (currentPlayerCount == 1)
                 {
                     _placeCounter.text = "1 place left!";
                 }
@@ -1018,6 +1026,8 @@ public class GameManager : MonoBehaviourPunCallbacks
                 {
                     _placeCounter.text = Mathf.Min(Mathf.Ceil((float)_totalPlayers / 2) - playersCompleted,PhotonNetwork.CurrentRoom.PlayerCount-playersCompleted) - playersCompleted + " places left!";
                 }
+
+                _playersPreviousFrame = currentPlayerCount;
                 //Debug.Log("Name: "+SceneManager.GetActiveScene().name + " Stage: " + _stage + " Players Finished: "+playersCompleted+" Goal: " + (_totalPlayers/2));
 
                 if (_stage == 1 && (playersCompleted >= (float)_totalPlayers / 2 || playersCompleted + elimPlayers >= _totalPlayers))
