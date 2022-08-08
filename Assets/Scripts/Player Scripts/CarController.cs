@@ -779,7 +779,7 @@ public class CarController : MonoBehaviour
 
 
         _resetDelay = _resetDelay <= 0 ? 0 : _resetDelay - Time.deltaTime;
-        if (_reset && _resetDelay <= 0)
+        if (!bot && _reset && _resetDelay <= 0)
         {
             _resetDelay = resetCooldown;
             ResetPlayer(true);
@@ -817,6 +817,8 @@ public class CarController : MonoBehaviour
 
     public void ResetPlayer(bool pressedButton = false)
     {
+        if (!_photonView)
+            Debug.LogError("No photon view!");
         if (_photonView.Owner.IsMasterClient && _photonView.IsMine)
         {
             if (!bot && pressedButton)
