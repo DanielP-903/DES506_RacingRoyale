@@ -280,6 +280,10 @@ public class GameManager : MonoBehaviourPunCallbacks
         foreach (Transform t in spectateTargets)
         {
             Debug.Log("Item: " + t);
+            foreach (DictionaryEntry entry in _photonView.Owner.CustomProperties)
+            {
+                Debug.Log("Entry: "+entry.Key +" : "+ entry.Value);
+            }
         }
 
         if (next)
@@ -528,6 +532,10 @@ public class GameManager : MonoBehaviourPunCallbacks
                 spectateTarget = pv.gameObject.transform;
                 foundView = true;
                 break;
+            }
+            foreach (DictionaryEntry entry in pv.Owner.CustomProperties)
+            {
+                Debug.Log("Entry: "+entry.Key +" : "+ entry.Value);
             }
         }
 
