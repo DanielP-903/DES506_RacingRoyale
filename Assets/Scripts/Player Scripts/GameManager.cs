@@ -1011,6 +1011,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 //_timer.gameObject.SetActive(false);
                 TryGetFinishedPlayers(out playersCompleted, _stage);
                 TryGetElimPlayers(out elimPlayers);
+                
                 float currentPlayerCount = Mathf.Min(Mathf.Ceil((float)_totalPlayers / 2) - playersCompleted, PhotonNetwork.CurrentRoom.PlayerCount-playersCompleted);
 
                 if (currentPlayerCount != _playersPreviousFrame)
@@ -1024,7 +1025,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 }
                 else
                 {
-                    _placeCounter.text = Mathf.Min(Mathf.Ceil((float)_totalPlayers / 2) - playersCompleted,PhotonNetwork.CurrentRoom.PlayerCount-playersCompleted) - playersCompleted + " places left!";
+                    _placeCounter.text = currentPlayerCount - playersCompleted + " places left!";
                 }
 
                 _playersPreviousFrame = currentPlayerCount;
