@@ -22,6 +22,8 @@ public class AlertSystem : MonoBehaviour
     private Sprite qualifiedImage;
     [SerializeField]
     private Sprite eliminatedImage;
+    [SerializeField]
+    private Sprite checkpointDestroyedImage;
 
     private IEnumerator storedRoutine;
     
@@ -68,6 +70,9 @@ public class AlertSystem : MonoBehaviour
                 break;
             case "Eliminated":
                 _alertImage.sprite = eliminatedImage;
+                break;
+            case "CheckpointDestroyed":
+                _alertImage.sprite = checkpointDestroyedImage;
                 break;
         }
         _alertImage.fillOrigin = (int) Image.OriginHorizontal.Left;
