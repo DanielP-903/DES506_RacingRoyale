@@ -44,7 +44,8 @@ public class BotCarController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (PhotonNetwork.LocalPlayer.IsMasterClient)
+        //PhotonNetwork.LocalPlayer.IsMasterClient
+        if (!_debugMode)
         {
             _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
             _botNum = _gm.GetTotalPlayers() + _gm.GetBotNum() + 1;
