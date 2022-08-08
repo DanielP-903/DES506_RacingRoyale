@@ -143,6 +143,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dissolve: 0
   isCheckpoint: 0
+  isStartingLocation: 0
 --- !u!54 &2854874753918054489
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -229,6 +230,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dissolve: 0
   isCheckpoint: 0
+  isStartingLocation: 0
 --- !u!1 &2997697151105297761
 GameObject:
   m_ObjectHideFlags: 0
@@ -579,6 +581,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 52d731196e98ea14aa5503c64b21197e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -173129689935960244, guid: 52d731196e98ea14aa5503c64b21197e, type: 3}
+      propertyPath: m_CastShadows
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 52d731196e98ea14aa5503c64b21197e, type: 3}
