@@ -260,12 +260,12 @@ public class GameManager : MonoBehaviourPunCallbacks
         Debug.Log(spectateTargets[0]);
         foreach (PhotonView pv in PhotonNetwork.PhotonViewCollection)
         {
-            if (!pv.Owner.CustomProperties.ContainsKey("Eliminated") 
-                && !pv.Owner.CustomProperties.ContainsKey("Completed"+_stage) 
-                && pv.gameObject != null 
-                && (pv.gameObject.tag == "Player" || pv.gameObject.tag == "EliminationZone") 
-                && pv.gameObject.name != _photonView.Owner.NickName
-                && pv.name != "Finished")
+            if ((!pv.Owner.CustomProperties.ContainsKey("Eliminated") 
+                 && !pv.Owner.CustomProperties.ContainsKey("Completed"+_stage) 
+                 && pv.gameObject != null 
+                 && pv.gameObject.tag == "Player"
+                 && pv.gameObject.name != _photonView.Owner.NickName)
+                || pv.gameObject.tag == "EliminationZone")
             {
                 spectateTargets.Add(pv.gameObject.transform);
                 Debug.Log("AddedToSpec");
@@ -522,12 +522,12 @@ public class GameManager : MonoBehaviourPunCallbacks
         bool foundView = false;
         foreach (PhotonView pv in PhotonNetwork.PhotonViewCollection)
         {
-            if (!pv.Owner.CustomProperties.ContainsKey("Eliminated") 
+            if ((!pv.Owner.CustomProperties.ContainsKey("Eliminated") 
                 && !pv.Owner.CustomProperties.ContainsKey("Completed"+_stage) 
                 && pv.gameObject != null 
-                && (pv.gameObject.tag == "Player" || pv.gameObject.tag == "EliminationZone") 
-                && pv.gameObject.name != _photonView.Owner.NickName
-                && pv.name != "Finished")
+                && pv.gameObject.tag == "Player"
+                && pv.gameObject.name != _photonView.Owner.NickName)
+                || pv.gameObject.tag == "EliminationZone")
             {
                 spectateTarget = pv.gameObject.transform;
                 foundView = true;

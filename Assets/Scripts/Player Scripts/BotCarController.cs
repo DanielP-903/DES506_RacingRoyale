@@ -169,9 +169,16 @@ public class BotCarController : MonoBehaviour
 
     public void goToSpawn()
     {
-        if (!_spawnLocation.name.Contains("SpawnLocation") && _cs != null &&
+        if (_spawnLocation && !_spawnLocation.name.Contains("SpawnLocation") &&
             _cs.GetCheckpointElimination(_spawnLocation.parent.gameObject))
         {
+            _cc.audioManager.PlaySound("CarEliminatedByWall");
+            PhotonNetwork.Destroy(this.gameObject);
+        }
+        else if (_spawnLocation && _spawnLocation.name.Contains("SpawnLocation") &&
+                 _spawnLocation.parent.GetComponent<Dissolve>().dissolve)
+        {
+            _cc.audioManager.PlaySound("CarEliminatedByWall");
             PhotonNetwork.Destroy(this.gameObject);
         }
         else
