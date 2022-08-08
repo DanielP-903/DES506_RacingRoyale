@@ -27,6 +27,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     [Tooltip("Number of Bots to Spawn")] [SerializeField]
     private int maxBots = 8;
+    
+    [SerializeField] private SO_Connection connection;
 
     #endregion
 
@@ -684,6 +686,11 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             SetUp();
         }
+    }
+    
+    void OnDisconnected(DisconnectCause cause)
+    {
+        connection.cause = "timeout";
     }
 
     /*private void LoadPlayerInLevel(Scene scene, LoadSceneMode loadSceneMode)
