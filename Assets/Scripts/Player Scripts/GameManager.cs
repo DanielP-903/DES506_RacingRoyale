@@ -809,7 +809,10 @@ public class GameManager : MonoBehaviourPunCallbacks
                 _completed = false;
             }
 
-            GameObject.Find("Message").GetComponent<TextMeshProUGUI>().color = Color.clear;
+            if (GameObject.Find("Message"))
+            {
+                GameObject.Find("Message").GetComponent<TextMeshProUGUI>().color = Color.clear;
+            }
             _totalPlayers = (int)PhotonNetwork.CurrentRoom.CustomProperties["TotalPlayerCount"];
             _totalBots = 0;
 
