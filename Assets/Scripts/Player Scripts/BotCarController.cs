@@ -675,38 +675,44 @@ public class BotCarController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "ResetZone")
+        if (_pv.Owner.IsMasterClient && _pv.IsMine)
         {
-            touchingReset = true;
-        }
-        else if (other.tag == "EliminationZone")
-        {
-            PhotonNetwork.Destroy(this.gameObject);
-        }
-        else if (other.tag == "BotsNoBoost")
-        {
-            boostAllowed = false;
-        }
-        else if (other.gameObject.GetComponent<BotPoint>())
-        {
-            botTarget = null;
-            BotPoint bp = other.gameObject.GetComponent<BotPoint>();
-            //Debug.Log("Hit Bot Point: "+bp.name);
-            _passedBotPoints.Add(bp);
-            currentOrder = bp.order + 1;
-            currentChoice = bp.choice;
-            if (bp.choices.Length > 0)
+            if (other.tag == "ResetZone")
             {
-                pickChoice(bp.choices);
+                touchingReset = true;
+            }
+            else if (other.tag == "EliminationZone")
+            {
+                PhotonNetwork.Destroy(this.gameObject);
+            }
+            else if (other.tag == "BotsNoBoost")
+            {
+                boostAllowed = false;
+            }
+            else if (other.gameObject.GetComponent<BotPoint>())
+            {
+                botTarget = null;
+                BotPoint bp = other.gameObject.GetComponent<BotPoint>();
+                //Debug.Log("Hit Bot Point: "+bp.name);
+                _passedBotPoints.Add(bp);
+                currentOrder = bp.order + 1;
+                currentChoice = bp.choice;
+                if (bp.choices.Length > 0)
+                {
+                    pickChoice(bp.choices);
+                }
             }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "BotsNoBoost")
+        if (_pv.Owner.IsMasterClient && _pv.IsMine)
         {
-            boostAllowed = true;
+            if (other.tag == "BotsNoBoost")
+            {
+                boostAllowed = true;
+            }
         }
     }
 
