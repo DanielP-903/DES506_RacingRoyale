@@ -11,12 +11,16 @@ public class TimerCube : MonoBehaviour
     private MeshRenderer _meshRenderer;
 
     private PlayerManager _playerRef;
+    private AudioManager _audioRef;
     private bool _hasFoundPlayer;
     private GameManager _gm;
 
     private float _currentTimerValue;
+    private float _previousTimerValue;
 
     private VisualEffect _effect;
+
+    private bool _played = false;
     
     // Start is called before the first frame update
     void Start()
@@ -25,7 +29,7 @@ public class TimerCube : MonoBehaviour
         _meshRenderer = GetComponent<MeshRenderer>();
         _meshRenderer.enabled = true;
         _effect = transform.GetChild(0).GetComponent<VisualEffect>();
-        //StartCoroutine(WaitForPlayer());
+        StartCoroutine(WaitForPlayer());
      
     }
 
@@ -38,24 +42,22 @@ public class TimerCube : MonoBehaviour
         _effect.Stop();
         //StartCoroutine(WaitForPlayer());
         _currentTimerValue = 3;
+        _played = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if ((int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer"+_gm.GetStageNum())] != 0)
+        if ((int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer"+_gm.GetStageNum())] != 0 && _hasFoundPlayer)
         {
+            if (!_played)
+            {
+                _audioRef.PlaySound("GameStartFirst");
+                _played = true;
+            }
+            
             int hit = (int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer"+_gm.GetStageNum())];
             _currentTimerValue = _gm.GetStartDelay() - ((PhotonNetwork.ServerTimestamp - hit) / 1000f);
-            // if (_playerRef.startDelayText.text != "Go!")
-            // {
-            //     _currentTimerValue = _playerRef.timer;
-            // }
-            // else
-            // {
-            //     _currentTimerValue = 0;
-            //     
-            // }
             if (_currentTimerValue <= 3 && _currentTimerValue > 2)
             {
                 if (!_meshRenderer.enabled)
@@ -63,36 +65,43 @@ public class TimerCube : MonoBehaviour
                 var meshMats = _meshRenderer.materials;
                 meshMats[1] = materials[0];
                 _meshRenderer.materials = meshMats; 
-                //Debug.Log("Changed to material 1");
             }
             else if (_currentTimerValue <= 2 && _currentTimerValue > 1)
             {
+                if (_previousTimerValue > 2)
+                {
+                    _audioRef.PlaySound("GameStartFirst");
+                }
                 if (!_meshRenderer.enabled)
                     _meshRenderer.enabled = true;
                 var meshMats = _meshRenderer.materials;
                 meshMats[1] = materials[1];
                 _meshRenderer.materials = meshMats; 
-                //Debug.Log("Changed to material 2");
             }
             else if (_currentTimerValue <= 1 && _currentTimerValue > 0.05f)
             {              
+                if (_previousTimerValue > 1)
+                {
+                    _audioRef.PlaySound("GameStartFirst");
+                }
                 if (!_meshRenderer.enabled)
                     _meshRenderer.enabled = true;
                 var meshMats = _meshRenderer.materials;
                 meshMats[1] = materials[2];
                 _meshRenderer.materials = meshMats; 
-                //Debug.Log("Changed to material 3");
             }
             else
             {
-                //Destroy(this.gameObject);
                 if (_meshRenderer.enabled)
                 {
+                    _audioRef.PlaySound("GameStartFinal");
                     _effect.Play();
                     _meshRenderer.enabled = false;
                 }
             }
         }
+
+        _previousTimerValue = _currentTimerValue;
     }
     
     IEnumerator WaitForPlayer()
@@ -111,6 +120,7 @@ public class TimerCube : MonoBehaviour
             if (player.GetComponent<PhotonView>().IsMine && !player.GetComponent<CarController>().bot)
             {
                 _playerRef = player.GetComponent<PlayerManager>();
+                _audioRef = player.GetComponent<CarController>().audioManager;
                 //Debug.Log("Player Found");
                 _hasFoundPlayer = true;
             }
