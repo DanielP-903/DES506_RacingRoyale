@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
@@ -12,6 +13,7 @@ public class fadeScreen : MonoBehaviour
 
     private IEnumerator storedRoutine;
     public bool fadedOut = false;
+    private GameObject progressPanel;
     
     // Start is called before the first frame update
     void Start()
@@ -34,12 +36,12 @@ public class fadeScreen : MonoBehaviour
     {
         if (PlayerPrefs.HasKey("MasterVol"))
         {
-            mixer.SetFloat("Master", 0);
+            mixer.SetFloat("Master", -80);
         }
         fadeScreenUI.color = new Color(fadeScreenUI.color.r, fadeScreenUI.color.g, fadeScreenUI.color.b, 1);
         //Debug.Log("Fading In");
         fadedOut = false;
-        float vol = -10;
+        float vol = -20;
         float volStep = PlayerPrefs.GetFloat("MasterVol") / 25;
         mixer.SetFloat("Master", vol);
         yield return new WaitForSeconds(1);
@@ -81,7 +83,7 @@ public class fadeScreen : MonoBehaviour
         float vol = PlayerPrefs.GetFloat("MasterVol");
         float volStep = PlayerPrefs.GetFloat("MasterVol") / 25;
         mixer.SetFloat("Master", vol);
-        while (fadeScreenUI.color.a < 1 || vol > 0)
+        while (fadeScreenUI.color.a < 1 || vol > -80)
         {
             if (fadeScreenUI.color.a < 1)
             {
@@ -95,15 +97,39 @@ public class fadeScreen : MonoBehaviour
             if (vol > -80)
             {
                 mixer.GetFloat("Master", out vol);
-                mixer.SetFloat("Master", vol - volStep);
+                Debug.Log(vol - volStep);
+                if (vol - volStep < -80)
+                {
+                    mixer.SetFloat("Master", -80);
+                }
+                else
+                {
+                    mixer.SetFloat("Master", vol - volStep);
+                }
                 mixer.GetFloat("Master", out vol);
             }
             yield return new WaitForFixedUpdate();
         }
-
+        mixer.SetFloat("Master", -80);
+        StartCoroutine(LoadingBar());
         fadedOut = true;
     }
     
+    IEnumerator LoadingBar()
+    {
+        progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(11).gameObject;
+        progressPanel.SetActive(true);
+        while (PhotonNetwork.LevelLoadingProgress < 1.0f)
+        {
+            progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value =
+                PhotonNetwork.LevelLoadingProgress;
+            progressPanel.transform.GetChild(1).Rotate(Vector3.forward, -Time.deltaTime * 500.0f, Space.World);
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+    }
 
     #endregion
 }
