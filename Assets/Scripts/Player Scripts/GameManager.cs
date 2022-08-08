@@ -218,6 +218,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void CompletePlayer()
     {
         _completed = true;
+        ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
+        {
+            { "Completed"+_stage, true }
+        };
+        _photonView.Owner.SetCustomProperties(props);
         //photonView.name = "Finished";
         Spectate();
         _photonView.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
@@ -256,6 +261,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         foreach (PhotonView pv in PhotonNetwork.PhotonViewCollection)
         {
             if (!pv.Owner.CustomProperties.ContainsKey("Eliminated") 
+                && !pv.Owner.CustomProperties.ContainsKey("Completed"+_stage) 
                 && pv.gameObject != null 
                 && (pv.gameObject.tag == "Player" || pv.gameObject.tag == "EliminationZone") 
                 && pv.gameObject.name != _photonView.Owner.NickName
@@ -513,6 +519,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         foreach (PhotonView pv in PhotonNetwork.PhotonViewCollection)
         {
             if (!pv.Owner.CustomProperties.ContainsKey("Eliminated") 
+                && !pv.Owner.CustomProperties.ContainsKey("Completed"+_stage) 
                 && pv.gameObject != null 
                 && (pv.gameObject.tag == "Player" || pv.gameObject.tag == "EliminationZone") 
                 && pv.gameObject.name != _photonView.Owner.NickName
