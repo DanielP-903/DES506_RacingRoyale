@@ -44,7 +44,8 @@ public class BotCarController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (PhotonNetwork.LocalPlayer.IsMasterClient)
+        //PhotonNetwork.LocalPlayer.IsMasterClient
+        if (!_debugMode)
         {
             _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
             _botNum = _gm.GetTotalPlayers() + _gm.GetBotNum() + 1;
@@ -106,9 +107,9 @@ public class BotCarController : MonoBehaviour
         else
         {
             //Debug.Log("Destroying Bot Control");
-            Destroy(GetComponent<CarController>());
+            //Destroy(GetComponent<CarController>());
             //Destroy(GetComponent<Rigidbody>());
-            Destroy(this);
+            //Destroy(this);
         }
 
         name = transform.Find("Name").Find("Name").GetComponent<TextMeshProUGUI>();
@@ -119,24 +120,27 @@ public class BotCarController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (!canStart && (int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer" + _gm.GetStageNum())] != 0)
+        if (_pv.Owner.IsMasterClient && _pv.IsMine)
         {
-            canStart = true;
-        }
-        else if(canStart)
-        { 
-            decideBehaviour();
-            checkReset();
-            if (Time.time - stuckTimer > 15)
+            if (!canStart && (int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer" + _gm.GetStageNum())] != 0)
             {
-                stuckTimer = Time.time;
-                if (Vector3.Distance(stuckPos, transform.position) < 3)
+                canStart = true;
+            }
+            else if (canStart)
+            {
+                decideBehaviour();
+                checkReset();
+                if (Time.time - stuckTimer > 15)
                 {
-                    goToSpawn();
-                }
-                else
-                {
-                    stuckPos = transform.position;
+                    stuckTimer = Time.time;
+                    if (Vector3.Distance(stuckPos, transform.position) < 3)
+                    {
+                        goToSpawn();
+                    }
+                    else
+                    {
+                        stuckPos = transform.position;
+                    }
                 }
             }
         }

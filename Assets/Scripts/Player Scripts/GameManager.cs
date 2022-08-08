@@ -974,7 +974,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             case "WaitingArea":
                 if (!progressPanel)
                 {
-                    Debug.LogWarning("Progress panel does not exist");
+                    //Debug.LogWarning("Progress panel does not exist");
                 }
 
                 //_placeCounter.gameObject.SetActive(false);
