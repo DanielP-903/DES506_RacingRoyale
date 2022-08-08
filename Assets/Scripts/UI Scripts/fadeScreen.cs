@@ -42,7 +42,7 @@ public class fadeScreen : MonoBehaviour
         //Debug.Log("Fading In");
         fadedOut = false;
         float vol = -20;
-        float volStep = PlayerPrefs.GetFloat("MasterVol") / 25;
+        float volStep = (PlayerPrefs.GetFloat("MasterVol") + 80) / 25;
         mixer.SetFloat("Master", vol);
         yield return new WaitForSeconds(1);
         while (fadeScreenUI.color.a > 0 || vol < PlayerPrefs.GetFloat("MasterVol"))
@@ -81,7 +81,7 @@ public class fadeScreen : MonoBehaviour
     IEnumerator FadeOut()
     {
         float vol = PlayerPrefs.GetFloat("MasterVol");
-        float volStep = PlayerPrefs.GetFloat("MasterVol") / 25;
+        float volStep = (PlayerPrefs.GetFloat("MasterVol") + 80) / 25;
         mixer.SetFloat("Master", vol);
         while (fadeScreenUI.color.a < 1 || vol > -80)
         {
