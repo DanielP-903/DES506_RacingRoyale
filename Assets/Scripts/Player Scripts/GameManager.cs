@@ -218,7 +218,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void CompletePlayer()
     {
         _completed = true;
-        photonView.name = "Finished";
+        //photonView.name = "Finished";
         Spectate();
         _photonView.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
         //PhotonNetwork.Destroy(_photonView.gameObject);
@@ -814,7 +814,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 _completed = false;
                 if (photonView != null)
                 {
-                    photonView.name = photonView.Owner.NickName;
+                    //photonView.name = photonView.Owner.NickName;
                 }
             }
 

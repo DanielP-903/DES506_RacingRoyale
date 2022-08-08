@@ -123,13 +123,12 @@ public class TimerCube : MonoBehaviour
                 _audioRef = player.GetComponent<CarController>().audioManager;
                 //Debug.Log("Player Found");
                 _hasFoundPlayer = true;
+                if (_playerRef.startDelayText.text == "Go!")
+                {
+                    _playerRef.startDelayText.text = "3";
+                    _playerRef.timer = 3;
+                }
             }
-        }
-
-        if (_playerRef.startDelayText.text == "Go!")
-        {
-            _playerRef.startDelayText.text = "3";
-            _playerRef.timer = 3;
         }
     }
 }
