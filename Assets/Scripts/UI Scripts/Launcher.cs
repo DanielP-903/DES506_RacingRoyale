@@ -259,15 +259,8 @@ public class Launcher : MonoBehaviourPunCallbacks
                 PhotonNetwork.ConnectUsingSettings();
                 PhotonNetwork.GameVersion = gameVersion;
             }
-
-            StartCoroutine(delay());
-
         }
-
-        private IEnumerator delay()
-        {
-            yield return new WaitForSeconds(60);
-        }
+        
         
         // QUIT APPLICATION
         public void QuitGame()
