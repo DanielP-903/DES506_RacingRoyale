@@ -288,6 +288,8 @@ public class PlayerManager : MonoBehaviour
         //playerNumber = _gm.GetPlayerNumber();
     }
 
+
+    
     void Update()
     {
         if (transform.position.y < -5 && _photonView.IsMine)

@@ -41,7 +41,10 @@ public class Launcher : MonoBehaviourPunCallbacks
         private GameObject controlsPanel;
         [Tooltip("The Ui Panel for Credits")]
         [SerializeField]
-        private GameObject creditsPanel;
+        private GameObject creditsPanel;       
+        [Tooltip("The Ui Panel for Connection Popup")]
+        [SerializeField]
+        private GameObject timeoutPanel;
         [Tooltip("The Ui 3d Car Display")]
         [SerializeField]
         private GameObject selectorCar;
@@ -58,7 +61,10 @@ public class Launcher : MonoBehaviourPunCallbacks
         [Tooltip("Dropdown for Resolution")]
         [SerializeField]
         private TMP_Dropdown resolution;
-
+        
+        [Tooltip("Connection Error Holder Scriptable Object")]
+        [SerializeField]
+        private SO_Connection connection;
         #endregion
 
         // PRIVATE LAUNCHER VARIABLES (VERSION CONTROL HERE)
@@ -77,6 +83,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         string gameVersion = "0.28.0";
 
 
+        
         #endregion
         
         
@@ -216,6 +223,8 @@ public class Launcher : MonoBehaviourPunCallbacks
                 resolution.value = PlayerPrefs.GetInt("Resolution");
             }
             ApplyGraphics();
+            
+            timeoutPanel.SetActive(connection.cause == "timeout");
         }
         
         
@@ -250,6 +259,14 @@ public class Launcher : MonoBehaviourPunCallbacks
                 PhotonNetwork.ConnectUsingSettings();
                 PhotonNetwork.GameVersion = gameVersion;
             }
+
+            StartCoroutine(delay());
+
+        }
+
+        private IEnumerator delay()
+        {
+            yield return new WaitForSeconds(60);
         }
         
         // QUIT APPLICATION
