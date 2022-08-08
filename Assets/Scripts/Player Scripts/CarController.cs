@@ -834,7 +834,7 @@ public class CarController : MonoBehaviour
                 _botCarController.goToSpawn();
             }
         }
-        else if (!bot)
+        else if (bot)
         {
             PhotonNetwork.Destroy(this.gameObject);
         }
