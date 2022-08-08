@@ -40,9 +40,16 @@ public class PlayerNameInputField : MonoBehaviour
         TMP_InputField _inputField = this.GetComponent<TMP_InputField>();
         if (_inputField != null)
         {
-            if (PlayerPrefs.HasKey(playerNamePrefKey))
+            if (PlayerPrefs.HasKey(playerNamePrefKey) && PlayerPrefs.GetString(playerNamePrefKey) != null)
             {
                 defaultName = PlayerPrefs.GetString(playerNamePrefKey);
+                _inputField.text = defaultName;
+            }
+            else
+            {
+                string s = Resources.Load<TextAsset>("Names").ToString();
+                string[] linesInFile = s.Split('\n');
+                defaultName = linesInFile[Random.Range(0, linesInFile.Length - 1)];
                 _inputField.text = defaultName;
             }
         }

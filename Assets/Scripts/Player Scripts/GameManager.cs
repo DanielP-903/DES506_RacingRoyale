@@ -218,6 +218,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void CompletePlayer()
     {
         _completed = true;
+        ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
+        {
+            { "Completed"+_stage, true }
+        };
+        _photonView.Owner.SetCustomProperties(props);
         //photonView.name = "Finished";
         Spectate();
         _photonView.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
@@ -255,11 +260,12 @@ public class GameManager : MonoBehaviourPunCallbacks
         Debug.Log(spectateTargets[0]);
         foreach (PhotonView pv in PhotonNetwork.PhotonViewCollection)
         {
-            if (!pv.Owner.CustomProperties.ContainsKey("Eliminated") 
-                && pv.gameObject != null 
-                && (pv.gameObject.tag == "Player" || pv.gameObject.tag == "EliminationZone") 
-                && pv.gameObject.name != _photonView.Owner.NickName
-                && pv.name != "Finished")
+            if ((!pv.Owner.CustomProperties.ContainsKey("Eliminated") 
+                 && !pv.Owner.CustomProperties.ContainsKey("Completed"+_stage) 
+                 && pv.gameObject != null 
+                 && pv.gameObject.tag == "Player"
+                 && pv.gameObject.name != _photonView.Owner.NickName)
+                || pv.gameObject.tag == "EliminationZone")
             {
                 spectateTargets.Add(pv.gameObject.transform);
                 Debug.Log("AddedToSpec");
@@ -274,6 +280,10 @@ public class GameManager : MonoBehaviourPunCallbacks
         foreach (Transform t in spectateTargets)
         {
             Debug.Log("Item: " + t);
+            foreach (DictionaryEntry entry in _photonView.Owner.CustomProperties)
+            {
+                Debug.Log("Entry: "+entry.Key +" : "+ entry.Value);
+            }
         }
 
         if (next)
@@ -512,15 +522,20 @@ public class GameManager : MonoBehaviourPunCallbacks
         bool foundView = false;
         foreach (PhotonView pv in PhotonNetwork.PhotonViewCollection)
         {
-            if (!pv.Owner.CustomProperties.ContainsKey("Eliminated") 
+            if ((!pv.Owner.CustomProperties.ContainsKey("Eliminated") 
+                && !pv.Owner.CustomProperties.ContainsKey("Completed"+_stage) 
                 && pv.gameObject != null 
-                && (pv.gameObject.tag == "Player" || pv.gameObject.tag == "EliminationZone") 
-                && pv.gameObject.name != _photonView.Owner.NickName
-                && pv.name != "Finished")
+                && pv.gameObject.tag == "Player"
+                && pv.gameObject.name != _photonView.Owner.NickName)
+                || pv.gameObject.tag == "EliminationZone")
             {
                 spectateTarget = pv.gameObject.transform;
                 foundView = true;
                 break;
+            }
+            foreach (DictionaryEntry entry in pv.Owner.CustomProperties)
+            {
+                Debug.Log("Entry: "+entry.Key +" : "+ entry.Value);
             }
         }
 
