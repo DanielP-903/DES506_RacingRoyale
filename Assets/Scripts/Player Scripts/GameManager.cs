@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             _photonView.RPC("sendMessage", RpcTarget.AllViaServer,
-                other.NickName + " has joined. " + PhotonNetwork.CurrentRoom.PlayerCount + "/" +
+                "<color=blue>"+other.NickName + "</color> has joined. " + PhotonNetwork.CurrentRoom.PlayerCount + "/" +
                 PhotonNetwork.CurrentRoom.MaxPlayers);
             PhotonNetwork.Destroy(botsStored[PhotonNetwork.CurrentRoom.PlayerCount - 2]);
             //Debug.LogFormat("OnPlayerEnteredRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
@@ -111,10 +111,10 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             _photonView.RPC("sendMessage", RpcTarget.AllViaServer,
-                other.NickName + " has left. " + PhotonNetwork.CurrentRoom.PlayerCount + "/" +
-                PhotonNetwork.CurrentRoom.MaxPlayers);
+                "<color=blue>"+other.NickName + "</color> has left. " + PhotonNetwork.CurrentRoom.PlayerCount + "/" +
+                              PhotonNetwork.CurrentRoom.MaxPlayers);
             //Debug.LogFormat("OnPlayerLeftRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
-
+            //_photonView.RPC("sendMessage", RpcTarget.AllViaServer,"<color=blue>" + _photonView.Owner.NickName + "</color> has loaded.");
 
             //LoadArena();
 
@@ -218,6 +218,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void CompletePlayer()
     {
         _completed = true;
+        //photonView.name = "Finished";
         Spectate();
         _photonView.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
         //PhotonNetwork.Destroy(_photonView.gameObject);
@@ -254,12 +255,11 @@ public class GameManager : MonoBehaviourPunCallbacks
         Debug.Log(spectateTargets[0]);
         foreach (PhotonView pv in PhotonNetwork.PhotonViewCollection)
         {
-            bool notCompleted = true;
-            if (pv.gameObject.GetComponent<PlayerManager>())
-            {
-                notCompleted = !pv.gameObject.GetComponent<PlayerManager>().completedStage;
-            }
-            if (!pv.Owner.CustomProperties.ContainsKey("Eliminated") && pv.gameObject != null && pv.gameObject.tag == "Player" && pv.gameObject.name != _photonView.Owner.NickName && notCompleted)
+            if (!pv.Owner.CustomProperties.ContainsKey("Eliminated") 
+                && pv.gameObject != null 
+                && (pv.gameObject.tag == "Player" || pv.gameObject.tag == "EliminationZone") 
+                && pv.gameObject.name != _photonView.Owner.NickName
+                && pv.name != "Finished")
             {
                 spectateTargets.Add(pv.gameObject.transform);
                 Debug.Log("AddedToSpec");
@@ -512,7 +512,11 @@ public class GameManager : MonoBehaviourPunCallbacks
         bool foundView = false;
         foreach (PhotonView pv in PhotonNetwork.PhotonViewCollection)
         {
-            if (!pv.Owner.CustomProperties.ContainsKey("Eliminated") && pv.gameObject != null && pv.gameObject.tag == "Player" && pv.gameObject.name != _photonView.Owner.NickName)
+            if (!pv.Owner.CustomProperties.ContainsKey("Eliminated") 
+                && pv.gameObject != null 
+                && (pv.gameObject.tag == "Player" || pv.gameObject.tag == "EliminationZone") 
+                && pv.gameObject.name != _photonView.Owner.NickName
+                && pv.name != "Finished")
             {
                 spectateTarget = pv.gameObject.transform;
                 foundView = true;
@@ -808,6 +812,10 @@ public class GameManager : MonoBehaviourPunCallbacks
             else if (_completed)
             {
                 _completed = false;
+                if (photonView != null)
+                {
+                    //photonView.name = photonView.Owner.NickName;
+                }
             }
 
             if (GameObject.Find("Message"))
@@ -958,7 +966,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 PhotonNetwork.CurrentRoom.IsOpen = false;
                 progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(11).gameObject;
                 progressPanel.SetActive(true);
-                StartCoroutine(LoadingBar());
+                //StartCoroutine(LoadingBar());
                 LoadArena("EndStage");
             }
         }
@@ -987,7 +995,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
                     progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(11).gameObject;
                     progressPanel.SetActive(true);
-                    StartCoroutine(LoadingBar());
+                    //StartCoroutine(LoadingBar());
                     if (PhotonNetwork.IsMasterClient)
                     {
                         ExitGames.Client.Photon.Hashtable hash = new ExitGames.Client.Photon.Hashtable();
@@ -1039,12 +1047,12 @@ public class GameManager : MonoBehaviourPunCallbacks
                     {
                         _photonView.gameObject.GetComponent<PlayerManager>().EliminateCurrentPlayer();
                     }
+                    //StartCoroutine(LoadingBar());
                     if (PhotonNetwork.IsMasterClient)
                     {
                         progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(11)
                             .gameObject;
                         progressPanel.SetActive(true);
-                        StartCoroutine(LoadingBar());
                         LoadArena("Stage2");
                     }
                 }
@@ -1068,12 +1076,12 @@ public class GameManager : MonoBehaviourPunCallbacks
                 if (_stage == 2 && (playersCompleted >= (int)4 || elimPlayers + playersCompleted >= _totalPlayers))
                 {
                     _stage++;
+                    //StartCoroutine(LoadingBar());
                     if (PhotonNetwork.IsMasterClient)
                     {
                         progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(11)
                             .gameObject;
                         progressPanel.SetActive(true);
-                        StartCoroutine(LoadingBar());
                         LoadArena("EndStage");
                     }
                 }

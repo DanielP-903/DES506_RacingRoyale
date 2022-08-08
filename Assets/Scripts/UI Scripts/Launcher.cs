@@ -175,6 +175,7 @@ public class Launcher : MonoBehaviourPunCallbacks
             }
             else
             {
+                Debug.Log("Setting Master 0");
                 mixer.SetFloat("Master", 0);
             }
             if (PlayerPrefs.HasKey("MusicVol"))
@@ -183,7 +184,8 @@ public class Launcher : MonoBehaviourPunCallbacks
             }
             else
             {
-                mixer.SetFloat("Master", 0);
+                Debug.Log("Setting Music 0");
+                mixer.SetFloat("Music", 0);
             }
             if (PlayerPrefs.HasKey("SoundVol"))
             {
@@ -191,7 +193,8 @@ public class Launcher : MonoBehaviourPunCallbacks
             }
             else
             {
-                mixer.SetFloat("Master", 0);
+                Debug.Log("Setting Sound 0");
+                mixer.SetFloat("Sound", 0);
             }
 
             if (PlayerPrefs.HasKey("FullScreen"))
