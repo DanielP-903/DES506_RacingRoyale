@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class JackMaskObject : MonoBehaviour
 {
@@ -19,8 +20,7 @@ public class JackMaskObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 mouse = Input.mousePosition;
-        Ray castRay = Camera.main.ScreenPointToRay(mouse);
+        Ray castRay = Camera.main.ScreenPointToRay(new Vector3(Mouse.current.position.x.ReadValue(), Mouse.current.position.y.ReadValue(), 0));
         RaycastHit hit;
         if (Physics.Raycast(castRay, out hit, Mathf.Infinity))
         {
