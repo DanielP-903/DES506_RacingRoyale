@@ -113,16 +113,37 @@ public class fadeScreen : MonoBehaviour
         mixer.SetFloat("Master", -80);
         StartCoroutine(LoadingBar());
         fadedOut = true;
+        while (fadeScreenUI.color.a > 0)
+        {
+            if (fadeScreenUI.color.a > 0)
+            {
+                fadeScreenUI.color = new Color(fadeScreenUI.color.r, fadeScreenUI.color.g, fadeScreenUI.color.b, fadeScreenUI.color.a - 0.04f);
+            }
+            else
+            {
+                fadeScreenUI.color = new Color(fadeScreenUI.color.r, fadeScreenUI.color.g, fadeScreenUI.color.b, 0);
+            }
+            
+            yield return new WaitForFixedUpdate();
+        }
     }
     
     IEnumerator LoadingBar()
     {
-        progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(11).gameObject;
+        if (GameObject.FindGameObjectWithTag("MainCanvas").transform.childCount > 10)
+        {
+            progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(11).gameObject;
+        }
+        else
+        {
+            progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(7).gameObject;
+        }
+
+        progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = 0;
         progressPanel.SetActive(true);
         while (PhotonNetwork.LevelLoadingProgress < 1.0f)
         {
-            progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value =
-                PhotonNetwork.LevelLoadingProgress;
+            progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = PhotonNetwork.LevelLoadingProgress;
             progressPanel.transform.GetChild(1).Rotate(Vector3.forward, -Time.deltaTime * 500.0f, Space.World);
             yield return null;
         }

@@ -412,13 +412,13 @@ public class PlayerManager : MonoBehaviour
         if (pressedButton && _spawnLocation && !_spawnLocation.name.Contains("SpawnLocation") &&
             _cs.GetCheckpointElimination(_spawnLocation.parent.gameObject))
         {
-            _messageText.color = Color.white;
+            //_messageText.color = Color.white;
             //StartCoroutine(fadeMessage());
             _as.displayAlert("CheckpointDestroyed");
         }
         else if (pressedButton && _spawnLocation && _spawnLocation.name.Contains("SpawnLocation") && _spawnLocation.parent.GetComponent<Dissolve>().dissolve)
         {
-            _messageText.color = Color.white;
+            //_messageText.color = Color.white;
             //StartCoroutine(fadeMessage());
             _as.displayAlert("CheckpointDestroyed");
         }
