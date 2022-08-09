@@ -1206,7 +1206,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             }
         }
             //&& counter < 100000
-            while (!allPlayersReady && counter < 100)
+            while (!allPlayersReady && counter < 300)
             {
                 allPlayersReady = true;
                 //Debug.Log("Running While Loop");
