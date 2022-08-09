@@ -126,6 +126,8 @@ public class PlayerPowerups : MonoBehaviour
         _punchGlove = transform.GetChild(3).gameObject;
         _punchLine = _grappleLineObject.GetComponent<LineRenderer>();
         _blastObject.SetActive(false);
+
+        _currentPowerupType = PowerupType.None;
     }
 
     void FixedUpdate()
