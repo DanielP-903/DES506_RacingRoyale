@@ -20,7 +20,11 @@ public class fadeScreen : MonoBehaviour
     void Start()
     {
         fadeScreenUI = GetComponent<Image>();
-        pm = GameObject.Find("PauseMenu").GetComponent<PauseMenu>();
+        if (GameObject.Find("PauseMenu"))
+        {
+            pm = GameObject.Find("PauseMenu").GetComponent<PauseMenu>();
+        }
+
         storedRoutine = FadeIn();
         StartCoroutine(storedRoutine);
     }
