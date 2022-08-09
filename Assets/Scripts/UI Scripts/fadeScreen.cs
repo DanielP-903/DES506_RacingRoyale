@@ -14,11 +14,13 @@ public class fadeScreen : MonoBehaviour
     private IEnumerator storedRoutine;
     public bool fadedOut = false;
     private GameObject progressPanel;
+    private PauseMenu pm;
     
     // Start is called before the first frame update
     void Start()
     {
         fadeScreenUI = GetComponent<Image>();
+        pm = GameObject.Find("PauseMenu").GetComponent<PauseMenu>();
         storedRoutine = FadeIn();
         StartCoroutine(storedRoutine);
     }
@@ -30,7 +32,50 @@ public class fadeScreen : MonoBehaviour
         StartCoroutine(storedRoutine);
     }
 
+    public void quitFade()
+    {
+        StopCoroutine(storedRoutine);
+        storedRoutine = QuitFade();
+        StartCoroutine(storedRoutine);
+    }
+
     #region IEnumerators
+
+    IEnumerator QuitFade()
+    {
+        float vol = PlayerPrefs.GetFloat("MasterVol");
+        float volStep = (PlayerPrefs.GetFloat("MasterVol") + 80) / 25;
+        mixer.SetFloat("Master", vol);
+        while (fadeScreenUI.color.a < 1 || vol > -80)
+        {
+            if (fadeScreenUI.color.a < 1)
+            {
+                fadeScreenUI.color = new Color(fadeScreenUI.color.r, fadeScreenUI.color.g, fadeScreenUI.color.b, fadeScreenUI.color.a + 0.04f);
+            }
+            else
+            {
+                fadeScreenUI.color = new Color(fadeScreenUI.color.r, fadeScreenUI.color.g, fadeScreenUI.color.b, 1);
+            }
+
+            if (vol > -80)
+            {
+                mixer.GetFloat("Master", out vol);
+                Debug.Log(vol - volStep);
+                if (vol - volStep < -80)
+                {
+                    mixer.SetFloat("Master", -80);
+                }
+                else
+                {
+                    mixer.SetFloat("Master", vol - volStep);
+                }
+                mixer.GetFloat("Master", out vol);
+            }
+            yield return new WaitForFixedUpdate();
+        }
+
+        PhotonNetwork.LeaveRoom();
+    }
 
     IEnumerator FadeIn()
     {
@@ -130,15 +175,16 @@ public class fadeScreen : MonoBehaviour
     
     IEnumerator LoadingBar()
     {
-        if (GameObject.FindGameObjectWithTag("MainCanvas").transform.childCount > 10)
+        pm.Resume();
+        /*if (GameObject.FindGameObjectWithTag("MainCanvas").transform.childCount > 10)
         {
-            progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(11).gameObject;
+            progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(12).gameObject;
         }
         else
         {
             progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(6).gameObject;
-        }
-
+        }*/
+        progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.Find("Progress BG").gameObject;
         progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = 0;
         progressPanel.SetActive(true);
         while (PhotonNetwork.LevelLoadingProgress < 1.0f)

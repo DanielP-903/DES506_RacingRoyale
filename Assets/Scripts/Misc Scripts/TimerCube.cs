@@ -21,7 +21,7 @@ public class TimerCube : MonoBehaviour
     private VisualEffect _effect;
 
     private bool _played = false;
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,7 +30,6 @@ public class TimerCube : MonoBehaviour
         _meshRenderer.enabled = true;
         _effect = transform.GetChild(0).GetComponent<VisualEffect>();
         StartCoroutine(WaitForPlayer());
-     
     }
 
     void OnLevelWasLoaded()
