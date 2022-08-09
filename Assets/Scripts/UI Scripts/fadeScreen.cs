@@ -14,11 +14,13 @@ public class fadeScreen : MonoBehaviour
     private IEnumerator storedRoutine;
     public bool fadedOut = false;
     private GameObject progressPanel;
+    private PauseMenu pm;
     
     // Start is called before the first frame update
     void Start()
     {
         fadeScreenUI = GetComponent<Image>();
+        pm = GameObject.Find("PauseMenu").GetComponent<PauseMenu>();
         storedRoutine = FadeIn();
         StartCoroutine(storedRoutine);
     }
@@ -173,6 +175,7 @@ public class fadeScreen : MonoBehaviour
     
     IEnumerator LoadingBar()
     {
+        pm.Resume();
         /*if (GameObject.FindGameObjectWithTag("MainCanvas").transform.childCount > 10)
         {
             progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(12).gameObject;
