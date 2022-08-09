@@ -265,7 +265,11 @@ public class BotCarController : MonoBehaviour
         //Debug.Log(nearestPoint.name + ":"+nearestPoint.position+":" +transform.position+"-"+Vector2.SignedAngle(new Vector2(transform.position.x, transform.position.z), new Vector2(nearestPoint.position.x, nearestPoint.position.z)));
         //target = Vector2.SignedAngle(new Vector2(transform.position.x, transform.position.z), new Vector2(nearestPoint.position.x, nearestPoint.position.z));
         //target = Mathf.Rad2Deg * Mathf.Atan2(transform.InverseTransformPoint(nearestPoint.position).x, transform.InverseTransformPoint(nearestPoint.position).z);
-        target = Mathf.Rad2Deg * Mathf.Atan2(botTarget.position.x - transform.position.x, botTarget.position.z - transform.position.z);
+        if (botTarget != null)
+        {
+            target = Mathf.Rad2Deg * Mathf.Atan2(botTarget.position.x - transform.position.x, botTarget.position.z - transform.position.z);
+        }
+
         Debug.DrawRay(this.transform.position, (Quaternion.AngleAxis(target, Vector3.up) * Vector3.forward) * 100f, Color.yellow );
         //target = Mathf.Atan((nearestPoint.position.z - transform.position.z)/ (nearestPoint.position.x - transform.position.x)) * Mathf.Rad2Deg;
         //Debug.Log(nearestPoint.name + ":" + nearestPoint.position + ":" + transform.position + " " + target);

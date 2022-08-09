@@ -986,8 +986,8 @@ public class GameManager : MonoBehaviourPunCallbacks
             if (PhotonNetwork.IsMasterClient)
             {
                 PhotonNetwork.CurrentRoom.IsOpen = false;
-                progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(11).gameObject;
-                progressPanel.SetActive(true);
+                //progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(11).gameObject;
+                //progressPanel.SetActive(true);
                 //StartCoroutine(LoadingBar());
                 LoadArena("EndStage");
             }
@@ -1015,8 +1015,8 @@ public class GameManager : MonoBehaviourPunCallbacks
                     //_totalPlayers = PhotonNetwork.CurrentRoom.PlayerCount;
                     //Debug.Log("TotalPlayers: "+_totalPlayers);
 
-                    progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(11).gameObject;
-                    progressPanel.SetActive(true);
+                    //progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(11).gameObject;
+                    //progressPanel.SetActive(true);
                     //StartCoroutine(LoadingBar());
                     if (PhotonNetwork.IsMasterClient)
                     {
@@ -1072,9 +1072,8 @@ public class GameManager : MonoBehaviourPunCallbacks
                     //StartCoroutine(LoadingBar());
                     if (PhotonNetwork.IsMasterClient)
                     {
-                        progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(11)
-                            .gameObject;
-                        progressPanel.SetActive(true);
+                        //progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(11).gameObject;
+                        //progressPanel.SetActive(true);
                         LoadArena("Stage2");
                     }
                 }
@@ -1101,9 +1100,8 @@ public class GameManager : MonoBehaviourPunCallbacks
                     //StartCoroutine(LoadingBar());
                     if (PhotonNetwork.IsMasterClient)
                     {
-                        progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(11)
-                            .gameObject;
-                        progressPanel.SetActive(true);
+                        //progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(11).gameObject;
+                        //progressPanel.SetActive(true);
                         LoadArena("EndStage");
                     }
                 }
@@ -1206,7 +1204,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             }
         }
             //&& counter < 100000
-            while (!allPlayersReady && counter < 100)
+            while (!allPlayersReady && counter < 300)
             {
                 allPlayersReady = true;
                 //Debug.Log("Running While Loop");
@@ -1298,7 +1296,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     //     }
     // }
 
-    IEnumerator LoadingBar()
+    /*IEnumerator LoadingBar()
     {
         while (PhotonNetwork.LevelLoadingProgress < 1.0f)
         {
@@ -1310,7 +1308,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         yield return new WaitForEndOfFrame();
 
-    }
+    }*/
 
     #endregion
 
