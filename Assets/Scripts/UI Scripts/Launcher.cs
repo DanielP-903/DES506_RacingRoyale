@@ -227,6 +227,8 @@ public class Launcher : MonoBehaviourPunCallbacks
             timeoutPanel.SetActive(connection.cause != "left");
             if (connection.cause == "left")
                 connection.cause = "";
+            else
+                EventSystem.current.SetSelectedGameObject(timeoutPanel.transform.GetChild(4).gameObject);
         }
         
         

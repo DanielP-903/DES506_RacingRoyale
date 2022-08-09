@@ -132,23 +132,17 @@ public class WallFollow : MonoBehaviour
         }
         else
         {
-            _startDelayTimer = _startDelayTimer <= 0 ? 0 : _startDelayTimer - Time.deltaTime;
-            if (_startDelayTimer < 1)
+            _startDelayTimer = _startDelayTimer <= 0 ? 0 : _startDelayTimer - Time.deltaTime; 
+            //_startDelayTimer < 1
+            int serverTimer =
+                (int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer" + GameObject.Find("GameManager").GetComponent<GameManager>().GetStageNum())];
+            
+            if (serverTimer != 0 && PhotonNetwork.ServerTimestamp - serverTimer > startDelay * 1000)
             {
-                StartCoroutine(RemoveDelayText());
                 _startDelayTimer = startDelay;
                 _begin = true;
             }
         }
-
-        
-    }
-
-    private IEnumerator RemoveDelayText()
-    {
-        //startDelayText.text = "GO";
-        yield return new WaitForSeconds(2);
-        //startDelayText.text = "";
     }
     
     IEnumerator waitTime()
