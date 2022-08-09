@@ -11,8 +11,14 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file:////StuHomeOdd/HomeDrive9$/1700099/Desktop/GameManager.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file:////StuHomeOdd/HomeDrive9$/1700099/Desktop/Launcher.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Art/VFX/JackMask/JackMaskObject.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Photon/PhotonUnityNetworking/UtilityScripts/Room/CountdownTimer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/PowerupCollision.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Misc Scripts/WaitingStageDisable.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI Scripts/SO_Connection.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/WaitingArea.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.postprocessing@3.0.3/PostProcessing/Runtime/Effects/DepthOfField.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.universal@10.3.2/Runtime/ShadowUtils.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.visualeffectgraph@10.3.2/Editor/Models/VFXGraph.cs" root0="SKIP_HIGHLIGHTING" />
@@ -28,22 +34,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Discover.Launch.Via.Unity": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.keymap",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Discover.Launch.Via.Unity&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;rider.run.widget.enabled.cache&quot;: &quot;false&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunAnythingCache">
     <option name="myCommands">
       <command value="reset" />
@@ -76,10 +83,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="12768">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="12768" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -202,8 +209,9 @@
       <workItem from="1659687407570" duration="20334000" />
       <workItem from="1659946568375" duration="5714000" />
       <workItem from="1659953327334" duration="5660000" />
-      <workItem from="1659967702398" duration="3875000" />
-      <workItem from="1660033138969" duration="11928000" />
+      <workItem from="1659967702398" duration="4029000" />
+      <workItem from="1660032806967" duration="4784000" />
+      <workItem from="1660040469144" duration="9626000" />
     </task>
     <servers />
   </component>
@@ -231,9 +239,42 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/Player Scripts/Powerup Scripts/PlayerPowerups.cs</url>
-          <line>682</line>
-          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\Player Scripts\Powerup Scripts\PlayerPowerups.cs" initialLine="701" containingFunctionPresentation="method 'OnTriggerEnter'" />
+          <url>file://$PROJECT_DIR$/Assets/Scripts/Player Scripts/PlayerManager.cs</url>
+          <line>411</line>
+          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\Player Scripts\PlayerManager.cs" initialLine="411" containingFunctionPresentation="method 'GoToSpawn'">
+            <startOffsets>
+              <option value="13754" />
+            </startOffsets>
+            <endOffsets>
+              <option value="13918" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/Player Scripts/CarController.cs</url>
+          <line>825</line>
+          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\Player Scripts\CarController.cs" initialLine="825" containingFunctionPresentation="method 'ResetPlayer'">
+            <startOffsets>
+              <option value="27345" />
+            </startOffsets>
+            <endOffsets>
+              <option value="27376" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/Player Scripts/CarController.cs</url>
+          <line>829</line>
+          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\Player Scripts\CarController.cs" initialLine="829" containingFunctionPresentation="method 'ResetPlayer'">
+            <startOffsets>
+              <option value="27448" />
+            </startOffsets>
+            <endOffsets>
+              <option value="27475" />
+            </endOffsets>
+          </properties>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>
