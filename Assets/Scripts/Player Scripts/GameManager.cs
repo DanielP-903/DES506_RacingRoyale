@@ -159,8 +159,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
 
         connection.cause = "left";
-
-        PhotonNetwork.LeaveRoom();
+        
+        GameObject.Find("FadeScreen").GetComponent<fadeScreen>().quitFade();
     }
 
     public void SetDelayTimer()
