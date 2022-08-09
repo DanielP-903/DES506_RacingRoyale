@@ -1059,7 +1059,6 @@ public class GameManager : MonoBehaviourPunCallbacks
                 //_timer.gameObject.SetActive(false);
                 TryGetFinishedPlayers(out playersCompleted, _stage);
                 TryGetElimPlayers(out elimPlayers);
-                
                 int currentPlayerCount = (int)Mathf.Min(Mathf.Ceil((float)_totalPlayers / 2) - playersCompleted, PhotonNetwork.CurrentRoom.PlayerCount-playersCompleted);
 
                 if (currentPlayerCount != _playersPreviousFrame)
@@ -1103,15 +1102,23 @@ public class GameManager : MonoBehaviourPunCallbacks
                 break;
             case "Stage2":
                 //_timer.gameObject.SetActive(false);
+                int numOfSpectatingPlayers = 0;
+                foreach (Player player in PhotonNetwork.PlayerList)
+                {
+                    if ((bool)player.CustomProperties["Eliminated"])
+                    {
+                        numOfSpectatingPlayers++;
+                    }
+                }
                 TryGetFinishedPlayers(out playersCompleted, _stage);
                 TryGetElimPlayers(out elimPlayers);
-                if (Mathf.Min(4 - playersCompleted,PhotonNetwork.CurrentRoom.PlayerCount-playersCompleted) == 1)
+                if (Mathf.Min(4 - playersCompleted,PhotonNetwork.CurrentRoom.PlayerCount-(playersCompleted+numOfSpectatingPlayers)) == 1)
                 {
                     _placeCounter.text = "1 podium space left!";
                 }
                 else
                 {
-                    _placeCounter.text = Mathf.Min(4 - playersCompleted,PhotonNetwork.CurrentRoom.PlayerCount-playersCompleted) + " podium spaces left!";
+                    _placeCounter.text = Mathf.Min(4 - playersCompleted,PhotonNetwork.CurrentRoom.PlayerCount-(playersCompleted+numOfSpectatingPlayers)) + " podium spaces left!";
                 }
 
                 //Debug.Log("Name: "+SceneManager.GetActiveScene().name + " Stage: " + _stage + " Players Finished: "+(_totalPlayers - elimPlayers)+" Goal: 0");
