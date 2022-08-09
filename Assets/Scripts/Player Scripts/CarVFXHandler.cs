@@ -265,16 +265,16 @@ public class CarVFXHandler : MonoBehaviour
             _dangerWallEffect.SetVector2("Alpha Values", new Vector2(0,0));
         }
 
-        if (!_carController.bot && !_carController.debug)
-        {
-            _outlineObject.GetComponent<MeshFilter>().sharedMesh =
-                meshArray[(int)PhotonNetwork.LocalPlayer.CustomProperties["Skin"]];
-            _outlineObjectGrapple.GetComponent<MeshFilter>().sharedMesh =
-                meshArray[(int)PhotonNetwork.LocalPlayer.CustomProperties["Skin"]];
-        }
-
-        if (!_carController.debug && !_carController.bot)
-            _photonView.RPC("UpdateOutlineMeshes", RpcTarget.All, _photonView.ViewID, (int)PhotonNetwork.LocalPlayer.CustomProperties["Skin"]);
+        // if (!_carController.bot && !_carController.debug)
+        // {
+        //     _outlineObject.GetComponent<MeshFilter>().sharedMesh =
+        //         meshArray[(int)PhotonNetwork.LocalPlayer.CustomProperties["Skin"]];
+        //     _outlineObjectGrapple.GetComponent<MeshFilter>().sharedMesh =
+        //         meshArray[(int)PhotonNetwork.LocalPlayer.CustomProperties["Skin"]];
+        // }
+        //
+        // if (!_carController.debug && !_carController.bot)
+        //     _photonView.RPC("UpdateOutlineMeshes", RpcTarget.All, _photonView.ViewID, (int)PhotonNetwork.LocalPlayer.CustomProperties["Skin"]);
 
         StopDriftEffects();
     }
