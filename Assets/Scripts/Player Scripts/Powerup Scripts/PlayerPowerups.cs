@@ -403,50 +403,6 @@ public class PlayerPowerups : MonoBehaviour
 
      private void GrapplingHook()
      {
-         // // Detect opponent to grapple to
-         // RaycastHit[] hits;
-         // hits = Physics.SphereCastAll(transform.position, 5, transform.forward,  achievableDistance);
-         // if (hits.Length > 0)
-         // {
-         //     _carController.audioManager.PlaySound("GrapplingHookLaunch");
-         //     float distance = 1000000.0f;
-         //     _nearestHit = hits[0];
-         //     foreach (var hit in hits)
-         //     {
-         //         if (hit.distance < distance && hit.transform.CompareTag("Player") && hit.transform.gameObject != transform.gameObject)
-         //         {
-         //             distance = hit.distance;
-         //             _nearestHit = hit;
-         //         }
-         //     }
-         //
-         //     if (_nearestHit.transform.CompareTag("Player") && _nearestHit.transform.gameObject != transform.gameObject)
-         //     {
-         //         // Found a player to grapple!
-         //         _grappleLineObject.SetActive(true);
-         //         StartCoroutine(Grapple());
-         //         Debug.Log("HIT!!!");
-         //         powerupIcon.transform.GetChild(2).gameObject.SetActive(false);
-         //         _audioManager.PlaySound("GrapplingHook");
-         //         _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.GrapplingHook, true);
-         //         _carController.audioManager.PlaySound("GrapplingHook");
-         //     }
-         //     else
-         //     {
-         //         Debug.Log("No hit!");
-         //         powerupIcon.transform.GetChild(2).gameObject.SetActive(true);
-         //         _grappleLineObject.SetActive(false);
-         //         _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.GrapplingHook, false);
-         //     }
-         // }
-         // else
-         // {
-         //     Debug.Log("No hit!");
-         //     powerupIcon.transform.GetChild(2).gameObject.SetActive(true);
-         //     _grappleLineObject.SetActive(false);
-         //     _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.GrapplingHook, false);
-         // }
-
          if (_currentTarget)
          {
              _grappleLineObject.SetActive(true);
