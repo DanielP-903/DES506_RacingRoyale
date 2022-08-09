@@ -224,7 +224,9 @@ public class Launcher : MonoBehaviourPunCallbacks
             }
             ApplyGraphics();
             
-            timeoutPanel.SetActive(connection.cause == "timeout");
+            timeoutPanel.SetActive(connection.cause != "left");
+            if (connection.cause == "left")
+                connection.cause = "";
         }
         
         
@@ -242,10 +244,11 @@ public class Launcher : MonoBehaviourPunCallbacks
         {
             // keep track of the will to join a room, because when we come back from the game we will get a callback that we are connected, so we need to know what to do then
             isConnecting = PhotonNetwork.ConnectUsingSettings();
-            progressPanel.SetActive(true);
-            controlPanel.SetActive(false);
-            progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = 0;
-            StartCoroutine(LoadingBar());
+            //progressPanel.SetActive(true);
+            //controlPanel.SetActive(false);
+            //progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = 0;
+            //StartCoroutine(LoadingBar());
+            GameObject.Find("FadeScreen").GetComponent<fadeScreen>().fadeOut();
             
             // we check if we are connected or not, we join if we are , else we initiate the connection to the server.
             if (PhotonNetwork.IsConnected)
