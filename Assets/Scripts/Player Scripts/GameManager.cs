@@ -1206,7 +1206,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             }
         }
             //&& counter < 100000
-            while (!allPlayersReady && counter < 100)
+            while (!allPlayersReady && counter < 300)
             {
                 allPlayersReady = true;
                 //Debug.Log("Running While Loop");
@@ -1298,7 +1298,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     //     }
     // }
 
-    IEnumerator LoadingBar()
+    /*IEnumerator LoadingBar()
     {
         while (PhotonNetwork.LevelLoadingProgress < 1.0f)
         {
@@ -1310,7 +1310,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         yield return new WaitForEndOfFrame();
 
-    }
+    }*/
 
     #endregion
 

@@ -12,7 +12,7 @@ public class TimerCube : MonoBehaviour
 
     private PlayerManager _playerRef;
     private AudioManager _audioRef;
-    private bool _hasFoundPlayer;
+    private bool _hasFoundPlayer = false;
     private GameManager _gm;
 
     private float _currentTimerValue;
