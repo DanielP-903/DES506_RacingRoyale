@@ -136,7 +136,7 @@ public class fadeScreen : MonoBehaviour
         }
         else
         {
-            progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(7).gameObject;
+            progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(6).gameObject;
         }
 
         progressPanel.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = 0;
