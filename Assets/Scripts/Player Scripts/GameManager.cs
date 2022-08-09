@@ -1028,7 +1028,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 //_placeCounter.gameObject.SetActive(false);
                 CountdownTimer.TryGetStartTime(out var hit);
                 if (PhotonNetwork.CurrentRoom.IsOpen &&
-                    (PhotonNetwork.ServerTimestamp - hit) / 1000f > waitingTime)
+                    (PhotonNetwork.ServerTimestamp - hit) / 1000f > (waitingTime - 5))
                 {
                     //_totalPlayers = PhotonNetwork.CurrentRoom.PlayerCount;
                     //Debug.Log("TotalPlayers: "+_totalPlayers);
