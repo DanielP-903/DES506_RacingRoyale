@@ -1298,7 +1298,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     //     }
     // }
 
-    IEnumerator LoadingBar()
+    /*IEnumerator LoadingBar()
     {
         while (PhotonNetwork.LevelLoadingProgress < 1.0f)
         {
@@ -1310,7 +1310,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         yield return new WaitForEndOfFrame();
 
-    }
+    }*/
 
     #endregion
 
