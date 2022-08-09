@@ -179,7 +179,11 @@ public class fadeScreen : MonoBehaviour
     
     IEnumerator LoadingBar()
     {
-        pm.Resume();
+        if (pm != null)
+        {
+            pm.Resume();
+        }
+
         /*if (GameObject.FindGameObjectWithTag("MainCanvas").transform.childCount > 10)
         {
             progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(12).gameObject;
