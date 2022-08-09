@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using Cursor = UnityEngine.Cursor;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Random = UnityEngine.Random;
 using Slider = UnityEngine.UI.Slider;
 
@@ -54,7 +55,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private GameObject spectateMenu;
     private TextMeshProUGUI spectateText;
     private GameObject attachedPlayer;
-    private float _playersPreviousFrame;
+    private int _playersPreviousFrame;
 
     #endregion
 
@@ -120,6 +121,15 @@ public class GameManager : MonoBehaviourPunCallbacks
 
             //LoadArena();
 
+        }
+    }
+
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable hashtable)
+    {
+        if ((_eliminated || _completed) && spectateTarget.GetComponent<PhotonView>().Owner == targetPlayer &&
+            hashtable.ContainsKey("Completed" + _stage) || hashtable.ContainsKey("Eliminated"))
+        {
+            Spectate();
         }
     }
 
@@ -253,7 +263,13 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void SetSpectateMenu(GameObject newMenu)
     {
         spectateMenu = newMenu;
+        if (_eliminated)
+        {
+            spectateMenu.SetActive(true);
+        }
     }
+    
+    
 
     public void ChangeSpectateTarget(bool next = true)
     {
@@ -1044,7 +1060,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 TryGetFinishedPlayers(out playersCompleted, _stage);
                 TryGetElimPlayers(out elimPlayers);
                 
-                float currentPlayerCount = Mathf.Min(Mathf.Ceil((float)_totalPlayers / 2) - playersCompleted, PhotonNetwork.CurrentRoom.PlayerCount-playersCompleted);
+                int currentPlayerCount = (int)Mathf.Min(Mathf.Ceil((float)_totalPlayers / 2) - playersCompleted, PhotonNetwork.CurrentRoom.PlayerCount-playersCompleted);
 
                 if (currentPlayerCount != _playersPreviousFrame)
                 {
@@ -1057,7 +1073,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 }
                 else
                 {
-                    _placeCounter.text = currentPlayerCount - playersCompleted + " places left!";
+                    _placeCounter.text = currentPlayerCount + " places left!";
                 }
 
                 _playersPreviousFrame = currentPlayerCount;
@@ -1065,15 +1081,19 @@ public class GameManager : MonoBehaviourPunCallbacks
 
                 if (_stage == 1 && (playersCompleted >= (float)_totalPlayers / 2 || playersCompleted + elimPlayers >= _totalPlayers))
                 {
-                    _stage = 2;
-                    SetFinishedPlayers(0, _stage);
+                    Spectate();
+                    _placeCounter.text = "No spaces left!";
                     if (!_completed && !_eliminated)
                     {
+                        _placeCounter.text = "You've been left behind!";
                         _photonView.gameObject.GetComponent<PlayerManager>().EliminateCurrentPlayer();
                     }
+                    _stage = 2;
+                    SetFinishedPlayers(0, _stage);
                     //StartCoroutine(LoadingBar());
                     if (PhotonNetwork.IsMasterClient)
                     {
+                        //_placeCounter.color = Color.clear;
                         //progressPanel = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(11).gameObject;
                         //progressPanel.SetActive(true);
                         LoadArena("Stage2");
@@ -1085,7 +1105,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 //_timer.gameObject.SetActive(false);
                 TryGetFinishedPlayers(out playersCompleted, _stage);
                 TryGetElimPlayers(out elimPlayers);
-                if (Mathf.Min(Mathf.Ceil((float)_totalPlayers / 2) - playersCompleted, PhotonNetwork.CurrentRoom.PlayerCount-playersCompleted) == 1)
+                if (Mathf.Min(4 - playersCompleted,PhotonNetwork.CurrentRoom.PlayerCount-playersCompleted) == 1)
                 {
                     _placeCounter.text = "1 podium space left!";
                 }
@@ -1098,7 +1118,15 @@ public class GameManager : MonoBehaviourPunCallbacks
                 //_stage == 2 && playersCompleted >= (float)_totalPlayers/16
                 if (_stage == 2 && (playersCompleted >= (int)4 || elimPlayers + playersCompleted >= _totalPlayers))
                 {
+                    Spectate();
+                    _placeCounter.text = "No spaces left!";
+                    if (!_completed && !_eliminated)
+                    {
+                        _placeCounter.text = "You've been left behind!";
+                        _photonView.gameObject.GetComponent<PlayerManager>().EliminateCurrentPlayer();
+                    }
                     _stage++;
+                    SetFinishedPlayers(0, _stage);
                     //StartCoroutine(LoadingBar());
                     if (PhotonNetwork.IsMasterClient)
                     {
