@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using Cursor = UnityEngine.Cursor;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Random = UnityEngine.Random;
 using Slider = UnityEngine.UI.Slider;
 
@@ -120,6 +121,15 @@ public class GameManager : MonoBehaviourPunCallbacks
 
             //LoadArena();
 
+        }
+    }
+
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable hashtable)
+    {
+        if ((_eliminated || _completed) && spectateTarget.GetComponent<PhotonView>().Owner == targetPlayer &&
+            hashtable.ContainsKey("Completed" + _stage) || hashtable.ContainsKey("Eliminated"))
+        {
+            Spectate();
         }
     }
 
@@ -253,7 +263,13 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void SetSpectateMenu(GameObject newMenu)
     {
         spectateMenu = newMenu;
+        if (_eliminated)
+        {
+            spectateMenu.SetActive(true);
+        }
     }
+    
+    
 
     public void ChangeSpectateTarget(bool next = true)
     {
