@@ -224,7 +224,9 @@ public class Launcher : MonoBehaviourPunCallbacks
             }
             ApplyGraphics();
             
-            timeoutPanel.SetActive(connection.cause == "timeout");
+            timeoutPanel.SetActive(connection.cause != "left");
+            if (connection.cause == "left")
+                connection.cause = "";
         }
         
         

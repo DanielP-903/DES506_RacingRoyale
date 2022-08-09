@@ -598,7 +598,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void Start()
     {
         //Debug.Log("Running!");
-        Cursor.visible = false;
+        Cursor.visible = SceneManager.GetActiveScene().name == "WaitingArea";
         //SceneManager.sceneLoaded -= LoadPlayerInLevel;
         DontDestroyOnLoad(this.gameObject);
         _timer = GameObject.Find("Timer").GetComponent<TextMeshProUGUI>();
