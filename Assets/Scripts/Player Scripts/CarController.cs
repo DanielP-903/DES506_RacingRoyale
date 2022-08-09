@@ -819,7 +819,7 @@ public class CarController : MonoBehaviour
     {
         if (!_photonView)
             Debug.LogError("No photon view!");
-        if (_photonView.Owner.IsMasterClient && _photonView.IsMine)
+        if (_photonView.IsMine)
         {
             if (!bot && pressedButton)
             {
@@ -829,12 +829,12 @@ public class CarController : MonoBehaviour
             {
                 _playerManager.GoToSpawn();
             }
-            else
+            else if (_photonView.Owner.IsMasterClient && _photonView.IsMine)
             {
                 _botCarController.goToSpawn();
             }
         }
-        else if (bot)
+        else if (bot && _photonView.Owner.IsMasterClient && _photonView.IsMine)
         {
             PhotonNetwork.Destroy(this.gameObject);
         }
