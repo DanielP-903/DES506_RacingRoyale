@@ -158,6 +158,8 @@ public class GameManager : MonoBehaviourPunCallbacks
             //EliminatePlayer(elimPosition);
         }
 
+        connection.cause = "left";
+
         PhotonNetwork.LeaveRoom();
     }
 

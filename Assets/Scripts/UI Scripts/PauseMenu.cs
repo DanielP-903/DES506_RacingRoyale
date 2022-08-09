@@ -28,11 +28,13 @@ public class PauseMenu : MonoBehaviour
     [Tooltip("Toggle for VSync")]
     [SerializeField]
     private Toggle vSync;
+    [SerializeField] 
+    private SO_Connection connection;
     [Tooltip("Dropdown for Resolution")]
     [SerializeField]
     private TMP_Dropdown resolution;
     [SerializeField] private bool debugMode;
-
+    
     private bool escapeKey;
     private bool lastKey;
 
