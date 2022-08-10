@@ -99,7 +99,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             _photonView.RPC("sendMessage", RpcTarget.AllViaServer,
                 "<color=blue>"+other.NickName + "</color> has joined. " + PhotonNetwork.CurrentRoom.PlayerCount + "/" +
                 PhotonNetwork.CurrentRoom.MaxPlayers);
-            if (botsStored.Length >= PhotonNetwork.CurrentRoom.PlayerCount - 2 && PhotonNetwork.CurrentRoom.PlayerCount - 2 > -1)
+            if (botsStored.Length >= PhotonNetwork.CurrentRoom.PlayerCount && PhotonNetwork.CurrentRoom.PlayerCount - 2 > -1)
             {
                 PhotonNetwork.Destroy(botsStored[PhotonNetwork.CurrentRoom.PlayerCount - 2]);
             }
@@ -353,14 +353,14 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (spectateTarget.name == "Danger Wall")
         {
             cvc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0,500,-1000);
-            cvc.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset = new Vector3(0,500,-1000);
+            //cvc.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset = new Vector3(0,500,-1000);
             Debug.Log("Changed Offset to " + cvc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset);
-            Debug.Log("Changed Offset to " + cvc.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset);
+            //Debug.Log("Changed Offset to " + cvc.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset);
         }
         else
         {
             cvc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0,5,-8);
-            cvc.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset  = new Vector3(0,5,-8);
+            //cvc.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset  = new Vector3(0,5,-8);
         }
 
         spectateText.text = part1 + "\n" + part2;
@@ -602,14 +602,14 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (spectateTarget.name == "Danger Wall")
         {
             cvc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0,500,-1000);
-            cvc.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset = new Vector3(0,500,-1000);
+            //cvc.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset = new Vector3(0,500,-1000);
             Debug.Log("Changed Offset to " + cvc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset);
-            Debug.Log("Changed Offset to " + cvc.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset);
+            //Debug.Log("Changed Offset to " + cvc.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset);
         }
         else
         {
             cvc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0,5,-8);
-            cvc.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset  = new Vector3(0,5,-8);
+            //cvc.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset  = new Vector3(0,5,-8);
         }
 
         spectateText.text = part1 + "\n" + part2;
