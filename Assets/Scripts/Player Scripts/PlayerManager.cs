@@ -465,7 +465,7 @@ public class PlayerManager : MonoBehaviour
     {
         if (!debugMode)
             _as.displayAlert("Checkpoint");
-        if (_photonView.Owner.IsMasterClient)
+        if (_photonView.Owner.IsMasterClient && _gm.GetBots().Length > 0)
         {
             GameObject[] bots = _gm.GetBots();
             int botsToChange = Random.Range(1, 4);
