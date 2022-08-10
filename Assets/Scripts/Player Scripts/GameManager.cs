@@ -99,7 +99,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             _photonView.RPC("sendMessage", RpcTarget.AllViaServer,
                 "<color=blue>"+other.NickName + "</color> has joined. " + PhotonNetwork.CurrentRoom.PlayerCount + "/" +
                 PhotonNetwork.CurrentRoom.MaxPlayers);
-            if (botsStored.Length >= PhotonNetwork.CurrentRoom.PlayerCount - 2 && PhotonNetwork.CurrentRoom.PlayerCount - 2 > -1)
+            if (botsStored.Length >= PhotonNetwork.CurrentRoom.PlayerCount && PhotonNetwork.CurrentRoom.PlayerCount - 2 > -1)
             {
                 PhotonNetwork.Destroy(botsStored[PhotonNetwork.CurrentRoom.PlayerCount - 2]);
             }
