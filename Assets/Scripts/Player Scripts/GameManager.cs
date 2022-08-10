@@ -149,7 +149,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void LeaveRoom()
     {
         //Debug.Log("Player: "+_photonView.Owner.NickName + " Eliminated.");
-        if (_photonView && !_eliminated && !(_stage == 2 && _completed))
+        if (_photonView && !_eliminated && !(_stage == 2 && _completed) && SceneManager.GetActiveScene().name != "WaitingArea")
         {
             ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
             {
@@ -293,7 +293,9 @@ public class GameManager : MonoBehaviourPunCallbacks
                  && !pv.Owner.CustomProperties.ContainsKey("Completed"+_stage) 
                  && pv.gameObject != null 
                  && pv.gameObject.tag == "Player"
-                 && pv.gameObject.name != _photonView.Owner.NickName)
+                 && pv.gameObject.name != _photonView.Owner.NickName
+                 && pv.GetComponent<ServerSyncScript>()
+                 && !pv.GetComponent<ServerSyncScript>().completed)
                 || pv.gameObject.tag == "EliminationZone")
             {
                 spectateTargets.Add(pv.gameObject.transform);
@@ -568,7 +570,9 @@ public class GameManager : MonoBehaviourPunCallbacks
                 && !pv.Owner.CustomProperties.ContainsKey("Completed"+_stage) 
                 && pv.gameObject != null 
                 && pv.gameObject.tag == "Player"
-                && pv.gameObject.name != _photonView.Owner.NickName)
+                && pv.gameObject.name != _photonView.Owner.NickName
+                && pv.GetComponent<ServerSyncScript>()
+                && !pv.GetComponent<ServerSyncScript>().completed)
                 || pv.gameObject.tag == "EliminationZone")
             {
                 spectateTarget = pv.gameObject.transform;
