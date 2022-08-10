@@ -129,8 +129,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable hashtable)
     {
-        if ((_eliminated || _completed) &&spectateTarget.GetComponent<PhotonView>() &&spectateTarget.GetComponent<PhotonView>().Owner == targetPlayer &&
-            hashtable.ContainsKey("Completed" + _stage) || hashtable.ContainsKey("Eliminated"))
+        if ((_eliminated || _completed) 
+            &&spectateTarget.GetComponent<PhotonView>() 
+            && spectateTarget.GetComponent<PhotonView>().Owner == targetPlayer 
+            && (hashtable.ContainsKey("Completed" + _stage) || hashtable.ContainsKey("Eliminated")))
         {
             Debug.Log("C: "+_completed+"E: "+_eliminated);
             Debug.Log("Spectating Due to PlayerProp Update");
