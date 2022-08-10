@@ -48,7 +48,11 @@ public class TimerCube : MonoBehaviour
     void Update()
     {
         int timerVal = 0;
-        timerVal = (int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer" + _gm.GetStageNum())];
+        if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("Timer" + _gm.GetStageNum()))
+        {
+            timerVal = (int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer" + _gm.GetStageNum())];
+        }
+
         if (timerVal != 0 && _hasFoundPlayer)
         {
             if (!_played)
