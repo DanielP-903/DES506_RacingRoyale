@@ -40,12 +40,6 @@ public class PlayerPowerups : MonoBehaviour
     public float achievablePunchRange = 30.0f;
     [Tooltip("Radius area of effect for targets")]
     public float detectionRadius = 5.0f;
-    
-    
-    [Header("OBSOLETE POWERUPS")]
-    public float wallShieldTime = 15.0f;
-    public float wallShieldBounciness = 10.0f;
-    public float warpPortalTime = 15.0f;
 
     [Header("Other")]
     [Tooltip("UI icon for powerups")]
@@ -128,6 +122,8 @@ public class PlayerPowerups : MonoBehaviour
         _blastObject.SetActive(false);
 
         _currentPowerupType = PowerupType.None;
+        _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(false, _currentTarget);
+        _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(false, _currentTarget);
     }
 
     void FixedUpdate()
