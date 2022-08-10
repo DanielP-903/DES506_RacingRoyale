@@ -465,7 +465,7 @@ public class PlayerManager : MonoBehaviour
     {
         if (!debugMode)
             _as.displayAlert("Checkpoint");
-        if (_photonView.Owner.IsMasterClient)
+        if (_photonView.Owner.IsMasterClient && _gm.GetBots().Length > 0)
         {
             GameObject[] bots = _gm.GetBots();
             int botsToChange = Random.Range(1, 4);
@@ -682,11 +682,16 @@ public class PlayerManager : MonoBehaviour
                 yield return new WaitForFixedUpdate();
             }
             Debug.Log("Count: "+counter);
-            yield return new WaitUntil(() => ((int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer"+_gm.GetStageNum())] != 0));
+            //yield return new WaitUntil(() => ((int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer"+_gm.GetStageNum())] != 0));
             int hit = 0;
-            if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(("Timer" + _gm.GetStageNum())))
+            while (hit == 0)
             {
-                hit = (int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer" + _gm.GetStageNum())];
+                if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(("Timer" + _gm.GetStageNum())))
+                {
+                    hit = (int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer" + _gm.GetStageNum())];
+                }
+
+                yield return new WaitForFixedUpdate();
             }
 
             Debug.Log("Timer: "+hit);
