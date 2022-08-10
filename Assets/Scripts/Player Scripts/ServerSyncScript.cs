@@ -3,8 +3,32 @@ using Photon.Pun;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class ServerSyncScript : MonoBehaviour
+public class ServerSyncScript : MonoBehaviourPunCallbacks, IPunObservable
 {
+    
+    #region IPunObservable implementation
+
+    public bool completed;
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            // We own this player: send the others our data
+            completed = false;
+            if (_gm)
+            {
+                completed = _gm._completed;
+            }
+            stream.SendNext(completed);
+        }
+        else
+        {
+            // Network player, receive data
+            this.completed = (bool)stream.ReceiveNext();
+        }
+    }
+    #endregion
+    
     [SerializeField] private bool debugMode;
     private GameManager _gm;
     private MessageBox _mb;
