@@ -282,6 +282,12 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void ChangeSpectateTarget(bool next = true)
     {
+        spectateMenu  = GameObject.Find("SpectateButtons");
+        if (spectateMenu != null)
+        {
+            spectateMenu.SetActive(true);
+        }
+
         int index = 0;
         ArrayList spectateTargets = new ArrayList();
         spectateTargets.Add(GameObject.Find("Danger Wall").transform);
@@ -530,6 +536,11 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     void Spectate()
     {
+        spectateMenu  = GameObject.Find("SpectateButtons");
+        if (spectateMenu != null)
+        {
+            spectateMenu.SetActive(true);
+        }
         Debug.Log("Spectating: " + SceneManager.GetActiveScene().name);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -1130,7 +1141,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 int numOfSpectatingPlayers = 0;
                 foreach (Player player in PhotonNetwork.PlayerList)
                 {
-                    if ((bool)player.CustomProperties["Eliminated"])
+                    if (player.CustomProperties.ContainsKey("Eliminated") && (bool)player.CustomProperties["Eliminated"])
                     {
                         numOfSpectatingPlayers++;
                     }
