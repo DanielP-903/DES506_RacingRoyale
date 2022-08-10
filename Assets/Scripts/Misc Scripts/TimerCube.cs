@@ -14,6 +14,7 @@ public class TimerCube : MonoBehaviour
     private AudioManager _audioRef;
     private bool _hasFoundPlayer = false;
     private GameManager _gm;
+    private GameObject startBlocker;
 
     private float _currentTimerValue;
     private float _previousTimerValue;
@@ -25,6 +26,7 @@ public class TimerCube : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        startBlocker = GameObject.Find("StartBlocker");
         _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
         _meshRenderer = GetComponent<MeshRenderer>();
         _meshRenderer.enabled = true;
@@ -102,6 +104,7 @@ public class TimerCube : MonoBehaviour
                     _audioRef.PlaySound("GameStartFinal");
                     _effect.Play();
                     _meshRenderer.enabled = false;
+                    startBlocker.SetActive(false);
                 }
             }
         }

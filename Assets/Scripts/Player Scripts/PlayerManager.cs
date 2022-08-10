@@ -710,7 +710,6 @@ public class PlayerManager : MonoBehaviour
             Debug.Log("TIME LEFT IS: " + _gm.GetStartDelay() + ": Server:" +PhotonNetwork.ServerTimestamp + ": TimeSet:" + hit + " Total Timer Value: "+(_gm.GetStartDelay() - ((PhotonNetwork.ServerTimestamp - hit) / 1000f)));
 
             //Start Code Here
-            startBlocker.SetActive(false);
             startDelayText.text = "Go!";
             //Debug.Log("StartedRACE!");
             while (startDelayText.color.a > 0)

@@ -90,7 +90,7 @@ public class fadeScreen : MonoBehaviour
         fadeScreenUI.color = new Color(fadeScreenUI.color.r, fadeScreenUI.color.g, fadeScreenUI.color.b, 1);
         //Debug.Log("Fading In");
         fadedOut = false;
-        float vol = -20;
+        float vol = -80;
         float volStep = (PlayerPrefs.GetFloat("MasterVol") + 80) / 25;
         mixer.SetFloat("Master", vol);
         yield return new WaitForSeconds(1);
