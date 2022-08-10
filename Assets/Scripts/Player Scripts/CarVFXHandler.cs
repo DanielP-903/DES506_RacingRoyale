@@ -315,7 +315,7 @@ public class CarVFXHandler : MonoBehaviour
 
         _wall = GameObject.FindGameObjectWithTag("EliminationZone");
         _dangerPressureImg = canvas.transform.GetChild(0).GetComponent<Image>();
-        _mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        _mainCam =  GameObject.Find("PlayerCamera").GetComponent<Camera>();
         _carController = GetComponent<CarController>();
         _speedLinesEffect = _mainCam.transform.GetChild(2).gameObject.GetComponent<VisualEffect>();
         _speedCircleEffect = _mainCam.transform.GetChild(3).gameObject.GetComponent<VisualEffect>();
@@ -395,6 +395,19 @@ public class CarVFXHandler : MonoBehaviour
         _newAlpha.x = Mathf.Lerp(0.2f, 0, (100 - clampedVelocity) / 100);
         _newAlpha.y = Mathf.Lerp(0.5f, 0, (100 - clampedVelocity) / 100);
 
+        // if (GameObject.Find("CM vcam1") && GameObject.Find("CM vcam1").activeInHierarchy)
+        // {
+        //     _speedLinesEffect.Stop();
+        //     _dangerWallEffect.Stop();
+        //     _speedCircleEffect.Stop();
+        // }
+        // else if (SceneManager.GetActiveScene().name != "WaitingArea" && SceneManager.GetActiveScene().name != "EndStage")
+        // {
+        //     // _speedLinesEffect.Play();
+        //     // _dangerWallEffect.Play();
+        //     // _speedCircleEffect.Play();   
+        // }
+        
         if (!_speedLinesEffect) return;
         
         _speedLinesEffect.SetVector2("Alpha Values", _newAlpha);
