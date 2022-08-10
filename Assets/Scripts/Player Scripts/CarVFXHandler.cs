@@ -24,11 +24,33 @@ public class CarVFXHandler : MonoBehaviour
     public GameObject impactEffectObject;
     public GameObject impactEffectPrefab;
 
-    [Header("Camera Profiles (Post-Pro)")] 
-    public List<VolumeProfile> profiles;
+    [Header("Post-Pro")]
+    //public List<VolumeProfile> profiles;
     
+    // Vignette
+    public Color vignetteColourOld;
+    public float vignetteIntensityOld;
+    public float vignetteSmoothnessOld;
+    
+    public Color vignetteColourNew;
+    public float vignetteIntensityNew;
+    public float vignetteSmoothnessNew;
+    
+    // Chromatic Aberration
+    public float chromaticIntensityOld;
+    
+    public float chromaticIntensityNew;
+
+    private Color _vignetteColourCurrent;
+    private float _vignetteIntensityCurrent;
+    private float _vignetteSmoothnessCurrent;
+    private float _chromaticIntensityCurrent;
+
     [Header("Other")] 
     public float maxWallDistanceAlert = 30.0f;
+
+    private bool _inZone = false;
+    
     
     [HideInInspector] public bool boostPlaying;
     
@@ -37,11 +59,8 @@ public class CarVFXHandler : MonoBehaviour
     private VisualEffect _speedCircleEffect;
     private VisualEffect _dangerWallEffect;
     private VisualEffect _portalEffect;
-    
-    
     private GameObject _outlineObject;
     private GameObject _outlineObjectGrapple;
- 
     private CarController _carController;
     private Rigidbody _rigidbody;
     private Camera _mainCam;
@@ -337,6 +356,22 @@ public class CarVFXHandler : MonoBehaviour
         {
             _speedLinesEffect.Play();
         }
+
+        if (_inZone)
+        {
+            _vignetteColourCurrent = Color.Lerp(_vignetteColourCurrent, vignetteColourNew, Time.deltaTime);
+            _vignetteIntensityCurrent = Mathf.Lerp(_vignetteIntensityCurrent, vignetteIntensityNew, Time.deltaTime);
+            _vignetteSmoothnessCurrent = Mathf.Lerp(_vignetteSmoothnessCurrent, vignetteSmoothnessNew, Time.deltaTime);
+            _chromaticIntensityCurrent = Mathf.Lerp(_chromaticIntensityCurrent, chromaticIntensityNew, Time.deltaTime);
+        }
+        else
+        {
+            _vignetteColourCurrent = Color.Lerp(_vignetteColourCurrent, vignetteColourOld, Time.deltaTime);
+            _vignetteIntensityCurrent = Mathf.Lerp(_vignetteIntensityCurrent, vignetteIntensityOld, Time.deltaTime);
+            _vignetteSmoothnessCurrent = Mathf.Lerp(_vignetteSmoothnessCurrent, vignetteSmoothnessOld, Time.deltaTime);
+            _chromaticIntensityCurrent = Mathf.Lerp(_chromaticIntensityCurrent, chromaticIntensityOld, Time.deltaTime);         
+        }
+        
     }
 
     private void FixedUpdate()
@@ -364,8 +399,8 @@ public class CarVFXHandler : MonoBehaviour
         _outlineObjectGrapple.SetActive(active);
     }
     
-    public void SetCameraProfile(bool isInZone)
+    public void SetInZone(bool isInZone)
     {
-        _mainCam.GetComponent<CinemachineVolumeSettings>().m_Profile = isInZone ? profiles[1] : profiles[0];
+        _inZone = isInZone;
     }
 }

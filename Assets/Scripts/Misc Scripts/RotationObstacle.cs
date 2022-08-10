@@ -26,7 +26,6 @@ public class RotationObstacle : MonoBehaviour
     void FixedUpdate()
     {
         Vector3 newRot = Vector3.zero;
-        Vector3 rotationOffset = Vector3.zero;
         if (Random.Range(0, 2) == 1 && useRandomOffset)
         {
             newRot = new Vector3(.5f, .5f, .5f);
