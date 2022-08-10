@@ -415,12 +415,12 @@ public class CarVFXHandler : MonoBehaviour
     
     public void SetOutlineActive(bool active, GameObject target)
     {
-        _outlineObject.GetComponent<MeshFilter>().sharedMesh = target.transform.GetChild(19).GetComponent<MeshFilter>().sharedMesh;
+        _outlineObject.GetComponent<MeshFilter>().sharedMesh = target.transform.Find("Outline Punch").GetComponent<MeshFilter>().sharedMesh;
         _outlineObject.SetActive(active);
     }
     public void SetGrappleOutlineActive(bool active, GameObject target)
     {
-        _outlineObjectGrapple.GetComponent<MeshFilter>().sharedMesh = target.transform.GetChild(19).GetComponent<MeshFilter>().sharedMesh;
+        _outlineObjectGrapple.GetComponent<MeshFilter>().sharedMesh = target.transform.Find("Outline Grapple").GetComponent<MeshFilter>().sharedMesh;
         _outlineObjectGrapple.SetActive(active);
     }
     
