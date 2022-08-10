@@ -1130,7 +1130,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 int numOfSpectatingPlayers = 0;
                 foreach (Player player in PhotonNetwork.PlayerList)
                 {
-                    if ((bool)player.CustomProperties["Eliminated"])
+                    if (player.CustomProperties.ContainsKey("Eliminated") && (bool)player.CustomProperties["Eliminated"])
                     {
                         numOfSpectatingPlayers++;
                     }
