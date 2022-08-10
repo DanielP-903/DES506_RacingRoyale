@@ -129,8 +129,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable hashtable)
     {
-        if ((_eliminated || _completed) &&spectateTarget.GetComponent<PhotonView>() &&spectateTarget.GetComponent<PhotonView>().Owner == targetPlayer &&
-            hashtable.ContainsKey("Completed" + _stage) || hashtable.ContainsKey("Eliminated"))
+        if ((_eliminated || _completed) 
+            &&spectateTarget.GetComponent<PhotonView>() 
+            && spectateTarget.GetComponent<PhotonView>().Owner == targetPlayer 
+            && (hashtable.ContainsKey("Completed" + _stage) || hashtable.ContainsKey("Eliminated")))
         {
             Debug.Log("C: "+_completed+"E: "+_eliminated);
             Debug.Log("Spectating Due to PlayerProp Update");
@@ -147,7 +149,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void LeaveRoom()
     {
         //Debug.Log("Player: "+_photonView.Owner.NickName + " Eliminated.");
-        if (_photonView && !_eliminated && !(_stage == 2 && _completed))
+        if (_photonView && !_eliminated && !(_stage == 2 && _completed) && SceneManager.GetActiveScene().name != "WaitingArea")
         {
             ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
             {
@@ -280,6 +282,12 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void ChangeSpectateTarget(bool next = true)
     {
+        spectateMenu  = GameObject.Find("SpectateButtons");
+        if (spectateMenu != null)
+        {
+            spectateMenu.SetActive(true);
+        }
+
         int index = 0;
         ArrayList spectateTargets = new ArrayList();
         spectateTargets.Add(GameObject.Find("Danger Wall").transform);
@@ -291,7 +299,9 @@ public class GameManager : MonoBehaviourPunCallbacks
                  && !pv.Owner.CustomProperties.ContainsKey("Completed"+_stage) 
                  && pv.gameObject != null 
                  && pv.gameObject.tag == "Player"
-                 && pv.gameObject.name != _photonView.Owner.NickName)
+                 && pv.gameObject.name != _photonView.Owner.NickName
+                 && pv.GetComponent<ServerSyncScript>()
+                 && !pv.GetComponent<ServerSyncScript>().completed)
                 || pv.gameObject.tag == "EliminationZone")
             {
                 spectateTargets.Add(pv.gameObject.transform);
@@ -356,16 +366,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         
         if (spectateTarget.name == "Danger Wall")
         {
-            cvc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0,500,-1000);
-            //cvc.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset = new Vector3(0,500,-1000);
-            Debug.Log("Changed Offset to " + cvc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset);
-            //Debug.Log("Changed Offset to " + cvc.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset);
+            spectateTarget = GameObject.Find("DangerWallCamOffset").transform;
         }
-        else
-        {
-            cvc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0,5,-8);
-            //cvc.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset  = new Vector3(0,5,-8);
-        }
+
 
         spectateText.text = part1 + "\n" + part2;
         if (spectateTarget != null && cvc != null)
@@ -533,6 +536,11 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     void Spectate()
     {
+        spectateMenu  = GameObject.Find("SpectateButtons");
+        if (spectateMenu != null)
+        {
+            spectateMenu.SetActive(true);
+        }
         Debug.Log("Spectating: " + SceneManager.GetActiveScene().name);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -566,7 +574,9 @@ public class GameManager : MonoBehaviourPunCallbacks
                 && !pv.Owner.CustomProperties.ContainsKey("Completed"+_stage) 
                 && pv.gameObject != null 
                 && pv.gameObject.tag == "Player"
-                && pv.gameObject.name != _photonView.Owner.NickName)
+                && pv.gameObject.name != _photonView.Owner.NickName
+                && pv.GetComponent<ServerSyncScript>()
+                && !pv.GetComponent<ServerSyncScript>().completed)
                 || pv.gameObject.tag == "EliminationZone")
             {
                 spectateTarget = pv.gameObject.transform;
@@ -605,15 +615,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (spectateTarget.name == "Danger Wall")
         {
-            cvc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0,500,-1000);
-            //cvc.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset = new Vector3(0,500,-1000);
-            Debug.Log("Changed Offset to " + cvc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset);
-            //Debug.Log("Changed Offset to " + cvc.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset);
-        }
-        else
-        {
-            cvc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0,5,-8);
-            //cvc.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset  = new Vector3(0,5,-8);
+            spectateTarget = GameObject.Find("DangerWallCamOffset").transform;
         }
 
         spectateText.text = part1 + "\n" + part2;
@@ -1139,7 +1141,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 int numOfSpectatingPlayers = 0;
                 foreach (Player player in PhotonNetwork.PlayerList)
                 {
-                    if ((bool)player.CustomProperties["Eliminated"])
+                    if (player.CustomProperties.ContainsKey("Eliminated") && (bool)player.CustomProperties["Eliminated"])
                     {
                         numOfSpectatingPlayers++;
                     }

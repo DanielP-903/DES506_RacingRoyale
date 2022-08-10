@@ -132,7 +132,7 @@ public class PlayerPowerups : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (_carController.bot) return;
+        if (_carController.bot || !_photonView.IsMine) return;
         
         PhysUpdatePowerups();
     }
