@@ -293,7 +293,9 @@ public class GameManager : MonoBehaviourPunCallbacks
                  && !pv.Owner.CustomProperties.ContainsKey("Completed"+_stage) 
                  && pv.gameObject != null 
                  && pv.gameObject.tag == "Player"
-                 && pv.gameObject.name != _photonView.Owner.NickName)
+                 && pv.gameObject.name != _photonView.Owner.NickName
+                 && pv.GetComponent<ServerSyncScript>()
+                 && !pv.GetComponent<ServerSyncScript>().completed)
                 || pv.gameObject.tag == "EliminationZone")
             {
                 spectateTargets.Add(pv.gameObject.transform);
@@ -570,7 +572,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 && pv.gameObject.tag == "Player"
                 && pv.gameObject.name != _photonView.Owner.NickName
                 && pv.GetComponent<ServerSyncScript>()
-                && pv.GetComponent<ServerSyncScript>().completed)
+                && !pv.GetComponent<ServerSyncScript>().completed)
                 || pv.gameObject.tag == "EliminationZone")
             {
                 spectateTarget = pv.gameObject.transform;
