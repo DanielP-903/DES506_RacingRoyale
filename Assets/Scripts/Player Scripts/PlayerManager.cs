@@ -671,7 +671,12 @@ public class PlayerManager : MonoBehaviour
             Debug.Log("C: "+PhotonNetwork.CurrentRoom.CustomProperties[("Timer"+_gm.GetStageNum())]);
             //int notZero = (int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer" + _gm.GetStageNum())];;
             counter = 0;
-            while ((int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer"+_gm.GetStageNum())] == 0 && counter < 600)
+            int timerVal = 0;
+            if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("Timer" + _gm.GetStageNum()))
+            {
+                timerVal = (int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer" + _gm.GetStageNum())];
+            }
+            while (timerVal == 0 && counter < 600)
             {
                 counter++;
                 yield return new WaitForFixedUpdate();

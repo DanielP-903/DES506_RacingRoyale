@@ -38,7 +38,7 @@ public class TutorialMenu : MonoBehaviour
     public void NextPage()
     {
         _currentTutPage++;
-        if (_currentTutPage > tutorialPages.Count-1)
+        if (_currentTutPage >= tutorialPages.Count-1)
         {
             _currentTutPage = tutorialPages.Count-1;
             nextArrow.SetActive(false);
@@ -53,7 +53,7 @@ public class TutorialMenu : MonoBehaviour
     public void PreviousPage()
     {
         _currentTutPage--;
-        if (_currentTutPage < 0)
+        if (_currentTutPage <= 0)
         {
             _currentTutPage = 0;
             previousArrow.SetActive(false);

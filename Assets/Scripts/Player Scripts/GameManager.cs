@@ -99,7 +99,10 @@ public class GameManager : MonoBehaviourPunCallbacks
             _photonView.RPC("sendMessage", RpcTarget.AllViaServer,
                 "<color=blue>"+other.NickName + "</color> has joined. " + PhotonNetwork.CurrentRoom.PlayerCount + "/" +
                 PhotonNetwork.CurrentRoom.MaxPlayers);
-            PhotonNetwork.Destroy(botsStored[PhotonNetwork.CurrentRoom.PlayerCount - 2]);
+            if (botsStored.Length >= PhotonNetwork.CurrentRoom.PlayerCount - 2 && PhotonNetwork.CurrentRoom.PlayerCount - 2 > -1)
+            {
+                PhotonNetwork.Destroy(botsStored[PhotonNetwork.CurrentRoom.PlayerCount - 2]);
+            }
             //Debug.LogFormat("OnPlayerEnteredRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
 
 
@@ -126,7 +129,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable hashtable)
     {
-        if ((_eliminated || _completed) && spectateTarget.GetComponent<PhotonView>().Owner == targetPlayer &&
+        if ((_eliminated || _completed) &&spectateTarget.GetComponent<PhotonView>() &&spectateTarget.GetComponent<PhotonView>().Owner == targetPlayer &&
             hashtable.ContainsKey("Completed" + _stage) || hashtable.ContainsKey("Eliminated"))
         {
             Spectate();
@@ -276,7 +279,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         int index = 0;
         ArrayList spectateTargets = new ArrayList();
         spectateTargets.Add(GameObject.Find("Danger Wall").transform);
-        CinemachineVirtualCamera cvc = Camera.main.gameObject.GetComponent<CinemachineVirtualCamera>();
+        CinemachineVirtualCamera cvc = GameObject.Find("PlayerCamera").GetComponent<CinemachineVirtualCamera>();
         Debug.Log(spectateTargets[0]);
         foreach (PhotonView pv in PhotonNetwork.PhotonViewCollection)
         {
@@ -345,6 +348,19 @@ public class GameManager : MonoBehaviourPunCallbacks
         else
         {
             part2 = "Spectating... " + spectateTarget.GetComponent<PhotonView>().name;
+        }
+        
+        if (spectateTarget.name == "Danger Wall")
+        {
+            cvc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0,500,-1000);
+            cvc.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset = new Vector3(0,500,-1000);
+            Debug.Log("Changed Offset to " + cvc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset);
+            Debug.Log("Changed Offset to " + cvc.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset);
+        }
+        else
+        {
+            cvc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0,5,-8);
+            cvc.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset  = new Vector3(0,5,-8);
         }
 
         spectateText.text = part1 + "\n" + part2;
@@ -583,8 +599,20 @@ public class GameManager : MonoBehaviourPunCallbacks
             part2 = "Spectating... " + spectateTarget.GetComponent<PhotonView>().name;
         }
 
-        spectateText.text = part1 + "\n" + part2;
+        if (spectateTarget.name == "Danger Wall")
+        {
+            cvc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0,500,-1000);
+            cvc.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset = new Vector3(0,500,-1000);
+            Debug.Log("Changed Offset to " + cvc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset);
+            Debug.Log("Changed Offset to " + cvc.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset);
+        }
+        else
+        {
+            cvc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0,5,-8);
+            cvc.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset  = new Vector3(0,5,-8);
+        }
 
+        spectateText.text = part1 + "\n" + part2;
         if (spectateTarget != null && cvc != null)
         {
             cvc.m_Follow = spectateTarget;

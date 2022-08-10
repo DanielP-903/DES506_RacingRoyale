@@ -47,7 +47,13 @@ public class TimerCube : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if ((int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer"+_gm.GetStageNum())] != 0 && _hasFoundPlayer)
+        int timerVal = 0;
+        if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("Timer" + _gm.GetStageNum()))
+        {
+            timerVal = (int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer" + _gm.GetStageNum())];
+        }
+
+        if (timerVal != 0 && _hasFoundPlayer)
         {
             if (!_played)
             {
