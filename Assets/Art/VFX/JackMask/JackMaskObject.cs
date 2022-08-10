@@ -11,10 +11,10 @@ public class JackMaskObject : MonoBehaviour
 
     void Start()
     {
-        // for (int i =0; i < MaskObject.Length; i++)
-        // {
-        //     MaskObject[i].GetComponent<MeshRenderer>().material.renderQueue = 3002;
-        // }
+        for (int i =0; i < MaskObject.Length; i++)
+        {
+            MaskObject[i].GetComponent<MeshRenderer>().material.renderQueue = 3002;
+        }
     }
 
     // Update is called once per frame
