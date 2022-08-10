@@ -346,6 +346,15 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             part2 = "Spectating... " + spectateTarget.GetComponent<PhotonView>().name;
         }
+        
+        if (spectateTarget.name == "Danger Wall")
+        {
+            cvc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0,50,-100);
+        }
+        else
+        {
+            cvc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0,5,-8);
+        }
 
         spectateText.text = part1 + "\n" + part2;
         if (spectateTarget != null && cvc != null)
@@ -581,6 +590,15 @@ public class GameManager : MonoBehaviourPunCallbacks
         else
         {
             part2 = "Spectating... " + spectateTarget.GetComponent<PhotonView>().name;
+        }
+
+        if (spectateTarget.name == "Danger Wall")
+        {
+            cvc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0,50,-100);
+        }
+        else
+        {
+            cvc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0,5,-8);
         }
 
         spectateText.text = part1 + "\n" + part2;
