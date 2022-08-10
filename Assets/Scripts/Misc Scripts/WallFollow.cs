@@ -135,7 +135,11 @@ public class WallFollow : MonoBehaviour
             _startDelayTimer = _startDelayTimer <= 0 ? 0 : _startDelayTimer - Time.deltaTime; 
             //_startDelayTimer < 1
             int serverTimer = 0;
-            serverTimer = (int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer" + GameObject.Find("GameManager").GetComponent<GameManager>().GetStageNum())];
+            if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("Timer" + GameObject.Find("GameManager").GetComponent<GameManager>().GetStageNum()))
+            {
+                serverTimer = (int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer" + GameObject.Find("GameManager").GetComponent<GameManager>().GetStageNum())];
+            }
+            //serverTimer = (int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer" + GameObject.Find("GameManager").GetComponent<GameManager>().GetStageNum())];
             
             if (serverTimer != 0 && PhotonNetwork.ServerTimestamp - serverTimer > startDelay * 1000)
             {
