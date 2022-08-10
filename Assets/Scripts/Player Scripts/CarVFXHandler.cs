@@ -3,12 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using Cinemachine.PostFX;
 using Photon.Pun;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityEngine.VFX;
+using ChromaticAberration = UnityEngine.Rendering.Universal.ChromaticAberration;
+using Vignette = UnityEngine.Rendering.Universal.Vignette;
 
 public class CarVFXHandler : MonoBehaviour
 {
@@ -49,7 +53,6 @@ public class CarVFXHandler : MonoBehaviour
     [Header("Other")] 
     public float maxWallDistanceAlert = 30.0f;
 
-    private bool _inZone = false;
     
     
     [HideInInspector] public bool boostPlaying;
@@ -72,7 +75,8 @@ public class CarVFXHandler : MonoBehaviour
     private DataManager _dm;
     private Mesh[] meshArray;
     private Material[] matArray;
-    
+    private bool _inZone = false;
+    private VolumeProfile _profile;
     
     #region VFX-Activation
 
@@ -296,6 +300,8 @@ public class CarVFXHandler : MonoBehaviour
         //     _photonView.RPC("UpdateOutlineMeshes", RpcTarget.All, _photonView.ViewID, (int)PhotonNetwork.LocalPlayer.CustomProperties["Skin"]);
 
         StopDriftEffects();
+
+        _profile = _mainCam.GetComponent<CinemachineVolumeSettings>().m_Profile;
     }
 
     void OnLevelWasLoaded()
@@ -356,24 +362,30 @@ public class CarVFXHandler : MonoBehaviour
         {
             _speedLinesEffect.Play();
         }
-
-        if (_inZone)
-        {
-            _vignetteColourCurrent = Color.Lerp(_vignetteColourCurrent, vignetteColourNew, Time.deltaTime);
-            _vignetteIntensityCurrent = Mathf.Lerp(_vignetteIntensityCurrent, vignetteIntensityNew, Time.deltaTime);
-            _vignetteSmoothnessCurrent = Mathf.Lerp(_vignetteSmoothnessCurrent, vignetteSmoothnessNew, Time.deltaTime);
-            _chromaticIntensityCurrent = Mathf.Lerp(_chromaticIntensityCurrent, chromaticIntensityNew, Time.deltaTime);
-        }
-        else
-        {
-            _vignetteColourCurrent = Color.Lerp(_vignetteColourCurrent, vignetteColourOld, Time.deltaTime);
-            _vignetteIntensityCurrent = Mathf.Lerp(_vignetteIntensityCurrent, vignetteIntensityOld, Time.deltaTime);
-            _vignetteSmoothnessCurrent = Mathf.Lerp(_vignetteSmoothnessCurrent, vignetteSmoothnessOld, Time.deltaTime);
-            _chromaticIntensityCurrent = Mathf.Lerp(_chromaticIntensityCurrent, chromaticIntensityOld, Time.deltaTime);         
-        }
         
+        UpdateCameraProfile();
     }
 
+    private void UpdateCameraProfile()
+    {
+        _vignetteColourCurrent = Color.Lerp(_vignetteColourCurrent, _inZone ? vignetteColourNew : vignetteColourOld , Time.deltaTime);
+        _vignetteIntensityCurrent = Mathf.Lerp(_vignetteIntensityCurrent, _inZone ?vignetteIntensityNew : vignetteIntensityOld, Time.deltaTime);
+        _vignetteSmoothnessCurrent = Mathf.Lerp(_vignetteSmoothnessCurrent, _inZone ?vignetteSmoothnessNew : vignetteSmoothnessOld, Time.deltaTime);
+        _chromaticIntensityCurrent = Mathf.Lerp(_chromaticIntensityCurrent, _inZone ?chromaticIntensityNew : chromaticIntensityOld, Time.deltaTime);
+        
+        if (_profile.TryGet<Vignette>(out var vign))
+        {
+            vign.color.value = _vignetteColourCurrent;
+            vign.intensity.value = _vignetteIntensityCurrent;
+            vign.smoothness.value = _vignetteSmoothnessCurrent;
+        }
+
+        if (_profile.TryGet<ChromaticAberration>(out var chrom))
+        {
+            chrom.intensity.value = _chromaticIntensityCurrent;
+        }
+    }
+    
     private void FixedUpdate()
     {
         if (!_photonView.IsMine) return;
