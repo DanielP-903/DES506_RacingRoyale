@@ -132,6 +132,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         if ((_eliminated || _completed) &&spectateTarget.GetComponent<PhotonView>() &&spectateTarget.GetComponent<PhotonView>().Owner == targetPlayer &&
             hashtable.ContainsKey("Completed" + _stage) || hashtable.ContainsKey("Eliminated"))
         {
+            Debug.Log("Spectating Due to PlayerProp Update");
             Spectate();
         }
     }
@@ -229,6 +230,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         _elimPositon = elimPos;
         _eliminated = true;
+        Debug.Log("Spectating Due to Elim");
         Spectate();
     }
 
@@ -241,6 +243,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         };
         _photonView.Owner.SetCustomProperties(props);
         //photonView.name = "Finished";
+        Debug.Log("Spectating Due to Completed");
         Spectate();
         _photonView.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
         //PhotonNetwork.Destroy(_photonView.gameObject);
@@ -1022,6 +1025,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (spectateTarget == null && _eliminated)
         {
             Spectate();
+            Debug.Log("Spectating Due to No Target when Eliminated");
         }
 
         int elimPlayers;
@@ -1108,6 +1112,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
                 if (_stage == 1 && (playersCompleted >= (float)_totalPlayers / 2 || playersCompleted + elimPlayers >= _totalPlayers))
                 {
+                    Debug.Log("Spectating Due to Players Completed Level 1");
                     Spectate();
                     _placeCounter.text = "No spaces left!";
                     if (!_completed && !_eliminated)
@@ -1153,6 +1158,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 //_stage == 2 && playersCompleted >= (float)_totalPlayers/16
                 if (_stage == 2 && (playersCompleted >= (int)4 || elimPlayers + playersCompleted >= _totalPlayers))
                 {
+                    Debug.Log("Spectating Due to Players Completed Level 2");
                     Spectate();
                     _placeCounter.text = "No spaces left!";
                     if (!_completed && !_eliminated)
