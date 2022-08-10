@@ -682,8 +682,13 @@ public class PlayerManager : MonoBehaviour
                 yield return new WaitForFixedUpdate();
             }
             Debug.Log("Count: "+counter);
-            //yield return new WaitUntil(() => ((int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer"+_gm.GetStageNum())] != null);
-            int hit = (int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer"+_gm.GetStageNum())];
+            yield return new WaitUntil(() => ((int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer"+_gm.GetStageNum())] != 0));
+            int hit = 0;
+            if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(("Timer" + _gm.GetStageNum())))
+            {
+                hit = (int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer" + _gm.GetStageNum())];
+            }
+
             Debug.Log("Timer: "+hit);
             //object hitFromProps;
             //PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(("Timer" + _gm.GetStageNum()), out hitFromProps);
