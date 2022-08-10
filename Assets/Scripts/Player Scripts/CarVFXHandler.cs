@@ -264,7 +264,7 @@ public class CarVFXHandler : MonoBehaviour
         GameObject canvas = GameObject.Find("Canvas");
         _dangerPressureImg = canvas.transform.GetChild(0).GetComponent<Image>();
         
-        var mainCamObject = GameObject.FindGameObjectWithTag("MainCamera");
+        var mainCamObject = GameObject.Find("PlayerCamera");
         
         if (!mainCamObject) return;
         
