@@ -122,8 +122,11 @@ public class PlayerPowerups : MonoBehaviour
         _blastObject.SetActive(false);
 
         _currentPowerupType = PowerupType.None;
-        _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(false, _currentTarget);
-        _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(false, _currentTarget);
+        if (_currentTarget)
+        {
+            _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(false, _currentTarget);
+            _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(false, _currentTarget);
+        }
     }
 
     void FixedUpdate()
