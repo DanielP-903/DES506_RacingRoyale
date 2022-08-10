@@ -360,16 +360,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         
         if (spectateTarget.name == "Danger Wall")
         {
-            cvc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0,500,-1000);
-            //cvc.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset = new Vector3(0,500,-1000);
-            Debug.Log("Changed Offset to " + cvc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset);
-            //Debug.Log("Changed Offset to " + cvc.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset);
+            spectateTarget = GameObject.Find("DangerWallCamOffset").transform;
         }
-        else
-        {
-            cvc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0,5,-8);
-            //cvc.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset  = new Vector3(0,5,-8);
-        }
+
 
         spectateText.text = part1 + "\n" + part2;
         if (spectateTarget != null && cvc != null)
@@ -611,15 +604,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (spectateTarget.name == "Danger Wall")
         {
-            cvc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0,500,-1000);
-            //cvc.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset = new Vector3(0,500,-1000);
-            Debug.Log("Changed Offset to " + cvc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset);
-            //Debug.Log("Changed Offset to " + cvc.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset);
-        }
-        else
-        {
-            cvc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0,5,-8);
-            //cvc.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset  = new Vector3(0,5,-8);
+            spectateTarget = GameObject.Find("DangerWallCamOffset").transform;
         }
 
         spectateText.text = part1 + "\n" + part2;
