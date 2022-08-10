@@ -78,10 +78,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="11456">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="11456" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -206,7 +206,7 @@
       <workItem from="1659953327334" duration="5660000" />
       <workItem from="1659967702398" duration="3875000" />
       <workItem from="1660033138969" duration="15004000" />
-      <workItem from="1660119575777" duration="11072000" />
+      <workItem from="1660119575777" duration="14166000" />
     </task>
     <servers />
   </component>
@@ -229,5 +229,24 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/Player Scripts/CarVFXHandler.cs</url>
+          <line>412</line>
+          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\Player Scripts\CarVFXHandler.cs" initialLine="399" containingFunctionPresentation="method 'FixedUpdate'">
+            <startOffsets>
+              <option value="14179" />
+            </startOffsets>
+            <endOffsets>
+              <option value="14235" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
