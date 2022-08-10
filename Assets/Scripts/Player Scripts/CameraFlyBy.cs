@@ -1,3 +1,4 @@
+using System.Linq;
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -28,7 +29,7 @@ public class CameraFlyBy : MonoBehaviour
         }
 
         if (_vc.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition > maxFlyByPathPosition ||
-            Keyboard.current.anyKey.isPressed)
+            Keyboard.current.anyKey.isPressed || Gamepad.current.allControls.Any())
         {
             //Debug.Log("Flyby Complete");
             activateFlyBy = false;
