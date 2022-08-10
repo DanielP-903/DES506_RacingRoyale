@@ -276,7 +276,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         int index = 0;
         ArrayList spectateTargets = new ArrayList();
         spectateTargets.Add(GameObject.Find("Danger Wall").transform);
-        CinemachineVirtualCamera cvc = Camera.main.gameObject.GetComponent<CinemachineVirtualCamera>();
+        CinemachineVirtualCamera cvc = GameObject.Find("PlayerCamera").GetComponent<CinemachineVirtualCamera>();
         Debug.Log(spectateTargets[0]);
         foreach (PhotonView pv in PhotonNetwork.PhotonViewCollection)
         {
