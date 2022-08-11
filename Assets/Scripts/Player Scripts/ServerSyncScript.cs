@@ -5,9 +5,9 @@ using Photon.Realtime;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class ServerSyncScript : MonoBehaviourPunCallbacks, IPunObservable, IOnEventCallback
+public class ServerSyncScript : MonoBehaviourPunCallbacks, IPunObservable
 {
-    #region ServerEventSystem
+    /*#region ServerEventSystem
 
     public void OnEvent(EventData photonEvent)
     {
@@ -20,7 +20,7 @@ public class ServerSyncScript : MonoBehaviourPunCallbacks, IPunObservable, IOnEv
         }
     }
 
-    #endregion
+    #endregion*/
     
     
     #region IPunObservable implementation
@@ -48,7 +48,7 @@ public class ServerSyncScript : MonoBehaviourPunCallbacks, IPunObservable, IOnEv
     
     [SerializeField] private bool debugMode;
     private GameManager _gm;
-    private MessageBox _mb;
+    //private MessageBox _mb;
     private fadeScreen _fs;
     private bool _mbFound = false;
     private DataManager _dm;
@@ -60,7 +60,7 @@ public class ServerSyncScript : MonoBehaviourPunCallbacks, IPunObservable, IOnEv
         {
             _dm = GameObject.Find("DataManager").GetComponent<DataManager>();
             meshArray = _dm.GetMesh();
-            _mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
+            //_mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
         }
     }
 
@@ -70,13 +70,13 @@ public class ServerSyncScript : MonoBehaviourPunCallbacks, IPunObservable, IOnEv
         if (!debugMode)
         {
             _fs = GameObject.Find("FadeScreen").GetComponent<fadeScreen>();
-            _mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
+            //_mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
         }
     }
 
     public void SetUp()
     {
-        _mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
+        //_mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
         _fs = GameObject.Find("FadeScreen").GetComponent<fadeScreen>();
         //Debug.Log("MessageBase: "+ _mb);
         _mbFound = true;
@@ -96,7 +96,7 @@ public class ServerSyncScript : MonoBehaviourPunCallbacks, IPunObservable, IOnEv
         //_mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
         //Debug.Log("MessageToDisplay: " + text);
         //Debug.Log("MessageBox: " + _mb + ":" + text);
-        _mb.sendText(text);
+        //_mb.sendText(text);
     }
 
     [PunRPC]
