@@ -88,6 +88,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         string content = dataToBeSent; 
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
         PhotonNetwork.RaiseEvent(1, content, raiseEventOptions, SendOptions.SendReliable);
+        Debug.Log("Raised Event");
     }
 
     /// <summary>
@@ -123,7 +124,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient)
         {
-            _photonView.RPC("sendComment", RpcTarget.AllViaServer, "<color=blue>"+other.NickName + "</color> has left. " + PhotonNetwork.CurrentRoom.PlayerCount + "/" + PhotonNetwork.CurrentRoom.MaxPlayers);
+            //_photonView.RPC("sendComment", RpcTarget.AllViaServer, "<color=blue>"+other.NickName + "</color> has left. " + PhotonNetwork.CurrentRoom.PlayerCount + "/" + PhotonNetwork.CurrentRoom.MaxPlayers);
             sendData(("<color=blue>"+other.NickName + "</color> has left. " + PhotonNetwork.CurrentRoom.PlayerCount + "/" + PhotonNetwork.CurrentRoom.MaxPlayers).ToString());
             //Debug.LogFormat("OnPlayerLeftRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
             //_photonView.RPC("sendComment", RpcTarget.AllViaServer,"<color=blue>" + _photonView.Owner.NickName + "</color> has loaded.");
