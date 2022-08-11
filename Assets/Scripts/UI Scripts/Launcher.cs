@@ -282,7 +282,7 @@ public class Launcher : MonoBehaviourPunCallbacks
             controlPanel.SetActive(false);
             selectorCar.SetActive(false);
             EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(optionsPanel.transform.GetChild(0).gameObject);
+            EventSystem.current.SetSelectedGameObject(optionsPanel.transform.GetChild(5).gameObject);
         }
 
         public void GoToControls()
@@ -294,7 +294,7 @@ public class Launcher : MonoBehaviourPunCallbacks
             controlPanel.SetActive(false);
             selectorCar.SetActive(false);
             EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(controlsPanel.transform.GetChild(1).gameObject);
+            EventSystem.current.SetSelectedGameObject(controlsPanel.transform.GetChild(6).gameObject);
         }
         public void GoToCredits()
         {
@@ -305,7 +305,7 @@ public class Launcher : MonoBehaviourPunCallbacks
             controlPanel.SetActive(false);
             selectorCar.SetActive(false);
             EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(creditsPanel.transform.GetChild(1).gameObject);
+            EventSystem.current.SetSelectedGameObject(creditsPanel.transform.GetChild(4).gameObject);
         }
 
         public void GoBackToMenu()
