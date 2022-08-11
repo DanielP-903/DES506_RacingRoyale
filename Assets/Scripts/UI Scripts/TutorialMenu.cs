@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class TutorialMenu : MonoBehaviour
@@ -42,6 +43,7 @@ public class TutorialMenu : MonoBehaviour
         {
             _currentTutPage = tutorialPages.Count-1;
             nextArrow.SetActive(false);
+            EventSystem.current.SetSelectedGameObject(nextArrow);
         }
         else if (previousArrow.activeInHierarchy == false)
         {
@@ -57,6 +59,7 @@ public class TutorialMenu : MonoBehaviour
         {
             _currentTutPage = 0;
             previousArrow.SetActive(false);
+            EventSystem.current.SetSelectedGameObject(previousArrow);
         }
         else if (nextArrow.activeInHierarchy == false)
         {

@@ -1,5 +1,6 @@
 using System.Collections;
 using Cinemachine;
+using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
@@ -7,13 +8,14 @@ using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using Cursor = UnityEngine.Cursor;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Random = UnityEngine.Random;
 using Slider = UnityEngine.UI.Slider;
 
-public class GameManager : MonoBehaviourPunCallbacks
+public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
 {
     // --- VARS ---
     // CHANGEABLE GM VARIABLES (WAITING TIME HERE)
@@ -53,9 +55,12 @@ public class GameManager : MonoBehaviourPunCallbacks
     private GameObject[] botsStored;
     private Transform spectateTarget;
     private GameObject spectateMenu;
+    private GameObject pauseMenu;
     private TextMeshProUGUI spectateText;
     private GameObject attachedPlayer;
     private int _playersPreviousFrame;
+    private MessageBox _mb;
+    private GameObject inputSystem;
 
     #endregion
 
@@ -76,6 +81,32 @@ public class GameManager : MonoBehaviourPunCallbacks
     #endregion
 
 
+    #region ServerEventSystem
+    public void sendData(string dataToBeSent)
+    {
+        string content = dataToBeSent; 
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+        PhotonNetwork.RaiseEvent(1, content, raiseEventOptions, SendOptions.SendReliable);
+        Debug.Log("Raised Event");
+    }
+
+    public void sendComment(string text)
+    {
+        _mb.sendText(text);
+    }
+    
+    public void OnEvent(EventData photonEvent)
+    {
+        byte eventCode = photonEvent.Code;
+        if (eventCode == 1)
+        {
+            string data = (string)photonEvent.CustomData;
+            
+            sendComment(data);
+        }
+    }
+
+    #endregion
 
     // --- METHODS ---
     // THIS SECTION IS FOR CALLS TO DO WITH CONNECTING AND DISCONNECTING
@@ -96,9 +127,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient)
         {
-            _photonView.RPC("sendMessage", RpcTarget.AllViaServer,
-                "<color=blue>"+other.NickName + "</color> has joined. " + PhotonNetwork.CurrentRoom.PlayerCount + "/" +
-                PhotonNetwork.CurrentRoom.MaxPlayers);
+            //_photonView.RPC("sendComment", RpcTarget.AllViaServer, "<color=blue>"+other.NickName + "</color> has joined. " + PhotonNetwork.CurrentRoom.PlayerCount + "/" + PhotonNetwork.CurrentRoom.MaxPlayers);
+            sendData(("<color=blue>"+other.NickName + "</color> has joined. " + PhotonNetwork.CurrentRoom.PlayerCount + "/" + PhotonNetwork.CurrentRoom.MaxPlayers).ToString());
             if (botsStored.Length >= PhotonNetwork.CurrentRoom.PlayerCount && PhotonNetwork.CurrentRoom.PlayerCount - 2 > -1)
             {
                 PhotonNetwork.Destroy(botsStored[PhotonNetwork.CurrentRoom.PlayerCount - 2]);
@@ -116,11 +146,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient)
         {
-            _photonView.RPC("sendMessage", RpcTarget.AllViaServer,
-                "<color=blue>"+other.NickName + "</color> has left. " + PhotonNetwork.CurrentRoom.PlayerCount + "/" +
-                              PhotonNetwork.CurrentRoom.MaxPlayers);
+            //_photonView.RPC("sendComment", RpcTarget.AllViaServer, "<color=blue>"+other.NickName + "</color> has left. " + PhotonNetwork.CurrentRoom.PlayerCount + "/" + PhotonNetwork.CurrentRoom.MaxPlayers);
+            sendData(("<color=blue>"+other.NickName + "</color> has left. " + PhotonNetwork.CurrentRoom.PlayerCount + "/" + PhotonNetwork.CurrentRoom.MaxPlayers).ToString());
             //Debug.LogFormat("OnPlayerLeftRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
-            //_photonView.RPC("sendMessage", RpcTarget.AllViaServer,"<color=blue>" + _photonView.Owner.NickName + "</color> has loaded.");
+            //_photonView.RPC("sendComment", RpcTarget.AllViaServer,"<color=blue>" + _photonView.Owner.NickName + "</color> has loaded.");
 
             //LoadArena();
 
@@ -363,18 +392,18 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             part2 = "Spectating... " + spectateTarget.GetComponent<PhotonView>().name;
         }
-        
-        if (spectateTarget.name == "Danger Wall")
-        {
-            spectateTarget = GameObject.Find("DangerWallCamOffset").transform;
-        }
-
 
         spectateText.text = part1 + "\n" + part2;
         if (spectateTarget != null && cvc != null)
         {
             cvc.m_Follow = spectateTarget;
             cvc.m_LookAt = spectateTarget;
+            if (spectateTarget.name == "Danger Wall")
+            {
+                cvc.m_Follow =  GameObject.Find("DangerWallCamOffset").transform;
+                cvc.m_Follow =  GameObject.Find("DangerWallCamTarget").transform;
+            }
+
         }
     }
 
@@ -536,7 +565,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     void Spectate()
     {
-        spectateMenu  = GameObject.Find("SpectateButtons");
+        if (spectateMenu == null)
+        {
+            spectateMenu = GameObject.Find("SpectateButtons");
+        }
         if (spectateMenu != null)
         {
             spectateMenu.SetActive(true);
@@ -613,16 +645,17 @@ public class GameManager : MonoBehaviourPunCallbacks
             part2 = "Spectating... " + spectateTarget.GetComponent<PhotonView>().name;
         }
 
-        if (spectateTarget.name == "Danger Wall")
-        {
-            spectateTarget = GameObject.Find("DangerWallCamOffset").transform;
-        }
-
         spectateText.text = part1 + "\n" + part2;
         if (spectateTarget != null && cvc != null)
         {
             cvc.m_Follow = spectateTarget;
             cvc.m_LookAt = spectateTarget;
+            if (spectateTarget.name == "Danger Wall")
+            {
+                cvc.m_Follow =  GameObject.Find("DangerWallCamOffset").transform;
+                cvc.m_Follow =  GameObject.Find("DangerWallCamTarget").transform;
+            }
+
         }
     }
 
@@ -657,6 +690,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         GameObject.Find("PlaceCounter").SetActive(false);
         GameObject.Find("Message").SetActive(false);
         GameObject spectateObject = GameObject.Find("SpectatorText");
+        _mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
         if (spectateObject)
         {
             spectateText = spectateObject.GetComponent<TextMeshProUGUI>();
@@ -737,6 +771,15 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (SceneManager.GetActiveScene().name != "WaitingArea")
         {
             SetUp();
+            PhotonNetwork.IsMessageQueueRunning = true;
+        }
+        else
+        {
+            spectateMenu  = GameObject.Find("SpectateButtons");
+            if (spectateMenu != null)
+            {
+                spectateMenu.SetActive(false);
+            }
         }
     }
     
@@ -890,11 +933,33 @@ public class GameManager : MonoBehaviourPunCallbacks
                 {
                     //photonView.name = photonView.Owner.NickName;
                 }
+                spectateMenu  = GameObject.Find("SpectateButtons");
+                if (spectateMenu != null)
+                {
+                    spectateMenu.SetActive(false);
+                }
+            }
+            else
+            {
+                spectateMenu  = GameObject.Find("SpectateButtons");
+                if (spectateMenu != null)
+                {
+                    spectateMenu.SetActive(false);
+                }
             }
 
             if (GameObject.Find("Message"))
             {
                 GameObject.Find("Message").GetComponent<TextMeshProUGUI>().color = Color.clear;
+            }
+
+            if (GameObject.Find("MessageBox"))
+            {
+                _mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
+            }
+            else
+            {
+                Debug.LogError("No MessageBox");
             }
             _totalPlayers = (int)PhotonNetwork.CurrentRoom.CustomProperties["TotalPlayerCount"];
             _totalBots = 0;
@@ -1020,10 +1085,17 @@ public class GameManager : MonoBehaviourPunCallbacks
                 Spectate();
             }
         }
+        pauseMenu = GameObject.Find("Canvas").transform.Find("PauseMenu").gameObject;
+        inputSystem = GameObject.Find("Canvas").transform.Find("InputSystem").gameObject;
     }
-
+    
     private void Update()
     {
+        if (_eliminated && inputSystem && !inputSystem.activeInHierarchy)
+        {
+            inputSystem.SetActive(true);
+        }
+
         //Debug.Log("TotalPlayers: "+PhotonNetwork.CurrentRoom.Players.Count);
         if (spectateTarget == null && _eliminated)
         {
@@ -1033,7 +1105,15 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         int elimPlayers;
         TryGetElimPlayers(out elimPlayers);
-        if (elimPlayers != 0 && elimPlayers == _totalPlayers && _stage > 0 && _stage < 5)
+        int elimPlayerCount = 0;
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            if (player.CustomProperties.ContainsKey("Eliminated"))
+            {
+                elimPlayerCount++;
+            }
+        }
+        if (((elimPlayers != 0 && elimPlayers >= _totalPlayers) || (elimPlayerCount >= PhotonNetwork.CurrentRoom.PlayerCount)) && _stage > 0 && _stage < 5)
         {
             _stage = 5;
             if (PhotonNetwork.IsMasterClient)
@@ -1385,6 +1465,13 @@ public class GameManager : MonoBehaviourPunCallbacks
     }*/
 
     #endregion
-
+    // Escape
+    public void Escape(InputAction.CallbackContext context)
+    {
+        float value = context.ReadValue<float>();
+        if (pauseMenu)
+            pauseMenu.GetComponent<PauseMenu>().SetEscape(value > 0);
+        //Debug.Log("Escape detected");
+    }
 }
 

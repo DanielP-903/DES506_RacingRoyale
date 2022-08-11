@@ -171,6 +171,7 @@ public class CarController : MonoBehaviour
     private bool _hitDetect;
     private bool _lookBehind;
 
+    private bool _tutorialEnabled;
     #endregion
 
     #region Floats+Vectors
@@ -212,6 +213,7 @@ public class CarController : MonoBehaviour
     private int _boostsInAirLeft = 1;
     private CameraFlyBy _cameraFlyBy;
     private PauseMenu _pm;
+    private GameObject _tutorialObject;
 
     #endregion
 
@@ -280,6 +282,7 @@ public class CarController : MonoBehaviour
         }
 
         _pm = GameObject.Find("PauseMenu").GetComponent<PauseMenu>();
+        _tutorialObject = GameObject.Find("TutorialMenu");
         var mainCameraObject = GameObject.Find("PlayerCamera");
         if (mainCameraObject)
         {
@@ -359,6 +362,10 @@ public class CarController : MonoBehaviour
 
     public void FixedUpdate()
     {
+        if (_tutorialObject)
+            _tutorialEnabled = _tutorialObject.activeInHierarchy;
+
+        if (_tutorialEnabled || _pm.transform.GetChild(0).gameObject.activeInHierarchy) return;
         PhysUpdateDriving();
         PhysUpdateForces();
         PhysUpdateAirControl();
@@ -893,14 +900,14 @@ public class CarController : MonoBehaviour
             int rand = Random.Range(1, 5);
             if (!bot) audioManager.PlaySound("CarHit0" + rand);
         }
-        else if (collision.contacts[0].point.y > transform.position.y - 4.0f)
-        {
-            Vector3 direction = collision.contacts[0].point - transform.position;
-            _rigidbody.velocity = -(direction.normalized * (bounciness/6));
-            _vfxHandler.PlayVFXAtPosition("SoftImpact", collision.contacts[0].point);
-            int rand = Random.Range(1, 5);
-            if (!bot) audioManager.PlaySound("CarHit0" + rand);
-        }
+        // else if (collision.contacts[0].point.y > transform.position.y - 4.0f)
+        // {
+        //     Vector3 direction = collision.contacts[0].point - transform.position;
+        //     _rigidbody.velocity = -(direction.normalized * (bounciness/6));
+        //     _vfxHandler.PlayVFXAtPosition("SoftImpact", collision.contacts[0].point);
+        //     int rand = Random.Range(1, 5);
+        //     if (!bot) audioManager.PlaySound("CarHit0" + rand);
+        // }
     }
 
     private void OnTriggerEnter(Collider other)
