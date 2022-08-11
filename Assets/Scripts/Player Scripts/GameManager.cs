@@ -891,6 +891,14 @@ public class GameManager : MonoBehaviourPunCallbacks
                     //photonView.name = photonView.Owner.NickName;
                 }
             }
+            else
+            {
+                spectateMenu  = GameObject.Find("SpectateButtons");
+                if (spectateMenu != null)
+                {
+                    spectateMenu.SetActive(false);
+                }
+            }
 
             if (GameObject.Find("Message"))
             {
