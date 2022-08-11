@@ -111,6 +111,11 @@ public class PauseMenu : MonoBehaviour
     {
         escapeKey = input;
     }
+
+    public bool GetEscape()
+    {
+        return escapeKey;
+    }
     
     public void Resume()
     {
@@ -136,7 +141,7 @@ public class PauseMenu : MonoBehaviour
         optionsPanel.SetActive(false);
         controlsPanel.SetActive(false);
         EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(pausePanel.transform.GetChild(0).gameObject);
+        EventSystem.current.SetSelectedGameObject(pausePanel.transform.GetChild(1).gameObject);
     }
     
     public void GoToOptions()
@@ -147,7 +152,7 @@ public class PauseMenu : MonoBehaviour
         optionsPanel.SetActive(true);
         controlsPanel.SetActive(false);
         EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(optionsPanel.transform.GetChild(0).gameObject);
+        EventSystem.current.SetSelectedGameObject(optionsPanel.transform.GetChild(5).gameObject);
     }
 
     public void GoToControls()
@@ -158,7 +163,7 @@ public class PauseMenu : MonoBehaviour
         optionsPanel.SetActive(false);
         controlsPanel.SetActive(true);
         EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(controlsPanel.transform.GetChild(1).gameObject);
+        EventSystem.current.SetSelectedGameObject(controlsPanel.transform.GetChild(6).gameObject);
     }
     
     // QUIT APPLICATION

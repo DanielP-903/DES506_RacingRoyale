@@ -365,7 +365,7 @@ public class CarController : MonoBehaviour
         if (_tutorialObject)
             _tutorialEnabled = _tutorialObject.activeInHierarchy;
 
-        if (_tutorialEnabled) return;
+        if (_tutorialEnabled || _pm.transform.GetChild(0).gameObject.activeInHierarchy) return;
         PhysUpdateDriving();
         PhysUpdateForces();
         PhysUpdateAirControl();
