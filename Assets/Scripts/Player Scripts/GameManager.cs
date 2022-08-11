@@ -14,7 +14,7 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Random = UnityEngine.Random;
 using Slider = UnityEngine.UI.Slider;
 
-public class GameManager : MonoBehaviourPunCallbacks
+public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
 {
     // --- VARS ---
     // CHANGEABLE GM VARIABLES (WAITING TIME HERE)
@@ -57,6 +57,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private TextMeshProUGUI spectateText;
     private GameObject attachedPlayer;
     private int _playersPreviousFrame;
+    private MessageBox _mb;
 
     #endregion
 
@@ -77,12 +78,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     #endregion
 
 
-
-    // --- METHODS ---
-    // THIS SECTION IS FOR CALLS TO DO WITH CONNECTING AND DISCONNECTING
-
-    #region Photon Callbacks
-    
+    #region ServerEventSystem
     public void sendData(string dataToBeSent)
     {
         string content = dataToBeSent; 
@@ -90,6 +86,29 @@ public class GameManager : MonoBehaviourPunCallbacks
         PhotonNetwork.RaiseEvent(1, content, raiseEventOptions, SendOptions.SendReliable);
         Debug.Log("Raised Event");
     }
+
+    public void sendComment(string text)
+    {
+        _mb.sendText(text);
+    }
+    
+    public void OnEvent(EventData photonEvent)
+    {
+        byte eventCode = photonEvent.Code;
+        if (eventCode == 1)
+        {
+            string data = (string)photonEvent.CustomData;
+            
+            sendComment(data);
+        }
+    }
+
+    #endregion
+
+    // --- METHODS ---
+    // THIS SECTION IS FOR CALLS TO DO WITH CONNECTING AND DISCONNECTING
+
+    #region Photon Callbacks
 
     /// <summary>
     /// Called when the local player left the room. We need to load the launcher scene.
@@ -667,6 +686,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         GameObject.Find("PlaceCounter").SetActive(false);
         GameObject.Find("Message").SetActive(false);
         GameObject spectateObject = GameObject.Find("SpectatorText");
+        _mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
         if (spectateObject)
         {
             spectateText = spectateObject.GetComponent<TextMeshProUGUI>();
@@ -922,6 +942,15 @@ public class GameManager : MonoBehaviourPunCallbacks
             if (GameObject.Find("Message"))
             {
                 GameObject.Find("Message").GetComponent<TextMeshProUGUI>().color = Color.clear;
+            }
+
+            if (GameObject.Find("MessageBox"))
+            {
+                _mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
+            }
+            else
+            {
+                Debug.LogError("No MessageBox");
             }
             _totalPlayers = (int)PhotonNetwork.CurrentRoom.CustomProperties["TotalPlayerCount"];
             _totalBots = 0;

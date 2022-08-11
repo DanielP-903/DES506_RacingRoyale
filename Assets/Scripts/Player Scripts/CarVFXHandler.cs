@@ -323,6 +323,7 @@ public class CarVFXHandler : MonoBehaviour
         StopDriftEffects();
 
         _profile = _mainCam.GetComponent<CinemachineVolumeSettings>().m_Profile;
+        ResetCameraProfile();
     }
 
     void OnLevelWasLoaded()
