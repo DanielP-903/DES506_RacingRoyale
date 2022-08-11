@@ -90,7 +90,7 @@ public class ServerSyncScript : MonoBehaviourPunCallbacks, IPunObservable, IOnEv
             _fs.fadeOut();
     }
 
-    [PunRPC]
+    //[PunRPC]
     void sendComment(string text)
     {
         //_mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
