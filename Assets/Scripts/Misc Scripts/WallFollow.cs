@@ -63,7 +63,7 @@ public class WallFollow : MonoBehaviour
         _startDelayTimer = startDelay;
         _begin = false;
         
-        _wallOMeter = GameObject.FindGameObjectWithTag("MainCanvas").transform.GetChild(13).gameObject;
+        _wallOMeter = GameObject.FindGameObjectWithTag("MainCanvas").transform.Find("Wallometer").gameObject;
         _wallOMeterSlider = _wallOMeter.GetComponent<Slider>();
         _wallOMeterPlayer = _wallOMeter.transform.GetChild(2).gameObject;
 
