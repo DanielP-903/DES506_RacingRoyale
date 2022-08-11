@@ -738,6 +738,14 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             SetUp();
         }
+        else
+        {
+            spectateMenu  = GameObject.Find("SpectateButtons");
+            if (spectateMenu != null)
+            {
+                spectateMenu.SetActive(false);
+            }
+        }
     }
     
     void OnDisconnected(DisconnectCause cause)
