@@ -389,18 +389,18 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         {
             part2 = "Spectating... " + spectateTarget.GetComponent<PhotonView>().name;
         }
-        
-        if (spectateTarget.name == "Danger Wall")
-        {
-            spectateTarget = GameObject.Find("DangerWallCamOffset").transform;
-        }
-
 
         spectateText.text = part1 + "\n" + part2;
         if (spectateTarget != null && cvc != null)
         {
             cvc.m_Follow = spectateTarget;
             cvc.m_LookAt = spectateTarget;
+            if (spectateTarget.name == "Danger Wall")
+            {
+                cvc.m_Follow =  GameObject.Find("DangerWallCamOffset").transform;
+                cvc.m_Follow =  GameObject.Find("DangerWallCamTarget").transform;
+            }
+
         }
     }
 
@@ -642,16 +642,17 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
             part2 = "Spectating... " + spectateTarget.GetComponent<PhotonView>().name;
         }
 
-        if (spectateTarget.name == "Danger Wall")
-        {
-            spectateTarget = GameObject.Find("DangerWallCamOffset").transform;
-        }
-
         spectateText.text = part1 + "\n" + part2;
         if (spectateTarget != null && cvc != null)
         {
             cvc.m_Follow = spectateTarget;
             cvc.m_LookAt = spectateTarget;
+            if (spectateTarget.name == "Danger Wall")
+            {
+                cvc.m_Follow =  GameObject.Find("DangerWallCamOffset").transform;
+                cvc.m_Follow =  GameObject.Find("DangerWallCamTarget").transform;
+            }
+
         }
     }
 
@@ -928,6 +929,11 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
                 if (photonView != null)
                 {
                     //photonView.name = photonView.Owner.NickName;
+                }
+                spectateMenu  = GameObject.Find("SpectateButtons");
+                if (spectateMenu != null)
+                {
+                    spectateMenu.SetActive(false);
                 }
             }
             else
