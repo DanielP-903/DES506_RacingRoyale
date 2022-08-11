@@ -7,6 +7,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -28,27 +29,47 @@ public class CarVFXHandler : MonoBehaviour
     public GameObject impactEffectObject;
     public GameObject impactEffectPrefab;
 
-    [Header("Post-Pro")]
-    //public List<VolumeProfile> profiles;
-    
-    // Vignette
+    [Header("Post-Pro Old")]
+    // Old
     public Color vignetteColourOld;
     public float vignetteIntensityOld;
     public float vignetteSmoothnessOld;
+    public float chromaticIntensityOld;
+    public float colourAdjustmentsPostExposureOld;
+    public Color colourAdjustmentsColourFilterOld;
+    public float colourAdjustmentsHueShiftOld;
+    public float colourAdjustmentsSaturationOld;
+    public Color splitToningShadowColourOld;
+    public Color splitToningHighlightColourOld;
+    public bool splitToningBalanceOld;
     
+    [Header("Post-Pro New")]
+    // New
     public Color vignetteColourNew;
     public float vignetteIntensityNew;
     public float vignetteSmoothnessNew;
-    
-    // Chromatic Aberration
-    public float chromaticIntensityOld;
-    
     public float chromaticIntensityNew;
+    public float colourAdjustmentsPostExposureNew;
+    public Color colourAdjustmentsColourFilterNew;
+    public float colourAdjustmentsHueShiftNew;
+    public float colourAdjustmentsSaturationNew;
+    public Color splitToningShadowColourNew;
+    public Color splitToningHighlightColourNew;
+    public bool splitToningBalanceNew;
 
+    // Current
     private Color _vignetteColourCurrent;
     private float _vignetteIntensityCurrent;
     private float _vignetteSmoothnessCurrent;
     private float _chromaticIntensityCurrent;
+    
+    private float _colourAdjustmentsPostExposureCurrent;
+    private Color _colourAdjustmentsColourFilterCurrent;
+    private float _colourAdjustmentsHueShiftCurrent;
+    private float _colourAdjustmentsSaturationCurrent;
+    private Color _splitToningShadowColourCurrent;
+    private Color _splitToningHighlightColourCurrent;
+    private bool _splitToningBalanceCurrent;
 
     [Header("Other")] 
     public float maxWallDistanceAlert = 30.0f;
@@ -336,6 +357,8 @@ public class CarVFXHandler : MonoBehaviour
             _speedLinesEffect.Stop();
             _dangerWallEffect.Stop(); // Note this might stop it from working entirely
         }
+        
+        ResetCameraProfile();
     }
 
     // Update is called once per frame
@@ -369,9 +392,16 @@ public class CarVFXHandler : MonoBehaviour
     private void UpdateCameraProfile()
     {
         _vignetteColourCurrent = Color.Lerp(_vignetteColourCurrent, _inZone ? vignetteColourNew : vignetteColourOld , Time.deltaTime);
-        _vignetteIntensityCurrent = Mathf.Lerp(_vignetteIntensityCurrent, _inZone ?vignetteIntensityNew : vignetteIntensityOld, Time.deltaTime);
-        _vignetteSmoothnessCurrent = Mathf.Lerp(_vignetteSmoothnessCurrent, _inZone ?vignetteSmoothnessNew : vignetteSmoothnessOld, Time.deltaTime);
-        _chromaticIntensityCurrent = Mathf.Lerp(_chromaticIntensityCurrent, _inZone ?chromaticIntensityNew : chromaticIntensityOld, Time.deltaTime);
+        _vignetteIntensityCurrent = Mathf.Lerp(_vignetteIntensityCurrent, _inZone ? vignetteIntensityNew : vignetteIntensityOld, Time.deltaTime);
+        _vignetteSmoothnessCurrent = Mathf.Lerp(_vignetteSmoothnessCurrent, _inZone ? vignetteSmoothnessNew : vignetteSmoothnessOld, Time.deltaTime);
+        _chromaticIntensityCurrent = Mathf.Lerp(_chromaticIntensityCurrent, _inZone ? chromaticIntensityNew : chromaticIntensityOld, Time.deltaTime);
+        _colourAdjustmentsPostExposureCurrent = Mathf.Lerp(_colourAdjustmentsPostExposureCurrent, _inZone ? colourAdjustmentsPostExposureNew : colourAdjustmentsPostExposureOld, Time.deltaTime);
+        _colourAdjustmentsColourFilterCurrent = Color.Lerp(_colourAdjustmentsColourFilterCurrent, _inZone ? colourAdjustmentsColourFilterNew : colourAdjustmentsColourFilterOld , Time.deltaTime);
+        _colourAdjustmentsHueShiftCurrent = Mathf.Lerp(_colourAdjustmentsHueShiftCurrent, _inZone ? colourAdjustmentsHueShiftNew : colourAdjustmentsHueShiftOld, Time.deltaTime);
+        _colourAdjustmentsSaturationCurrent = Mathf.Lerp(_colourAdjustmentsSaturationCurrent, _inZone ? colourAdjustmentsSaturationNew : colourAdjustmentsSaturationOld, Time.deltaTime);
+        _splitToningHighlightColourCurrent = Color.Lerp(_splitToningHighlightColourCurrent, _inZone ? splitToningHighlightColourNew : splitToningHighlightColourOld , Time.deltaTime);
+        _splitToningShadowColourCurrent = Color.Lerp(_splitToningShadowColourCurrent, _inZone ? splitToningShadowColourNew : splitToningShadowColourOld , Time.deltaTime);
+        _splitToningBalanceCurrent = _inZone ? splitToningBalanceNew : splitToningBalanceOld;
         
         if (_profile.TryGet<Vignette>(out var vign))
         {
@@ -383,6 +413,51 @@ public class CarVFXHandler : MonoBehaviour
         if (_profile.TryGet<ChromaticAberration>(out var chrom))
         {
             chrom.intensity.value = _chromaticIntensityCurrent;
+        }
+        
+        if (_profile.TryGet<ColorAdjustments>(out var colo))
+        {
+            colo.postExposure.value = _colourAdjustmentsPostExposureCurrent;
+            colo.colorFilter.value = _colourAdjustmentsColourFilterCurrent;
+            colo.hueShift.value = _colourAdjustmentsPostExposureCurrent;
+            colo.saturation.value = _colourAdjustmentsPostExposureCurrent;
+        }
+        
+        if (_profile.TryGet<SplitToning>(out var split))
+        {
+            split.shadows.value = _splitToningShadowColourCurrent;
+            split.highlights.value = _splitToningHighlightColourCurrent;
+            split.balance.overrideState = _splitToningBalanceCurrent;
+        }
+    }
+
+    private void ResetCameraProfile()
+    {
+        if (_profile.TryGet<Vignette>(out var vign))
+        {
+            vign.color.value = vignetteColourOld;
+            vign.intensity.value = vignetteIntensityOld;
+            vign.smoothness.value = vignetteSmoothnessOld;
+        }
+
+        if (_profile.TryGet<ChromaticAberration>(out var chrom))
+        {
+            chrom.intensity.value = chromaticIntensityOld;
+        }
+        
+        if (_profile.TryGet<ColorAdjustments>(out var colo))
+        {
+            colo.postExposure.value = colourAdjustmentsPostExposureOld;
+            colo.colorFilter.value = colourAdjustmentsColourFilterOld;
+            colo.hueShift.value = colourAdjustmentsHueShiftOld;
+            colo.saturation.value = colourAdjustmentsSaturationOld;
+        }
+        
+        if (_profile.TryGet<SplitToning>(out var split))
+        {
+            split.shadows.value = splitToningShadowColourOld;
+            split.highlights.value = splitToningHighlightColourOld;
+            split.balance.overrideState = splitToningBalanceOld;
         }
     }
     
