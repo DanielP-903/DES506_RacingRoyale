@@ -536,7 +536,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     void Spectate()
     {
-        spectateMenu  = GameObject.Find("SpectateButtons");
+        if (spectateMenu == null)
+        {
+            spectateMenu = GameObject.Find("SpectateButtons");
+        }
         if (spectateMenu != null)
         {
             spectateMenu.SetActive(true);
@@ -738,6 +741,14 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             SetUp();
         }
+        else
+        {
+            spectateMenu  = GameObject.Find("SpectateButtons");
+            if (spectateMenu != null)
+            {
+                spectateMenu.SetActive(false);
+            }
+        }
     }
     
     void OnDisconnected(DisconnectCause cause)
@@ -891,6 +902,14 @@ public class GameManager : MonoBehaviourPunCallbacks
                     //photonView.name = photonView.Owner.NickName;
                 }
             }
+            else
+            {
+                spectateMenu  = GameObject.Find("SpectateButtons");
+                if (spectateMenu != null)
+                {
+                    spectateMenu.SetActive(false);
+                }
+            }
 
             if (GameObject.Find("Message"))
             {
@@ -1033,7 +1052,15 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         int elimPlayers;
         TryGetElimPlayers(out elimPlayers);
-        if (elimPlayers != 0 && elimPlayers == _totalPlayers && _stage > 0 && _stage < 5)
+        int elimPlayerCount = 0;
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            if (player.CustomProperties.ContainsKey("Eliminated"))
+            {
+                elimPlayerCount++;
+            }
+        }
+        if ((elimPlayers != 0 && elimPlayers >= _totalPlayers) || (elimPlayerCount >= PhotonNetwork.CurrentRoom.PlayerCount) && _stage > 0 && _stage < 5)
         {
             _stage = 5;
             if (PhotonNetwork.IsMasterClient)
