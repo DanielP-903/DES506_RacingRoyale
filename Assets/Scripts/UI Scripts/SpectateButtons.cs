@@ -11,7 +11,7 @@ public class SpectateButtons : MonoBehaviour
     {
         gm = GameObject.Find("GameManager").GetComponent<GameManager>();
         gm.SetSpectateMenu(this.gameObject);
-        this.gameObject.SetActive(false);
+        //this.gameObject.SetActive(false);
     }
 
     public void SpectateNext()
