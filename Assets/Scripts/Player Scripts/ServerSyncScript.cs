@@ -1,10 +1,27 @@
 using System;
+using ExitGames.Client.Photon;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class ServerSyncScript : MonoBehaviourPunCallbacks, IPunObservable
+public class ServerSyncScript : MonoBehaviourPunCallbacks, IPunObservable, IOnEventCallback
 {
+    #region ServerEventSystem
+
+    public void OnEvent(EventData photonEvent)
+    {
+        byte eventCode = photonEvent.Code;
+        if (eventCode == 1)
+        {
+            string data = (string)photonEvent.CustomData;
+            
+            sendComment(data);
+        }
+    }
+
+    #endregion
+    
     
     #region IPunObservable implementation
 
@@ -74,12 +91,12 @@ public class ServerSyncScript : MonoBehaviourPunCallbacks, IPunObservable
     }
 
     [PunRPC]
-    void sendMessage(string text)
+    void sendComment(string text)
     {
         //_mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
         //Debug.Log("MessageToDisplay: " + text);
         //Debug.Log("MessageBox: " + _mb + ":" + text);
-        _mb.sendMessage(text);
+        _mb.sendText(text);
     }
 
     [PunRPC]
