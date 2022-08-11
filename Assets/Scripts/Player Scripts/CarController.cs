@@ -900,14 +900,14 @@ public class CarController : MonoBehaviour
             int rand = Random.Range(1, 5);
             if (!bot) audioManager.PlaySound("CarHit0" + rand);
         }
-        else if (collision.contacts[0].point.y > transform.position.y - 4.0f)
-        {
-            Vector3 direction = collision.contacts[0].point - transform.position;
-            _rigidbody.velocity = -(direction.normalized * (bounciness/6));
-            _vfxHandler.PlayVFXAtPosition("SoftImpact", collision.contacts[0].point);
-            int rand = Random.Range(1, 5);
-            if (!bot) audioManager.PlaySound("CarHit0" + rand);
-        }
+        // else if (collision.contacts[0].point.y > transform.position.y - 4.0f)
+        // {
+        //     Vector3 direction = collision.contacts[0].point - transform.position;
+        //     _rigidbody.velocity = -(direction.normalized * (bounciness/6));
+        //     _vfxHandler.PlayVFXAtPosition("SoftImpact", collision.contacts[0].point);
+        //     int rand = Random.Range(1, 5);
+        //     if (!bot) audioManager.PlaySound("CarHit0" + rand);
+        // }
     }
 
     private void OnTriggerEnter(Collider other)
