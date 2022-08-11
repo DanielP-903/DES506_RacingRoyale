@@ -8,6 +8,7 @@ using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using Cursor = UnityEngine.Cursor;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
@@ -54,10 +55,12 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
     private GameObject[] botsStored;
     private Transform spectateTarget;
     private GameObject spectateMenu;
+    private GameObject pauseMenu;
     private TextMeshProUGUI spectateText;
     private GameObject attachedPlayer;
     private int _playersPreviousFrame;
     private MessageBox _mb;
+    private GameObject inputSystem;
 
     #endregion
 
@@ -1082,10 +1085,17 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
                 Spectate();
             }
         }
+        pauseMenu = GameObject.Find("Canvas").transform.Find("PauseMenu").gameObject;
+        inputSystem = GameObject.Find("Canvas").transform.Find("InputSystem").gameObject;
     }
-
+    
     private void Update()
     {
+        if (_eliminated && inputSystem && !inputSystem.activeInHierarchy)
+        {
+            inputSystem.SetActive(true);
+        }
+
         //Debug.Log("TotalPlayers: "+PhotonNetwork.CurrentRoom.Players.Count);
         if (spectateTarget == null && _eliminated)
         {
@@ -1455,6 +1465,13 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
     }*/
 
     #endregion
-
+    // Escape
+    public void Escape(InputAction.CallbackContext context)
+    {
+        float value = context.ReadValue<float>();
+        if (pauseMenu)
+            pauseMenu.GetComponent<PauseMenu>().SetEscape(value > 0);
+        //Debug.Log("Escape detected");
+    }
 }
 
