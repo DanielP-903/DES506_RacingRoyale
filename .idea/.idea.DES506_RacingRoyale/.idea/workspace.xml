@@ -78,10 +78,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="1244">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="1244" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -208,7 +208,7 @@
       <workItem from="1660033138969" duration="15004000" />
       <workItem from="1660119575777" duration="16830000" />
       <workItem from="1660205670497" duration="1077000" />
-      <workItem from="1660207304745" duration="9228000" />
+      <workItem from="1660207304745" duration="12608000" />
     </task>
     <servers />
   </component>
@@ -231,5 +231,24 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/Player Scripts/GameManager.cs</url>
+          <line>1470</line>
+          <properties documentPath="M:\GitHub\DES506_RacingRoyale\Assets\Scripts\Player Scripts\GameManager.cs" initialLine="1470" containingFunctionPresentation="method 'Escape'">
+            <startOffsets>
+              <option value="53700" />
+            </startOffsets>
+            <endOffsets>
+              <option value="53741" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
