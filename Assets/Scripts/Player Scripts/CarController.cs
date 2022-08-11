@@ -171,6 +171,7 @@ public class CarController : MonoBehaviour
     private bool _hitDetect;
     private bool _lookBehind;
 
+    private bool _tutorialEnabled;
     #endregion
 
     #region Floats+Vectors
@@ -212,6 +213,7 @@ public class CarController : MonoBehaviour
     private int _boostsInAirLeft = 1;
     private CameraFlyBy _cameraFlyBy;
     private PauseMenu _pm;
+    private GameObject _tutorialObject;
 
     #endregion
 
@@ -280,6 +282,7 @@ public class CarController : MonoBehaviour
         }
 
         _pm = GameObject.Find("PauseMenu").GetComponent<PauseMenu>();
+        _tutorialObject = GameObject.Find("TutorialMenu");
         var mainCameraObject = GameObject.Find("PlayerCamera");
         if (mainCameraObject)
         {
@@ -359,6 +362,10 @@ public class CarController : MonoBehaviour
 
     public void FixedUpdate()
     {
+        if (_tutorialObject)
+            _tutorialEnabled = _tutorialObject.activeInHierarchy;
+
+        if (_tutorialEnabled) return;
         PhysUpdateDriving();
         PhysUpdateForces();
         PhysUpdateAirControl();
