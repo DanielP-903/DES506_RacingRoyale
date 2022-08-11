@@ -75,7 +75,7 @@ public class MessageBox : MonoBehaviour
         }
     }
     
-    public void sendMessage(string text)
+    public void sendText(string text)
     {
         if (messages == null)
         {
@@ -95,49 +95,6 @@ public class MessageBox : MonoBehaviour
         messages.Enqueue(new MessageStruct(text, Time.time));
         UpdateMessages();
     }
-
-    /*IEnumerator fadeMessage(MessageStruct trackedMessage)
-    {
-        if (messageBoxes.Length < 1)
-        {
-            messageBoxes = transform.GetChild(0).GetChild(0).GetComponentsInChildren<TextMeshProUGUI>();
-        }
-        int counter = 0;
-        TextMeshProUGUI trackedTMP = null;
-        foreach (MessageStruct ms in messages)
-        {
-            if (ms == trackedMessage)
-            {
-                trackedTMP = messageBoxes[counter];
-                break;
-            }
-            counter++;
-        }
-
-        if (trackedTMP != null)
-        {
-            while (messages.Contains(trackedMessage) && trackedTMP.alpha > 0)
-            {
-                trackedTMP.alpha = trackedTMP.alpha - 0.01f;
-                foreach (MessageStruct ms in messages)
-                {
-                    if (ms == trackedMessage)
-                    {
-                        trackedTMP = messageBoxes[counter];
-                        break;
-                    }
-
-                    counter++;
-                }
-
-                yield return new WaitForFixedUpdate();
-            }
-        }
-        else
-        {
-            Debug.LogError("Tracked TMP Not Found");
-        }
-    }*/
 }
 
 public class MessageStruct

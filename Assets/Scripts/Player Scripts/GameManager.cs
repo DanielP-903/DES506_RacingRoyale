@@ -1,5 +1,6 @@
 using System.Collections;
 using Cinemachine;
+using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
@@ -81,6 +82,14 @@ public class GameManager : MonoBehaviourPunCallbacks
     // THIS SECTION IS FOR CALLS TO DO WITH CONNECTING AND DISCONNECTING
 
     #region Photon Callbacks
+    
+    public void sendData(string dataToBeSent)
+    {
+        string content = dataToBeSent; 
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+        PhotonNetwork.RaiseEvent(1, content, raiseEventOptions, SendOptions.SendReliable);
+        Debug.Log("Raised Event");
+    }
 
     /// <summary>
     /// Called when the local player left the room. We need to load the launcher scene.
@@ -96,9 +105,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient)
         {
-            _photonView.RPC("sendMessage", RpcTarget.AllViaServer,
-                "<color=blue>"+other.NickName + "</color> has joined. " + PhotonNetwork.CurrentRoom.PlayerCount + "/" +
-                PhotonNetwork.CurrentRoom.MaxPlayers);
+            //_photonView.RPC("sendComment", RpcTarget.AllViaServer, "<color=blue>"+other.NickName + "</color> has joined. " + PhotonNetwork.CurrentRoom.PlayerCount + "/" + PhotonNetwork.CurrentRoom.MaxPlayers);
+            sendData(("<color=blue>"+other.NickName + "</color> has joined. " + PhotonNetwork.CurrentRoom.PlayerCount + "/" + PhotonNetwork.CurrentRoom.MaxPlayers).ToString());
             if (botsStored.Length >= PhotonNetwork.CurrentRoom.PlayerCount && PhotonNetwork.CurrentRoom.PlayerCount - 2 > -1)
             {
                 PhotonNetwork.Destroy(botsStored[PhotonNetwork.CurrentRoom.PlayerCount - 2]);
@@ -116,11 +124,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient)
         {
-            _photonView.RPC("sendMessage", RpcTarget.AllViaServer,
-                "<color=blue>"+other.NickName + "</color> has left. " + PhotonNetwork.CurrentRoom.PlayerCount + "/" +
-                              PhotonNetwork.CurrentRoom.MaxPlayers);
+            //_photonView.RPC("sendComment", RpcTarget.AllViaServer, "<color=blue>"+other.NickName + "</color> has left. " + PhotonNetwork.CurrentRoom.PlayerCount + "/" + PhotonNetwork.CurrentRoom.MaxPlayers);
+            sendData(("<color=blue>"+other.NickName + "</color> has left. " + PhotonNetwork.CurrentRoom.PlayerCount + "/" + PhotonNetwork.CurrentRoom.MaxPlayers).ToString());
             //Debug.LogFormat("OnPlayerLeftRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
-            //_photonView.RPC("sendMessage", RpcTarget.AllViaServer,"<color=blue>" + _photonView.Owner.NickName + "</color> has loaded.");
+            //_photonView.RPC("sendComment", RpcTarget.AllViaServer,"<color=blue>" + _photonView.Owner.NickName + "</color> has loaded.");
 
             //LoadArena();
 
@@ -740,6 +747,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (SceneManager.GetActiveScene().name != "WaitingArea")
         {
             SetUp();
+            PhotonNetwork.IsMessageQueueRunning = true;
         }
         else
         {
@@ -1060,7 +1068,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 elimPlayerCount++;
             }
         }
-        if ((elimPlayers != 0 && elimPlayers >= _totalPlayers) || (elimPlayerCount >= PhotonNetwork.CurrentRoom.PlayerCount) && _stage > 0 && _stage < 5)
+        if (((elimPlayers != 0 && elimPlayers >= _totalPlayers) || (elimPlayerCount >= PhotonNetwork.CurrentRoom.PlayerCount)) && _stage > 0 && _stage < 5)
         {
             _stage = 5;
             if (PhotonNetwork.IsMasterClient)
