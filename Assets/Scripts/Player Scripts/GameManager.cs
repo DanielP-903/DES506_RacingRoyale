@@ -61,6 +61,8 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
     private int _playersPreviousFrame;
     private MessageBox _mb;
     private GameObject inputSystem;
+    private float timeSinceLastTimedOutCheck = 0;
+    private float timerAtLastTimedOutCheck = 0;
 
     #endregion
 
@@ -1141,6 +1143,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
                 Destroy(this);
                 break;
             case "WaitingArea":
+                
                 if (!progressPanel)
                 {
                     //Debug.LogWarning("Progress panel does not exist");
@@ -1176,6 +1179,19 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
                 int sec = (Mathf.FloorToInt(tempTime)%60);
                 int milSec = Mathf.FloorToInt((tempTime - (sec+(min * 60))) * 100f);
                 _timer.text = min.ToString("d2") + ":" + sec.ToString("d2") + ":" + milSec.ToString("d2");
+                
+                if (Time.time > timeSinceLastTimedOutCheck + 10)
+                {
+                    timeSinceLastTimedOutCheck = Time.time;
+                    if (timerAtLastTimedOutCheck == tempTime)
+                    {
+                        LeaveRoom();
+                    }
+                    else
+                    {
+                        timerAtLastTimedOutCheck = tempTime;
+                    }
+                }
                 break;
             case "Stage1":
                 //_timer.gameObject.SetActive(false);
