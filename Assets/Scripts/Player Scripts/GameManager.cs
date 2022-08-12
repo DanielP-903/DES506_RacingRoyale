@@ -404,7 +404,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
             if (spectateTarget.name == "Danger Wall")
             {
                 cvc.m_Follow =  GameObject.Find("DangerWallCamOffset").transform;
-                cvc.m_Follow =  GameObject.Find("DangerWallCamTarget").transform;
+                cvc.m_LookAt =  GameObject.Find("DangerWallCamTarget").transform;
             }
 
         }
@@ -656,7 +656,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
             if (spectateTarget.name == "Danger Wall")
             {
                 cvc.m_Follow =  GameObject.Find("DangerWallCamOffset").transform;
-                cvc.m_Follow =  GameObject.Find("DangerWallCamTarget").transform;
+                cvc.m_LookAt =  GameObject.Find("DangerWallCamTarget").transform;
             }
 
         }
