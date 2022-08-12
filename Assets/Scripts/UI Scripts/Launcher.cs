@@ -361,6 +361,11 @@ public class Launcher : MonoBehaviourPunCallbacks
             }
         }
 
+        public void ChangeConnectionCause(string cause)
+        {
+            connection.cause = cause;
+        }
+
         public void ChangeMaster(float newVol)
         {
             PlayerPrefs.SetFloat("MasterVol", newVol);
