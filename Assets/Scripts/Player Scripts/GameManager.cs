@@ -393,6 +393,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
             part2 = "Spectating... " + spectateTarget.GetComponent<PhotonView>().name;
         }
 
+        spectateText.gameObject.SetActive(true);
         spectateText.text = part1 + "\n" + part2;
         if (spectateTarget != null && cvc != null)
         {
@@ -986,11 +987,16 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
                 }
 
                 GameObject spectateObject = GameObject.Find("SpectatorText");
-                if (spectateObject)
+                if (spectateObject && !_eliminated)
                 {
                     spectateText = spectateObject.GetComponent<TextMeshProUGUI>();
                     spectateText.gameObject.SetActive(false);
                     //Debug.Log("Disabled Spectator Text");
+                }
+                else if (spectateObject && _eliminated)
+                {
+                    spectateText = spectateObject.GetComponent<TextMeshProUGUI>();
+                    spectateText.gameObject.SetActive(true);
                 }
 
                 _placeCounter = GameObject.Find("PlaceCounter").GetComponent<TextMeshProUGUI>();
