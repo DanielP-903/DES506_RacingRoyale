@@ -79,7 +79,7 @@ public class CarVFXHandler : MonoBehaviour
     [HideInInspector] public bool boostPlaying;
     
     // Camera VFX
-    private VisualEffect _speedLinesEffect;
+    public VisualEffect _speedLinesEffect;
     private VisualEffect _speedCircleEffect;
     private VisualEffect _dangerWallEffect;
     private VisualEffect _portalEffect;
@@ -378,14 +378,14 @@ public class CarVFXHandler : MonoBehaviour
         newAlphaWall.y = Mathf.Lerp(0,1,  ((maxWallDistanceAlert-30.0f) - distanceToWall) / (maxWallDistanceAlert-30.0f));
         _dangerWallEffect.SetVector2("Alpha Values", newAlphaWall);
 
-        if (SceneManager.GetActiveScene().name == "EndStage")
+        /*if (SceneManager.GetActiveScene().name == "EndStage")
         {
             _speedLinesEffect.Stop();
         }
         else
         {
             _speedLinesEffect.Play();
-        }
+        }*/
         
         UpdateCameraProfile();
     }
