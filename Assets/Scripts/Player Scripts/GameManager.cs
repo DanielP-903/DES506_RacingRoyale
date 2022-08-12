@@ -388,7 +388,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
         if (spectateTarget.CompareTag("EliminationZone"))
         {
-            part2 = "Spectating... The Wall";
+            part2 = "Spectating... The Monster";
         }
         else
         {
@@ -640,7 +640,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
             if (GameObject.Find("Danger Wall") != null)
             {
                 spectateTarget = GameObject.Find("Danger Wall").transform;
-                part2 = "Spectating... The Wall";
+                part2 = "Spectating... The Monster";
             }
         }
         else
@@ -1104,6 +1104,11 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
             inputSystem.SetActive(true);
         }
 
+        if (!pauseMenu)
+        {
+            Debug.Log("Pause menu doesn't exist!!");
+        }
+
         //Debug.Log("TotalPlayers: "+PhotonNetwork.CurrentRoom.Players.Count);
         if (spectateTarget == null && _eliminated)
         {
@@ -1500,6 +1505,10 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
     public void Escape(InputAction.CallbackContext context)
     {
         float value = context.ReadValue<float>();
+        if (!pauseMenu)
+        {
+            pauseMenu = GameObject.Find("PauseMenu");
+        }
         if (pauseMenu)
             pauseMenu.GetComponent<PauseMenu>().SetEscape(value > 0);
         //Debug.Log("Escape detected");
