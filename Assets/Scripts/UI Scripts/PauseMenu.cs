@@ -48,6 +48,7 @@ public class PauseMenu : MonoBehaviour
         }
 
         Cursor.visible = false;
+        transform.GetChild(0).gameObject.SetActive(false);
         pausePanel.SetActive(false);
         optionsPanel.SetActive(false);
         controlsPanel.SetActive(false);
@@ -128,6 +129,7 @@ public class PauseMenu : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.Locked;
         }
+        transform.GetChild(0).gameObject.SetActive(false);
         pausePanel.SetActive(false);
         optionsPanel.SetActive(false);
         controlsPanel.SetActive(false);
@@ -137,6 +139,7 @@ public class PauseMenu : MonoBehaviour
     {
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+        transform.GetChild(0).gameObject.SetActive(true);
         pausePanel.SetActive(true);
         optionsPanel.SetActive(false);
         controlsPanel.SetActive(false);
@@ -148,6 +151,7 @@ public class PauseMenu : MonoBehaviour
     {
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+        transform.GetChild(0).gameObject.SetActive(false);
         pausePanel.SetActive(false);
         optionsPanel.SetActive(true);
         controlsPanel.SetActive(false);
@@ -159,6 +163,7 @@ public class PauseMenu : MonoBehaviour
     {
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+        transform.GetChild(0).gameObject.SetActive(false);
         pausePanel.SetActive(false);
         optionsPanel.SetActive(false);
         controlsPanel.SetActive(true);

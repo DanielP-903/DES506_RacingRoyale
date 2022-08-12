@@ -47,7 +47,7 @@ public class TutorialMenu : MonoBehaviour
             _currentTutPage = tutorialPages.Count-1;
             nextArrow.SetActive(false);
             nextArrowShadow.SetActive(false);
-            EventSystem.current.SetSelectedGameObject(nextArrow);
+            EventSystem.current.SetSelectedGameObject(previousArrow);
         }
         else if (previousArrow.activeInHierarchy == false)
         {
@@ -65,7 +65,7 @@ public class TutorialMenu : MonoBehaviour
             _currentTutPage = 0;
             previousArrow.SetActive(false);
             previousArrowShadow.SetActive(false);
-            EventSystem.current.SetSelectedGameObject(previousArrow);
+            EventSystem.current.SetSelectedGameObject(nextArrow);
         }
         else if (nextArrow.activeInHierarchy == false)
         {

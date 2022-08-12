@@ -31,6 +31,8 @@ public class fadeScreen : MonoBehaviour
 
     public void fadeOut()
     {
+        if (storedRoutine == null) return;
+        
         StopCoroutine(storedRoutine);
         storedRoutine = FadeOut();
         StartCoroutine(storedRoutine);
@@ -38,6 +40,8 @@ public class fadeScreen : MonoBehaviour
 
     public void quitFade()
     {
+        if (storedRoutine == null) return;
+        
         StopCoroutine(storedRoutine);
         storedRoutine = QuitFade();
         StartCoroutine(storedRoutine);

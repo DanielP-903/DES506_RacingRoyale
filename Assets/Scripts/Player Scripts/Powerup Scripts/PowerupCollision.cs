@@ -8,7 +8,11 @@ public class PowerupCollision : MonoBehaviour
     {
         if (collider.CompareTag("Player"))
         {
-            transform.parent.GetComponent<PowerupSpawner>().ResetTimer();
+            if (collider.TryGetComponent<PlayerPowerups>(out var playerPowerups))
+            {
+                if (!playerPowerups.IsUsingAnyPowerup())
+                    transform.parent.GetComponent<PowerupSpawner>().ResetTimer();
+            }
         }
     }
 }

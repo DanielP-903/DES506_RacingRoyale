@@ -190,11 +190,8 @@ public class PlayerPowerups : MonoBehaviour
                 {
                     if (_currentTarget)
                     {
-                        if (_currentPowerupType == PowerupType.PunchingGlove)
-                            _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(false, _currentTarget);
-                        else
-                            _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(false, _currentTarget);
-
+                        _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(false, _currentTarget);
+                        _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(false, _currentTarget);
                         _currentTarget = null;
                     }
 
@@ -206,10 +203,8 @@ public class PlayerPowerups : MonoBehaviour
             {
                 if (_currentTarget)
                 {
-                    if (_currentPowerupType == PowerupType.PunchingGlove)
-                        _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(false, _currentTarget);
-                    else
-                        _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(false, _currentTarget);
+                    _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(false, _currentTarget);
+                    _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(false, _currentTarget);
                     _currentTarget = null;
                 }
                 Debug.Log("No hit!");
@@ -564,7 +559,7 @@ public class PlayerPowerups : MonoBehaviour
          _audioManager.PlaySound("PowerUpCollected");
      }
 
-     private bool IsUsingAnyPowerup()
+     public bool IsUsingAnyPowerup()
      {
          return (_boosting || _grappling || _punching || _airBlasting);
      }
