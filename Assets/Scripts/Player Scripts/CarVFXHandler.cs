@@ -81,7 +81,7 @@ public class CarVFXHandler : MonoBehaviour
     // Camera VFX
     public VisualEffect _speedLinesEffect;
     private VisualEffect _speedCircleEffect;
-    private VisualEffect _dangerWallEffect;
+    public VisualEffect _dangerWallEffect;
     private VisualEffect _portalEffect;
     private GameObject _outlineObject;
     private GameObject _outlineObjectGrapple;
