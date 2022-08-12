@@ -14,11 +14,14 @@ public class TutorialMenu : MonoBehaviour
     private bool _activateTutorial;
 
     public GameObject previousArrow; 
-    public GameObject nextArrow;
+    public GameObject nextArrow;   
+    public GameObject previousArrowShadow; 
+    public GameObject nextArrowShadow;
 
     private void Start()
     {
         previousArrow.SetActive(false);
+        previousArrowShadow.SetActive(false);
         _activateTutorial = true;
     }
 
@@ -43,11 +46,13 @@ public class TutorialMenu : MonoBehaviour
         {
             _currentTutPage = tutorialPages.Count-1;
             nextArrow.SetActive(false);
+            nextArrowShadow.SetActive(false);
             EventSystem.current.SetSelectedGameObject(nextArrow);
         }
         else if (previousArrow.activeInHierarchy == false)
         {
             previousArrow.SetActive(true);
+            previousArrowShadow.SetActive(true);
         }
         UpdatePages();
     }
@@ -59,11 +64,13 @@ public class TutorialMenu : MonoBehaviour
         {
             _currentTutPage = 0;
             previousArrow.SetActive(false);
+            previousArrowShadow.SetActive(false);
             EventSystem.current.SetSelectedGameObject(previousArrow);
         }
         else if (nextArrow.activeInHierarchy == false)
         {
             nextArrow.SetActive(true);
+            nextArrowShadow.SetActive(true);
         }
         UpdatePages();
     }
