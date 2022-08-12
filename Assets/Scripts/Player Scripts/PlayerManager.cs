@@ -531,6 +531,8 @@ public class PlayerManager : MonoBehaviour
     {
         if (!completedStage && !eliminated)
         {
+            CarVFXHandler vfx = GetComponent<CarVFXHandler>();
+            vfx._speedLinesEffect.Stop();
             _as.displayAlert("Eliminated");
             startDelayText.color = new Color(startDelayText.color.r, startDelayText.color.g, startDelayText.color.b, 0);
             //Debug.Log("Player: "+_photonView.Owner.NickName + " Eliminated.");
