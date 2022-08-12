@@ -1262,15 +1262,15 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
                 TryGetElimPlayers(out elimPlayers);
                 if (Mathf.Min(4 - playersCompleted,PhotonNetwork.CurrentRoom.PlayerCount-(playersCompleted+numOfSpectatingPlayers)) == 1)
                 {
-                    _placeCounter.text = "1 podium left!";
+                    _placeCounter.text = "1 space left!";
                 }
                 else if (Mathf.Min(4 - playersCompleted,PhotonNetwork.CurrentRoom.PlayerCount-(playersCompleted+numOfSpectatingPlayers)) > 1)
                 {
-                    _placeCounter.text = Mathf.Min(4 - playersCompleted,PhotonNetwork.CurrentRoom.PlayerCount-(playersCompleted+numOfSpectatingPlayers)) + " podiums left!";
+                    _placeCounter.text = Mathf.Min(4 - playersCompleted,PhotonNetwork.CurrentRoom.PlayerCount-(playersCompleted+numOfSpectatingPlayers)) + " spaces left!";
                 }
                 else
                 {
-                    _placeCounter.text = "No podiums left!";
+                    _placeCounter.text = "No spaces left!";
                 }
 
                 //Debug.Log("Name: "+SceneManager.GetActiveScene().name + " Stage: " + _stage + " Players Finished: "+(_totalPlayers - elimPlayers)+" Goal: 0");
