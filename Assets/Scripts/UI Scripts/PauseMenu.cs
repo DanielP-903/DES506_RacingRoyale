@@ -163,7 +163,7 @@ public class PauseMenu : MonoBehaviour
         optionsPanel.SetActive(false);
         controlsPanel.SetActive(true);
         EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(controlsPanel.transform.GetChild(6).gameObject);
+        EventSystem.current.SetSelectedGameObject(controlsPanel.transform.GetChild(5).gameObject);
     }
     
     // QUIT APPLICATION
