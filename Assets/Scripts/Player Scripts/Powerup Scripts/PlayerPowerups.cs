@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class PlayerPowerups : MonoBehaviour
@@ -137,6 +138,13 @@ public class PlayerPowerups : MonoBehaviour
         PhysUpdatePowerups();
     }
 
+    private void Update()
+    {
+        if (!powerupIcon.gameObject.activeInHierarchy) return;
+        
+        powerupIcon.transform.GetChild(1).gameObject.SetActive(Gamepad.current != null);
+        powerupIcon.transform.GetChild(2).gameObject.SetActive(Gamepad.current == null);
+    }
 
     private void DetectTarget()
     {
@@ -176,7 +184,7 @@ public class PlayerPowerups : MonoBehaviour
                     else
                         _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(true, _currentTarget);
                     Debug.Log("HIT!!!");
-                    powerupIcon.transform.GetChild(2).gameObject.SetActive(false);
+                    powerupIcon.transform.GetChild(3).gameObject.SetActive(false);
                 }
                 else
                 {
@@ -191,7 +199,7 @@ public class PlayerPowerups : MonoBehaviour
                     }
 
                     Debug.Log("No hit!");
-                    powerupIcon.transform.GetChild(2).gameObject.SetActive(true);
+                    powerupIcon.transform.GetChild(3).gameObject.SetActive(true);
                 }
             }
             else
@@ -205,7 +213,7 @@ public class PlayerPowerups : MonoBehaviour
                     _currentTarget = null;
                 }
                 Debug.Log("No hit!");
-                powerupIcon.transform.GetChild(2).gameObject.SetActive(true);
+                powerupIcon.transform.GetChild(3).gameObject.SetActive(true);
             }
     }
     
@@ -236,6 +244,13 @@ public class PlayerPowerups : MonoBehaviour
         if (!_punching && _punchGlove.activeInHierarchy)
         {
             _punchGlove.SetActive(false);
+            if (_currentTarget)
+            {
+                _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(false,_currentTarget);
+                _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(false,_currentTarget);
+                _currentTarget = null;
+                powerupIcon.transform.GetChild(3).gameObject.SetActive(false);
+            }
         }
         
         if (_grappling && _nearestHit.transform != null)
@@ -274,6 +289,13 @@ public class PlayerPowerups : MonoBehaviour
                 _grappleLineObject.SetActive(false);
                 StartCoroutine(DelayRemoveIcon());
                 _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.GrapplingHook, false);
+                if (_currentTarget)
+                {
+                    _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(false,_currentTarget);
+                    _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(false,_currentTarget);
+                    _currentTarget = null;
+                    powerupIcon.transform.GetChild(3).gameObject.SetActive(false);
+                }
             }
         }
         
@@ -286,12 +308,10 @@ public class PlayerPowerups : MonoBehaviour
         {
             if (_currentTarget)
             {
-                if (_currentPowerupType == PowerupType.PunchingGlove)
-                    _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(false,_currentTarget);
-                else
-                    _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(false,_currentTarget);
+                _currentTarget.GetComponent<CarVFXHandler>().SetOutlineActive(false,_currentTarget);
+                _currentTarget.GetComponent<CarVFXHandler>().SetGrappleOutlineActive(false,_currentTarget);
                 _currentTarget = null;
-                powerupIcon.transform.GetChild(2).gameObject.SetActive(false);
+                powerupIcon.transform.GetChild(3).gameObject.SetActive(false);
             }
         }
         
@@ -380,12 +400,12 @@ public class PlayerPowerups : MonoBehaviour
                  //currentPowerupType = PowerupType.None;
                  _punchTimer = punchTime;
                  Debug.Log("HIT!!!");
-                 powerupIcon.transform.GetChild(2).gameObject.SetActive(false);
+                 powerupIcon.transform.GetChild(3).gameObject.SetActive(false);
              }
              else
              {
                  Debug.Log("No hit!");
-                 powerupIcon.transform.GetChild(2).gameObject.SetActive(true);
+                 powerupIcon.transform.GetChild(3).gameObject.SetActive(true);
                  _punchObject.SetActive(false);
                  _punchGlove.SetActive(false);
                  _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.PunchingGlove, false);
@@ -394,7 +414,7 @@ public class PlayerPowerups : MonoBehaviour
          else
          {
              Debug.Log("No hit!");
-             powerupIcon.transform.GetChild(2).gameObject.SetActive(true);
+             powerupIcon.transform.GetChild(3).gameObject.SetActive(true);
              _punchObject.SetActive(false);
              _punchGlove.SetActive(false);
              _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.PunchingGlove, false);
@@ -407,7 +427,7 @@ public class PlayerPowerups : MonoBehaviour
          {
              _grappleLineObject.SetActive(true);
              StartCoroutine(Grapple());
-             powerupIcon.transform.GetChild(2).gameObject.SetActive(false);
+             powerupIcon.transform.GetChild(3).gameObject.SetActive(false);
              _audioManager.PlaySound("GrapplingHook");
              _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.GrapplingHook, true);
          }
@@ -429,7 +449,7 @@ public class PlayerPowerups : MonoBehaviour
 
      private IEnumerator Grapple()
      {
-         powerupIcon.transform.GetChild(2).gameObject.SetActive(false);
+         powerupIcon.transform.GetChild(3).gameObject.SetActive(false);
          // Apply a constant acceleration force towards the player for a limited time
          _grappling = true;
          yield return new WaitForSeconds(grappleTime);
@@ -564,7 +584,9 @@ public class PlayerPowerups : MonoBehaviour
              _vfxHandler.SpawnVFXAtPosition("ItemBoxDisappear", collider.transform.position, 0.5f,false);
              _vfxHandler.PlayVFXAtPosition("ItemBoxImpact", transform.position);
              _audioManager.PlaySound("PowerUpCollected");
-             powerupIcon.transform.GetChild(2).gameObject.SetActive(false);
+             powerupIcon.transform.GetChild(1).gameObject.SetActive(Gamepad.current != null);
+             powerupIcon.transform.GetChild(2).gameObject.SetActive(Gamepad.current == null);
+             powerupIcon.transform.GetChild(3).gameObject.SetActive(false);
          }
          
          if (collider.transform.CompareTag("Blast") && collider.transform.parent.gameObject != transform.gameObject)

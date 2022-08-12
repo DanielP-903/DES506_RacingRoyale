@@ -1,6 +1,7 @@
 using System.Collections;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class DebugMenu : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class DebugMenu : MonoBehaviour
     private Rect windowRect = new Rect(20, 90, 300, 250);
     private Rect windowToggle = new Rect(20, 20, 250, 40);
     private bool showWindow = false;
+    private bool _debugEnable = false;
 
     private void Start()
     {
@@ -22,10 +24,13 @@ public class DebugMenu : MonoBehaviour
 
     void OnGUI()
     {
-        windowToggle = GUI.Window(0, windowToggle, DebugToggleWindow, "");
-        if (showWindow)
+        if (_debugEnable)
         {
-            windowRect = GUI.Window(1, windowRect, WindowFunction, "Debug Menu");
+            windowToggle = GUI.Window(0, windowToggle, DebugToggleWindow, "");
+            if (showWindow)
+            {
+                windowRect = GUI.Window(1, windowRect, WindowFunction, "Debug Menu");
+            }
         }
     }
 
@@ -110,5 +115,14 @@ public class DebugMenu : MonoBehaviour
         {
             _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         }
+    }
+    
+    
+    // Activate Power
+    public void EnableDebugging(InputAction.CallbackContext context)
+    {
+        float value = context.ReadValue<float>();
+        _debugEnable = value > 0;
+        //Debug.Log("Activate Powerup detected");
     }
 }
