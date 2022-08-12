@@ -1117,8 +1117,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\t\t\t       <b>POWERUP</b>\nThe Powerup icon represents the current powerup
-    you have picked up\n"
+  m_text: '<b>POWERUP</b>
+
+    This shows your current powerup!
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7620ab10e20aa0542a589ae1030e6a4b, type: 2}
   m_sharedMaterial: {fileID: -6149088190388838870, guid: 7620ab10e20aa0542a589ae1030e6a4b, type: 2}
@@ -1152,7 +1155,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 8
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -2009,7 +2012,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.3325, y: 0.27555612}
   m_AnchorMax: {x: 0.6675001, y: 0.43555614}
-  m_AnchoredPosition: {x: 25, y: 91.225}
+  m_AnchoredPosition: {x: 25, y: 86.2}
   m_SizeDelta: {x: 228.5656, y: 50.454}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6186721629851187980
@@ -2040,10 +2043,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '<b>Grappling Hook</b> - A cable that attaches itself to another player
-    and pulls you forward. Targets will be highlighted in yellow. Cannot be used
-    unless you have other players nearby.
-
+  m_text: '<b>Grappling Hook</b> -Hook onto other players to pull yourself forward.
+    Targets are highlighted in green when you drive close enough!
 
 '
   m_isRightToLeft: 0
@@ -2108,7 +2109,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0.4852982, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -3257,8 +3258,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\t\t\t\t<b>BOOST METER</b>\nWhen the boost meter is full you can boost!
-    Once depleted, it will gradually fill up and you can boost again!\r"
+  m_text: "\t\t\t\t<b>BOOST METER</b>\nWhen full this will allow you to boost. It
+    will gradually refill when you are grounded."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7620ab10e20aa0542a589ae1030e6a4b, type: 2}
   m_sharedMaterial: {fileID: -6149088190388838870, guid: 7620ab10e20aa0542a589ae1030e6a4b, type: 2}
@@ -9036,8 +9037,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\t\t\t\t      <b>MINIMAP</b>\nThe Minimap shows you where you are on the
-    level, other players, the wall and important locations on the tracks!"
+  m_text: "\t\t\t\t      <b>MINIMAP</b>\nYou can see the track, The Wall, and even
+    other players!"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7620ab10e20aa0542a589ae1030e6a4b, type: 2}
   m_sharedMaterial: {fileID: -6149088190388838870, guid: 7620ab10e20aa0542a589ae1030e6a4b, type: 2}
@@ -9413,7 +9414,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 69.85
+  m_fontSize: 69.8
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -10864,7 +10865,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.3325, y: 0.27555612}
   m_AnchorMax: {x: 0.6675001, y: 0.43555614}
-  m_AnchoredPosition: {x: 27.1, y: 106.09775}
+  m_AnchoredPosition: {x: 27.1, y: 96.9}
   m_SizeDelta: {x: 228.5656, y: 28.108}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6434355647986478454
@@ -10895,8 +10896,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '<b>Air Blast</b> - A powerful circular blast of air that pushes all players
-    around you.
+  m_text: '<b>Air Blast</b> - A blast of air to blast your opponents away.
 
 
 '
@@ -12564,7 +12564,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.3325, y: 0.27555612}
   m_AnchorMax: {x: 0.6675001, y: 0.43555614}
-  m_AnchoredPosition: {x: 26.4, y: 98.88377}
+  m_AnchoredPosition: {x: 26.4, y: 98.1}
   m_SizeDelta: {x: 228.5656, y: 35.1359}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3799516110747941908
@@ -12595,11 +12595,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '<b>Punching Glove</b> - A homing projectile that targets players near
-    you. Targets will be highlighted in red. Cannot be used unless you have other
-    players nearby.
-
-'
+  m_text: <b>Punching Glove</b> - Knock your opponents off guard with this punching
+    glove. Targets are highlighted in red when you drive close enough!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7620ab10e20aa0542a589ae1030e6a4b, type: 2}
   m_sharedMaterial: {fileID: -6149088190388838870, guid: 7620ab10e20aa0542a589ae1030e6a4b, type: 2}
@@ -12823,10 +12820,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\t\t\t\t       \t\t   <b>THE WALL</b>\nYou better move fast! Look behind
-    you \u201CBalagazoopaloozuzigzagma Goolagar, Under-The-Bed Dweller\u201D is eating
-    the tracks and checkpoints behind you! Escape it\u2019s force field, to stay
-    safe!\r\n"
+  m_text: "\t\t\t\t       \t\t   <b>THE WALL</b>\nYou better move fast! \u201CGoolagar,
+    Under-The-Bed Dweller\u201D is eating the track and checkpoints behind you! Escape
+    it\u2019s force field, to stay safe!"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7620ab10e20aa0542a589ae1030e6a4b, type: 2}
   m_sharedMaterial: {fileID: -6149088190388838870, guid: 7620ab10e20aa0542a589ae1030e6a4b, type: 2}
@@ -13695,7 +13691,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.3325, y: 0.27555612}
   m_AnchorMax: {x: 0.6675001, y: 0.43555614}
-  m_AnchoredPosition: {x: 27.100006, y: 107.05}
+  m_AnchoredPosition: {x: 27.100006, y: 104.1}
   m_SizeDelta: {x: 228.5656, y: 26.201}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7826171746642331899
@@ -13726,9 +13722,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '<b>Super Boost</b> - A longer and more powerful version of your usual
-    boost.
-
+  m_text: '<b>Super Boost</b> - More powerful than your usual boost!
 
 
 '
@@ -13794,7 +13788,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0.39952278, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -13999,8 +13993,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\t\t\t\t   <b>WALL METER</b>\nThe Wall Meter shows you how far you are
-    along the stage to the finish line and the wall behind you!"
+  m_text: "\t\t\t\t   <b>WALL METER</b>\nSee how close you are to the finish, and
+    how close The Wall is to you!"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7620ab10e20aa0542a589ae1030e6a4b, type: 2}
   m_sharedMaterial: {fileID: -6149088190388838870, guid: 7620ab10e20aa0542a589ae1030e6a4b, type: 2}
@@ -15418,8 +15412,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\t\t\t    <b>PLAYER SLOTS LEFT\r</b>\nThis shows the number of players
-    left to qualify and progress to the next stage and eventually win the game!"
+  m_text: "\t\t\t    <b>PLAYER SLOTS LEFT\r</b>\nKeep an eye on this to see how many
+    places are left. So you can win!"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7620ab10e20aa0542a589ae1030e6a4b, type: 2}
   m_sharedMaterial: {fileID: -6149088190388838870, guid: 7620ab10e20aa0542a589ae1030e6a4b, type: 2}
@@ -15849,8 +15843,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\t\t\t <b>SPEEDOMETER</b>\nThe Speedometer represents the current speed
-    of your car\n"
+  m_text: "\t\t\t <b>SPEEDOMETER</b>\nThis shows the current speed you are going.\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7620ab10e20aa0542a589ae1030e6a4b, type: 2}
   m_sharedMaterial: {fileID: -6149088190388838870, guid: 7620ab10e20aa0542a589ae1030e6a4b, type: 2}
@@ -16281,7 +16274,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3624fe8927aa24e4f9be68caab252ecb, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2a6cdf3811302aa438b3e6856939af4f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -18071,6 +18064,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1230374126748676273, guid: 6a291ba819d5b8845868aa2154145ad0, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 3.4
+      objectReference: {fileID: 0}
     - target: {fileID: 1394177388191395593, guid: 6a291ba819d5b8845868aa2154145ad0, type: 3}
       propertyPath: m_Pivot.x
       value: 1
@@ -18234,6 +18231,14 @@ PrefabInstance:
     - target: {fileID: 6856693118160796466, guid: 6a291ba819d5b8845868aa2154145ad0, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6856693118160796467, guid: 6a291ba819d5b8845868aa2154145ad0, type: 3}
+      propertyPath: m_Value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6856693118698205951, guid: 6a291ba819d5b8845868aa2154145ad0, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.98098934
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6a291ba819d5b8845868aa2154145ad0, type: 3}
