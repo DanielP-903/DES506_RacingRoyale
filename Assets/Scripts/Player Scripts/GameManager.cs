@@ -393,6 +393,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
             part2 = "Spectating... " + spectateTarget.GetComponent<PhotonView>().name;
         }
 
+        spectateText.gameObject.SetActive(true);
         spectateText.text = part1 + "\n" + part2;
         if (spectateTarget != null && cvc != null)
         {
@@ -986,11 +987,16 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
                 }
 
                 GameObject spectateObject = GameObject.Find("SpectatorText");
-                if (spectateObject)
+                if (spectateObject && !_eliminated)
                 {
                     spectateText = spectateObject.GetComponent<TextMeshProUGUI>();
                     spectateText.gameObject.SetActive(false);
                     //Debug.Log("Disabled Spectator Text");
+                }
+                else if (spectateObject && _eliminated)
+                {
+                    spectateText = spectateObject.GetComponent<TextMeshProUGUI>();
+                    spectateText.gameObject.SetActive(true);
                 }
 
                 _placeCounter = GameObject.Find("PlaceCounter").GetComponent<TextMeshProUGUI>();
@@ -1166,9 +1172,10 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
                 }
 
                 float tempTime = (float)waitingTime - (float)((PhotonNetwork.ServerTimestamp - hit) / 1000f);
-                int sec = Mathf.FloorToInt(tempTime);
-                int milSec = Mathf.FloorToInt((tempTime - sec) * 100f);
-                _timer.text = sec + ":" + milSec;
+                int min = Mathf.FloorToInt(Mathf.FloorToInt(tempTime) / 60);
+                int sec = (Mathf.FloorToInt(tempTime)%60);
+                int milSec = Mathf.FloorToInt((tempTime - (sec+(min * 60))) * 100f);
+                _timer.text = min.ToString("d2") + ":" + sec.ToString("d2") + ":" + milSec.ToString("d2");
                 break;
             case "Stage1":
                 //_timer.gameObject.SetActive(false);
@@ -1185,9 +1192,13 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
                 {
                     _placeCounter.text = "1 place left!";
                 }
-                else
+                else if (currentPlayerCount > 1)
                 {
                     _placeCounter.text = currentPlayerCount + " places left!";
+                }
+                else
+                {
+                    _placeCounter.text = "No places left!";
                 }
 
                 _playersPreviousFrame = currentPlayerCount;
@@ -1232,9 +1243,13 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
                 {
                     _placeCounter.text = "1 podium space left!";
                 }
-                else
+                else if (Mathf.Min(4 - playersCompleted,PhotonNetwork.CurrentRoom.PlayerCount-(playersCompleted+numOfSpectatingPlayers)) > 1)
                 {
                     _placeCounter.text = Mathf.Min(4 - playersCompleted,PhotonNetwork.CurrentRoom.PlayerCount-(playersCompleted+numOfSpectatingPlayers)) + " podium spaces left!";
+                }
+                else
+                {
+                    _placeCounter.text = "No podium space left!";
                 }
 
                 //Debug.Log("Name: "+SceneManager.GetActiveScene().name + " Stage: " + _stage + " Players Finished: "+(_totalPlayers - elimPlayers)+" Goal: 0");

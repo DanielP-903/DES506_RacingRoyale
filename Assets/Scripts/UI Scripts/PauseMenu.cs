@@ -224,7 +224,7 @@ public class PauseMenu : MonoBehaviour
                 PlayerPrefs.SetInt("Resolution", 1);
                 break;
             case 2:
-                Screen.SetResolution(640, 480, fullScreen.isOn);
+                Screen.SetResolution(640, 360, fullScreen.isOn);
                 PlayerPrefs.SetInt("Resolution", 2);
                 break;
         }
