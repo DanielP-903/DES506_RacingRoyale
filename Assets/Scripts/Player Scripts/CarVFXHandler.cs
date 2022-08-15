@@ -17,6 +17,10 @@ using Vignette = UnityEngine.Rendering.Universal.Vignette;
 
 public class CarVFXHandler : MonoBehaviour
 {
+    [Header("Camera VFX")]
+    public VisualEffect speedLinesEffect; 
+    public VisualEffect dangerWallEffect;
+    
     [Header("Boost VFX")]
     public List<ParticleSystem> boostEffects = new List<ParticleSystem>();
     public List<ParticleSystem> superBoostEffects = new List<ParticleSystem>();
@@ -62,7 +66,6 @@ public class CarVFXHandler : MonoBehaviour
     private float _vignetteIntensityCurrent;
     private float _vignetteSmoothnessCurrent;
     private float _chromaticIntensityCurrent;
-    
     private float _colourAdjustmentsPostExposureCurrent;
     private Color _colourAdjustmentsColourFilterCurrent;
     private float _colourAdjustmentsHueShiftCurrent;
@@ -72,16 +75,12 @@ public class CarVFXHandler : MonoBehaviour
     private bool _splitToningBalanceCurrent;
 
     [Header("Other")] 
-    public float maxWallDistanceAlert = 30.0f;
-
-    
+    [SerializeField] private float maxWallDistanceAlert = 30.0f;
     
     [HideInInspector] public bool boostPlaying;
     
     // Camera VFX
-    public VisualEffect _speedLinesEffect;
     private VisualEffect _speedCircleEffect;
-    public VisualEffect _dangerWallEffect;
     private VisualEffect _portalEffect;
     private GameObject _outlineObject;
     private GameObject _outlineObjectGrapple;
@@ -94,9 +93,7 @@ public class CarVFXHandler : MonoBehaviour
     private VisualEffect _currentEffect;
     private PhotonView _photonView;
     private DataManager _dm;
-    private Mesh[] meshArray;
-    private Material[] matArray;
-    private bool _inZone = false;
+    private bool _inZone;
     private VolumeProfile _profile;
     
     #region VFX-Activation
@@ -120,14 +117,6 @@ public class CarVFXHandler : MonoBehaviour
         }
     }
 
-    public void PlayBoostEffectAlt()
-    {
-        foreach (var effect in boostEffects)
-        {
-            effect.Play();
-        }
-    }
-    
     public void PlaySuperBoostEffectAlt()
     {
         foreach (var effect in superBoostEffects)
@@ -136,13 +125,6 @@ public class CarVFXHandler : MonoBehaviour
         }
     }
 
-    public void StopBoostEffect()
-    {
-        foreach (var effect in boostEffects)
-        {
-            effect.Stop();
-        }
-    }
     public void StopSuperBoostEffect()
     {
         foreach (var effect in superBoostEffects)
@@ -185,10 +167,10 @@ public class CarVFXHandler : MonoBehaviour
                 _speedCircleEffect.Play();
                 break;
             case "DangerWallEffect":
-                _dangerWallEffect.Play();
+                dangerWallEffect.Play();
                 break;
             case "SpeedLinesEffect":
-                _speedLinesEffect.Play();
+                speedLinesEffect.Play();
                 break;
             case "PortalEffect":
                 _portalEffect.Play();
@@ -270,8 +252,8 @@ public class CarVFXHandler : MonoBehaviour
         if (!_carController.debug)
         {
             _dm = GameObject.Find("DataManager").GetComponent<DataManager>();
-            meshArray = _dm.GetMesh();
-            matArray = _dm.GetMats();
+            _dm.GetMesh();
+            _dm.GetMats();
         }
 
 
@@ -290,9 +272,9 @@ public class CarVFXHandler : MonoBehaviour
         if (!mainCamObject) return;
         
         _mainCam = mainCamObject.GetComponent<Camera>();
-        _speedLinesEffect = _mainCam.transform.GetChild(2).gameObject.GetComponent<VisualEffect>();
+        speedLinesEffect = _mainCam.transform.GetChild(2).gameObject.GetComponent<VisualEffect>();
         _speedCircleEffect = _mainCam.transform.GetChild(3).gameObject.GetComponent<VisualEffect>();
-        _dangerWallEffect = _mainCam.transform.GetChild(4).gameObject.GetComponent<VisualEffect>();
+        dangerWallEffect = _mainCam.transform.GetChild(4).gameObject.GetComponent<VisualEffect>();
         _portalEffect = _mainCam.transform.GetChild(5).gameObject.GetComponent<VisualEffect>();
         
         _outlineObject = transform.GetChild(6).gameObject;
@@ -306,7 +288,7 @@ public class CarVFXHandler : MonoBehaviour
         
         if (SceneManager.GetActiveScene().name == "WaitingArea")
         {
-            _dangerWallEffect.SetVector2("Alpha Values", new Vector2(0,0));
+            dangerWallEffect.SetVector2("Alpha Values", new Vector2(0,0));
         }
 
         // if (!_carController.bot && !_carController.debug)
@@ -339,24 +321,24 @@ public class CarVFXHandler : MonoBehaviour
         _dangerPressureImg = canvas.transform.GetChild(0).GetComponent<Image>();
         _mainCam =  GameObject.Find("PlayerCamera").GetComponent<Camera>();
         _carController = GetComponent<CarController>();
-        _speedLinesEffect = _mainCam.transform.GetChild(2).gameObject.GetComponent<VisualEffect>();
+        speedLinesEffect = _mainCam.transform.GetChild(2).gameObject.GetComponent<VisualEffect>();
         _speedCircleEffect = _mainCam.transform.GetChild(3).gameObject.GetComponent<VisualEffect>();
-        _dangerWallEffect = _mainCam.transform.GetChild(4).gameObject.GetComponent<VisualEffect>();
+        dangerWallEffect = _mainCam.transform.GetChild(4).gameObject.GetComponent<VisualEffect>();
         impactEffectObject.GetComponent<VisualEffect>();
         _speedCircleEffect.Stop();
         _portalEffect.Stop();
 
         if (SceneManager.GetActiveScene().name == "WaitingArea")
         {
-            _dangerWallEffect.SetVector2("Alpha Values", new Vector2(0,0));
+            dangerWallEffect.SetVector2("Alpha Values", new Vector2(0,0));
         }
 
         if (SceneManager.GetActiveScene().name == "EndStage")
         {
-            _dangerWallEffect.SetVector2("Alpha Values", new Vector2(0,0));
+            dangerWallEffect.SetVector2("Alpha Values", new Vector2(0,0));
             _speedCircleEffect.Stop();
-            _speedLinesEffect.Stop();
-            _dangerWallEffect.Stop(); // Note this might stop it from working entirely
+            speedLinesEffect.Stop();
+            dangerWallEffect.Stop(); // Note this might stop it from working entirely
         }
         
         ResetCameraProfile();
@@ -376,7 +358,7 @@ public class CarVFXHandler : MonoBehaviour
         Vector2 newAlphaWall;
         newAlphaWall.x = Mathf.Lerp(0,0.5f, ((maxWallDistanceAlert-30.0f) - distanceToWall) / (maxWallDistanceAlert-30.0f));
         newAlphaWall.y = Mathf.Lerp(0,1,  ((maxWallDistanceAlert-30.0f) - distanceToWall) / (maxWallDistanceAlert-30.0f));
-        _dangerWallEffect.SetVector2("Alpha Values", newAlphaWall);
+        dangerWallEffect.SetVector2("Alpha Values", newAlphaWall);
 
         /*if (SceneManager.GetActiveScene().name == "EndStage")
         {
@@ -484,9 +466,9 @@ public class CarVFXHandler : MonoBehaviour
         //     // _speedCircleEffect.Play();   
         // }
         
-        if (!_speedLinesEffect) return;
+        if (!speedLinesEffect) return;
         
-        _speedLinesEffect.SetVector2("Alpha Values", _newAlpha);
+        speedLinesEffect.SetVector2("Alpha Values", _newAlpha);
     }
     
     public void SetOutlineActive(bool active, GameObject target)

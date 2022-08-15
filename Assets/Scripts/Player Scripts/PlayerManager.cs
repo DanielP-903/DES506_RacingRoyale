@@ -531,8 +531,8 @@ public class PlayerManager : MonoBehaviour
     {
         if (!completedStage && !eliminated)
         {
-            _vfx._speedLinesEffect.Stop();
-            _vfx._dangerWallEffect.Stop();
+            _vfx.speedLinesEffect.Stop();
+            _vfx.dangerWallEffect.Stop();
             
             _as.displayAlert("Eliminated");
             startDelayText.color = new Color(startDelayText.color.r, startDelayText.color.g, startDelayText.color.b, 0);
