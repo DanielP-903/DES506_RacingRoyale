@@ -150,7 +150,7 @@ public class fadeScreen : MonoBehaviour
             if (vol > -80)
             {
                 mixer.GetFloat("Master", out vol);
-                Debug.Log(vol - volStep);
+                //Debug.Log(vol - volStep);
                 if (vol - volStep < -80)
                 {
                     mixer.SetFloat("Master", -80);

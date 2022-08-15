@@ -1404,7 +1404,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d308d8fd637e3d14f8d0b2dbfec48274, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -30149,6 +30149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbfd85ce9b96705439c65d95f6d707a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  completed: 0
   debugMode: 0
 --- !u!114 &8276028864395317406
 MonoBehaviour:
@@ -30185,11 +30186,32 @@ MonoBehaviour:
   elimEffect: {fileID: 0}
   impactEffectObject: {fileID: 3206420097114395190}
   impactEffectPrefab: {fileID: 4090457144769879042, guid: c5b742ea29c92d341bd95b10a3a57b47, type: 3}
-  profiles:
-  - {fileID: 11400000, guid: 5ff1afaeb8d73704c80b751f18e5029f, type: 2}
-  - {fileID: 11400000, guid: f559484af390b1d4f963cf2c48486195, type: 2}
+  vignetteColourOld: {r: 0, g: 0, b: 0, a: 0}
+  vignetteIntensityOld: 0
+  vignetteSmoothnessOld: 0
+  chromaticIntensityOld: 0
+  colourAdjustmentsPostExposureOld: 0
+  colourAdjustmentsColourFilterOld: {r: 0, g: 0, b: 0, a: 0}
+  colourAdjustmentsHueShiftOld: 0
+  colourAdjustmentsSaturationOld: 0
+  splitToningShadowColourOld: {r: 0, g: 0, b: 0, a: 0}
+  splitToningHighlightColourOld: {r: 0, g: 0, b: 0, a: 0}
+  splitToningBalanceOld: 0
+  vignetteColourNew: {r: 0, g: 0, b: 0, a: 0}
+  vignetteIntensityNew: 0
+  vignetteSmoothnessNew: 0
+  chromaticIntensityNew: 0
+  colourAdjustmentsPostExposureNew: 0
+  colourAdjustmentsColourFilterNew: {r: 0, g: 0, b: 0, a: 0}
+  colourAdjustmentsHueShiftNew: 0
+  colourAdjustmentsSaturationNew: 0
+  splitToningShadowColourNew: {r: 0, g: 0, b: 0, a: 0}
+  splitToningHighlightColourNew: {r: 0, g: 0, b: 0, a: 0}
+  splitToningBalanceNew: 0
   maxWallDistanceAlert: 30
   boostPlaying: 0
+  _speedLinesEffect: {fileID: 0}
+  _dangerWallEffect: {fileID: 0}
 --- !u!1 &4892388860486838944
 GameObject:
   m_ObjectHideFlags: 0
