@@ -218,6 +218,7 @@ public class CarController : MonoBehaviour
 
     #region Initialisation
 
+    // Initialise values and get components to be used
     private void Start()
     {
         if (debug)
@@ -229,10 +230,11 @@ public class CarController : MonoBehaviour
         {
             _botCarController = GetComponent<BotCarController>();
         }
-
+        
         _passedFinishLine = false;
         _pushDelay = jumpCooldown;
         _boostDelay = boostCooldown;
+        
         _rigidbody = GetComponent<Rigidbody>();
         _playerManager = GetComponent<PlayerManager>();
         _playerPowerups = GetComponent<PlayerPowerups>();
@@ -240,6 +242,7 @@ public class CarController : MonoBehaviour
         GetComponent<Animator>();
         _impulseSource = GetComponent<CinemachineImpulseSource>();
 
+        // Initialise brake torque
         foreach (var axle in axles)
         {
             axle.leftWheel.brakeTorque = brakeTorque;
@@ -247,6 +250,7 @@ public class CarController : MonoBehaviour
         }
 
         _rigidbody.centerOfMass = centreOfMass.transform.localPosition;
+        
         if (!debug)
         {
             GameObject icon = GameObject.Find("Powerup Icon");
@@ -259,6 +263,8 @@ public class CarController : MonoBehaviour
 
         if (debug)
         {
+            // Debugging only: Get a checkpoint system within the current level
+            
             GameObject checkpointObject = GameObject.Find("CheckpointSystem");
             checkpointObject.GetComponent<CheckpointSystem>();
 
@@ -295,6 +301,7 @@ public class CarController : MonoBehaviour
 
     }
 
+    // Initialise values and get components to be used (on each level load)
     public void SetUp()
     {
         if (debug)
@@ -304,9 +311,12 @@ public class CarController : MonoBehaviour
 
         _passedFinishLine = false;
         GameObject checkpointObject = GameObject.Find("CheckpointSystem");
+        
         if (SceneManager.GetActiveScene().name == "Stage1" || SceneManager.GetActiveScene().name == "Stage2")
-            _playerPowerups.powerupIcon =
-                GameObject.FindGameObjectWithTag("PowerupIcon").gameObject.GetComponent<Image>();
+        {
+            _playerPowerups.powerupIcon = GameObject.FindGameObjectWithTag("PowerupIcon").gameObject.GetComponent<Image>();
+        }
+
         _playerPowerups.powerupIcon.gameObject.SetActive(false);
         _pm = GameObject.Find("PauseMenu").GetComponent<PauseMenu>();
         if (checkpointObject != null)
@@ -326,6 +336,7 @@ public class CarController : MonoBehaviour
 
         GameObject flybyCamObject = GameObject.FindGameObjectWithTag("FlyBy");
 
+        // Execute if flyby is present
         if (!flybyCamObject) return;
 
         flybyCamObject.GetComponent<Camera>();
@@ -352,29 +363,43 @@ public class CarController : MonoBehaviour
 
     public void FixedUpdate()
     {
+        // Disable car controls if tutorial menu is present
         if (_tutorialObject)
             _tutorialEnabled = _tutorialObject.activeInHierarchy;
 
         if (_tutorialEnabled || _pm.transform.GetChild(0).gameObject.activeInHierarchy) return;
         
+        // Update basic movement and turning of the car
         PhysUpdateDriving();
+        
+        // Update forces given to the car via jumping
         PhysUpdateForces();
+        
+        // Update air control values
         PhysUpdateAirControl();
+        
+        // Update boost functionality
         PhysUpdateAcceleration();
+        
+        // Place restrictions on velocities both linear and angular
         PhysRestrictVelocities();
     }
 
     private void PhysRestrictVelocities()
     {
-        Vector3 newValues = new Vector3(_rigidbody.angularVelocity.x, _rigidbody.angularVelocity.y,
-            _rigidbody.angularVelocity.z);
+        // Store current angular velocity
+        Vector3 newValues = new Vector3(_rigidbody.angularVelocity.x, _rigidbody.angularVelocity.y, _rigidbody.angularVelocity.z);
 
         if (!_grounded)
         {
+            // In the air
+            // Restrict y angular velocity to -/+3
             newValues.y = Mathf.Clamp(newValues.y, -3, 3);
         }
         else
         {
+            // On the ground
+            // Restrict x and z angular velocity to -/+1 and y to -/+2
             newValues.x = Mathf.Clamp(newValues.x, -1, 1);
             newValues.y = Mathf.Clamp(newValues.y, -2, 2);
             newValues.z = Mathf.Clamp(newValues.z, -1, 1);
@@ -382,10 +407,10 @@ public class CarController : MonoBehaviour
 
         _rigidbody.angularVelocity = newValues;
 
+        // Restrict velocity based on terminal velocity value
         if (!_vfxHandler.boostPlaying)
         {
-            Vector3 newLinearValues = _rigidbody.velocity =
-                new Vector3(_rigidbody.velocity.x, _rigidbody.velocity.y, _rigidbody.velocity.z);
+            Vector3 newLinearValues = _rigidbody.velocity = new Vector3(_rigidbody.velocity.x, _rigidbody.velocity.y, _rigidbody.velocity.z);
             newLinearValues.x = Mathf.Clamp(newLinearValues.x, -terminalVelocity / MphConstant, terminalVelocity / MphConstant);
             newLinearValues.y = Mathf.Clamp(newLinearValues.y, -terminalVelocity / MphConstant, terminalVelocity / MphConstant);
             newLinearValues.z = Mathf.Clamp(newLinearValues.z, -terminalVelocity / MphConstant, terminalVelocity / MphConstant);
@@ -397,7 +422,7 @@ public class CarController : MonoBehaviour
     {
         _boostDelay = _boostDelay <= 0 ? 0 : _boostDelay - Time.fixedDeltaTime;
 
-        // BOOST FUNCTIONALITY
+        // Boost functionality
         if (_boost && _boostDelay <= 0)
         {
             if (!_grounded)
@@ -406,10 +431,16 @@ public class CarController : MonoBehaviour
                 _boostsInAirLeft--;
             }
 
-            if (!bot) audioManager.PlaySound("SuperBoostLoop");
+            if (!bot)
+            {
+                audioManager.PlaySound("SuperBoostLoop");
+            }
+            
             _vfxHandler.PlayVFX("BoostEffect");
             _vfxHandler.StartCoroutine(_vfxHandler.ActivateBoostEffect());
+            
             _boostDelay = boostCooldown;
+            
             if (_rigidbody.velocity.magnitude * MphConstant < 0.1f)
             {
                 _rigidbody.velocity = transform.forward * boostForceAmount;
@@ -435,12 +466,14 @@ public class CarController : MonoBehaviour
 
         if (_hit.transform != null)
         {
+            // Jump Pad
             if (_hit.transform.CompareTag("JumpPad") && _padDelay <= 0)
             {
                 _padDelay = padCooldown;
                 _rigidbody.AddForce(transform.up * (jumpPadForce * 700.0f * 1.5f), ForceMode.Force);
             }
 
+            // Boost Pad
             if (_hit.transform.CompareTag("BoostPad") && _padDelay <= 0)
             {
                 if (!bot) audioManager.PlaySound("SuperBoostLoop");
@@ -457,6 +490,7 @@ public class CarController : MonoBehaviour
             }
         }
 
+        // Oil slick functionality
         if (_onOil && !_vfxHandler.boostPlaying && _rigidbody.velocity.magnitude * MphConstant > 30)
         {
             var oilVector = new Vector3(_savedOilVelocity.x, _rigidbody.velocity.y, _savedOilVelocity.z);
@@ -464,55 +498,57 @@ public class CarController : MonoBehaviour
         }
     }
 
+    // Air control functionality
     private void PhysUpdateAirControl()
     {
         if (_grounded) return;
 
+        // Pitch
         if (_airDown) _rigidbody.AddTorque(-transform.right / sidewaysTurnForcePitch, ForceMode.VelocityChange);
         if (_airUp) _rigidbody.AddTorque(transform.right / sidewaysTurnForcePitch, ForceMode.VelocityChange);
         
+        // Lock pitch by angle
         if (Vector3.Angle(transform.forward, _groundForward) > maxAirTurnAngle)
         {
             _rigidbody.angularVelocity = new Vector3(0,_rigidbody.angularVelocity.y, 0);
         }
         
+        // Yaw and Roll
         if (_moveLeft) _rigidbody.AddTorque(-transform.up / sidewaysTurnForceYaw, ForceMode.VelocityChange);
         if (_moveRight) _rigidbody.AddTorque(transform.up / sidewaysTurnForceYaw, ForceMode.VelocityChange);
         if (_airLeft) _rigidbody.AddTorque(transform.forward / sidewaysTurnForceRoll, ForceMode.VelocityChange);
         if (_airRight) _rigidbody.AddTorque(-transform.forward / sidewaysTurnForceRoll, ForceMode.VelocityChange);
 
+        // restrict angular velocity to small value on x and z planes
         if (!_airLeft && !_airRight && !_airUp && !_airDown)
         {
-            _rigidbody.angularVelocity = new Vector3(
-                _rigidbody.angularVelocity.x, 
-                _rigidbody.angularVelocity.y, 
-                Mathf.Clamp(_rigidbody.angularVelocity.z, -0.1f, 0.1f));
-            
-            _rigidbody.angularVelocity = new Vector3(
-                Mathf.Clamp(_rigidbody.angularVelocity.x, -0.1f, 0.1f), 
-                _rigidbody.angularVelocity.y, 
-                _rigidbody.angularVelocity.z);
+            _rigidbody.angularVelocity = new Vector3(_rigidbody.angularVelocity.x, _rigidbody.angularVelocity.y, Mathf.Clamp(_rigidbody.angularVelocity.z, -0.1f, 0.1f));
+            _rigidbody.angularVelocity = new Vector3(Mathf.Clamp(_rigidbody.angularVelocity.x, -0.1f, 0.1f), _rigidbody.angularVelocity.y, _rigidbody.angularVelocity.z);
         }
     }
 
     // For updating driving physics with wheel colliders
     private void PhysUpdateDriving()
     {
+        // Get amount of motor direction scale to apply to the wheels
         float motorMultiplier = _moveForward ? forwardMultiplier : _moveBackward ? -backwardMultiplier : 0;
 
+        // Apply motor force to multiplier
         float currentMotorValue = motorForce * motorMultiplier;
 
+        // Get current steering angle
         _currentSteeringAngle = Mathf.Lerp(_currentSteeringAngle,
             _rigidbody.velocity.magnitude * MphConstant > 60 ? 10 : maxSteeringAngle,
             Time.deltaTime * wheelResetSpeed);
 
+        // Increase turning amount based on if reversing
         float currentTurnAmount = _moveBackward ? _turnAmount * 2 : _turnAmount;
 
+        // Increase to max turning for bots only (for snappier bot movement)
         if (bot && _moveLeft)
         {
             _turnAmount = maxTurnAmount;
         }
-        
         if (bot && _moveRight)
         {
             _turnAmount = maxTurnAmount;
@@ -520,25 +556,34 @@ public class CarController : MonoBehaviour
         
         if (_moveLeft)
         {
+            // Steer left
             _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, -currentTurnAmount, Time.deltaTime * wheelTurningSpeed);
         }
         else if (_moveRight)
         {
+            // Steer right
             _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, currentTurnAmount, Time.deltaTime * wheelTurningSpeed);
         }
         else
         {
+            // No steer if no turn buttons are pressed
             _currentSteeringMulti = Mathf.Lerp(_currentSteeringMulti, 0, Time.deltaTime * wheelResetSpeed);
         }
 
+        // Apply current steering multiplier to the max steering angle given
         float currentSteeringValue = maxSteeringAngle * _currentSteeringMulti;
         
+        // Go through each axle (front and back)
         foreach (var axle in axles)
         {
+            // Set all wheels to use correct brake torque
             axle.leftWheel.brakeTorque = brakeTorque;
             axle.rightWheel.brakeTorque = brakeTorque;
+            
+            // Apply steering values to steering-enabled wheels
             if (axle.steering)
             {
+                // Steering for front and back wheels
                 if (axle.isFrontWheel)
                 {
                     axle.leftWheel.steerAngle = currentSteeringValue;
@@ -551,13 +596,15 @@ public class CarController : MonoBehaviour
                 }
             }
 
+            // Apply motor values to motor-enabled wheels
             if (axle.motor)
             {
                 axle.leftWheel.motorTorque = currentMotorValue;
                 axle.rightWheel.motorTorque = currentMotorValue;
             }
 
-            if (_drift) // New original friction
+            // New original drift friction
+            if (_drift) 
             {
                 WheelFrictionCurve frictionCurve = axle.leftWheel.forwardFriction;
                 axle.leftWheel.forwardFriction = frictionCurve;
@@ -571,22 +618,26 @@ public class CarController : MonoBehaviour
             }
 
         }
-
+        
         if (!_moveForward && !_moveBackward)
         {
+            // No forward/backward movement, apply an idle brake force to make the car come to a stop
             brakeTorque = idleBrakeForce;
         }
         else if (_drift)
         {
+            // Disable motors and drift the car by a defined force
             brakeTorque = driftForceAmount;
             axles[0].motor = false;
         }
         else
         {
+            // Reset brake torque and motors if moving
             brakeTorque = 0.0f;
             axles[0].motor = true;
         }
 
+        // Apply an additional acceleration force for moving forward
         if (_moveForward) _rigidbody.AddForce(transform.forward * accelerationForce, ForceMode.Acceleration);
 
         if (!_grounded)
@@ -699,6 +750,7 @@ public class CarController : MonoBehaviour
             _gm.SetDelayTimer();
         }
 
+        // Draw debug rays for wheel directions
         WheelCollider currentWheel = axles[0].leftWheel;
         float currentTorque = currentWheel.motorTorque;
         float currentBrake = currentWheel.brakeTorque;
@@ -709,15 +761,17 @@ public class CarController : MonoBehaviour
         Debug.DrawRay(currentWheel.transform.position, _groundForward * currentBrake / 100, Color.magenta);
         Debug.DrawRay(currentWheel.transform.position, currentWheel.transform.parent.forward * currentBrake / 100, Color.yellow);
         
-        _hitDetect = Physics.BoxCast(transform.position + transform.up, transform.localScale, -transform.up, out _hit,
-            transform.rotation, 1);
+        // Ground detection
+        _hitDetect = Physics.BoxCast(transform.position + transform.up, transform.localScale, -transform.up, out _hit, transform.rotation, 1);
         _grounded = _hitDetect;
+        
         if (_hit.collider && !_hit.collider.isTrigger)
         {
             if (_grounded != _groundedPreviousFrame)
             {
                 if (!_groundedPreviousFrame)
                 {
+                    // Apply a small camera shake, sound and vfx to the car when landing after being in the air for a while
                     if (_airTime > 1)
                     {
                         _vfxHandler.SpawnVFXAtPosition("GroundImpact", transform.position + (transform.forward / 2) - (transform.up / 1.5f), 2, false);
@@ -731,11 +785,14 @@ public class CarController : MonoBehaviour
                     }
                 }
             }
-        } 
+        }
 
         if (_hit.transform != null)
+        {
             _onOil = _hit.transform.CompareTag("OilSlip");
+        }
 
+        // Oil slick functionality
         if (_onOil != _onOilPreviousFrame)
         {
             _savedOilVelocity = new Vector3(_rigidbody.velocity.x, 0, _rigidbody.velocity.z);
@@ -752,6 +809,7 @@ public class CarController : MonoBehaviour
             _groundForward = transform.forward;
         }
         
+        // Player manual resetting
         _resetDelay = _resetDelay <= 0 ? 0 : _resetDelay - Time.deltaTime;
         if (!bot && _reset && _resetDelay <= 0)
         {
@@ -759,8 +817,10 @@ public class CarController : MonoBehaviour
             ResetPlayer(true);
         }
 
+        // Retrieve previous frame vars
         _onOilPreviousFrame = _onOil;
         _groundedPreviousFrame = _grounded;
+        
         if (!_grounded)
         {
             _airTime += Time.deltaTime;
@@ -770,25 +830,24 @@ public class CarController : MonoBehaviour
             _boostsInAirLeft = maxBoostsInAir;
         }
 
-        if (_cameraFlyBy)
+        // Flyby
+        if (!_cameraFlyBy) return;
+        
+        if (!_cameraFlyBy.activateFlyBy)
         {
-            if (!_cameraFlyBy.activateFlyBy)
-            {
-                flybyCam.gameObject.SetActive(false); 
-                //_mainCam.gameObject.SetActive(true);
-                _mainCam.enabled = true;
-                _gm.halt = false;
-            }
-            else
-            {
-                flybyCam.gameObject.SetActive(true);
-                //_mainCam.gameObject.SetActive(false);
-                _mainCam.enabled = false;
-                _gm.SetDelayTimer();
-            }
+            flybyCam.gameObject.SetActive(false); 
+            _mainCam.enabled = true;
+            _gm.halt = false;
+        }
+        else
+        {
+            flybyCam.gameObject.SetActive(true);
+            _mainCam.enabled = false;
+            _gm.SetDelayTimer();
         }
     }
 
+    // Reset the player based on manual or automatic (collided with reset zone)
     private void ResetPlayer(bool pressedButton = false)
     {
         if (!_photonView)

@@ -64,12 +64,6 @@ public class DebugMenu : MonoBehaviour
             if (_hasFoundPlayer)
                 playerPowerups.DebugSetCurrentPowerup(PowerupType.Superboost);
         }
-
-        // if (GUI.Button (new Rect (25, 120, 200, 30), "Give Bouncy Wall Shield")) 
-        // {
-        //     if (_hasFoundPlayer)
-        //         playerPowerups.DebugSetCurrentPowerup(PowerupType.BouncyWallShield);
-        // }
         if (GUI.Button(new Rect(25, 130, 200, 30), "Give Air Blast"))
         {
             if (_hasFoundPlayer)
@@ -87,16 +81,12 @@ public class DebugMenu : MonoBehaviour
             if (_hasFoundPlayer)
                 playerPowerups.DebugSetCurrentPowerup(PowerupType.PunchingGlove);
         }
-        // if (GUI.Button (new Rect (25, 200, 200, 30), "Give Warp Portal"))
-        // {
-        //     if (_hasFoundPlayer)
-        //         playerPowerups.DebugSetCurrentPowerup(PowerupType.WarpPortal);
-        // }
-
+        
         // Make the windows be draggable.
         GUI.DragWindow(new Rect(0, 0, 10000, 10000));
     }
-
+    
+    // Wait for the player to be spawned then get a reference
     IEnumerator waitTime()
     {
         yield return new WaitForSeconds(1);

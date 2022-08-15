@@ -7,16 +7,23 @@ using UnityEngine.SceneManagement;
 
 public class TutorialMenu : MonoBehaviour
 {
-    public List<GameObject> tutorialPages;
+    [SerializeField]
+    private List<GameObject> tutorialPages;
 
-    private int _currentTutPage = 0;
+    [SerializeField]
+    private GameObject previousArrow; 
+    
+    [SerializeField]
+    private GameObject nextArrow;   
+    
+    [SerializeField]
+    private GameObject previousArrowShadow; 
+    
+    [SerializeField]
+    private GameObject nextArrowShadow;
 
+    private int _currentTutPage;
     private bool _activateTutorial;
-
-    public GameObject previousArrow; 
-    public GameObject nextArrow;   
-    public GameObject previousArrowShadow; 
-    public GameObject nextArrowShadow;
 
     private void Start()
     {
@@ -28,7 +35,10 @@ public class TutorialMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Toggle tutorial menu based on stage name and if player has not closed the tutorial window
         gameObject.SetActive(SceneManager.GetActiveScene().name == "WaitingArea" && _activateTutorial);
+        
+        // Change cursor state dependant on if tutorial menu is being displayed
         if (SceneManager.GetActiveScene().name == "WaitingArea" && _activateTutorial && Cursor.lockState != CursorLockMode.None)
         {
             Cursor.lockState = CursorLockMode.None;
@@ -39,6 +49,7 @@ public class TutorialMenu : MonoBehaviour
         }
     }
 
+    // Button: Go to the next page
     public void NextPage()
     {
         _currentTutPage++;
@@ -57,6 +68,7 @@ public class TutorialMenu : MonoBehaviour
         UpdatePages();
     }
     
+    // Button: Go to the previous page
     public void PreviousPage()
     {
         _currentTutPage--;
@@ -75,11 +87,13 @@ public class TutorialMenu : MonoBehaviour
         UpdatePages();
     }
 
+    // Button: Quit the tutorial window
     public void ExitTutorial()
     {
         _activateTutorial = false;
     }
     
+    // Update the current page
     private void UpdatePages()
     {
         for (int i = 0; i < tutorialPages.Count; i++)
