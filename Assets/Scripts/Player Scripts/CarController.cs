@@ -712,7 +712,7 @@ public class CarController : MonoBehaviour
     {
         _gm.halt = true;
         yield return new WaitForSeconds(flybyDelay);
-        _mainCam.gameObject.SetActive(false);
+        _mainCam.enabled = false;
         flybyCam.gameObject.SetActive(true);
         flybyCam.GetComponent<CameraFlyBy>().activateFlyBy = true;
     }
@@ -809,14 +809,16 @@ public class CarController : MonoBehaviour
         {
             if (!_cameraFlyBy.activateFlyBy)
             {
-                flybyCam.gameObject.SetActive(false);
-                _mainCam.gameObject.SetActive(true);
+                flybyCam.gameObject.SetActive(false); 
+                //_mainCam.gameObject.SetActive(true);
+                _mainCam.enabled = true;
                 _gm.halt = false;
             }
             else
             {
                 flybyCam.gameObject.SetActive(true);
-                _mainCam.gameObject.SetActive(false);
+                //_mainCam.gameObject.SetActive(false);
+                _mainCam.enabled = false;
                 _gm.SetDelayTimer();
             }
         }

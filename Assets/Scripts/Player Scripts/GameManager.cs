@@ -1126,7 +1126,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
                 elimPlayerCount++;
             }
         }
-        if (((elimPlayers != 0 && elimPlayers >= _totalPlayers) || (elimPlayerCount >= PhotonNetwork.CurrentRoom.PlayerCount)) && _stage > 0 && _stage < 5)
+        if (_stage > 0 && _stage < 5 && ((elimPlayers != 0 && elimPlayers >= _totalPlayers) || (elimPlayerCount >= PhotonNetwork.CurrentRoom.PlayerCount)))
         {
             _stage = 5;
             if (PhotonNetwork.IsMasterClient)
