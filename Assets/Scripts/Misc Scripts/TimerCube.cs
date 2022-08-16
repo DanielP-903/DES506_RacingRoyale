@@ -4,29 +4,28 @@ using Photon.Pun;
 using UnityEngine;
 using UnityEngine.VFX;
 
+/// <summary>
+/// Handles the timer cubes at the start of levels 1 and 2
+/// </summary>
 public class TimerCube : MonoBehaviour
 {
     [SerializeField] private List<Material> materials = new List<Material>();
 
     private MeshRenderer _meshRenderer;
-
     private PlayerManager _playerRef;
     private AudioManager _audioRef;
-    private bool _hasFoundPlayer = false;
+    private bool _hasFoundPlayer;
     private GameManager _gm;
-    private GameObject startBlocker;
-
+    private GameObject _startBlocker;
     private float _currentTimerValue;
     private float _previousTimerValue;
-
     private VisualEffect _effect;
-
-    private bool _played = false;
+    private bool _played;
 
     // Start is called before the first frame update
     void Start()
     {
-        startBlocker = GameObject.Find("StartBlocker");
+        _startBlocker = GameObject.Find("StartBlocker");
         _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
         _meshRenderer = GetComponent<MeshRenderer>();
         _meshRenderer.enabled = true;
@@ -41,7 +40,6 @@ public class TimerCube : MonoBehaviour
         _meshRenderer.enabled = true;
         _effect = transform.GetChild(0).GetComponent<VisualEffect>();
         _effect.Stop();
-        //StartCoroutine(WaitForPlayer());
         _currentTimerValue = 3;
         _played = false;
     }
@@ -104,7 +102,7 @@ public class TimerCube : MonoBehaviour
                     _audioRef.PlaySound("GameStartFinal");
                     _effect.Play();
                     _meshRenderer.enabled = false;
-                    startBlocker.SetActive(false);
+                    _startBlocker.SetActive(false);
                 }
             }
         }
@@ -112,6 +110,9 @@ public class TimerCube : MonoBehaviour
         _previousTimerValue = _currentTimerValue;
     }
     
+    /// <summary>
+    /// Wait for player to spawn then get a reference
+    /// </summary>
     IEnumerator WaitForPlayer()
     {
         yield return new WaitForSeconds(1);
@@ -119,7 +120,6 @@ public class TimerCube : MonoBehaviour
         GameObject[] listOfPlayers = GameObject.FindGameObjectsWithTag("Player");
         foreach (GameObject player in listOfPlayers)
         {
-            //Debug.Log("Player: " + player);
             if (!player.GetComponent<PhotonView>())
             {
                 continue;
@@ -129,7 +129,6 @@ public class TimerCube : MonoBehaviour
             {
                 _playerRef = player.GetComponent<PlayerManager>();
                 _audioRef = player.GetComponent<CarController>().audioManager;
-                //Debug.Log("Player Found");
                 _hasFoundPlayer = true;
                 if (_playerRef.startDelayText.text == "Go!")
                 {

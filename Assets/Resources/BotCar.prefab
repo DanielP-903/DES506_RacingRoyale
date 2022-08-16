@@ -30004,8 +30004,8 @@ MonoBehaviour:
   minimapArrow: {fileID: 283880474495604786}
   checkpoints: {fileID: 0}
   flybyCam: {fileID: 0}
-  audioManager: {fileID: 5577336420711824411}
   flybyDelay: 0.01
+  audioManager: {fileID: 5577336420711824411}
   debug: 0
   bot: 1
 --- !u!95 &4892388860096004562
@@ -30163,6 +30163,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 133e7ad02d92a4549bfc56d24d948685, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speedLinesEffect: {fileID: 0}
+  dangerWallEffect: {fileID: 0}
   boostEffects:
   - {fileID: 8489673970258440142}
   - {fileID: 4335451986854053912}
@@ -30210,8 +30212,6 @@ MonoBehaviour:
   splitToningBalanceNew: 0
   maxWallDistanceAlert: 30
   boostPlaying: 0
-  _speedLinesEffect: {fileID: 0}
-  _dangerWallEffect: {fileID: 0}
 --- !u!1 &4892388860486838944
 GameObject:
   m_ObjectHideFlags: 0

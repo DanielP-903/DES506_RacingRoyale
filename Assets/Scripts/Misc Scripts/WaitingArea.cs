@@ -1,7 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Enables the cursor after a small delay when entering the waiting area
+/// </summary>
 public class WaitingArea : MonoBehaviour
 {
     // Start is called before the first frame update

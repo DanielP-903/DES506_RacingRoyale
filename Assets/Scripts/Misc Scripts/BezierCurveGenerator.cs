@@ -1,19 +1,19 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
+
+/// <summary>
+/// Handles the generation of bezier curve paths used by the wall
+/// </summary>
 public class BezierCurveGenerator : MonoBehaviour
 {
-    private Vector3 _gizmosPos;
     public List<Transform> controlPoints;
+    private Vector3 _gizmosPos;
+    private float _stepValue = 0.02f;
+    private int _direction = 1;
     
-    // [Header("Adjust Speed Between Length of Curve")]
-    // [Tooltip("Step size between each generated point in the bezier sphere")]
-    // public float stepValue = 0.05f;
-    private float stepValue = 0.02f;
-
-    private int direction = 1;
-    
+    /// <summary>
+    /// Add a new curve to the list and define it's initial points
+    /// </summary>
     public void AddNewCurve()
     {
         GameObject newControlPoint1 = new GameObject("ControlPoint_" + (controlPoints.Count));
@@ -30,9 +30,12 @@ public class BezierCurveGenerator : MonoBehaviour
         controlPoints.Add(newControlPoint1.transform);
         controlPoints.Add(newControlPoint2.transform);
         controlPoints.Add(newControlPoint3.transform);
-        direction = -direction;
+        _direction = -_direction;
     }
 
+    /// <summary>
+    /// Remove the last curve on the list
+    /// </summary>
     public void RemoveLastCurve()
     {
         if (controlPoints.Count > 4)
@@ -49,13 +52,15 @@ public class BezierCurveGenerator : MonoBehaviour
         }
     }
     
-    
+    /// <summary>
+    /// Draw the bezier curve using gizmos for visualisation and ease of use in editor
+    /// </summary>
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.white;
-        if (stepValue < 0.01f) stepValue = 0.01f;
+        if (_stepValue < 0.01f) _stepValue = 0.01f;
         
-        for (float t = 0; t <= 1; t += stepValue)
+        for (float t = 0; t <= 1; t += _stepValue)
         {
             // Reference: https://en.wikipedia.org/wiki/B%C3%A9zier_curve
             for (int i = 0; i < controlPoints.Count - 1; i += 3)

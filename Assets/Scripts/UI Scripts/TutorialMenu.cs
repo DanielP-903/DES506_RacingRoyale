@@ -5,6 +5,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Handles the tutorial menu functionality
+/// </summary>
 public class TutorialMenu : MonoBehaviour
 {
     [SerializeField]

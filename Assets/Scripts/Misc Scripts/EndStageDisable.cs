@@ -1,12 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Disables vfx and enables cursor on loading the end stage
+/// </summary>
 public class EndStageDisable : MonoBehaviour
 {
     private Camera _mainCam;
+    
     // Camera VFX
     private VisualEffect _speedLinesEffect;
     private VisualEffect _speedCircleEffect;
@@ -24,13 +26,10 @@ public class EndStageDisable : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name == "EndStage")
         {
-            //_dangerWallEffect.SetVector2("Alpha Values", new Vector2(0,0));
-            //_speedCircleEffect.SetVector2("Alpha Values", new Vector2(0,0));
-            //_speedLinesEffect.SetVector2("Alpha Values", new Vector2(0,0));
             _speedCircleEffect.Stop();
             _speedLinesEffect.Stop();
-            _dangerWallEffect.Stop(); // Note this might stop it from working entirely
-            _portalEffect.Stop(); // Note this might stop it from working entirely
+            _dangerWallEffect.Stop();
+            _portalEffect.Stop();
         }
         
         Cursor.lockState = CursorLockMode.None;

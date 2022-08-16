@@ -6,17 +6,16 @@ using UnityEngine.InputSystem;
 
 public class DebugMenu : MonoBehaviour
 {
-    public CarVFXHandler carVFXHandler;
+    [SerializeField] private PlayerPowerups playerPowerups;
     private CarController _carController;
-    public PlayerPowerups playerPowerups;
     private GameManager _gameManager;
     private GameObject _playerRef;
     private bool _hasFoundPlayer;
 
     private Rect windowRect = new Rect(20, 90, 300, 250);
     private Rect windowToggle = new Rect(20, 20, 250, 40);
-    private bool showWindow = false;
-    private bool _debugEnable = false;
+    private bool showWindow;
+    private bool _debugEnable;
     private float _debugTimer = 1;
 
     private void Start()
@@ -31,22 +30,32 @@ public class DebugMenu : MonoBehaviour
 
     void OnGUI()
     {
+        // Draw the appropriate windows when debugging is allowed
         if (_debugEnable)
         {
             windowToggle = GUI.Window(0, windowToggle, DebugToggleWindow, "");
             if (showWindow)
-            {
+            { 
+                // Draw window when toggled on
                 windowRect = GUI.Window(1, windowRect, WindowFunction, "Debug Menu");
             }
         }
     }
 
+    /// <summary>
+    /// Create a debug toggle window for toggling the debug features
+    /// <param name="windowID">The ID of the window to be used</param>
+    /// </summary>
     void DebugToggleWindow(int windowID)
     {
         // Make a toggle button for hiding and showing the window
         showWindow = GUI.Toggle(new Rect(10, 10, 200, 20), showWindow, "Enable/Disable Debug Menu");
     }
-
+    
+    /// <summary>
+    /// Draw a debug window containing buttons that give powerups or skips the waiting timer
+    /// <param name="windowID">The ID of the window to be used</param>
+    /// </summary>
     void WindowFunction(int windowID)
     {
         GUI.Label(new Rect(25, 25, 200, 30), "Waiting Area Debug");
@@ -86,7 +95,9 @@ public class DebugMenu : MonoBehaviour
         GUI.DragWindow(new Rect(0, 0, 10000, 10000));
     }
     
-    // Wait for the player to be spawned then get a reference
+    /// <summary>
+    /// Wait for player to spawn then get a reference
+    /// </summary>
     IEnumerator waitTime()
     {
         yield return new WaitForSeconds(1);
@@ -113,7 +124,10 @@ public class DebugMenu : MonoBehaviour
             _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         }
     }
-
+    
+    /// <summary>
+    /// Change the debugging state
+    /// </summary>
     private void ChangeDebuggingState()
     {
         if (_debugTimer <= 0)
@@ -124,11 +138,11 @@ public class DebugMenu : MonoBehaviour
     }
 
 
-    // Activate Power
+    // Enable debugging input
     public void EnableDebugging(InputAction.CallbackContext context)
     {
         float value = context.ReadValue<float>();
         ChangeDebuggingState();
-        //Debug.Log("Activate Powerup detected");
+        //Debug.Log("Enable debugging detected");
     }
 }

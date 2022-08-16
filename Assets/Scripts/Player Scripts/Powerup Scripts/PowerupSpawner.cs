@@ -1,82 +1,79 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-    public class PowerupSpawner : MonoBehaviour
+/// <summary>
+/// Powerup spawning functionality
+/// </summary>
+public class PowerupSpawner : MonoBehaviour
+{
+    [SerializeField] private float spawnDelay = 2.0f;
+    [SerializeField] private List<SO_Powerup> powerups = new List<SO_Powerup>();
+    private float _spawnTimer;
+    private SO_Powerup _currentPowerup;
+    private GameObject _powerupCube;
+
+    // Start is called before the first frame update
+    void Start()
     {
-        public float spawnDelay = 2.0f;
-        public List<SO_Powerup> powerups = new List<SO_Powerup>();
-    
-        private float _spawnTimer = 0.0f;
-
-        private SO_Powerup currentPowerup;
-        private GameObject _powerupCube;
-
-        // Start is called before the first frame update
-        void Start()
-        {
-            _spawnTimer = spawnDelay;
-            _powerupCube = transform.GetChild(0).gameObject;
-            _powerupCube.SetActive(false);
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-            _spawnTimer = _spawnTimer <= 0 ? 0 : _spawnTimer - Time.fixedDeltaTime;
-            if (_spawnTimer <= 0)
-            {
-                if (!transform.GetChild(0).gameObject.activeInHierarchy)
-                {
-                    SpawnPowerup();
-                }
-            }
-        }
-
-        private void SpawnPowerup()
-        {
-            float randomChance = Random.Range(0, 100);
-            if (randomChance < 25)
-            {
-                currentPowerup = powerups[0];
-            }
-            else if (randomChance >= 25 && randomChance < 50)
-            {
-                currentPowerup = powerups[1];
-            }
-            else if (randomChance >= 50 && randomChance < 75)
-            {
-                currentPowerup = powerups[2];
-            }
-            else if (randomChance >= 75)
-            {
-                currentPowerup = powerups[3];
-            }
-            //else if (randomChance >= 66 && randomChance < 83)
-            //{
-            //    currentPowerup = powerups[4];
-            //}
-            //else if (randomChance >= 83)
-            //{
-            //    currentPowerup = powerups[5];
-            //}
-        
-            // MANUAL ASSIGNATION OF POWERUP
-            //currentPowerup = powerups[4];
-        
-            _powerupCube.SetActive(true);
-        }
-
-        public void ResetTimer()
-        {
-            _spawnTimer = spawnDelay;
-            _powerupCube.SetActive(false);
-        }
-
-        public SO_Powerup GetCurrentPowerup()
-        {
-            return currentPowerup;
-        }
-
-
-
+        _spawnTimer = spawnDelay;
+        _powerupCube = transform.GetChild(0).gameObject;
+        _powerupCube.SetActive(false);
     }
+
+    // Update is called once per frame
+    void Update()
+    {
+        _spawnTimer = _spawnTimer <= 0 ? 0 : _spawnTimer - Time.fixedDeltaTime;
+        if (_spawnTimer <= 0)
+        {
+            if (!transform.GetChild(0).gameObject.activeInHierarchy)
+            {
+                SpawnPowerup();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Spawn a powerup and assign a random powerup type
+    /// </summary>
+    private void SpawnPowerup()
+    {
+        float randomChance = Random.Range(0, 100);
+        if (randomChance < 25)
+        {
+            _currentPowerup = powerups[0];
+        }
+        else if (randomChance >= 25 && randomChance < 50)
+        {
+            _currentPowerup = powerups[1];
+        }
+        else if (randomChance >= 50 && randomChance < 75)
+        {
+            _currentPowerup = powerups[2];
+        }
+        else if (randomChance >= 75)
+        {
+            _currentPowerup = powerups[3];
+        }
+
+        _powerupCube.SetActive(true);
+    }
+
+    /// <summary>
+    /// Reset the spawning timer delay on the powerup object
+    /// </summary>
+    public void ResetTimer()
+    {
+        _spawnTimer = spawnDelay;
+        _powerupCube.SetActive(false);
+    }
+    
+    /// <summary>
+    /// Retrieves the current powerup
+    /// </summary>
+    /// <returns>A powerup scriptable object</returns>
+    public SO_Powerup GetCurrentPowerup()
+    {
+        return _currentPowerup;
+    }
+}

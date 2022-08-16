@@ -5,13 +5,16 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Handles minimap functionality
+/// </summary>
 public class MinimapController : MonoBehaviour
 {
+    [SerializeField] private float yOffset = 20;
     private GameObject _playerRef;
     private bool hasFoundPlayer = false;
     private CarController _carController;
-
-    public float yOffset = 20;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -20,18 +23,12 @@ public class MinimapController : MonoBehaviour
         GetComponent<Camera>().orthographicSize = yOffset;
     }
     
-    
     void OnLevelWasLoaded()
     {
         GetComponent<Camera>().orthographicSize = yOffset;
         GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
-        // if (SceneManager.GetActiveScene().name == "EndStage")
-        // {
-        //     gameObject.SetActive(false);
-        // }
     }
-
-
+    
     // Update is called once per frame
     void Update()
     {
@@ -45,7 +42,10 @@ public class MinimapController : MonoBehaviour
             transform.rotation = Quaternion.Euler(90.0f, _playerRef.transform.eulerAngles.y, 0.0f);
         }
     }
-
+    
+    /// <summary>
+    /// Wait for player to spawn then get a reference
+    /// </summary>
     IEnumerator waitTime()
     {
         yield return new WaitForSeconds(1);

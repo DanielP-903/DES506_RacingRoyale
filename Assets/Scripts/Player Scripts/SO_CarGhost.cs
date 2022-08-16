@@ -1,14 +1,17 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Stores the state of the ghost for either replaying or recording
+/// </summary>
+public enum GhostMode
+{
+    Replay, Record    
+}
 
-    public enum GhostMode
-    {
-        Replay, Record    
-    }
-
+/// <summary>
+/// Car ghost scriptable object contains recording-specific values and playback functionality along with a reset function
+/// </summary>
 [CreateAssetMenu(fileName = "CarGhost", menuName = "Car Ghost", order = 1)]
 public class SO_CarGhost : ScriptableObject
 {

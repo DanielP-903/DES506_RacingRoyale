@@ -1,14 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PowerupCollision : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider collider)
+    private void OnTriggerEnter(Collider trigger)
     {
-        if (collider.CompareTag("Player"))
+        if (trigger.CompareTag("Player"))
         {
-            if (collider.TryGetComponent<PlayerPowerups>(out var playerPowerups))
+            if (trigger.TryGetComponent<PlayerPowerups>(out var playerPowerups))
             {
                 if (!playerPowerups.IsUsingAnyPowerup())
                     transform.parent.GetComponent<PowerupSpawner>().ResetTimer();

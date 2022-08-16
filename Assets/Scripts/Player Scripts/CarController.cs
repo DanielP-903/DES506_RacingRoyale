@@ -9,13 +9,22 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
+/// <summary>
+/// Defines the specific types of powerups by name
+/// </summary>
 public enum PowerupType
 {
     None, Superboost, BouncyWallShield, AirBlast, GrapplingHook, PunchingGlove, WarpPortal
 }
 
+/// <summary>
+/// Handles all player input and control of the car
+/// </summary>
 public class CarController : MonoBehaviour
 {
+    /// <summary>
+    /// Represents each axle on the car and their properties
+    /// </summary>
     [Serializable]
     public class Axle
     {
@@ -30,111 +39,111 @@ public class CarController : MonoBehaviour
 
     [Header("Car Driving Physics")] 
     [Tooltip("Object to represent transform of centre of mass")]
-    public GameObject centreOfMass;
+    [SerializeField] private GameObject centreOfMass;
 
     [Tooltip("Amount of force applied to the motor wheels")]
-    public float motorForce;
+    [SerializeField] private float motorForce;
 
     [Tooltip("Braking force")] 
-    public float brakeTorque = 1000;
+    [SerializeField] private float brakeTorque = 1000;
 
     [Tooltip("Maximum angle for steering")]
-    public float maxSteeringAngle;
+    [SerializeField] private float maxSteeringAngle;
 
     [Tooltip("Maximum angle for back wheel steering")]
-    public float maxBackWheelSteeringAngle;
+    [SerializeField] private float maxBackWheelSteeringAngle;
 
     [Tooltip("Maximum velocity for accelerating")]
-    public float terminalVelocity = 120;
+    [SerializeField] private float terminalVelocity = 120;
 
     [Tooltip("List of axles - DO NOT DELETE")]
-    public List<Axle> axles;
+    [SerializeField] private List<Axle> axles;
 
     [Tooltip("Physical wheel reset to idle speed")]
-    public float wheelResetSpeed = 50;
+    [SerializeField] private float wheelResetSpeed = 50;
 
     [Tooltip("Physical wheel turning speed")]
-    public float wheelTurningSpeed = 1;
+    [SerializeField] private float wheelTurningSpeed = 1;
 
     [Tooltip("Maximum turn percentage")] 
-    public float maxTurnAmount = 0.3f;
+    [SerializeField] private float maxTurnAmount = 0.3f;
 
     [Tooltip("Multiplier for forward acceleration")]
-    public float forwardMultiplier = 1;
+    [SerializeField] private float forwardMultiplier = 1;
 
     [Tooltip("Multiplier for backward acceleration")]
-    public float backwardMultiplier = 0.5f;
+    [SerializeField] private float backwardMultiplier = 0.5f;
 
     [Tooltip("Idle brake force")]
-     public float idleBrakeForce = 8000;
+    [SerializeField] private float idleBrakeForce = 8000;
 
     [Tooltip("Drift smoke VFX speed threshold")]
-    public float driftSmokeThreshold = 20;
+    [SerializeField] private float driftSmokeThreshold = 20;
 
     [Tooltip("Max forward turning angle in the air")]
-    public float maxAirTurnAngle = 180;    
+    [SerializeField] private float maxAirTurnAngle = 180;    
     
     [Header("----------------------------")]     
     [Header("Air Turning Settings")]     
     [Header("----------------------------")]     
     [Tooltip("Sideways move force")]
-    public float sidewaysMoveForce = 100;
+    [SerializeField] private float sidewaysMoveForce = 100;
     
     [Tooltip("Sideways turn force (YAW)")]
-    public float sidewaysTurnForceYaw = 200;
+    [SerializeField] private float sidewaysTurnForceYaw = 200;
     
     [Tooltip("Sideways turn force (PITCH)")]
-    public float sidewaysTurnForcePitch = 15;
+    [SerializeField] private float sidewaysTurnForcePitch = 15;
     
     [Tooltip("Sideways turn force (ROLL)")]
-    public float sidewaysTurnForceRoll = 15;
+    [SerializeField] private float sidewaysTurnForceRoll = 15;
 
     [Header("Forces")] 
     [Tooltip("Jumping force")]
     public float pushForceAmount = 5.0f;
 
     [Tooltip("Main forward speed force")] 
-    public float accelerationForce = 5.0f;
+    [SerializeField] private float accelerationForce = 5.0f;
     
     [Tooltip("Boost force")] 
-    public float boostForceAmount = 5.0f;
+    [SerializeField] private float boostForceAmount = 5.0f;
 
     [Tooltip("Drifting force (might not be in use currently)")]
-    public float driftForceAmount = 3000.0f;
+    [SerializeField] private float driftForceAmount = 3000.0f;
 
     [Tooltip("Max number of boosts allowed in the air")]
-    public int maxBoostsInAir = 1;
+    [SerializeField] private int maxBoostsInAir = 1;
 
     [Header("Environmental Pads")] 
     [Tooltip("Jumping pad force")]
-    public float jumpPadForce = 5.0f;
+    [SerializeField] private float jumpPadForce = 5.0f;
 
     [Tooltip("Boost pad force")] 
-    public float boostPadForce = 5.0f;
+    [SerializeField] private float boostPadForce = 5.0f;
 
     [Header("Collisions")] 
     [Tooltip("Collision force applied when bouncing off of players and objects")]
-    public float bounciness = 100.0f;
+    [SerializeField] private float bounciness = 100.0f;
 
     [Header("Cooldowns (in seconds)")] 
     [Tooltip("Jumping cooldown time")]
-    public float jumpCooldown = 2.0f;
+    [SerializeField] private float jumpCooldown = 2.0f;
 
     [Tooltip("Boosting cooldown time")]
-     public float boostCooldown = 2.0f;
+    public float boostCooldown = 2.0f;
      
     [Tooltip("Reset cooldown time")] 
-    public float resetCooldown = 2.0f;
+    [SerializeField] private float resetCooldown = 2.0f;
     
     [Tooltip("Jump pad cooldown time")] 
-    public float padCooldown = 2.0f;
+    [SerializeField] private float padCooldown = 2.0f;
 
-    [Header("Other")] 
+    [Header("Other")]
     public GameObject minimapArrow;
-    public CheckpointSystem checkpoints;
-    public Camera flybyCam;
+    [SerializeField] private CheckpointSystem checkpoints;
+    [SerializeField] private Camera flybyCam;
+    [SerializeField] private float flybyDelay = 0.01f;
     public AudioManager audioManager;
-    public float flybyDelay = 0.01f;
 
     [Header("DEBUG MODE")] 
     public bool debug;
@@ -300,8 +309,10 @@ public class CarController : MonoBehaviour
         _photonView = GetComponent<PhotonView>();
 
     }
-
-    // Initialise values and get components to be used (on each level load)
+    
+    /// <summary>
+    /// Initialise values and get components to be used (on each level load)
+    /// </summary>
     public void SetUp()
     {
         if (debug)
@@ -384,7 +395,10 @@ public class CarController : MonoBehaviour
         // Place restrictions on velocities both linear and angular
         PhysRestrictVelocities();
     }
-
+    
+    /// <summary>
+    /// Restrictions on angular and linear velocities based on state
+    /// </summary>
     private void PhysRestrictVelocities()
     {
         // Store current angular velocity
@@ -407,7 +421,7 @@ public class CarController : MonoBehaviour
 
         _rigidbody.angularVelocity = newValues;
 
-        // Restrict velocity based on terminal velocity value
+        // Restrict linear velocity based on terminal velocity value
         if (!_vfxHandler.boostPlaying)
         {
             Vector3 newLinearValues = _rigidbody.velocity = new Vector3(_rigidbody.velocity.x, _rigidbody.velocity.y, _rigidbody.velocity.z);
@@ -417,7 +431,10 @@ public class CarController : MonoBehaviour
             _rigidbody.velocity = newLinearValues;
         }
     }
-
+    
+    /// <summary>
+    /// For updating boost functionality
+    /// </summary>
     private void PhysUpdateAcceleration()
     {
         _boostDelay = _boostDelay <= 0 ? 0 : _boostDelay - Time.fixedDeltaTime;
@@ -451,8 +468,10 @@ public class CarController : MonoBehaviour
             }
         }
     }
-
-    // For updating rigidbody forces acting upon the car
+    
+    /// <summary>
+    /// For updating rigidbody forces acting upon the car
+    /// </summary>
     private void PhysUpdateForces()
     {
         _pushDelay = _pushDelay <= 0 ? 0 : _pushDelay - Time.fixedDeltaTime;
@@ -498,7 +517,9 @@ public class CarController : MonoBehaviour
         }
     }
 
-    // Air control functionality
+    /// <summary>
+    /// Air control functionality
+    /// </summary>
     private void PhysUpdateAirControl()
     {
         if (_grounded) return;
@@ -526,8 +547,10 @@ public class CarController : MonoBehaviour
             _rigidbody.angularVelocity = new Vector3(Mathf.Clamp(_rigidbody.angularVelocity.x, -0.1f, 0.1f), _rigidbody.angularVelocity.y, _rigidbody.angularVelocity.z);
         }
     }
-
-    // For updating driving physics with wheel colliders
+    
+    /// <summary>
+    /// For updating driving physics with wheel colliders
+    /// </summary>
     private void PhysUpdateDriving()
     {
         // Get amount of motor direction scale to apply to the wheels
@@ -731,6 +754,9 @@ public class CarController : MonoBehaviour
 
     #endregion
 
+    /// <summary>
+    /// Delays the flyby by a given amount of time
+    /// </summary>
     private IEnumerator DelayFlyBy()
     {
         _gm.halt = true;
@@ -847,7 +873,10 @@ public class CarController : MonoBehaviour
         }
     }
 
-    // Reset the player based on manual or automatic (collided with reset zone)
+    /// <summary>
+    /// Reset the player based on manual or automatic (collided with reset zone)
+    /// <param name="pressedButton">Reset button has been triggered or not</param>
+    /// </summary>
     private void ResetPlayer(bool pressedButton = false)
     {
         if (!_photonView)
@@ -873,7 +902,9 @@ public class CarController : MonoBehaviour
         }
     }
 
-    // Sourced gizmos code for displaying directional debug data for driving
+    /// <summary>
+    /// Sourced gizmos code for displaying directional debug data for driving
+    /// </summary>
     void OnDrawGizmos()
     {
         //Check if there has been a hit yet
@@ -904,6 +935,7 @@ public class CarController : MonoBehaviour
     {
         if (collision.transform.CompareTag("Player"))
         {
+            // Bounce players away from each other on collide
             Vector3 direction = collision.contacts[0].point - transform.position;
             if (!bot)
             {
@@ -911,16 +943,18 @@ public class CarController : MonoBehaviour
                 Debug.Log("HIT ANOTHER PLAYER WITH RIGIDBODY VELOCITY: " + _rigidbody.velocity);
             }
             else
+            {
                 GetComponent<Rigidbody>().velocity = -(direction.normalized * bounciness);
+            }
 
             if (bot) return;
             _vfxHandler.PlayVFXAtPosition("Impact", collision.contacts[0].point);
             audioManager.PlaySound("CarHit0" + Random.Range(1, 5));
-            _photonView.RPC("PlayerHit", RpcTarget.All, collision.transform.GetComponent<PhotonView>().ViewID,
-                direction, collision.contacts[0].point, bounciness);
+            _photonView.RPC("PlayerHit", RpcTarget.All, collision.transform.GetComponent<PhotonView>().ViewID, direction, collision.contacts[0].point, bounciness);
         }
         else if (collision.transform.CompareTag("SpinningTop"))
         {
+            // Bounce player away from spinning top
             Vector3 direction = collision.contacts[0].point - transform.position;
             _rigidbody.velocity = -(direction.normalized * 30);
             _vfxHandler.PlayVFXAtPosition("SoftImpact", collision.contacts[0].point);
@@ -944,6 +978,7 @@ public class CarController : MonoBehaviour
         if (other.transform.CompareTag("Checkpoint") && _passedCheckpoints.ContainsKey(other.gameObject) &&
             !_passedCheckpoints[other.gameObject])
         {
+            // Passed an uncleared checkpoint
             _vfxHandler.PlayVFX("Confetti");
             audioManager.PlaySound("Checkpoint");
             audioManager.PlaySound("Confetti");
@@ -967,11 +1002,13 @@ public class CarController : MonoBehaviour
 
         if (other.transform.CompareTag("EliminationZone") && !bot)
         {
+            // Inside the zone, set in vfx handler
             _vfxHandler.SetInZone(true);
         }
 
         if (other.transform.CompareTag("ResetZone"))
         {
+            // Triggered a reset  zone
             ResetPlayer();
             if (!bot) audioManager.PlaySound("CarEliminatedOffTrack");
         }
@@ -981,7 +1018,7 @@ public class CarController : MonoBehaviour
     {
         if (other.transform.CompareTag("EliminationZone") && !bot)
         {
-            // Hit elimination wall
+            // No longer in the zone, update vfx handler
             Debug.Log("Exit the Elimination Wall");
             _vfxHandler.SetInZone(false);
         }

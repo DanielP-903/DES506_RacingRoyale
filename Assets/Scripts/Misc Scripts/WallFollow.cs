@@ -1,44 +1,34 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using Photon.Pun;
-using TMPro;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Handles how the wall/monster moves through the level
+/// </summary>
 public class WallFollow : MonoBehaviour
 {
-    public GameObject path;
-
-    public float playerBarStartPos;
-    public float playerBarOffset;
-    public float startDelay = 3.0f;
-    public float chaseSpeed = 1.0f;
-    public TextMeshProUGUI startDelayText;
+    [SerializeField] private GameObject path;
+    [SerializeField] private float playerBarStartPos;
+    [SerializeField] private float playerBarOffset;
+    [SerializeField] private float startDelay = 3.0f;
+    [SerializeField] private float chaseSpeed = 1.0f;
+    
     private GameObject _wallOMeter;
     private BezierCurveGenerator _bezierCurveGenerator;
-
     private Slider _wallOMeterSlider;
     private GameObject _wallOMeterPlayer;
-
-    private float _startDelayTimer = 0.0f;
-    
-    private int routeNumber = 0;
-    private Vector3 endPos;
-    private Vector3 startPos;
-
+    private float _startDelayTimer;
+    private int _routeNumber;
+    private Vector3 _endPos;
+    private Vector3 _startPos;
     private float _tValue;
     private float _tValuePersistant;
     private float _tValueMax;
-
-    private bool _begin = false;
-    
+    private bool _begin;
     private GameObject _playerRef;
     private CarController _carController;
-    private Rigidbody _rigidbodyRef;
-    
-    private bool hasFoundPlayer = false;
+    private bool _hasFoundPlayer;
     private CheckpointSystem _checkpointSystem;
     
     [Header("Platform Dissolving Functionality")]
@@ -54,11 +44,11 @@ public class WallFollow : MonoBehaviour
     void Start()
     {
 
-        hasFoundPlayer = false;
-        StartCoroutine(waitTime());
+        _hasFoundPlayer = false;
+        StartCoroutine(WaitTime());
         _bezierCurveGenerator = path.GetComponent<BezierCurveGenerator>();
         _checkpointSystem = GameObject.FindGameObjectWithTag("CheckpointSystem").GetComponent<CheckpointSystem>();
-        routeNumber = 0;
+        _routeNumber = 0;
         _tValue = 0.0f;
         _startDelayTimer = startDelay;
         _begin = false;
@@ -67,25 +57,20 @@ public class WallFollow : MonoBehaviour
         _wallOMeterSlider = _wallOMeter.GetComponent<Slider>();
         _wallOMeterPlayer = _wallOMeter.transform.GetChild(2).gameObject;
 
-        endPos = _bezierCurveGenerator.controlPoints[_bezierCurveGenerator.controlPoints.Count - 1].transform.position;
-        startPos = _bezierCurveGenerator.controlPoints[0].transform.position;
+        _endPos = _bezierCurveGenerator.controlPoints[_bezierCurveGenerator.controlPoints.Count - 1].transform.position;
+        _startPos = _bezierCurveGenerator.controlPoints[0].transform.position;
 
         _tValueMax = Mathf.Floor(_bezierCurveGenerator.controlPoints.Count / 3);
-    }
-
-    public float GetStartDelayTimer()
-    {
-        return _startDelayTimer;
     }
     
     // Update is called once per frame
     void Update()
     {
-        if (hasFoundPlayer && _playerRef)
+        if (_hasFoundPlayer && _playerRef)
         {
-            float distanceToStart = Vector3.Distance(_playerRef.transform.position, startPos) - 5.0f;
-            float distanceToEnd = Vector3.Distance(_playerRef.transform.position, endPos) - 5.0f;
-            float distance = Vector3.Distance(startPos, endPos) - 5.0f;
+            float distanceToStart = Vector3.Distance(_playerRef.transform.position, _startPos) - 5.0f;
+            float distanceToEnd = Vector3.Distance(_playerRef.transform.position, _endPos) - 5.0f;
+            float distance = Vector3.Distance(_startPos, _endPos) - 5.0f;
 
             Vector3 newValues = _wallOMeterPlayer.transform.localPosition;
             var t = (distance- distanceToStart)/distance;
@@ -101,12 +86,12 @@ public class WallFollow : MonoBehaviour
             _tValuePersistant += Time.deltaTime * chaseSpeed;
             Vector3 oldPosition = transform.position;
 
-            var newPosition = Mathf.Pow(1 - _tValue, 3) * _bezierCurveGenerator.controlPoints[routeNumber].position +
-                              3 * Mathf.Pow(1 - _tValue, 2) * _tValue * _bezierCurveGenerator.controlPoints[routeNumber + 1].position +
-                              3 * (1 - _tValue) * Mathf.Pow(_tValue, 2) * _bezierCurveGenerator.controlPoints[routeNumber + 2].position +
-                              Mathf.Pow(_tValue, 3) * _bezierCurveGenerator.controlPoints[routeNumber + 3].position;
+            var newPosition = Mathf.Pow(1 - _tValue, 3) * _bezierCurveGenerator.controlPoints[_routeNumber].position +
+                              3 * Mathf.Pow(1 - _tValue, 2) * _tValue * _bezierCurveGenerator.controlPoints[_routeNumber + 1].position +
+                              3 * (1 - _tValue) * Mathf.Pow(_tValue, 2) * _bezierCurveGenerator.controlPoints[_routeNumber + 2].position +
+                              Mathf.Pow(_tValue, 3) * _bezierCurveGenerator.controlPoints[_routeNumber + 3].position;
             
-            if (hasFoundPlayer && _playerRef)
+            if (_hasFoundPlayer && _playerRef)
             {
                 _wallOMeterSlider.value = Mathf.Lerp(1, 0, (_tValueMax - _tValuePersistant) / _tValueMax);
             }
@@ -122,10 +107,10 @@ public class WallFollow : MonoBehaviour
             if (_tValue > 1)
             {
                 _tValue = 0.0f;
-                routeNumber += 3;
-                if (routeNumber >= _bezierCurveGenerator.controlPoints.Count - 1)
+                _routeNumber += 3;
+                if (_routeNumber >= _bezierCurveGenerator.controlPoints.Count - 1)
                 {
-                    routeNumber = 0;
+                    _routeNumber = 0;
                     _tValuePersistant = 0.0f;
                 }
             }
@@ -133,13 +118,12 @@ public class WallFollow : MonoBehaviour
         else
         {
             _startDelayTimer = _startDelayTimer <= 0 ? 0 : _startDelayTimer - Time.deltaTime; 
-            //_startDelayTimer < 1
+
             int serverTimer = 0;
             if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("Timer" + GameObject.Find("GameManager").GetComponent<GameManager>().GetStageNum()))
             {
                 serverTimer = (int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer" + GameObject.Find("GameManager").GetComponent<GameManager>().GetStageNum())];
             }
-            //serverTimer = (int)PhotonNetwork.CurrentRoom.CustomProperties[("Timer" + GameObject.Find("GameManager").GetComponent<GameManager>().GetStageNum())];
             
             if (serverTimer != 0 && PhotonNetwork.ServerTimestamp - serverTimer > startDelay * 1000)
             {
@@ -149,14 +133,16 @@ public class WallFollow : MonoBehaviour
         }
     }
     
-    IEnumerator waitTime()
+    /// <summary>
+    /// Wait for player to spawn then get a reference
+    /// </summary>
+    IEnumerator WaitTime()
     {
         yield return new WaitForSeconds(1);
         
         GameObject[] listOfPlayers = GameObject.FindGameObjectsWithTag("Player");
         foreach (GameObject player in listOfPlayers)
         {
-            //Debug.Log("Player: " + player);
             if (!player.GetComponent<PhotonView>())
             {
                 continue;
@@ -165,10 +151,9 @@ public class WallFollow : MonoBehaviour
             if (player.GetComponent<PhotonView>().IsMine && !player.GetComponent<CarController>().bot)
             {
                 _playerRef = player;
-                //Debug.Log("Player Found");
-                hasFoundPlayer = true;
+                _hasFoundPlayer = true;
                 _carController = _playerRef.GetComponent<CarController>();
-                _rigidbodyRef = _carController.GetComponent<Rigidbody>();
+                _carController.GetComponent<Rigidbody>();
             }
         }
         
@@ -176,10 +161,9 @@ public class WallFollow : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //Debug.Log("Wall Hit: "+other.gameObject.name+":"+other.tag);
+        // Destroy a checkpoint when collided
         if (other.CompareTag("Checkpoint"))
         {
-            //Debug.Log("Hit Checkpoint");
             _checkpointSystem.EliminateCheckpoint(other.gameObject);
         }
     }

@@ -1,32 +1,37 @@
 using UnityEngine;
 
+/// <summary>
+/// Handles the recording of ghost car playthroughs
+/// </summary>
 public class GhostRecorder : MonoBehaviour
 {
-    public SO_CarGhost ghost;
-    private float timer;
-    private float timeStampValue;
+    [SerializeField] private SO_CarGhost ghost;
+    private float _timer;
+    private float _timeStampValue;
 
     private void Awake()
     {
+        // Reset the recording on play if set to record
         if (ghost.mode == GhostMode.Record)
         {
             ghost.ResetVars();
-            timeStampValue = 0.0f;
-            timer = 0.0f;
+            _timeStampValue = 0.0f;
+            _timer = 0.0f;
         }
     }
 
     private void Update()
     {
-        timer += Time.unscaledDeltaTime;
-        timeStampValue += Time.unscaledDeltaTime;
+        _timer += Time.unscaledDeltaTime;
+        _timeStampValue += Time.unscaledDeltaTime;
 
-        if (ghost.mode == GhostMode.Record && timer >= (1 / ghost.frequency))
+        // Add ghost car locational data to the recorded list based on the state and frequency
+        if (ghost.mode == GhostMode.Record && _timer >= (1 / ghost.frequency))
         {
-            ghost.timeStamp.Add(timeStampValue);
+            ghost.timeStamp.Add(_timeStampValue);
             ghost.position.Add(transform.position);
             ghost.rotation.Add(transform.rotation);
-            timer = 0;
+            _timer = 0;
         }
     }
 }

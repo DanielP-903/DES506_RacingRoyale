@@ -6,47 +6,50 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
+/// <summary>
+/// Handles all powerup functionality for the player
+/// </summary>
 public class PlayerPowerups : MonoBehaviour
 {
     [Header("Super Boost")]
     [Tooltip("Amount of force given to the player when activating Super Boost")]
-    public float superBoostForce = 50.0f;
+    [SerializeField] private float superBoostForce = 50.0f;
 
     [Header("Air Blast")] 
     [Tooltip("Radius area of effect for the Air Blast")]
-    public float airBlastRadius = 10.0f;
+    [SerializeField] private float airBlastRadius = 10.0f;
     [Tooltip("Force applied to players who collide with the blast")]
-    public float airBlastForce = 10.0f;
+    [SerializeField] private float airBlastForce = 10.0f;
     [Tooltip("Time given for the Air Blast area of effect to expand")]
-    public float airBlastTime = 2.0f;
+    [SerializeField] private float airBlastTime = 2.0f;
     [Tooltip("Air Blast VFX")]
-    public List<ParticleSystem> airBlastEffects;
+    [SerializeField] private List<ParticleSystem> airBlastEffects;
 
     [Header("Grapple Hook")] 
     [Tooltip("Max time allowed before grapple disconnects")]
-    public float grappleTime = 2.0f;
+    [SerializeField] private float grappleTime = 2.0f;
     [Tooltip("Force applied to the player when grappling towards the target")]
-    public float grappleForce = 10.0f;
+    [SerializeField] private float grappleForce = 10.0f;
     [Tooltip("Maximum distance to look for targets")]
-    public float achievableDistance = 30.0f;
+    [SerializeField] private float achievableDistance = 30.0f;
     [Tooltip("Minimum distance hook is effective")]
-    public float grappleThreshold = 1.0f;
+    [SerializeField] private float grappleThreshold = 1.0f;
     
     [Header("Punching Glove")] 
     [Tooltip("Max time allowed before punching glove disconnects")]
-    public float punchTime = 2.0f;
+    [SerializeField] private float punchTime = 2.0f;
     [Tooltip("Force applied to the target when they are hit with the glove")]
-    public float punchingForce = 10.0f;
+    [SerializeField] private float punchingForce = 10.0f;
     [Tooltip("Maximum distance to look for targets")]
-    public float achievablePunchRange = 30.0f;
+    [SerializeField] private float achievablePunchRange = 30.0f;
     [Tooltip("Radius area of effect for targets")]
-    public float detectionRadius = 5.0f;
+    [SerializeField] private float detectionRadius = 5.0f;
 
     [Header("Other")]
     [Tooltip("UI icon for powerups")]
     public Image powerupIcon;
     [Tooltip("Powerup scriptable objects")]
-    public List<SO_Powerup> powerups = new List<SO_Powerup>();
+    [SerializeField] private List<SO_Powerup> powerups = new List<SO_Powerup>();
   
     private GameObject _grappleLineObject;
     private GameObject _punchObject;
@@ -54,6 +57,7 @@ public class PlayerPowerups : MonoBehaviour
     private GameObject _blastObject;
     private GameObject _wallObject;
     private GameObject _warpObject;
+    private GameObject _currentTarget;
 
     private SO_Powerup _currentPowerup;
     private PowerupType _currentPowerupType;
@@ -75,9 +79,8 @@ public class PlayerPowerups : MonoBehaviour
     private SphereCollider _blastObjectCollider;
     private RaycastHit _nearestHit;
     private LineRenderer _grappleLine;
-    private LineRenderer _punchLine; // haha
+    private LineRenderer _punchLine;
     private AudioManager _audioManager;
-    private GameObject _currentTarget;
     private PhotonView _photonView;
     
     // Start is called before the first frame update
@@ -140,12 +143,15 @@ public class PlayerPowerups : MonoBehaviour
 
     private void Update()
     {
+        // Change prompt from E to controller button and vice versa dependant on if controller is connected
         if (!powerupIcon.gameObject.activeInHierarchy) return;
-        
         powerupIcon.transform.GetChild(1).gameObject.SetActive(Gamepad.current != null);
         powerupIcon.transform.GetChild(2).gameObject.SetActive(Gamepad.current == null);
     }
 
+    /// <summary>
+    /// Casts a sphere for the current powerup (punching glove or grappling hook) and detects a potential target within the defined range
+    /// </summary>
     private void DetectTarget()
     {
         _usingPowerup = false;
@@ -212,6 +218,9 @@ public class PlayerPowerups : MonoBehaviour
             }
     }
     
+    /// <summary>
+    /// Update the current powerup and handle newly equipped powerups
+    /// </summary>
     private void PhysUpdatePowerups()
     {
         _airBlastTimer = _airBlastTimer <= 0 ? 0 : _airBlastTimer - Time.fixedDeltaTime;
@@ -345,7 +354,10 @@ public class PlayerPowerups : MonoBehaviour
     }
 
      #region Powerup_Functionality
-
+    
+     /// <summary>
+     /// Initialise the super boost powerup
+     /// </summary>
      private void SuperBoost()
      {
          StartCoroutine(DelayRemoveIconBoost());
@@ -361,7 +373,10 @@ public class PlayerPowerups : MonoBehaviour
              _rigidbody.AddForce(transform.forward * superBoostForce, ForceMode.VelocityChange);
          }
      }
-
+     
+     /// <summary>
+     /// Initialise the punching glove powerup
+     /// </summary>
      private void PunchingGlove()
      {
          // Detect opponent to grapple to
@@ -415,7 +430,10 @@ public class PlayerPowerups : MonoBehaviour
              _photonView.RPC("Powerup", RpcTarget.All, _photonView.ViewID, PowerupType.PunchingGlove, false);
          }
      }
-
+     
+     /// <summary>
+     /// Initialise the grappling hook powerup
+     /// </summary>
      private void GrapplingHook()
      {
          if (_currentTarget)
@@ -428,6 +446,9 @@ public class PlayerPowerups : MonoBehaviour
          }
      }
      
+     /// <summary>
+     /// Initialise the air blast powerup
+     /// </summary>
      private void AirBlast()
      {
          _blastObject.SetActive(true);
@@ -442,10 +463,12 @@ public class PlayerPowerups : MonoBehaviour
          _audioManager.PlaySound("AirBlast");
      }
 
+     /// <summary>
+     /// Activate and monitor time allocated for grappling
+     /// </summary>
      private IEnumerator Grapple()
      {
-         powerupIcon.transform.GetChild(3).gameObject.SetActive(false);
-         // Apply a constant acceleration force towards the player for a limited time
+         powerupIcon.transform.GetChild(3).gameObject.SetActive(false); 
          _grappling = true;
          yield return new WaitForSeconds(grappleTime);
          if (_grappling)
@@ -457,6 +480,9 @@ public class PlayerPowerups : MonoBehaviour
          }
      }
      
+     /// <summary>
+     /// Activate and monitor time allocated for punching
+     /// </summary>
      private IEnumerator Punch()
      {            
          // Reset line
@@ -488,6 +514,9 @@ public class PlayerPowerups : MonoBehaviour
          }
      }
 
+     /// <summary>
+     /// Reset the punching glove and it's associated GameObjects back to it's original location
+     /// </summary>
      public void ResetPunch()
      {
          // Reset line between them
@@ -507,6 +536,9 @@ public class PlayerPowerups : MonoBehaviour
      
      #endregion
 
+     /// <summary>
+     /// (Extended for super boost) Plays the "popping" animation then deletes and resets the current powerup
+     /// </summary>
      private IEnumerator DelayRemoveIconBoost()
      {
          _superBoostTimer = 1;
@@ -517,6 +549,9 @@ public class PlayerPowerups : MonoBehaviour
          _boosting = false;
      }
 
+     /// <summary>
+     /// Plays the "popping" animation then deletes and resets the current powerup
+     /// </summary>
      private IEnumerator DelayRemoveIcon()
      {
          powerupIcon.gameObject.GetComponent<Animator>().Play("PowerupPopOut");
@@ -527,6 +562,11 @@ public class PlayerPowerups : MonoBehaviour
          _usingPowerup = false;
      }
 
+     
+     /// <summary>
+     /// Give a specific powerup for debugging
+     /// </summary>
+     /// <param name="powerupType">The type of powerup to give</param>
      public void DebugSetCurrentPowerup(PowerupType powerupType)
      {
          switch (powerupType)
@@ -559,6 +599,9 @@ public class PlayerPowerups : MonoBehaviour
          _audioManager.PlaySound("PowerUpCollected");
      }
 
+     /// <summary>
+     /// Return true if player is currently using a powerup
+     /// </summary>
      public bool IsUsingAnyPowerup()
      {
          return (_boosting || _grappling || _punching || _airBlasting);
@@ -566,6 +609,7 @@ public class PlayerPowerups : MonoBehaviour
      
      private void OnTriggerEnter(Collider collider)
      {
+         // Player enters a powerup object trigger
          if (collider.transform.CompareTag("Powerup") && !IsUsingAnyPowerup() && !_carController.bot)
          {
              _currentPowerup = collider.transform.parent.GetComponent<PowerupSpawner>().GetCurrentPowerup();
@@ -584,6 +628,7 @@ public class PlayerPowerups : MonoBehaviour
              powerupIcon.transform.GetChild(3).gameObject.SetActive(false);
          }
          
+         // Player enters an air blast
          if (collider.transform.CompareTag("Blast") && collider.transform.parent.gameObject != transform.gameObject)
          {
              Vector3 direction = collider.transform.position - transform.position;
@@ -591,6 +636,7 @@ public class PlayerPowerups : MonoBehaviour
              _audioManager.PlaySound("AirBlast");
          }
          
+         // Player enters a punching glove
          if (collider.transform.CompareTag("PunchingGlove") && collider.transform.parent.gameObject != transform.gameObject)
          {
              Vector3 direction = collider.transform.position - transform.position;

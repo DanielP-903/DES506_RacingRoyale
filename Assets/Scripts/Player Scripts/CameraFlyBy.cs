@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class CameraFlyBy : MonoBehaviour
 {
-    public bool activateFlyBy = false;
+    public bool activateFlyBy;
     [SerializeField] private float maxFlyByPathPosition = 16.95f;
 
     private Animator _animator;
@@ -17,7 +17,6 @@ public class CameraFlyBy : MonoBehaviour
     {
         _vc = GetComponent<CinemachineVirtualCamera>();
         _animator = GetComponent<Animator>();
-        //activateFlyBy = true;
     }
 
     // Update is called once per frame
@@ -28,11 +27,9 @@ public class CameraFlyBy : MonoBehaviour
             _animator.Play("FlyBy");
         }
 
-        //Debug.Log(Gamepad.all.Count>0);
         if (_vc.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition > maxFlyByPathPosition ||
             Keyboard.current.anyKey.isPressed || (Gamepad.all.Count>0 && Gamepad.current.allControls.Any()))
         {
-            //Debug.Log("Flyby Complete");
             activateFlyBy = false;
             _animator.StopPlayback();
         }

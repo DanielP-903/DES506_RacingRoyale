@@ -1,13 +1,14 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
+/// <summary>
+/// Handles the rotation of minimap ui elements
+/// </summary>
 public class UIElementRotator : MonoBehaviour
 {
     private GameObject _playerRef;
-    private bool _hasFoundPlayer = false;
+    private bool _hasFoundPlayer;
 
     private void Start()
     {
@@ -23,6 +24,9 @@ public class UIElementRotator : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// Wait for player to spawn then get a reference
+    /// </summary>
     IEnumerator WaitForPlayer()
     {
         yield return new WaitForSeconds(1);
@@ -30,7 +34,6 @@ public class UIElementRotator : MonoBehaviour
         GameObject[] listOfPlayers = GameObject.FindGameObjectsWithTag("Player");
         foreach (GameObject player in listOfPlayers)
         {
-            //Debug.Log("Player: " + player);
             if (!player.GetComponent<PhotonView>())
             {
                 continue;
@@ -39,7 +42,6 @@ public class UIElementRotator : MonoBehaviour
             if (player.GetComponent<PhotonView>().IsMine && !player.GetComponent<CarController>().bot)
             {
                 _playerRef = player;
-                //Debug.Log("Player Found");
                 _hasFoundPlayer = true;
             }
         }

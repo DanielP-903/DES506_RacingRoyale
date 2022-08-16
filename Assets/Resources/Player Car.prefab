@@ -10921,8 +10921,8 @@ MonoBehaviour:
   minimapArrow: {fileID: 5734101572443402741}
   checkpoints: {fileID: 0}
   flybyCam: {fileID: 0}
-  audioManager: {fileID: 73668218835031516}
   flybyDelay: 0.01
+  audioManager: {fileID: 73668218835031516}
   debug: 0
   bot: 0
 --- !u!95 &1118674505751619605
@@ -11077,6 +11077,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 133e7ad02d92a4549bfc56d24d948685, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speedLinesEffect: {fileID: 0}
+  dangerWallEffect: {fileID: 0}
   boostEffects:
   - {fileID: 4157513261080102409}
   - {fileID: 8091151771477942751}
@@ -11134,8 +11136,6 @@ MonoBehaviour:
   splitToningBalanceNew: 1
   maxWallDistanceAlert: 30
   boostPlaying: 0
-  _speedLinesEffect: {fileID: 0}
-  _dangerWallEffect: {fileID: 0}
 --- !u!114 &7146928805486338320
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11208,7 +11208,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f23f0e82a97aa2544a5ebf5b8b17025f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  carVFXHandler: {fileID: 9136986456273771787}
   playerPowerups: {fileID: 4753270344536567159}
 --- !u!114 &6714147465124506571
 MonoBehaviour:
@@ -92305,7 +92304,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af481200c0b47ab45bd58ca5559689f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerRef: {fileID: 0}
 --- !u!114 &3636215852468938975
 MonoBehaviour:
   m_ObjectHideFlags: 0

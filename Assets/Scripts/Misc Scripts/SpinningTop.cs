@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Handles the spinning top obstacle functionality
+/// </summary>
 public class SpinningTop : MonoBehaviour
 {
-    [SerializeField]
-    private List<GameObject> pathNodes = new List<GameObject>();
-   
-    [SerializeField]
-    private float speed;
+    [SerializeField] private List<GameObject> pathNodes = new List<GameObject>();
+    [SerializeField] private float speed;
     
     private Vector3 _currentNodePos;
     private float _currentRotation;

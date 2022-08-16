@@ -1,11 +1,16 @@
 #if UNITY_EDITOR
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+
+/// <summary>
+/// Editor script for the bezier curve creation tool
+/// </summary>
 [CustomEditor(typeof(BezierCurveGenerator))]
 public class BezierCurveGenerator_EDITOR : Editor
 {
+    /// <summary>
+    /// Define the inspector UI for the tool
+    /// </summary>
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
@@ -20,7 +25,6 @@ public class BezierCurveGenerator_EDITOR : Editor
         {
             generator.RemoveLastCurve();
         }
-        //EditorGUILayout.HelpBox("This is a help box", MessageType.Info);
     }
 }
 #endif

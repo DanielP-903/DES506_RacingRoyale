@@ -1,51 +1,40 @@
 using System.Collections;
-using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/// <summary>
+/// Player hud element functionality
+/// </summary>
 public class PlayerHUDController : MonoBehaviour
 {
-    public TextMeshProUGUI speedText;
-    public Slider boostSlider;
-    
-    
+    [SerializeField] private TextMeshProUGUI speedText;
+    [SerializeField] private Slider boostSlider;
+    private bool _hasFoundPlayer = false;
     private GameObject _playerRef;
     private CarController _carController;
     private Rigidbody _rigidbodyRef;
-    
-    private bool hasFoundPlayer = false;
 
     [HideInInspector] public float currentSpeed = 0.0f;
+    
     // Start is called before the first frame update
     void Start()
     {
-        hasFoundPlayer = false;
+        _hasFoundPlayer = false;
         StartCoroutine(waitTime());
-        /*GameObject[] listOfPlayers = GameObject.FindGameObjectsWithTag("Player");
-        foreach (GameObject player in listOfPlayers)
-        {
-            Debug.Log("Player: " + player);
-            if (player.GetComponent<PhotonView>().IsMine)
-            {
-                _playerRef = player;
-                Debug.Log("Player Found");
-            }
-        }
-        //_playerRef = GameObject.FindGameObjectWithTag("Player");
-        _carController = _playerRef.GetComponent<CarController>();
-        _rigidbodyRef = _carController.GetComponent<Rigidbody>();*/
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (hasFoundPlayer && _playerRef)
+        if (_hasFoundPlayer && _playerRef)
         {
+            // Update MPH text
             currentSpeed = (Mathf.Round(_rigidbodyRef.velocity.magnitude * 2.2369362912f));
             speedText.text = currentSpeed.ToString();
 
+            // Update boost meter
             if (_carController.GetNoOfBoostsLeft() == 0)
             {
                 boostSlider.value = 0;
@@ -57,7 +46,10 @@ public class PlayerHUDController : MonoBehaviour
         }
         
     }
-
+    
+    /// <summary>
+    /// Wait for player to spawn then get a reference
+    /// </summary>
     IEnumerator waitTime()
     {
         yield return new WaitForSeconds(1);
@@ -75,7 +67,7 @@ public class PlayerHUDController : MonoBehaviour
             {
                 _playerRef = player;
                 //Debug.Log("Player Found");
-                hasFoundPlayer = true;
+                _hasFoundPlayer = true;
             }
         }
         
