@@ -3,21 +3,21 @@ using Cinemachine;
 using Photon.Pun;
 using UnityEngine;
 
+/// <summary>
+/// Handles camera shaking when player falls from a great height
+/// </summary>
 public class CameraShake : MonoBehaviour
 {
     private GameObject _target;
     private Rigidbody _rb;
     private CarController _cc;
-
-
     private CinemachineVirtualCamera _virtualCamera;
     private CinemachineBasicMultiChannelPerlin _noiseSettings;
 
     private float _shakeTimer;
     private float _shakeTime;
     private float _intensity;
-
-    private bool _hasFoundPlayer = false;
+    private bool _hasFoundPlayer;
 
     private void Start()
     {
@@ -47,12 +47,14 @@ public class CameraShake : MonoBehaviour
                 _noiseSettings.m_AmplitudeGain = 0;
             }
 
+            // Apply camera shake
             _noiseSettings.m_AmplitudeGain = Mathf.Clamp(_noiseSettings.m_AmplitudeGain, 0, 1);
         }
     }
 
-
-
+    /// <summary>
+    /// Wait for player to spawn then get a reference
+    /// </summary>
     IEnumerator WaitForPlayer()
     {
         yield return new WaitForSeconds(1);
@@ -60,7 +62,6 @@ public class CameraShake : MonoBehaviour
         GameObject[] listOfPlayers = GameObject.FindGameObjectsWithTag("Player");
         foreach (GameObject player in listOfPlayers)
         {
-            //Debug.Log("Player: " + player);
             if (!player.GetComponent<PhotonView>())
             {
                 continue;
@@ -69,7 +70,6 @@ public class CameraShake : MonoBehaviour
             if (player.GetComponent<PhotonView>().IsMine && !player.GetComponent<CarController>().bot)
             {
                 _target = player;
-                //Debug.Log("Player Found");
                 _hasFoundPlayer = true;
             }
         }

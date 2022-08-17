@@ -12,6 +12,9 @@ using UnityEngine.VFX;
 using ChromaticAberration = UnityEngine.Rendering.Universal.ChromaticAberration;
 using Vignette = UnityEngine.Rendering.Universal.Vignette;
 
+/// <summary>
+/// Handles the all game vfx
+/// </summary>
 public class CarVFXHandler : MonoBehaviour
 {
     [Header("Camera VFX")]
@@ -94,8 +97,10 @@ public class CarVFXHandler : MonoBehaviour
     private VolumeProfile _profile;
     
     #region VFX-Activation
-
-    // Regular boost FX activation
+    
+    /// <summary>
+    /// Regular boost FX activation
+    /// </summary>
     public IEnumerator ActivateBoostEffect()
     {
         foreach (var effect in boostEffects)
@@ -114,8 +119,10 @@ public class CarVFXHandler : MonoBehaviour
             effect.Stop();
         }
     }
-
-    // Super boost FX
+    
+    /// <summary>
+    /// Play super boost FX
+    /// </summary>
     public void PlaySuperBoostEffectAlt()
     {
         foreach (var effect in superBoostEffects)
@@ -123,6 +130,10 @@ public class CarVFXHandler : MonoBehaviour
             effect.Play();
         }
     }
+    
+    /// <summary>
+    /// Stop super boost FX
+    /// </summary>
     public void StopSuperBoostEffect()
     {
         foreach (var effect in superBoostEffects)
@@ -131,7 +142,11 @@ public class CarVFXHandler : MonoBehaviour
         }
     }
     
-    // Play a VFX by name
+    /// <summary>
+    /// Play a VFX by name
+    /// </summary>
+    /// <param name="vfxName">Name of the vfx to play </param>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
     public void PlayVFX(string vfxName)
     {
         if (_carController)
@@ -192,7 +207,13 @@ public class CarVFXHandler : MonoBehaviour
         }
     }
 
-    // Retrieve a given VFX index by name
+    
+    /// <summary>
+    /// Retrieve a given VFX index by name
+    /// </summary>
+    /// <param name="vfxName">Name of the vfx to retrieve the index</param>
+    /// <returns>Index given to the vfx</returns>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
     private int GetVFXIndex(string vfxName)
     {
         return vfxName switch
@@ -213,7 +234,10 @@ public class CarVFXHandler : MonoBehaviour
             _ => throw new ArgumentOutOfRangeException()
         };
     }
-
+    
+    /// <summary>
+    /// Stops all drifting effects
+    /// </summary>
     public void StopDriftEffects()
     {
         foreach (var effect in driftSmokeEffects)
@@ -222,14 +246,25 @@ public class CarVFXHandler : MonoBehaviour
         }
     }
     
-    // Play an effect using the attached impactEffectObject using a given position
+    /// <summary>
+    /// Play an effect using the attached impactEffectObject using a given position
+    /// </summary>
+    /// <param name="vfxName">Name of the vfx to play</param>
+    /// <param name="pos">Position to play it at</param>
     public void PlayVFXAtPosition(string vfxName, Vector3 pos)
     {
         impactEffectObject.transform.position = pos;
         PlayVFX(vfxName);
     }
-
-    // Spawn an object which plays a given VFX (by name) at a defined position and scale (can also use billboarding for 2D effects)
+    
+    /// <summary>
+    /// Spawn an object which plays a given VFX (by name) at a defined position and scale
+    /// (can also use bill-boarding for 2D effects)
+    /// </summary>
+    /// <param name="vfxName">Name of the vfx to spawn</param>
+    /// <param name="pos">Position to spawn it at</param>
+    /// <param name="scaleFactor">Scale factor of the spawned object</param>
+    /// <param name="isBillboard">Whether or not the effect should be a billboard (always face the camera)</param>
     public void SpawnVFXAtPosition(string vfxName, Vector3 pos, float scaleFactor, bool isBillboard)
     {
         GameObject newSpawn = Instantiate(impactEffectPrefab, pos, Quaternion.identity);
@@ -363,7 +398,9 @@ public class CarVFXHandler : MonoBehaviour
         UpdateCameraProfile();
     }
 
-    // System for lerping between two different camera profiles (in the zone vs outside the zone)
+    /// <summary>
+    /// System for lerping between two different camera profiles (in the zone vs outside the zone)
+    /// </summary>
     private void UpdateCameraProfile()
     {
         _vignetteColourCurrent = Color.Lerp(_vignetteColourCurrent, _inZone ? vignetteColourNew : vignetteColourOld , Time.deltaTime);
@@ -406,7 +443,9 @@ public class CarVFXHandler : MonoBehaviour
         }
     }
 
-    // Reset camera profile to outside the zone profile
+    /// <summary>
+    /// Reset camera profile to outside the zone profile
+    /// </summary>
     private void ResetCameraProfile()
     {
         if (_profile.TryGet<Vignette>(out var vign))
@@ -452,19 +491,32 @@ public class CarVFXHandler : MonoBehaviour
         speedLinesEffect.SetVector2("Alpha Values", _newAlpha);
     }
     
-    // Toggle activation of punching glove and grappling hook outlines
+    /// <summary>
+    /// Toggle activation of punching glove outline
+    /// </summary>
+    /// <param name="active">Whether or not the outline should be turned on</param>
+    /// <param name="target">Target object (another car) to turn the outline on/off</param>
     public void SetOutlineActive(bool active, GameObject target)
     {
         _outlineObject.GetComponent<MeshFilter>().sharedMesh = target.transform.Find("Outline Punch").GetComponent<MeshFilter>().sharedMesh;
         _outlineObject.SetActive(active);
     }
+    
+    /// <summary>
+    /// Toggle activation of grappling hook outline
+    /// </summary>
+    /// <param name="active">Whether or not the outline should be turned on</param>
+    /// <param name="target">Target object (another car) to turn the outline on/off</param>
     public void SetGrappleOutlineActive(bool active, GameObject target)
     {
         _outlineObjectGrapple.GetComponent<MeshFilter>().sharedMesh = target.transform.Find("Outline Grapple").GetComponent<MeshFilter>().sharedMesh;
         _outlineObjectGrapple.SetActive(active);
     }
     
-    // For post-processing profiles
+    /// <summary>
+    /// For post-processing profiles when transitioning to in the monster's sphere vs without
+    /// </summary>
+    /// <param name="isInZone">Whether or not the player is currently within the monster's sphere</param>
     public void SetInZone(bool isInZone)
     {
         _inZone = isInZone;
