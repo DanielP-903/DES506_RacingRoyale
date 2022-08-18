@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
+/// <summary>
+/// Sets initial movement of the beachball and resets it if it's too low or hits a reset zone.
+/// </summary>
 public class BeachBall : MonoBehaviour
 {
     [SerializeField] private float startForce = 35;
@@ -11,7 +14,9 @@ public class BeachBall : MonoBehaviour
     private Rigidbody rb;
     private PhotonView pv;
     
-    // Start is called before the first frame update
+    /// <summary>
+    /// Beachball initialisation upon start
+    /// </summary>
     void Start()
     {
         startPos = transform.position;
@@ -24,7 +29,9 @@ public class BeachBall : MonoBehaviour
         GoToSpawn();
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// If the beachball is below 20, reset to spawn
+    /// </summary>
     void Update()
     {
         if (transform.position.y < 20)
@@ -33,6 +40,9 @@ public class BeachBall : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// On touching a reset zone, reset to spawn
+    /// </summary>
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "ResetZone")
@@ -41,6 +51,9 @@ public class BeachBall : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Set beachball at it's initial spawn location and add a force to it to get it spinning
+    /// </summary>
     private void GoToSpawn()
     {
         transform.position = startPos;

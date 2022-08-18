@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class ChangingTrack : MonoBehaviour
 {
-    // Start is called before the first frame update
+    /// <summary>
+    /// Initialisation of random track upon start
+    /// </summary>
     void Start()
     {
         int version = Random.Range(0, 3);
@@ -27,8 +29,5 @@ public class ChangingTrack : MonoBehaviour
 
             }
         }
-
-
     }
-
 }

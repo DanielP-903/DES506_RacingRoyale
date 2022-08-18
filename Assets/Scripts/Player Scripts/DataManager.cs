@@ -8,7 +8,10 @@ public class DataManager : MonoBehaviour
 
     private static GameObject instance;
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// Initiliase this data manager as an instance if one doesn't already exist or destroy self
+    /// </summary>
+    /// <returns></returns>
     void Start()
     {
         if (!instance)
@@ -22,11 +25,19 @@ public class DataManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Get the stored array of meshes
+    /// </summary>
+    /// <returns>Array of meshes</returns>
     public Mesh[] GetMesh()
     {
         return meshArray;
     }
 
+    /// <summary>
+    /// Get the stored array of materials
+    /// </summary>
+    /// <returns>Array of materials</returns>
     public Material[] GetMats()
     {
         return matArray;

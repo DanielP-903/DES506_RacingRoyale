@@ -13,7 +13,7 @@ public class PlayerManager : MonoBehaviour
 
     // COMPONENTS, INTS AND BOOLS
 
-    #region Private Variables
+    #region Non-Serializable Variables
 
     private PhotonView _photonView;
     private CarController _cc;
@@ -54,10 +54,16 @@ public class PlayerManager : MonoBehaviour
 
     #endregion
 
-    // PRIVATE METHODS: START, LOAD, UPDATE
+    // PRIVATE METHODS
 
     #region Private Methods
 
+    /// <summary>
+    /// Attempt to get the number of total ready players for a stage
+    /// </summary>
+    /// <param name="readyPlayers">Out number of ready players</param>
+    /// <param name="stageNum">Number of stage</param>
+    /// <returns>True if found, false if not</returns>
     public static bool TryGetReadyPlayers(out int readyPlayers, int stageNum)
     {
         readyPlayers = 0;
@@ -75,6 +81,12 @@ public class PlayerManager : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Set the number of total ready players for a stage
+    /// </summary>
+    /// <param name="num">Number of ready players to be set</param>
+    /// <param name="stageNum">Number of stage</param>
+    /// <returns></returns>
     public static void SetReadyPlayers(int num, int stageNum)
     {
         int readyPlayers;
@@ -99,6 +111,13 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Attempt to get if a player is ready at a certain stage
+    /// </summary>
+    /// <param name="readyPlayer">Out true if player is ready</param>
+    /// <param name="stageNum">Number of stage</param>
+    /// <param name="player">Player to be checked</param>
+    /// <returns>True if found, false if not</returns>
     public static bool TryGetReadyPlayer(out bool readyPlayer, int stageNum, Player player)
     {
         readyPlayer = false;
@@ -115,6 +134,13 @@ public class PlayerManager : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Set if a player is ready at a certain stage
+    /// </summary>
+    /// <param name="readyPlayer">Readiness of player</param>
+    /// <param name="stageNum">Number of stage</param>
+    /// <param name="player">Player to be set</param>
+    /// <returns></returns>
     public static void SetReadyPlayer(bool setReady, int stageNum)
     {
         bool readyPlayer;
@@ -151,6 +177,10 @@ public class PlayerManager : MonoBehaviour
                   " NewValue: " + readyPlayer + " , wasSet2: " + wasSet2 + " Player: " + PhotonNetwork.LocalPlayer);
     }
 
+    /// <summary>
+    /// Initialise basics of Player Manager during start occuring in waiting area
+    /// </summary>
+    /// <returns></returns>
     void Start()
     {
         if (debugMode)
@@ -287,9 +317,11 @@ public class PlayerManager : MonoBehaviour
         //StartCoroutine(TestScript());
         //playerNumber = _gm.GetPlayerNumber();
     }
-
-
     
+    /// <summary>
+    /// Every frame, check for relevant game checks
+    /// </summary>
+    /// <returns></returns>
     void Update()
     {
         if (transform.position.y < -5 && _photonView.IsMine)
@@ -315,11 +347,19 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Initialise basics upon level loaded for Player Manager
+    /// </summary>
+    /// <returns></returns>
     void OnLevelWasLoaded()
     {
         SetUp();
     }
 
+    /// <summary>
+    /// Setup basics of the Player Manager
+    /// </summary>
+    /// <returns></returns>
     public void SetUp()
     {
         //Debug.Log("PlayerManger Loading Level");
@@ -393,20 +433,33 @@ public class PlayerManager : MonoBehaviour
 
     #endregion
 
-    // PUBLIC METHODS: SETNAME, GETPLAYERNUM, GOTOSPAWN, CHANGESPAWN, COMPLETESTAGE, ELIMPLAYER
+    // PUBLIC METHODS
 
     #region Public Methods
 
+    /// <summary>
+    /// Returns the Local Player's Position in Room's Player List
+    /// </summary>
+    /// <returns>Local Player's Position in Room's Player List</returns>
     public int GetPlayerNumber()
     {
         return playerNumber;
     }
 
+    /// <summary>
+    /// Returns if the local player has completed the stage
+    /// </summary>
+    /// <returns>True if completed in current stage</returns>
     public bool GetCompleted()
     {
         return completedStage;
     }
 
+    /// <summary>
+    /// Resets the local player to it's spawn location
+    /// </summary>
+    /// <param name="pressedButton">Whether or not this was called via button press</param>
+    /// <returns></returns>
     public void GoToSpawn(bool pressedButton = false)
     {
         if (pressedButton && _spawnLocation && !_spawnLocation.name.Contains("SpawnLocation") &&
@@ -451,16 +504,29 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Returns the spawn location of the local player
+    /// </summary>
+    /// <returns>Transform of the local player's spawn</returns>
     public Transform GetSpawnLocation()
     {
         return _spawnLocation;
     }
 
+    /// <summary>
+    /// Sets the current player's spawn location
+    /// </summary>
+    /// <param name="newSpawn">The new spawn location's transform</param>
+    /// <returns></returns>
     public void ChangeSpawnLocation(Transform newSpawn)
     {
         _spawnLocation = newSpawn;
     }
 
+    /// <summary>
+    /// Alerts the Player Manager that a checkpoint has been passed
+    /// </summary>
+    /// <returns></returns>
     public void PassCheckpoint()
     {
         if (!debugMode)
@@ -490,6 +556,10 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Alerts the Player Manager and Game Manager that the finish point has been passed
+    /// </summary>
+    /// <returns></returns>
     public void CompleteStage()
     {
         if (!completedStage && !eliminated)
@@ -522,11 +592,19 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Returns whether the current player has been eliminated
+    /// </summary>
+    /// <returns>True if player has been eliminated</returns>
     public bool IsEliminated()
     {
         return eliminated;
     }
     
+    /// <summary>
+    /// Alerts the Player Manager and Game Manager that the local player has been eliminated and deletes the player object
+    /// </summary>
+    /// <returns></returns>
     public void EliminateCurrentPlayer()
     {
         if (!completedStage && !eliminated)
@@ -575,12 +653,20 @@ public class PlayerManager : MonoBehaviour
 
     #region RPCs
 
+    /// <summary>
+    /// Starts the delay timer coroutine
+    /// </summary>
+    /// <returns></returns>
     [PunRPC]
     void startDelayTimer()
     {
         StartCoroutine(countdownTimer());
     }
 
+    /// <summary>
+    /// Changes the timer cubes and the control of the player based on the timer and whether or not all players are ready
+    /// </summary>
+    /// <returns></returns>
     IEnumerator countdownTimer()
     {
         if (SceneManager.GetActiveScene().name != "WaitingArea" && _photonView.IsMine)
@@ -729,6 +815,10 @@ public class PlayerManager : MonoBehaviour
 
     #region TimedScripts
 
+    /// <summary>
+    /// Causes any alerts to fade
+    /// </summary>
+    /// <returns></returns>
     IEnumerator fadeMessage()
     {
         while (_messageText.color.a < 0)

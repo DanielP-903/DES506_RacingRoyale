@@ -83,7 +83,15 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
     #endregion
 
 
+    // --- METHODS ---
+    // THIS SECTION IS FOR CALLS TO DO WITH CONNECTING AND DISCONNECTING
+    
     #region ServerEventSystem
+    /// <summary>
+    /// Send a string to all player's messageboxes via a rasied event
+    /// </summary>
+    /// <param name="dataToBeSent">A string to be sent to each player's messagebox</param>
+    /// <returns></returns>
     public void sendData(string dataToBeSent)
     {
         string content = dataToBeSent; 
@@ -92,11 +100,21 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         Debug.Log("Raised Event");
     }
 
+    /// <summary>
+    /// Send a string to the current player's message box
+    /// </summary>
+    /// <param name="text">A string to be sent to the current player's messagebox</param>
+    /// <returns></returns>
     public void sendComment(string text)
     {
         _mb.sendText(text);
     }
     
+    /// <summary>
+    /// Upon receiving a raised event, decide whether the code is 1, if so send the data of the event to the current player's messagebox
+    /// </summary>
+    /// <param name="photonEvent">Event data contained in the received raised event</param>
+    /// <returns></returns>
     public void OnEvent(EventData photonEvent)
     {
         byte eventCode = photonEvent.Code;
@@ -110,19 +128,21 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     #endregion
 
-    // --- METHODS ---
-    // THIS SECTION IS FOR CALLS TO DO WITH CONNECTING AND DISCONNECTING
-
     #region Photon Callbacks
 
     /// <summary>
-    /// Called when the local player left the room. We need to load the launcher scene.
+    /// Called when the local player left the room. Loads the main menu launcher.
     /// </summary>
     public override void OnLeftRoom()
     {
         SceneManager.LoadScene(0);
     }
 
+    /// <summary>
+    /// Called when a player joins the room, if master client, remove a bot and alert other players
+    /// </summary>
+    /// <param name="other">The player who has joined</param>
+    /// <returns></returns>
     public override void OnPlayerEnteredRoom(Player other)
     {
         //Debug.LogFormat("OnPlayerEnteredRoom() {0}", other.NickName); // not seen if you're the player connecting
@@ -142,6 +162,11 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         }
     }
 
+    /// <summary>
+    /// Called when a player leaves the room, if master client, alert other players
+    /// </summary>
+    /// <param name="other">The player who has left</param>
+    /// <returns></returns>
     public override void OnPlayerLeftRoom(Player other)
     {
         //Debug.LogFormat("OnPlayerLeftRoom() {0}", other.NickName); // seen when other disconnects
@@ -158,6 +183,12 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         }
     }
 
+    /// <summary>
+    /// Called when a player's properties are changed, if eliminated or completed and being spectated, cause current player to spectate another
+    /// </summary>
+    /// <param name="targetPlayer">The player who has had their properties changed</param>
+    /// <param name="hashtable">The hashtable containing the changed properties</param>
+    /// <returns></returns>
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable hashtable)
     {
         if ((_eliminated || _completed) 
@@ -173,10 +204,14 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     #endregion
 
-    // PUBLIC METHODS: LEAVE, GETPLAYERNUM, SETPLAYERNUM, RETURNPLAYERNUM, ELIMPLAYER, GETTOTAL, GETSTAGE
+    // PUBLIC METHODS
 
     #region Public Methods
 
+    /// <summary>
+    /// Eliminates the player and returns them to the main menu
+    /// </summary>
+    /// <returns></returns>
     public void LeaveRoom()
     {
         //Debug.Log("Player: "+_photonView.Owner.NickName + " Eliminated.");
@@ -211,11 +246,19 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         GameObject.Find("FadeScreen").GetComponent<fadeScreen>().quitFade();
     }
 
+    /// <summary>
+    /// Sets the delay timer to 3 seconds
+    /// </summary>
+    /// <returns></returns>
     public void SetDelayTimer()
     {
         startDelay = 3.0f;
     }
 
+    /// <summary>
+    /// Returns the Local Player's Position in Room's Player List
+    /// </summary>
+    /// <returns>Local Player's Position in Room's Player List</returns>
     public int GetPlayerNumber()
     {
         int counter = 1;
@@ -234,11 +277,20 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         return counter;
     }
 
+    /// <summary>
+    /// Sets the waiting time in the waiting room
+    /// </summary>
+    /// <param name="time">Time in seconds</param>
+    /// <returns></returns>
     public void SetWaitingTimer(float time)
     {
         waitingTime = time;
     }
 
+    /// <summary>
+    /// Set local player's player number to it's current actor number
+    /// </summary>
+    /// <returns>The number it was set to</returns>
     public int setPlayerNumber()
     {
         int counter = 1;
@@ -255,11 +307,20 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         return counter;
     }
 
+    /// <summary>
+    /// Returns local player's player number
+    /// </summary>
+    /// <returns>Local player's player number</returns>
     public int ReturnPlayerNumber()
     {
         return _playerNumber;
     }
 
+    /// <summary>
+    /// Eliminates the player and causes them to spectate
+    /// </summary>
+    /// <param name="elimPos">Position player was eliminated at</param>
+    /// <returns></returns>
     public void EliminatePlayer(int elimPos)
     {
         _elimPositon = elimPos;
@@ -268,6 +329,10 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         Spectate();
     }
 
+    /// <summary>
+    /// Sets player to having completed the stage and spectate
+    /// </summary>
+    /// <returns></returns>
     public void CompletePlayer()
     {
         _completed = true;
@@ -285,21 +350,38 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         _photonView.gameObject.transform.position = new Vector3(1000,1000,1000);
     }
 
+    /// <summary>
+    /// Gets the room's total players at the start of stage 1
+    /// </summary>
+    /// <returns>Number of players at starting of the game</returns>
     public int GetTotalPlayers()
     {
         return _totalPlayers;
     }
 
+    /// <summary>
+    /// Get the current stage number
+    /// </summary>
+    /// <returns>The current stage number</returns>
     public int GetStageNum()
     {
         return _stage;
     }
 
+    /// <summary>
+    /// Get the start delay
+    /// </summary>
+    /// <returns>The start delay</returns>
     public float GetStartDelay()
     {
         return startDelay;
     }
 
+    /// <summary>
+    /// Establishes the spectate menu
+    /// </summary>
+    /// <param name="newMenu">Spectate menu to be established</param>
+    /// <returns></returns>
     public void SetSpectateMenu(GameObject newMenu)
     {
         spectateMenu = newMenu;
@@ -309,8 +391,11 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         }
     }
     
-    
-
+    /// <summary>
+    /// Change to next or previous spectate target
+    /// </summary>
+    /// <param name="next">When next is true, change to next spectate target, otherwise change to previous target</param>
+    /// <returns></returns>
     public void ChangeSpectateTarget(bool next = true)
     {
         spectateMenu  = GameObject.Find("SpectateButtons");
@@ -410,11 +495,19 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         }
     }
 
+    /// <summary>
+    /// Increases total bots by 1
+    /// </summary>
+    /// <returns></returns>
     public void IncreaseBotNum()
     {
         _totalBots++;
     }
 
+    /// <summary>
+    /// Return current bot num and increase total bots by 1
+    /// </summary>
+    /// <returns>Current number of bots</returns>
     public int GetBotNum()
     {
         _totalBots++;
@@ -423,10 +516,16 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     #endregion
 
-    // CUSTOM PROPS METHODS: GET/SET ELIM, TOP3 AND FINISHED
+    // CUSTOM PROPS METHODS
 
     #region Custom Property Methods
 
+    /// <summary>
+    /// Attempt to get a player name string in the top 3 via position number
+    /// </summary>
+    /// <param name="top3Players">String to out the name of the player</param>
+    /// <param name="posNum">Position of player from 1-3</param>
+    /// <returns>True if found, false if not</returns>
     public static bool TryGetTop3Players(out string top3Players, int posNum)
     {
         top3Players = "";
@@ -441,6 +540,12 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         return false;
     }
 
+    /// <summary>
+    /// Set a player name string to be in the top 3 via position number
+    /// </summary>
+    /// <param name="top3">String to out the name of the player</param>
+    /// <param name="posNum">Position of player from 1-3</param>
+    /// <returns></returns>
     public static void SetTop3Players(string top3, int posNum)
     {
         string top3Players;
@@ -456,6 +561,12 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         //Debug.Log("Set Custom Props for Top 3 Players: "+ props.ToStringFull() + " wasSet: "+wasSet+" NewValue: "+top3Players);
     }
 
+    /// <summary>
+    /// Attempt to get a player in the top 4 via position number
+    /// </summary>
+    /// <param name="player">Player to out the player data</param>
+    /// <param name="posNum">Position of player from 1-4</param>
+    /// <returns>True if found, false if not</returns>
     public static bool TryGetTopPlayers(out Player player, int posNum)
     {
         object topPlayersFromProps;
@@ -469,6 +580,12 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         return false;
     }
 
+    /// <summary>
+    /// ASet a player in the top 4 via position number
+    /// </summary>
+    /// <param name="player">Player to out the player data</param>
+    /// <param name="posNum">Position of player from 1-4</param>
+    /// <returns></returns>
     public static void SetTopPlayers(Player player, int posNum)
     {
         Player topPlayer;
@@ -484,6 +601,12 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         //Debug.Log("Set Custom Props for Top 3 Players: "+ props.ToStringFull() + " wasSet: "+wasSet+" NewValue: "+top3Players);
     }
 
+    /// <summary>
+    /// Attempt to get the number of total finished players for a stage
+    /// </summary>
+    /// <param name="finishedPlayers">Out number of finished players</param>
+    /// <param name="stageNum">Number of stage</param>
+    /// <returns>True if found, false if not</returns>
     public static bool TryGetFinishedPlayers(out int finishedPlayers, int stageNum)
     {
         finishedPlayers = 0;
@@ -507,6 +630,12 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         return false;
     }
 
+    /// <summary>
+    /// Set the number of total finished players for a stage
+    /// </summary>
+    /// <param name="num">Number of finished players to be set</param>
+    /// <param name="stageNum">Number of stage</param>
+    /// <returns></returns>
     public static void SetFinishedPlayers(int num, int stageNum)
     {
         int finishedPlayers;
@@ -522,7 +651,11 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         //Debug.Log("Set Custom Props for Finished Players: "+ props.ToStringFull() + " wasSet: "+wasSet+" NewValue: "+finishedPlayers + " , wasSet2: " + wasSet2);
     }
 
-
+    /// <summary>
+    /// Attempt to get the number of total eliminated players
+    /// </summary>
+    /// <param name="elimPlayers">Out number of eliminated players</param>
+    /// <returns>True if found, false if not</returns>
     public static bool TryGetElimPlayers(out int elimPlayers)
     {
         elimPlayers = 0;
@@ -545,6 +678,11 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         return false;
     }
 
+    /// <summary>
+    /// Set the number of total eliminated players
+    /// </summary>
+    /// <param name="num">Number of eliminated players to be set</param>
+    /// <returns></returns>
     public static void SetElimPlayers(int num)
     {
         int elimPlayers = 0;
@@ -562,10 +700,14 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     #endregion
 
-    // PRIVATE METHODS: SPECTATE, LOADARENA, LOADPLAYER, START, UPDATE
+    // PRIVATE METHODS
 
     #region Private Methods
 
+    /// <summary>
+    /// Find spectate targets and set one at random to be the current spectate target for local player
+    /// </summary>
+    /// <returns></returns>
     void Spectate()
     {
         if (spectateMenu == null)
@@ -662,11 +804,21 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         }
     }
 
+    /// <summary>
+    /// Loads new level after 5 seconds via coroutine
+    /// </summary>
+    /// <param name="aernaName">Name of new scene to be loaded</param>
+    /// <returns></returns>
     void LoadArena(string arenaName)
     {
         StartCoroutine(loadingArena(arenaName));
     }
 
+    /// <summary>
+    /// Coroutine to load new level after 5 seconds and tells all to fade out
+    /// </summary>
+    /// <param name="num">Number of finished players to be set</param>
+    /// <returns></returns>
     IEnumerator loadingArena(string arenaName)
     {
         yield return new WaitForSeconds(5f);
@@ -683,6 +835,10 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         }
     }
 
+    /// <summary>
+    /// Initialise basics of Game Manager during start occuring in waiting area
+    /// </summary>
+    /// <returns></returns>
     private void Start()
     {
         //Debug.Log("Running!");
@@ -759,16 +915,28 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         }
     }
 
+    /// <summary>
+    /// Get an array of stored bots
+    /// </summary>
+    /// <returns>Array of stored bots</returns>
     public GameObject[] GetBots()
     {
         return botsStored;
     }
 
+    /// <summary>
+    /// Get the number of max bots allowed
+    /// </summary>
+    /// <returns>Number of max bots allowed</returns>
     public int GetMaxBots()
     {
         return maxBots;
     }
     
+    /// <summary>
+    /// Initialise basics upon level loaded for Game Manager
+    /// </summary>
+    /// <returns></returns>
     void OnLevelWasLoaded()
     {
         if (SceneManager.GetActiveScene().name != "WaitingArea")
@@ -786,6 +954,11 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         }
     }
     
+    /// <summary>
+    /// On disconnecting, set reason for disconnecting to timeout
+    /// </summary>
+    /// <param name="cause">Reason for disconnection</param>
+    /// <returns></returns>
     void OnDisconnected(DisconnectCause cause)
     {
         connection.cause = "timeout";
@@ -915,6 +1088,10 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
     }
 }*/
 
+    /// <summary>
+    /// Setup basics of the level
+    /// </summary>
+    /// <returns></returns>
     void SetUp()
     {
         /*foreach (AudioListener al in FindObjectsOfType<AudioListener>())
@@ -1097,6 +1274,10 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         inputSystem = GameObject.Find("Canvas").transform.Find("InputSystem").gameObject;
     }
     
+    /// <summary>
+    /// Every frame, check for relevant game checks
+    /// </summary>
+    /// <returns></returns>
     private void Update()
     {
         if (_eliminated && inputSystem && !inputSystem.activeInHierarchy)
@@ -1373,7 +1554,10 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     #region IEnumerators
 
-
+    /// <summary>
+    /// Set the timer for the cubes to disappear and update their time
+    /// </summary>
+    /// <returns></returns>
     IEnumerator setLevelTimer()
     {
         int counter = 0;
@@ -1501,7 +1685,12 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
     }*/
 
     #endregion
-    // Escape
+    
+    /// <summary>
+    /// If input system detects escape being pressed, open or close pause menu contextually
+    /// </summary>
+    /// <param name="context">Input Context for when the button is pressed</param>
+    /// <returns></returns>
     public void Escape(InputAction.CallbackContext context)
     {
         float value = context.ReadValue<float>();
