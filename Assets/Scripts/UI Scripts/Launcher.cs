@@ -9,6 +9,10 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
+/// <summary>
+/// Controls connecting to servers as well as Main Menu UI elements
+/// </summary>
+/// <returns></returns>
 public class Launcher : MonoBehaviourPunCallbacks
     {
         // --- VARS ---
@@ -274,6 +278,7 @@ public class Launcher : MonoBehaviourPunCallbacks
             Application.Quit();
         }
         
+        // GO TO OPTIONS MENU
         public void GoToOptions()
         {
             progressPanel.SetActive(false);
@@ -286,6 +291,7 @@ public class Launcher : MonoBehaviourPunCallbacks
             EventSystem.current.SetSelectedGameObject(optionsPanel.transform.GetChild(5).gameObject);
         }
 
+        // GO TO CONTROLS MENU
         public void GoToControls()
         {
             progressPanel.SetActive(false);
@@ -297,6 +303,8 @@ public class Launcher : MonoBehaviourPunCallbacks
             EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(controlsPanel.transform.GetChild(6).gameObject);
         }
+        
+        // GO TO CREDITS MENU
         public void GoToCredits()
         {
             progressPanel.SetActive(false);
@@ -309,6 +317,7 @@ public class Launcher : MonoBehaviourPunCallbacks
             EventSystem.current.SetSelectedGameObject(creditsPanel.transform.GetChild(4).gameObject);
         }
 
+        // GO BACK TO MAIN MENU
         public void GoBackToMenu()
         {
             progressPanel.SetActive(false);
@@ -321,6 +330,7 @@ public class Launcher : MonoBehaviourPunCallbacks
             EventSystem.current.SetSelectedGameObject(controlPanel.transform.GetChild(1).GetChild(1).gameObject);
         }
 
+        // APPLY GRAPHICAL SETTINGS
         public void ApplyGraphics()
         {
             //Screen.fullScreen = fullScreen.isOn;
@@ -361,23 +371,27 @@ public class Launcher : MonoBehaviourPunCallbacks
             }
         }
 
+        // CHANGE CONNECTION CAUSE BASED ON HOW PREVIOUS DISCONNECT OCCURED
         public void ChangeConnectionCause(string cause)
         {
             connection.cause = cause;
         }
 
+        // CHANGE MASTER GROUP MIXER VOLUME
         public void ChangeMaster(float newVol)
         {
             PlayerPrefs.SetFloat("MasterVol", newVol);
             mixer.SetFloat("Master", newVol);
         }
         
+        // CHANGE MUSIC GROUP MIXER VOLUME
         public void ChangeMusic(float newVol)
         {
             PlayerPrefs.SetFloat("MusicVol", newVol);
             mixer.SetFloat("Music", newVol);
         }
         
+        // CHANGE SOUND GROUP MIXER VOLUME
         public void ChangeSound(float newVol)
         {
             PlayerPrefs.SetFloat("SoundVol", newVol);
@@ -385,6 +399,8 @@ public class Launcher : MonoBehaviourPunCallbacks
         }
 
         #endregion
+        
+        // UPDATE LOADING BAR BASED ON LEVEL LOADED PERCENTAGE
         IEnumerator LoadingBar() 
         {
             while (PhotonNetwork.LevelLoadingProgress < 1.0f)
