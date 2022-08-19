@@ -429,6 +429,7 @@ public class CarVFXHandler : MonoBehaviour
         
         if (_profile.TryGet<ColorAdjustments>(out var colo))
         {
+            colo.active = true;
             colo.postExposure.value = _colourAdjustmentsPostExposureCurrent;
             colo.colorFilter.value = _colourAdjustmentsColourFilterCurrent;
             colo.hueShift.value = _colourAdjustmentsPostExposureCurrent;
@@ -462,12 +463,14 @@ public class CarVFXHandler : MonoBehaviour
         
         if (_profile.TryGet<ColorAdjustments>(out var colo))
         {
-            colo.postExposure.value = colourAdjustmentsPostExposureOld;
-            colo.colorFilter.value = colourAdjustmentsColourFilterOld;
-            colo.hueShift.value = colourAdjustmentsHueShiftOld;
-            colo.saturation.value = colourAdjustmentsSaturationOld;
-        }
-        
+            colo.active = false;
+            //     colo.postExposure.value = colourAdjustmentsPostExposureOld;
+            //     colo.colorFilter.value = colourAdjustmentsColourFilterOld;
+            //     colo.hueShift.value = colourAdjustmentsHueShiftOld;
+            //     colo.saturation.value = colourAdjustmentsSaturationOld;
+        } 
+            
+            
         if (_profile.TryGet<SplitToning>(out var split))
         {
             split.shadows.value = splitToningShadowColourOld;
