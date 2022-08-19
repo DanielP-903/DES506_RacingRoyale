@@ -1,6 +1,9 @@
 using UnityEngine;
 
-
+/// <summary>
+/// Data Manager keeps all universal data such as meshs and materials of cars stored in one location
+/// </summary>
+/// <returns></returns>
 public class DataManager : MonoBehaviour
 {
     [SerializeField] private Mesh[] meshArray;

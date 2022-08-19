@@ -5,13 +5,20 @@ using Photon.Pun;
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// Handler for all messages in the top right of the screen
+/// </summary>
+/// <returns></returns>
 public class MessageBox : MonoBehaviour
 {
     private Queue<MessageStruct> messages;
     private TextMeshProUGUI[] messageBoxes;
     [SerializeField] private float timeBeforeDecay = 10f;
     
-    // Start is called before the first frame update
+    /// <summary>
+    /// Sets up relevant components and structs
+    /// </summary>
+    /// <returns></returns>
     void Start()
     {
         //messages.Enqueue("StartMessage");
@@ -26,6 +33,10 @@ public class MessageBox : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Updates the opacity of messages and whether the correct text is present
+    /// </summary>
+    /// <returns></returns>
     private void Update()
     {
         int counter = 0;
@@ -56,6 +67,10 @@ public class MessageBox : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Update messages to contain the correct text
+    /// </summary>
+    /// <returns></returns>
     void UpdateMessages()
     {
         int counter = 0;
@@ -75,6 +90,11 @@ public class MessageBox : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// Adds message to the message box, removing one if there are already 5 messages
+    /// </summary>
+    /// <param name="text">Message to be added to the message box</param>
+    /// <returns></returns>
     public void sendText(string text)
     {
         if (messages == null)
@@ -97,6 +117,10 @@ public class MessageBox : MonoBehaviour
     }
 }
 
+/// <summary>
+/// Contains message information
+/// </summary>
+/// <returns></returns>
 public class MessageStruct
 {
     public string messageText;

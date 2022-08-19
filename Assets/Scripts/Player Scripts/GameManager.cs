@@ -15,6 +15,10 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Random = UnityEngine.Random;
 using Slider = UnityEngine.UI.Slider;
 
+/// <summary>
+/// Game Manager handles serverside interactions on local clients as well as game events like timers and spectating
+/// </summary>
+/// <returns></returns>
 public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
 {
     // --- VARS ---

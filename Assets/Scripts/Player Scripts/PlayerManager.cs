@@ -7,7 +7,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
+/// <summary>
+/// Player Manager handles player interaction with others and the server
+/// </summary>
+/// <returns></returns>
 public class PlayerManager : MonoBehaviour
 {
 

@@ -7,6 +7,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
+/// <summary>
+/// Controls the behaviour of bots
+/// </summary>
+/// <returns></returns>
+
 public class BotCarController : MonoBehaviour
 {
     [SerializeField] private bool _debugMode = false;
@@ -41,7 +46,10 @@ public class BotCarController : MonoBehaviour
     private TextMeshProUGUI flis;
 
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// Initialise Bots on beginning of every level
+    /// </summary>
+    /// <returns></returns>
     void Start()
     {
         //PhotonNetwork.LocalPlayer.IsMasterClient
@@ -117,7 +125,10 @@ public class BotCarController : MonoBehaviour
         flis = transform.Find("FLicense").Find("Name").GetComponent<TextMeshProUGUI>();
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// If owned by local player and player is master client, update it's behaviour, reset when necessary and update name changes
+    /// </summary>
+    /// <returns></returns>
     void FixedUpdate()
     {
         if (_pv.Owner.IsMasterClient && _pv.IsMine)
@@ -149,11 +160,19 @@ public class BotCarController : MonoBehaviour
         flis.text = _pv.name;
     }
 
+    /// <summary>
+    /// Get current bot's number
+    /// </summary>
+    /// <returns>Current bot's number</returns>
     public int GetBotNumber()
     {
         return _botNum;
     }
 
+    /// <summary>
+    /// If below -5 in the y axis, reset bot
+    /// </summary>
+    /// <returns></returns>
     void checkReset()
     {
         if (transform.position.y < -5 || touchingReset)
@@ -162,11 +181,20 @@ public class BotCarController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Set new spawn location for current bot
+    /// </summary>
+    /// <param name="newSpawn">The transform of the new spawn location</param>
+    /// <returns></returns>
     public void setSpawn(Transform newSpawn)
     {
         _spawnLocation = newSpawn;
     }
 
+    /// <summary>
+    /// Reset a bot to its current spawn location
+    /// </summary>
+    /// <returns></returns>
     public void goToSpawn()
     {
         if (_spawnLocation && !_spawnLocation.name.Contains("SpawnLocation") &&
@@ -201,11 +229,20 @@ public class BotCarController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Set the server name of the bot
+    /// </summary>
+    /// <param name="newName">The new name to be assigned</param>
+    /// <returns></returns>
     public void setName(string newName = "NotSetProperly")
     {
         _pv.name = newName;
     }
 
+    /// <summary>
+    /// If bot points exist in the level, navigate toward the closest untouched bot point on the bots chosen path, else use a behaviour tree to determine behaviour
+    /// </summary>
+    /// <returns></returns>
     void decideBehaviour()
     {
         //Debug.Log("Deciding Behaviour");
@@ -221,6 +258,10 @@ public class BotCarController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Identify the nearest untouched bot point on current chosen path
+    /// </summary>
+    /// <returns></returns>
     void decideTargetPoint()
     {
         RaycastHit hit;
@@ -289,6 +330,10 @@ public class BotCarController : MonoBehaviour
         //Debug.Log(nearestPoint.name + ":" + nearestPoint.position + ":" + transform.position + " " + target);
     }
 
+    /// <summary>
+    /// Upon spawning, choose a path based on the closest bot point to spawn location
+    /// </summary>
+    /// <returns></returns>
     void decideChoice()
     {
         botTarget = null;
@@ -311,11 +356,20 @@ public class BotCarController : MonoBehaviour
         currentChoice = nearestPoint.GetComponent<BotPoint>().choice;
     }
 
+    /// <summary>
+    /// Choose a random path upon touching a bot point with more than one choice
+    /// </summary>
+    /// <param name="choices">An array of paths to be chosen from</param>
+    /// <returns></returns>
     void pickChoice(int[] choices)
     {
         currentChoice = choices[Random.Range(0, choices.Length - 1)];
     }
 
+    /// <summary>
+    /// Using a raycast on to the track directly below it, find the target location to finish the track piece (Absent Bot Points Only)
+    /// </summary>
+    /// <returns></returns>
     void decideTarget()
     {
         RaycastHit hit;
@@ -361,6 +415,10 @@ public class BotCarController : MonoBehaviour
         //Debug.Log("Decided Target");
     }
 
+    /// <summary>
+    /// Align to chosen target bot point and drive toward it using drive functions, if collision detected, turn away so that progress can still be made
+    /// </summary>
+    /// <returns></returns>
     void alignToTarget()
     {
         //Debug.Log("CurrentRot: " + transform.rotation.eulerAngles.y + " TargetRot: "+ target);
@@ -426,6 +484,12 @@ public class BotCarController : MonoBehaviour
         }
     }
 
+    // DRIVE FUNCTIONS
+    
+    /// <summary>
+    /// Driving behaviour to turn left and drive forward
+    /// </summary>
+    /// <returns></returns>
     void leftTurn()
     {
         //Debug.Log("TurningToLeft");
@@ -435,6 +499,10 @@ public class BotCarController : MonoBehaviour
         _cc.BotNotBackward();
     }
 
+    /// <summary>
+    /// Driving behaviour to turn right and drive forward
+    /// </summary>
+    /// <returns></returns>
     void rightTurn()
     {
         //Debug.Log("TurningToRight");
@@ -444,6 +512,10 @@ public class BotCarController : MonoBehaviour
         _cc.BotNotBackward();
     }
 
+    /// <summary>
+    /// Driving behaviour to just drive forward
+    /// </summary>
+    /// <returns></returns>
     void justForward()
     {
         //Debug.Log("JustForward");
@@ -453,6 +525,10 @@ public class BotCarController : MonoBehaviour
         _cc.BotNotBackward();
     }
 
+    /// <summary>
+    /// Driving behaviour to just drive backward
+    /// </summary>
+    /// <returns></returns>
     void justBackward()
     {
         //Debug.Log("JustBackward");
@@ -462,6 +538,10 @@ public class BotCarController : MonoBehaviour
         _cc.BotBackward();
     }
 
+    /// <summary>
+    /// Driving behaviour to turn left and drive backward
+    /// </summary>
+    /// <returns></returns>
     void leftBackward()
     {
         //Debug.Log("LeftBackward");
@@ -471,6 +551,10 @@ public class BotCarController : MonoBehaviour
         _cc.BotBackward();
     }
 
+    /// <summary>
+    /// Driving behaviour to turn right and drive backward
+    /// </summary>
+    /// <returns></returns>
     void rightBackward()
     {
         //Debug.Log("RightBackward");
@@ -482,9 +566,19 @@ public class BotCarController : MonoBehaviour
 
     #region OldBehaviour
 
+    /// <summary>
+    /// Determine behaviour based on whether or not there are track pieces detected by multiple raycasts to then determine behaviour on a behaviour tree
+    /// </summary>
+    /// <returns></returns>
     void decideOldBehaviour()
     {
         int randomVal = Random.Range((int)0, (int)250);
+        
+        // If something detected left and forward and not too close
+        // or if pit is detected on left but not on right
+        // or if pit is detected forward left but not forward right
+        // or Random Behaviour == 0,
+        // turn right
         if ((detectLeft() && detectForward() && !detectTooClose())
             || (!detectLeftPit() && detectRightPit())
             || (!detectForwardLeftPit() && detectForwardRightPit())
@@ -493,6 +587,11 @@ public class BotCarController : MonoBehaviour
             rightTurn();
         }
 
+        // If something detected right and forward and not too close
+        // or if pit is detected on right but not on left
+        // or if pit is detected forward right but not forward left
+        // or Random Behaviour == 1,
+        // turn left
         else if ((detectRight() && detectForward() && !detectTooClose())
                  || (!detectRightPit() && detectLeftPit())
                  || (detectForward() && !detectTooClose())
@@ -502,17 +601,20 @@ public class BotCarController : MonoBehaviour
             leftTurn();
         }
 
+        // If too close or Random Behaviour == 2, Reverse
         else if (detectTooClose()
                  || randomVal == 2)
         {
             justBackward();
         }
 
+        // Else drive straight forward
         else
         {
             justForward();
         }
-
+        
+        // If not grounded, boost, else don't boost
         if (!_cc.GetGrounded())
         {
             _cc.BotBoost();
@@ -522,6 +624,7 @@ public class BotCarController : MonoBehaviour
             _cc.BotNotBoost();
         }
 
+        // If no track detected ahead, ahead and right, and ahead and left, gap detected so jump, else don't jump
         if (!detectForwardPit() && !detectForwardRightPit() && !detectForwardLeftPit())
         {
             _cc.BotSpace();
@@ -533,12 +636,15 @@ public class BotCarController : MonoBehaviour
     }
 
 
-
+    /// <summary>
+    /// Raycast 8 units in front of the bot
+    /// </summary>
+    /// <returns>Returns if detected something</returns>
     bool detectForward()
     {
         RaycastHit hit;
         //Debug.DrawRay(transform.position,  transform.TransformDirection(Vector3.forward) * 8f, Color.magenta);
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 5f, _layerMask))
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 8f, _layerMask))
         {
             //Debug.Log("Forward Detected!: "+hit.collider.gameObject);
             return true;
@@ -549,6 +655,10 @@ public class BotCarController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Raycast 5 units in front of the bot
+    /// </summary>
+    /// <returns>Returns if detected something</returns>
     bool detectTooClose()
     {
         RaycastHit hit;
@@ -571,6 +681,10 @@ public class BotCarController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Raycast 5 units 30 degrees left of the bot's forward position
+    /// </summary>
+    /// <returns>Returns if detected something</returns>
     bool detectLeft()
     {
         //Quaternion.Euler(0, -45, 0) * 
@@ -586,6 +700,10 @@ public class BotCarController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Raycast 5 units 30 degrees right of the bot's forward position
+    /// </summary>
+    /// <returns>Returns if detected something</returns>
     bool detectRight()
     {
         //Debug.DrawRay(transform.position, Quaternion.Euler(0, 30, 0) * transform.TransformDirection(Vector3.forward) * 5f, Color.magenta);
@@ -600,6 +718,10 @@ public class BotCarController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Raycast 5 units down at 5 units left from bot's position
+    /// </summary>
+    /// <returns>Returns if detected something</returns>
     bool detectLeftPit()
     {
         //Debug.DrawRay(transform.position - transform.right * 5, transform.TransformDirection(Vector3.down) * 5f, Color.cyan);
@@ -615,6 +737,10 @@ public class BotCarController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Raycast 5 units down at 5 units right from bot's position
+    /// </summary>
+    /// <returns>Returns if detected something</returns>
     bool detectRightPit()
     {
         //Debug.DrawRay(transform.position + transform.right * 5, transform.TransformDirection(Vector3.down) * 5f, Color.cyan);
@@ -630,6 +756,10 @@ public class BotCarController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Raycast 5 units down at 5 units left and forward from bot's position
+    /// </summary>
+    /// <returns>Returns if detected something</returns>
     bool detectForwardLeftPit()
     {
         //Debug.DrawRay(transform.position - transform.right * 5 + transform.forward * 5, transform.TransformDirection(Vector3.down) * 5f, Color.cyan);
@@ -645,6 +775,10 @@ public class BotCarController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Raycast 5 units down at 5 units right and forward from bot's position
+    /// </summary>
+    /// <returns>Returns if detected something</returns>
     bool detectForwardRightPit()
     {
         //Debug.DrawRay(transform.position + transform.right * 5 + transform.forward * 5, transform.TransformDirection(Vector3.down) * 5f, Color.cyan);
@@ -660,6 +794,10 @@ public class BotCarController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Raycast 5 units down at 5 units forward from bot's position
+    /// </summary>
+    /// <returns>Returns if detected something</returns>
     bool detectForwardPit()
     {
         //Debug.DrawRay(transform.position + transform.forward * 5, transform.TransformDirection(Vector3.down) * 5f, Color.cyan);
@@ -677,6 +815,11 @@ public class BotCarController : MonoBehaviour
 
     #endregion
 
+    /// <summary>
+    /// Upon entering a trigger box, reset, eliminate, disallow boost or update bot point targets depending on the tag of the collider
+    /// </summary>
+    /// <param name="other">Collider that has been detected</param>
+    /// <returns></returns>
     private void OnTriggerEnter(Collider other)
     {
         if (_pv.Owner.IsMasterClient && _pv.IsMine)
@@ -709,6 +852,11 @@ public class BotCarController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Upon exiting a trigger box if the tag did not allow boost, now allow boost
+    /// </summary>
+    /// <param name="other">Collider that has been detected</param>
+    /// <returns></returns>
     private void OnTriggerExit(Collider other)
     {
         if (_pv.Owner.IsMasterClient && _pv.IsMine)
@@ -720,11 +868,19 @@ public class BotCarController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Start random reset coroutine
+    /// </summary>
+    /// <returns></returns>
     public void RandomSpawn()
     {
         StartCoroutine(RandomReset());
     }
 
+    /// <summary>
+    /// Reset the bot after a random time between 0 and 5 seconds (Used when rubber banding bots to keep up with players)
+    /// </summary>
+    /// <returns></returns>
     IEnumerator RandomReset()
     {
         yield return new WaitForSeconds(Random.Range(0, 5));

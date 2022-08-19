@@ -5,27 +5,21 @@ using Photon.Realtime;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+/// <summary>
+/// Syncs visual information and interactions between players
+/// </summary>
+/// <returns></returns>
 public class ServerSyncScript : MonoBehaviourPunCallbacks, IPunObservable
 {
-    /*#region ServerEventSystem
 
-    public void OnEvent(EventData photonEvent)
-    {
-        byte eventCode = photonEvent.Code;
-        if (eventCode == 1)
-        {
-            string data = (string)photonEvent.CustomData;
-            
-            sendComment(data);
-        }
-    }
-
-    #endregion*/
-    
-    
     #region IPunObservable implementation
 
     public bool completed;
+    
+    /// <summary>
+    /// On serialization for the server, send data on whether the current owner has completed the stage
+    /// </summary>
+    /// <returns></returns>
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
@@ -54,6 +48,10 @@ public class ServerSyncScript : MonoBehaviourPunCallbacks, IPunObservable
     private DataManager _dm;
     private Mesh[] meshArray;
 
+    /// <summary>
+    /// On awake, find relevant components
+    /// </summary>
+    /// <returns></returns>
     private void Awake()
     {
         if (!debugMode)
@@ -64,7 +62,10 @@ public class ServerSyncScript : MonoBehaviourPunCallbacks, IPunObservable
         }
     }
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// On start, find relevant components
+    /// </summary>
+    /// <returns></returns>
     private void Start()
     {
         if (!debugMode)
@@ -74,6 +75,10 @@ public class ServerSyncScript : MonoBehaviourPunCallbacks, IPunObservable
         }
     }
 
+    /// <summary>
+    /// On setup, find relevant components
+    /// </summary>
+    /// <returns></returns>
     public void SetUp()
     {
         //_mb = GameObject.Find("MessageBox").GetComponent<MessageBox>();
@@ -82,6 +87,10 @@ public class ServerSyncScript : MonoBehaviourPunCallbacks, IPunObservable
         _mbFound = true;
     }
 
+    /// <summary>
+    /// RPC method where when called causes the screen to fade out and fade in to the connecting screen
+    /// </summary>
+    /// <returns></returns>
     [PunRPC]
     void fadeOut()
     {
@@ -90,6 +99,12 @@ public class ServerSyncScript : MonoBehaviourPunCallbacks, IPunObservable
             _fs.fadeOut();
     }
 
+    /// <summary>
+    /// Old RPC for message boxes (Obselete)
+    /// </summary>
+    /// /// <summary>
+    /// <param name="text">Message to be sent</param>
+    /// <returns></returns>
     //[PunRPC]
     void sendComment(string text)
     {
@@ -98,7 +113,14 @@ public class ServerSyncScript : MonoBehaviourPunCallbacks, IPunObservable
         //Debug.Log("MessageBox: " + _mb + ":" + text);
         //_mb.sendText(text);
     }
-
+    
+    /// <summary>
+    /// Called to display powerup usage from another player
+    /// </summary>
+    /// <param name="id">Player ID of powerup user</param>
+    /// <param name="type">Powerup Type</param>
+    /// <param name="active">Whether the object for the powerup should be set to active</param>
+    /// <returns></returns>
     [PunRPC]
     void Powerup(int id, PowerupType type, bool active) //GameObject subobj = null) 
     {
@@ -140,26 +162,49 @@ public class ServerSyncScript : MonoBehaviourPunCallbacks, IPunObservable
             subobj.SetActive(active);
     }
 
+    /// <summary>
+    /// Updates the effects of the airblast for all nearby players
+    /// </summary>
+    /// <param name="id">Player ID of air blast user</param>
+    /// <param name="radius">The radius affected by the airblast</param>
+    /// <returns></returns>
     [PunRPC]
     void UpdateAirBlast(int id, float radius)
     {
         SphereCollider col = PhotonView.Find(id).transform.GetChild(1).GetComponent<SphereCollider>();
         col.radius = Mathf.Lerp(col.radius, radius, Time.deltaTime);
-        ;
     }
 
+    /// <summary>
+    /// Updates the effects of the grapplehook for all nearby players
+    /// </summary>
+    /// <param name="id">The player ID of the player who used the grapplehook</param>
+    /// <param name="positions">An array of the positions of the player using it and the target affected player</param>
+    /// <returns></returns>
     [PunRPC]
     void UpdateGrappleHook(int id, Vector3[] positions)
     {
         PhotonView.Find(id).transform.GetChild(2).GetComponent<LineRenderer>().SetPositions(positions);
     }
 
+    /// <summary>
+    /// Updates the effects of the boxing glove for all nearby players
+    /// </summary>
+    /// <param name="id">The player ID of the player who used the boxing glove</param>
+    /// <param name="positions">An array of the positions of the player using it and the target affected player</param>
+    /// <returns></returns>
     [PunRPC]
     void UpdatePunchingGlove(int id, Vector3[] positions)
     {
         PhotonView.Find(id).transform.GetChild(2).GetComponent<LineRenderer>().SetPositions(positions);
     }
     
+    /// <summary>
+    /// Updates the effects of the boxing glove hit for all nearby players
+    /// </summary>
+    /// <param name="id">The player ID of the player who has been hit by the boxing glove</param>
+    /// <param name="positions">The hit position of the target affected player</param>
+    /// <returns></returns>
     [PunRPC]
     void PunchingGloveHit(int id, Vector3 hitPosition)
     {
@@ -174,6 +219,14 @@ public class ServerSyncScript : MonoBehaviourPunCallbacks, IPunObservable
         
     }
     
+    /// <summary>
+    /// Updates the effects of collision for two players who have collided
+    /// </summary>
+    /// <param name="id">The player ID of the player who hit the other</param>
+    /// <param name="direction">Direction of hitting player</param>
+    /// <param name="contactPoint">Point of hit occuring</param>
+    /// <param name="bounciness">How much force is applied upon collision</param>
+    /// <returns></returns>
     [PunRPC]
     void PlayerHit(int id, Vector3 direction, Vector3 contactPoint, float bounciness)
     {
@@ -196,6 +249,12 @@ public class ServerSyncScript : MonoBehaviourPunCallbacks, IPunObservable
         int rand = Random.Range(1, 5);
     }
 
+    /// <summary>
+    /// Updates the outline of a player for powerup usage based on their skin
+    /// </summary>
+    /// <param name="id">The player ID of the player who is to have an outline</param>
+    /// <param name="meshIndex">Skin Number</param>
+    /// <returns></returns>
     [PunRPC]
     void UpdateOutlineMeshes(int id, int meshIndex)
     {
