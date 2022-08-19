@@ -4,6 +4,10 @@ using ExitGames.Client.Photon;
 using Photon.Pun;
 using UnityEngine;
 
+/// <summary>
+/// Functionality for changing the skin and material for the player in the launcher
+/// </summary>
+/// <returns></returns>
 public class MeshManager : MonoBehaviour
 {
     const string playerMeshPrefKey = "Skin";
@@ -19,7 +23,10 @@ public class MeshManager : MonoBehaviour
     private GameObject flaps;
     private int meshMatNum = 0;
     
-    // Start is called before the first frame update
+    /// <summary>
+    /// Establish components on start
+    /// </summary>
+    /// <returns></returns>
     void Start()
     {
         dm = GameObject.Find("DataManager").GetComponent<DataManager>();
@@ -34,6 +41,10 @@ public class MeshManager : MonoBehaviour
         flaps.SetActive(meshMatNum < 3);
     }
 
+    /// <summary>
+    /// Pick Next Skin
+    /// </summary>
+    /// <returns></returns>
     public void nextSkin()
     {
         meshMatNum+=4;
@@ -46,6 +57,10 @@ public class MeshManager : MonoBehaviour
         setSkin(meshMatNum);
     }
 
+    /// <summary>
+    /// Pick Previous Skin
+    /// </summary>
+    /// <returns></returns>
     public void previousSkin()
     {
         meshMatNum-=4;
@@ -58,6 +73,10 @@ public class MeshManager : MonoBehaviour
         setSkin(meshMatNum);
     }
     
+    /// <summary>
+    /// Pick Next Color
+    /// </summary>
+    /// <returns></returns>
     public void nextColor()
     {
         meshMatNum++;
@@ -68,6 +87,10 @@ public class MeshManager : MonoBehaviour
         setSkin(meshMatNum);
     }
 
+    /// <summary>
+    /// Pick Previous Color
+    /// </summary>
+    /// <returns></returns>
     public void previousColor()
     {
         meshMatNum--;
@@ -77,8 +100,11 @@ public class MeshManager : MonoBehaviour
         }
         setSkin(meshMatNum);
     }
-
-
+    
+    /// <summary>
+    /// Apply changes to skin and color
+    /// </summary>
+    /// <returns></returns>
     void setSkin(int value)
     {
         PlayerPrefs.SetInt(playerMeshPrefKey, value);

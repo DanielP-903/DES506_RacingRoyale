@@ -7,6 +7,10 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
+/// <summary>
+/// In Game Pause Menu Functionality
+/// </summary>
+/// <returns></returns>
 public class PauseMenu : MonoBehaviour
 {
     [Tooltip("The Ui Panel for Credits")]

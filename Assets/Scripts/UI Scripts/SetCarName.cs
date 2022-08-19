@@ -5,6 +5,10 @@ using Photon.Pun;
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// Set Car Name
+/// </summary>
+/// <returns></returns>
 public class SetCarName : MonoBehaviour
 {
     private TextMeshProUGUI _name;

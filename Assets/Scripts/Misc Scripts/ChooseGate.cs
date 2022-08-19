@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Move gates to allow for choice in paths
+/// </summary>
+/// <returns></returns>
 public class ChooseGate : MonoBehaviour
 {
     public float speed = 2.5f, distance = 50f, waitTime = 10f;

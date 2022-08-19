@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Have Billboarded UI in world space face the main camera
+/// </summary>
+/// <returns></returns>
 public class BillBoarder : MonoBehaviour
 {
     private Component component;

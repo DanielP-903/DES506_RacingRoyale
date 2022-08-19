@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+/// <summary>
+/// Sets winner name and mesh in podium stage
+/// </summary>
+/// <returns></returns>
 public class SetWinnerName : MonoBehaviour
 {
     // WINNER NAME UI

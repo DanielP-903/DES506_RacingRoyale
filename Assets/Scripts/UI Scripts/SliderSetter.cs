@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Sets sliders to correct player preference
+/// </summary>
+/// <returns></returns>
 public class SliderSetter : MonoBehaviour
 {
     [SerializeField]

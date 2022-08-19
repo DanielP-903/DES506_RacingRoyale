@@ -5,6 +5,10 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 
+/// <summary>
+/// Controls Fading in and out of levels during transitions
+/// </summary>
+/// <returns></returns>
 public class fadeScreen : MonoBehaviour
 {
     private Image fadeScreenUI;
@@ -16,7 +20,10 @@ public class fadeScreen : MonoBehaviour
     private GameObject progressPanel;
     private PauseMenu pm;
     
-    // Start is called before the first frame update
+    /// <summary>
+    /// Establish UI Elements and Fade In
+    /// </summary>
+    /// <returns></returns>
     void Start()
     {
         fadeScreenUI = GetComponent<Image>();
@@ -29,6 +36,10 @@ public class fadeScreen : MonoBehaviour
         StartCoroutine(storedRoutine);
     }
 
+    /// <summary>
+    /// Clear Stored Routine and Start Fade Out Routine
+    /// </summary>
+    /// <returns></returns>
     public void fadeOut()
     {
         if (storedRoutine == null) return;
@@ -38,6 +49,10 @@ public class fadeScreen : MonoBehaviour
         StartCoroutine(storedRoutine);
     }
 
+    /// <summary>
+    /// Clear Stored Routine and Start Fade Out and Quit Routine
+    /// </summary>
+    /// <returns></returns>
     public void quitFade()
     {
         if (storedRoutine == null) return;
@@ -49,6 +64,10 @@ public class fadeScreen : MonoBehaviour
 
     #region IEnumerators
 
+    /// <summary>
+    /// Fade out, lower music and quit to main menu
+    /// </summary>
+    /// <returns></returns>
     IEnumerator QuitFade()
     {
         float vol = PlayerPrefs.GetFloat("MasterVol");
@@ -85,6 +104,10 @@ public class fadeScreen : MonoBehaviour
         PhotonNetwork.LeaveRoom();
     }
 
+    /// <summary>
+    /// Fade in and increase music
+    /// </summary>
+    /// <returns></returns>
     IEnumerator FadeIn()
     {
         if (PlayerPrefs.HasKey("MasterVol"))
@@ -131,6 +154,10 @@ public class fadeScreen : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// Fade out, lower music and fade in on loading bar
+    /// </summary>
+    /// <returns></returns>
     IEnumerator FadeOut()
     {
         float vol = PlayerPrefs.GetFloat("MasterVol");
@@ -181,6 +208,10 @@ public class fadeScreen : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// Update Loading Bar
+    /// </summary>
+    /// <returns></returns>
     IEnumerator LoadingBar()
     {
         if (pm != null)

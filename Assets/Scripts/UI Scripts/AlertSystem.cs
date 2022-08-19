@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Display Alerts for finishing, elimination and completion of stages and checkpoints
+/// </summary>
+/// <returns></returns>
 public class AlertSystem : MonoBehaviour
 {
     [SerializeField]
@@ -27,7 +31,10 @@ public class AlertSystem : MonoBehaviour
 
     private IEnumerator storedRoutine;
     
-    // Start is called before the first frame update
+    /// <summary>
+    /// Establish UI on Start
+    /// </summary>
+    /// <returns></returns>
     void Start()
     {
         _slider = transform.Find("Mask").Find("Slider").GetComponent<Slider>();
@@ -35,13 +42,11 @@ public class AlertSystem : MonoBehaviour
         _slider.value = 0;
         _alertImage.fillOrigin = (int) Image.OriginHorizontal.Left;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    
+    /// <summary>
+    /// Start Show Alert Coroutine
+    /// </summary>
+    /// <returns></returns>
     public void displayAlert(string alertName)
     {
         if (storedRoutine != null)
@@ -53,6 +58,10 @@ public class AlertSystem : MonoBehaviour
         StartCoroutine(storedRoutine);
     }
 
+    /// <summary>
+    /// Scroll fade in the alert, wait and scroll fade out the alert
+    /// </summary>
+    /// <returns></returns>
     IEnumerator showAlert(string alertName)
     {
         float fadeInStep = 1/fadeInTime * 0.02f;
